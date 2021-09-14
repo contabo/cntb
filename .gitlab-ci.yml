@@ -79,33 +79,22 @@ sync-github:
   before_script:
     - git config --global user.name "${GITLAB_USER_NAME}"
     - git config --global user.email "${GITLAB_USER_EMAIL}"
+    - echo 'deb [trusted=yes] https://repo.goreleaser.com/apt/ /' | tee /etc/apt/sources.list.d/goreleaser.list
+    - apt update
+    - apt install goreleaser
   script:
-    - ls -l
     - rm -rf .git
     - mkdir .tmp/
     - cd .tmp/
     - git clone http://root:$GITHUB_ACCESS_TOKEN@$GITHUB_REPO
     - cd cntb/ && git clone http://root:$GITHUB_ACCESS_TOKEN@$GITHUB_REPO
-    - ls -l
     - cp -r .git ../..
     - cd ../..
     - git add .
     - git diff-index --quiet HEAD || (git commit -m 'release' && git push http://root:$GITHUB_ACCESS_TOKEN@$GITHUB_REPO)
-  only:
-    - feature/AR-362-push-to-github
-
-
-release:
-  image: $CI_REGISTRY/arcus/common/images/base-images/buildtime/go:latest
-  stage: release
-  before_script:
-    - echo 'deb [trusted=yes] https://repo.goreleaser.com/apt/ /' | tee /etc/apt/sources.list.d/goreleaser.list
-    - apt update
-    - apt install goreleaser
-  script:
-    - ls
     - export GITHUB_TOKEN=$GITHUB_ACCESS_TOKEN
     - git tag $TAG_VERSION
+    - git push origin $TAG_VERSION
     - goreleaser release --rm-dist
   only:
-    - prod
+    - feature/AR-362-push-to-github
