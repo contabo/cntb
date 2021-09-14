@@ -1,0 +1,62 @@
+#!/usr/bin/env bats
+
+load handling_conf_files.bash
+load globals.bash
+load_lib bats-support
+load_lib bats-assert
+
+function setup_file() {
+  store_config_files
+  ensureTestConfig
+  deleteCache
+}
+
+function teardown_file() {
+  restore_config_files
+}
+
+@test 'delete snapshot: ok' {
+  run ./cntb create snapshot ${INSTANCE_ID} --name="snapshot${TEST_SUFFIX}" --description='test snapshot'
+  assert_success
+  snapshotId=$(echo "$output" | sed -n 's/.*snapshotId\s\+\([0-9a-zA-Z-]\+\).*$/\1/p')
+
+  run ./cntb delete snapshot ${INSTANCE_ID} "$snapshotId"
+  assert_success
+
+  run ./cntb get snapshot ${INSTANCE_ID} "$snapshotId"
+  assert_failure
+}
+
+@test "delete not existing snapshot: ok" {
+  run ./cntb delete snapshot ${INSTANCE_ID} 72f0a447-8040-4098-9cb1-2fa3093a18f7
+  assert_failure
+  assert_output --partial 'Error'
+  assert_output --partial '404,'
+  assert_output --partial "Error while deleting snapshot:"
+}
+
+
+@test 'delete snapshot without arguments: nok' {
+  run ./cntb delete snapshot
+  assert_failure
+}
+
+@test 'delete snapshot with invalid instanceId: nok' {
+  run ./cntb delete snapshot abc
+  assert_failure
+}
+
+@test 'delete snapshot without instanceId: nok' {
+  run ./cntb delete snapshot
+  assert_failure
+}
+
+@test 'delete snapshot with invalid snapshotId: nok' {
+  run ./cntb delete snapshot ${INSTANCE_ID} abc
+  assert_failure
+}
+
+@test 'delete snapshot without snapshotId: nok' {
+  run ./cntb delete snapshot ${INSTANCE_ID}
+  assert_failure
+}
