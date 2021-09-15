@@ -4,7 +4,9 @@ before:
     - go mod tidy
     - go mod download
 builds:
-  - env:
+  - main: ./main.go
+    binary: cntb
+    env:
       - CGO_ENABLED=0
     goos:
       - linux
@@ -13,6 +15,11 @@ builds:
     goarch:
       - amd64
       - arm64
+    ignore:
+      - goos: windows
+        goarch: arm64
+    ldflags:
+      - -w -s -X contabo.com/cli/cntb/cmd.version={{.Tag}} -X contabo.com/cli/cntb/cmd.commit={{.Commit}} -X contabo.com/cli/cntb/cmd.date={{.Date}}
 archives:
   -
     format_overrides:
@@ -29,8 +36,13 @@ archives:
 checksum:
   name_template: 'checksums.txt'
 snapshot:
-  name_template: "{{ incpatch .Version }}-next"
-
+  name_template: "{{ .Tag }}-next"
+changelog:
+  skip: true
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
 release:
   github:
     owner: contabo-gmbh
