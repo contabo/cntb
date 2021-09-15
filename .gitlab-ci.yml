@@ -2,7 +2,6 @@ default:
   image: $CI_REGISTRY/arcus/common/images/base-images/runtime/integration_test:latest
 variables:
   GIT_FETCH_EXTRA_FLAGS: --tags
-  #GIT_STRATEGY: clone
 
 stages:
   - generate-api
@@ -105,9 +104,8 @@ release:
         git add --all
         git commit -m "release $TAG_VERSION"
         git push https://root:$GITHUB_ACCESS_TOKEN@$GITHUB_REPO
-        echo "> release $TAG_VERSION" > notes.md
         git tag $TAG_VERSION
-        goreleaser release --rm-dist --skip-announce --release-notes notes.md
+        goreleaser release --rm-dist --skip-announce
       }
   only:
     - feature/AR-362-goreleaser
