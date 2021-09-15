@@ -110,7 +110,6 @@ release:
         git commit -m "release $TAG_VERSION"
         git push https://root:$GITHUB_ACCESS_TOKEN@$GITHUB_REPO
         git tag $TAG_VERSION
-        git push origin $TAG_VERSION
         echo "> release $TAG_VERSION" > notes.md
         goreleaser release --rm-dist --skip-announce --release-notes notes.md
       }
