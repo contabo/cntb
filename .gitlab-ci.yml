@@ -87,6 +87,7 @@ release:
     - COMMIT=$(git rev-list --tags --max-count=1)
     - echo "THIS IS COMMIT = $COMMIT"
     - echo "THIS IS TAG_VERSION = $TAG_VERSION"
+    - git tag -d v0.0.4
     - git tag --list
   script:
     - |
