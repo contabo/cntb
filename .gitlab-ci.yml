@@ -25,8 +25,6 @@ generate-api:
     expire_in: 30 min
     paths:
       - openapi
-  only:
-    - dev
   resource_group: $CI_COMMIT_BRANCH
 
 build:cli:
@@ -42,8 +40,6 @@ build:cli:
     expire_in: 30 min
     paths:
       - cntb
-  only:
-    - dev
   resource_group: $CI_COMMIT_BRANCH
 
 test:integration-test:
@@ -82,15 +78,7 @@ release:
   image: $CI_REGISTRY/arcus/common/images/base-images/buildtime/go:latest
   stage: release
   before_script:
-    - git config --global pager.branch false
-    - git config --global pager.config false
-    - git config --list
-    - git branch -r
-    - git branch
     - TAG_VERSION=$(git rev-list --tags --max-count=1 | xargs -I {} git describe --tags {})
-    - COMMIT=$(git rev-list --tags --max-count=1)
-    - echo "THIS IS COMMIT = $COMMIT"
-    - echo "THIS IS TAG_VERSION = $TAG_VERSION"
     - git config --global user.name "${GITLAB_USER_NAME}"
     - git config --global user.email "${GITLAB_USER_EMAIL}"
     - echo 'deb [trusted=yes] https://repo.goreleaser.com/apt/ /' | tee /etc/apt/sources.list.d/goreleaser.list
