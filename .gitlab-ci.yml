@@ -91,7 +91,6 @@ release:
     - COMMIT=$(git rev-list --tags --max-count=1)
     - echo "THIS IS COMMIT = $COMMIT"
     - echo "THIS IS TAG_VERSION = $TAG_VERSION"
-    - git tag --list
     - git config --global user.name "${GITLAB_USER_NAME}"
     - git config --global user.email "${GITLAB_USER_EMAIL}"
     - echo 'deb [trusted=yes] https://repo.goreleaser.com/apt/ /' | tee /etc/apt/sources.list.d/goreleaser.list
