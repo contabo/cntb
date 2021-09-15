@@ -25,6 +25,8 @@ generate-api:
     expire_in: 30 min
     paths:
       - openapi
+  only:
+    - dev
   resource_group: $CI_COMMIT_BRANCH
 
 build:cli:
@@ -40,6 +42,8 @@ build:cli:
     expire_in: 30 min
     paths:
       - cntb
+  only:
+    - dev
   resource_group: $CI_COMMIT_BRANCH
 
 test:integration-test:
