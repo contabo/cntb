@@ -2,6 +2,7 @@ default:
   image: $CI_REGISTRY/arcus/common/images/base-images/runtime/integration_test:latest
 variables:
   GIT_FETCH_EXTRA_FLAGS: --tags
+  GIT_STRATEGY: clone
 
 stages:
   - generate-api
@@ -25,8 +26,6 @@ generate-api:
     expire_in: 30 min
     paths:
       - openapi
-  only:
-    - dev
   resource_group: $CI_COMMIT_BRANCH
 
 build:cli:
@@ -42,8 +41,6 @@ build:cli:
     expire_in: 30 min
     paths:
       - cntb
-  only:
-    - dev
   resource_group: $CI_COMMIT_BRANCH
 
 test:integration-test:
@@ -108,8 +105,6 @@ release:
         git add --all
         git commit -m "release $TAG_VERSION"
         git push https://root:$GITHUB_ACCESS_TOKEN@$GITHUB_REPO
-        git tag $TAG_VERSION
-        git push origin $TAG_VERSION
         echo "> release $TAG_VERSION" > notes.md
         goreleaser release --rm-dist --skip-announce --release-notes notes.md
       }
