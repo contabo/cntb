@@ -87,8 +87,6 @@ release:
     - git config --list
     - git branch -r
     - git branch
-    - git tag --list
-    - git tag -d v0.0.4
     - TAG_VERSION=$(git rev-list --tags --max-count=1 | xargs -I {} git describe --tags {})
     - COMMIT=$(git rev-list --tags --max-count=1)
     - echo "THIS IS COMMIT = $COMMIT"
