@@ -2,6 +2,7 @@ default:
   image: $CI_REGISTRY/arcus/common/images/base-images/runtime/integration_test:latest
 variables:
   GIT_FETCH_EXTRA_FLAGS: --tags
+  GIT_STRATEGY: clone
 
 stages:
   - generate-api
@@ -82,10 +83,15 @@ release:
   image: $CI_REGISTRY/arcus/common/images/base-images/buildtime/go:latest
   stage: release
   before_script:
+    - git config --global pager.branch false
+    - git config --global pager.config false
+    - git branch
+    - git config --list
     - TAG_VERSION=$(git rev-list --tags --max-count=1 | xargs -I {} git describe --tags {})
     - COMMIT=$(git rev-list --tags --max-count=1)
     - echo "THIS IS COMMIT = $COMMIT"
     - echo "THIS IS TAG_VERSION = $TAG_VERSION"
+    - git tag --list
     - git config --global user.name "${GITLAB_USER_NAME}"
     - git config --global user.email "${GITLAB_USER_EMAIL}"
     - echo 'deb [trusted=yes] https://repo.goreleaser.com/apt/ /' | tee /etc/apt/sources.list.d/goreleaser.list
@@ -104,8 +110,9 @@ release:
         git commit -m "release $TAG_VERSION"
         git push https://root:$GITHUB_ACCESS_TOKEN@$GITHUB_REPO
         git tag $TAG_VERSION
+        git push origin $TAG_VERSION
         echo "> release $TAG_VERSION" > notes.md
         goreleaser release --rm-dist --skip-announce --release-notes notes.md
       }
   only:
-    - feature/AR-362-push-to-github
+    - feature/AR-362-goreleaser
