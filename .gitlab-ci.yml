@@ -83,9 +83,10 @@ release:
     - echo 'deb [trusted=yes] https://repo.goreleaser.com/apt/ /' | tee /etc/apt/sources.list.d/goreleaser.list
     - apt update
     - apt install goreleaser
+    - TAG_VERSION=$(git rev-list --tags --max-count=1 | xargs -I {} git describe --tags {})
+    - echo "THIS IS TAG_VERSION = $TAG_VERSION"
   script:
     - |
-      TAG_VERSION=$(git rev-list --tags --max-count=1 | xargs -I {} git describe --tags {})
       rm -rf .git
       mkdir .tmp/
       git clone https://root:$GITHUB_ACCESS_TOKEN@$GITHUB_REPO .tmp/
