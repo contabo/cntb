@@ -1,5 +1,7 @@
 default:
   image: $CI_REGISTRY/arcus/common/images/base-images/runtime/integration_test:latest
+variables:
+  GIT_FETCH_EXTRA_FLAGS: --tags
 
 stages:
   - generate-api
