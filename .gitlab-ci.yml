@@ -34,6 +34,7 @@ build:cli:
     name: $CI_COMMIT_BRANCH
   script:
     - export OPENAPIURL
+    # Cntb required to run bat tests in next stage.
     - make build-only
   artifacts:
     expire_in: 30 min
@@ -73,7 +74,7 @@ quality:sonar-qube:
     - dev
   resource_group: $CI_COMMIT_BRANCH
 
-sync-github:
+release:
   image: $CI_REGISTRY/arcus/common/images/base-images/buildtime/go:latest
   stage: release
   before_script:
@@ -83,18 +84,17 @@ sync-github:
     - apt update
     - apt install goreleaser
   script:
+    - TAG_VERSION=$(git rev-list --tags --max-count=1 | xargs -I {} git describe --tags {})
     - rm -rf .git
     - mkdir .tmp/
-    - cd .tmp/
-    - git clone http://root:$GITHUB_ACCESS_TOKEN@$GITHUB_REPO
-    - cd cntb/ && git clone http://root:$GITHUB_ACCESS_TOKEN@$GITHUB_REPO
-    - cp -r .git ../..
-    - cd ../..
-    - git add .
-    - git diff-index --quiet HEAD || (git commit -m 'release' && git push http://root:$GITHUB_ACCESS_TOKEN@$GITHUB_REPO)
+    - git clone https://root:$GITHUB_ACCESS_TOKEN@$GITHUB_REPO .tmp/
+    - cp -r .tmp/.git .
+    - rm -rf .tmp/
+    - git add --all
     - export GITHUB_TOKEN=$GITHUB_ACCESS_TOKEN
-    - git tag $TAG_VERSION
-    - git push origin $TAG_VERSION
-    - goreleaser release --rm-dist
+    - git diff-index --quiet HEAD || (git commit -m "release $TAG_VERSION" && git push https://root:$GITHUB_ACCESS_TOKEN@$GITHUB_REPO)
+    - git diff-index --quiet HEAD || git tag $TAG_VERSION
+    - git diff-index --quiet HEAD || git push origin $TAG_VERSION
+    - git diff-index --quiet HEAD || goreleaser release --rm-dist
   only:
     - feature/AR-362-push-to-github

@@ -1,10 +1,8 @@
 project_name: cntb
 before:
   hooks:
-    # You may remove this if you don't use go modules.
     - go mod tidy
-    # you may remove this if you don't need go generate
-    - go generate ./...
+    - go mod download
 builds:
   - env:
       - CGO_ENABLED=0
@@ -16,12 +14,15 @@ builds:
       - amd64
       - arm64
 archives:
-  - replacements:
+  -
+    format_overrides:
+      - goos: windows
+        format: zip
+    replacements:
       darwin: Darwin
       linux: Linux
       windows: Windows
-      386: i386
-      amd64: x86_64
+      amd64: x86
     files:
       - README.md
       - LICENSE
@@ -29,47 +30,13 @@ checksum:
   name_template: 'checksums.txt'
 snapshot:
   name_template: "{{ incpatch .Version }}-next"
-changelog:
-  sort: asc
-  filters:
-    exclude:
-      - '^docs:'
-      - '^test:'
 
 release:
   github:
     owner: contabo-gmbh
     name: cntb
-  draft: true
+  draft: false
   prerelease: auto
-  discussion_category_name: General
   header: |
-    ## Features
-    List of newly introduced features:
-    - Item 1
-    - Item 2
-    ## Bug fixes
-    List of fixed issues:
-    - Item 1
-    - Item 2
-    ## Code changes
-    - Item 1
-    - Item 2
+
   footer: |
-    ## Thanks!
-    Read more on our documentation page: https://github.com/contabo-gmbh/cntb
-
-nfpms:
-  - maintainer: contabo-gmbh
-    description: "Contabo CLI for managing Contabo account"
-    homepage: "https://github.com/contabo-gmbh/cntb"
-    license: "GPL v3"
-    formats:
-      - deb
-      - rpm
-      - apk
-    replacements:
-      amd64: 64-bit
-      darwin: macOS
-      linux: Tux
-
