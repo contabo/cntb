@@ -84,6 +84,7 @@ release:
     - apt update
     - apt install goreleaser
     - TAG_VERSION=$(git rev-list --tags --max-count=1 | xargs -I {} git describe --tags {})
+    - COMMIT=$(git rev-list --tags --max-count=1)
     - echo "THIS IS TAG_VERSION = $TAG_VERSION"
   script:
     - |
