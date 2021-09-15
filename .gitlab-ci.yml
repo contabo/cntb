@@ -78,17 +78,16 @@ release:
   image: $CI_REGISTRY/arcus/common/images/base-images/buildtime/go:latest
   stage: release
   before_script:
+    - TAG_VERSION=$(git rev-list --tags --max-count=1 | xargs -I {} git describe --tags {})
+    - COMMIT=$(git rev-list --tags --max-count=1)
+    - echo "THIS IS COMMIT = $COMMIT"
+    - echo "THIS IS TAG_VERSION = $TAG_VERSION"
+    - git tag --list
     - git config --global user.name "${GITLAB_USER_NAME}"
     - git config --global user.email "${GITLAB_USER_EMAIL}"
     - echo 'deb [trusted=yes] https://repo.goreleaser.com/apt/ /' | tee /etc/apt/sources.list.d/goreleaser.list
     - apt update
     - apt install goreleaser
-    - TAG_VERSION=$(git rev-list --tags --max-count=1 | xargs -I {} git describe --tags {})
-    - COMMIT=$(git rev-list --tags --max-count=1)
-    - echo "THIS IS COMMIT = $COMMIT"
-    - echo "THIS IS TAG_VERSION = $TAG_VERSION"
-    - git tag -d v0.0.4
-    - git tag --list
   script:
     - |
       rm -rf .git
