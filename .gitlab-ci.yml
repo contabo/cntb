@@ -84,8 +84,9 @@ release:
   before_script:
     - git config --global pager.branch false
     - git config --global pager.config false
-    - git branch
     - git config --list
+    - git branch -r
+    - git branch
     - TAG_VERSION=$(git rev-list --tags --max-count=1 | xargs -I {} git describe --tags {})
     - COMMIT=$(git rev-list --tags --max-count=1)
     - echo "THIS IS COMMIT = $COMMIT"
