@@ -81,7 +81,7 @@ release:
   before_script:
     - git config --global pager.branch false
     - git config --global pager.config false
-    - git branch
+    - git branch -r
     - git config --list
     - TAG_VERSION=$(git rev-list --tags --max-count=1 | xargs -I {} git describe --tags {})
     - COMMIT=$(git rev-list --tags --max-count=1)
@@ -93,6 +93,7 @@ release:
     - echo 'deb [trusted=yes] https://repo.goreleaser.com/apt/ /' | tee /etc/apt/sources.list.d/goreleaser.list
     - apt update
     - apt install goreleaser
+    - git rev-list -n 1 $TAG_VERSION
   script:
     - |
       rm -rf .git
