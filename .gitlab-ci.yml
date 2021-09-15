@@ -84,17 +84,29 @@ release:
     - apt update
     - apt install goreleaser
   script:
-    - TAG_VERSION=$(git rev-list --tags --max-count=1 | xargs -I {} git describe --tags {})
-    - rm -rf .git
-    - mkdir .tmp/
-    - git clone https://root:$GITHUB_ACCESS_TOKEN@$GITHUB_REPO .tmp/
-    - cp -r .tmp/.git .
-    - rm -rf .tmp/
-    - git add --all
-    - export GITHUB_TOKEN=$GITHUB_ACCESS_TOKEN
-    - git diff-index --quiet HEAD || (git commit -m "release $TAG_VERSION" && git push https://root:$GITHUB_ACCESS_TOKEN@$GITHUB_REPO)
-    - git diff-index --quiet HEAD || git tag $TAG_VERSION
-    - git diff-index --quiet HEAD || git push origin $TAG_VERSION
-    - git diff-index --quiet HEAD || goreleaser release --rm-dist
+    - |
+      TAG_VERSION=$(git rev-list --tags --max-count=1 | xargs -I {} git describe --tags {})
+      rm -rf .git
+      mkdir .tmp/
+      echo "before clone"
+      git clone https://root:$GITHUB_ACCESS_TOKEN@$GITHUB_REPO .tmp/
+      echo "after clone"
+      cp -r .tmp/.git .
+      echo "after cp"
+      rm -rf .tmp/
+      echo "after rm"
+      git add --all
+      echo "after git add"
+      export GITHUB_TOKEN=$GITHUB_ACCESS_TOKEN
+      git diff-index --quiet HEAD || {
+        echo "inside IF"
+        git commit -m "release $TAG_VERSION" && git push https://root:$GITHUB_ACCESS_TOKEN@$GITHUB_REPO
+        echo "after git commit"
+        git tag $TAG_VERSION
+        git push origin $TAG_VERSION
+        echo "after git push"
+        goreleaser release --rm-dist
+        echo "after goreleaser"
+      }
   only:
     - feature/AR-362-push-to-github
