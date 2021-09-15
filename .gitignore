@@ -5,3 +5,4 @@ openapi
 .vscode
 .idea
 dist/
+notes.md

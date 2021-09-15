@@ -91,9 +91,9 @@ release:
       git clone https://root:$GITHUB_ACCESS_TOKEN@$GITHUB_REPO .tmp/
       cp -r .tmp/.git .
       rm -rf .tmp/
-      git add --all
       export GITHUB_TOKEN=$GITHUB_ACCESS_TOKEN
       git diff-index --quiet HEAD || {
+        git add --all
         git commit -m "release $TAG_VERSION" && git push https://root:$GITHUB_ACCESS_TOKEN@$GITHUB_REPO
         git tag $TAG_VERSION
         git push origin $TAG_VERSION
