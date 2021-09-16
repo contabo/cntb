@@ -109,3 +109,4 @@ release:
       }
   only:
     - feature/AR-362-goreleaser
+    - prod
