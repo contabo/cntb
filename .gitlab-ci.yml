@@ -11,6 +11,8 @@ stages:
   - release
 
 generate-api:
+  variables:
+    GIT_STRATEGY: clone
   image: $CI_REGISTRY/arcus/common/images/base-images/pre_build/docker:latest
   stage: generate-api
   environment:
@@ -108,5 +110,5 @@ release:
         goreleaser release --rm-dist --skip-announce
       }
   only:
-    - feature/AR-362-goreleaser
     - prod
+    - feature/AR-362-goreleaser
