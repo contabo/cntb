@@ -12,16 +12,16 @@ PG_CLUSTER="${PG_CLUSTER:-test-postgres}"
 # 1. clean up database
 cat <<EOF > /tmp/cleanup-cntb-testdata.sql
 \c server_compute
-delete from custom_image where customer_id = 'cli-tool-integration-59a80d5d-1027-4d9f-94e4-1c87e8eef8ce';
+delete from custom_image where customer_id = '98546';
 refresh materialized view mv_image;
 \c idm_user_management
-delete from role where customer_id = 'cli-tool-integration-59a80d5d-1027-4d9f-94e4-1c87e8eef8ce';
-delete from "user" where customer_id = 'cli-tool-integration-59a80d5d-1027-4d9f-94e4-1c87e8eef8ce';
+delete from role where customer_id = '98546';
+delete from "user" where customer_id = '98546';
 \c idm_secret
-delete from secret where customer_id = 'cli-tool-integration-59a80d5d-1027-4d9f-94e4-1c87e8eef8ce';
+delete from secret where customer_id = '98546';
 \c organizing_tags
-delete from assignment where customer_id = 'cli-tool-integration-59a80d5d-1027-4d9f-94e4-1c87e8eef8ce';
-delete from tag where customer_id = 'cli-tool-integration-59a80d5d-1027-4d9f-94e4-1c87e8eef8ce';
+delete from assignment where customer_id = '98546';
+delete from tag where customer_id = '98546';
 EOF
 
 scp /tmp/cleanup-cntb-testdata.sql ${PG_CLUSTER}.contabo.intra:/tmp/cleanup-cntb-testdata.sql

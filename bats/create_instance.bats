@@ -19,17 +19,20 @@ function teardown_file() {
 ###
 
 @test 'create instance : ok' {
-  run ./cntb create instance -b true -p 12 --imageId "ae423751-50fa-4bf6-9978-015673bf51c4" --addOns '[{"id":1424,"quantity":1}]' --productId "V1" -r "EU"
+  if [ ${INT_ENVIRONMENT} == 'prod' ]; then
+    skip "Skip due to prod environment"
+  fi
+
+  run ./cntb create instance -b true -p 12 --imageId "${STANDARD_IMAGE_ID}" --addOns '[{"id":1424,"quantity":1}]' --productId "V1" -r "EU"
   assert_success
-#   instanceid="$output"
 }
 
 @test 'create instance : nok : missing arguments' {
-  run ./cntb create instance -b true -p 12 --imageId "ae423751-50fa-4bf6-9978-015673bf51c4" --addOns '[{"id":1424,"quantity":1}]' -r "EU"
+  run ./cntb create instance -b true -p 12 --imageId "${STANDARD_IMAGE_ID}" --addOns '[{"id":1424,"quantity":1}]' -r "EU"
   assert_failure
 }
 
 @test 'create : nok : invalid arguments' {
-  run ./cntb create instance -b true -p 12 --imageId "ae423751-50fa-4bf6-9978-015673bf51c4" --addOns '[{"id":aba,"quantity":1}]' --productId "V1" -r "EU"
+  run ./cntb create instance -b true -p 12 --imageId "${STANDARD_IMAGE_ID}" --addOns '[{"id":aba,"quantity":1}]' --productId "V1" -r "EU"
   assert_failure
 }

@@ -38,13 +38,24 @@ var instanceReinstallCmd = &cobra.Command{
 	Long:  `Your are able to reinstall an instance.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		instanceReinstallRequest := *instancesClient.NewReinstallInstanceRequestWithDefaults()
-
 		content := contaboCmd.OpenStdinOrFile()
+
 		switch content {
 		case nil:
 			// from arguments
 			instanceReinstallRequest.Boot = instanceBoot
 			instanceReinstallRequest.ImageId = instanceImageId
+
+			if instanceAddOns != "" {
+				var requestAddOns []instancesClient.AddOnRequest
+				err := json.Unmarshal([]byte(instanceAddOns), &requestAddOns)
+				if err != nil {
+					log.Error("I am going to fail now as there is an error")
+					log.Fatal(fmt.Sprintf("Format of addons invalid. Please check you syntax: %v", err))
+				}
+				instanceReinstallRequest.AddOns = &requestAddOns
+			}
+
 			if len(instanceSshKeys) != 0 {
 				instanceReinstallRequest.SshKeys = &instanceSshKeys
 			}
@@ -68,7 +79,7 @@ var instanceReinstallCmd = &cobra.Command{
 
 		resp, httpResp, err := client.ApiClient().InstancesApi.ReinstallInstance(context.Background(), instanceId).XRequestId(uuid.NewV4().String()).ReinstallInstanceRequest(instanceReinstallRequest).Execute()
 
-		util.HandleErrors(err, httpResp, "while reinstallingh instance")
+		util.HandleErrors(err, httpResp, "while reinstalling instance")
 
 		responseJSON, _ := resp.MarshalJSON()
 
@@ -79,11 +90,6 @@ var instanceReinstallCmd = &cobra.Command{
 		if len(args) < 1 {
 			cmd.Help()
 			log.Fatal("please provide instance id")
-		}
-
-		if len(args) > 1 {
-			cmd.Help()
-			log.Fatal("the instance id is the only argument allowed")
 		}
 
 		instanceId64, err := strconv.ParseInt(args[0], 10, 64)
@@ -127,4 +133,7 @@ func init() {
 
 	instanceReinstallCmd.Flags().StringVarP(&instanceUserData, "userData", "", "", `instance user data`)
 	viper.BindPFlag("userData", instanceReinstallCmd.Flags().Lookup("userData"))
+
+	instanceReinstallCmd.Flags().StringVarP(&instanceAddOns, "addOns", "", "", `list of the addons`)
+	viper.BindPFlag("addOns", instanceReinstallCmd.Flags().Lookup("addOns"))
 }

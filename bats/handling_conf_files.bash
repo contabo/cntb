@@ -1,7 +1,7 @@
 #!/bin/bash
 
 OAUTH2_CLIENT_ID="${OAUTH2_CLIENT_ID:-arcus-playground}"
-OAUTH2_USER="${OAUTH2_USER:-cli-tool-integration-59a80d5d-1027-4d9f-94e4-1c87e8eef8ce}"
+OAUTH2_USER="${OAUTH2_USER:-de-98546@contabo.net}"
 OAUTH2_PASS="${OAUTH2_PASS:-uog4ungoo%th0ieNg3oa}"
 OAUTH2_CLIENT_SECRET="${OAUTH2_CLIENT_SECRET:-7271e905-239e-4d15-a8c5-527743a58390}"
 OAUTH2_URL="${OAUTH2_URL:-https://idm-dev-int.contabo.intra/auth/realms/contabo/protocol/openid-connect/token}"

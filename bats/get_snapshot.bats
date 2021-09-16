@@ -67,7 +67,7 @@ function teardown_file() {
 }
 
 @test "get snapshot with invalid snapshotId: nok" {
-  run ./cntb get snapshot 100 aa
+  run ./cntb get snapshot ${INSTANCE_ID} aa
   assert_failure
 }
 

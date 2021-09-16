@@ -11,6 +11,7 @@ stages:
   - release
 
 generate-api:
+  # cleaning worktree caused of release
   variables:
     GIT_STRATEGY: clone
   image: $CI_REGISTRY/arcus/common/images/base-images/pre_build/docker:latest
@@ -56,6 +57,7 @@ test:integration-test:
     - export OAUTH2_URL
     - export OAUTH2_USER_ID
     - export OAUTH2_PASS
+    - export INT_ENVIRONMENT
     - bats -rt --timing bats/*.bats
   only:
     - dev
@@ -80,21 +82,9 @@ release:
   image: $CI_REGISTRY/arcus/common/images/base-images/buildtime/go:latest
   stage: release
   before_script:
-    - git config --global pager.branch false
-    - git config --global pager.config false
-    - git branch -r
-    - git config --list
     - TAG_VERSION=$(git rev-list --tags --max-count=1 | xargs -I {} git describe --tags {})
-    - COMMIT=$(git rev-list --tags --max-count=1)
-    - echo "THIS IS COMMIT = $COMMIT"
-    - echo "THIS IS TAG_VERSION = $TAG_VERSION"
-    - git tag --list
     - git config --global user.name "${GITLAB_USER_NAME}"
     - git config --global user.email "${GITLAB_USER_EMAIL}"
-    - echo 'deb [trusted=yes] https://repo.goreleaser.com/apt/ /' | tee /etc/apt/sources.list.d/goreleaser.list
-    - apt update
-    - apt install goreleaser
-    - git rev-list -n 1 $TAG_VERSION
   script:
     - |
       rm -rf .git
@@ -111,4 +101,3 @@ release:
       }
   only:
     - prod
-    - feature/AR-362-goreleaser

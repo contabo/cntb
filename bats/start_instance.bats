@@ -16,40 +16,18 @@ function teardown_file() {
 }
 
 @test 'start instance : ok' {
-  run ./cntb stop instance 100
+  run ./cntb stop instance ${INSTANCE_ID}
 
-  run ./cntb start instance 100
+  sleep 2
+
+  run ./cntb start instance ${INSTANCE_ID}
   assert_success
   assert_output --partial 'INSTANCEID'
   assert_output --partial 'ACTION'
-  assert_output --partial '100'
+  assert_output --partial "${INSTANCE_ID}"
   assert_output --partial 'start'
 
-  run ./cntb stop instance 100
-}
+  sleep 2
 
-@test 'start instance : ok : fromat wide' {
-  run ./cntb stop instance 100
-
-  run ./cntb start instance 100 -o wide
-  assert_success
-  assert_output --partial 'INSTANCEID'
-  assert_output --partial 'ACTION'
-  assert_output --partial '100'
-  assert_output --partial 'start'
-
-  run ./cntb stop instance 100
-}
-
-@test 'start instance : ok : format json' {
-  run ./cntb stop instance 100
-  
-  run ./cntb start instance 100 -o json
-  assert_success
-  assert_output --partial '"instanceId"'
-  assert_output --partial '"action"'
-  assert_output --partial '100'
-  assert_output --partial 'start'
-
-  run ./cntb stop instance 100
+  run ./cntb stop instance ${INSTANCE_ID}
 }

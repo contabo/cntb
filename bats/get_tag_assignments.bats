@@ -20,7 +20,7 @@ function teardown_file() {
   assert_success
   tagid="$output"
 
-   run ./cntb create tagAssignment $tagid instance cli-tool-integration-59a80d5d-1027-4d9f-94e4-1c87e8eef8ce
+   run ./cntb create tagAssignment $tagid instance de-98546@contabo.net
   assert_success
 
   run ./cntb get tagAssignments $tagid
@@ -31,7 +31,7 @@ function teardown_file() {
   assert_output --partial "RESOURCEID"
   assert_output --partial "RESOURCENAME"
 
-  run ./cntb delete tagAssignment $tagid instance cli-tool-integration-59a80d5d-1027-4d9f-94e4-1c87e8eef8ce
+  run ./cntb delete tagAssignment $tagid instance de-98546@contabo.net
   assert_success
   run ./cntb delete tag "$tagid"
   assert_success
@@ -44,7 +44,7 @@ function teardown_file() {
   tagid="$output"
 
 
-  run ./cntb create tagAssignment $tagid instance cli-tool-integration-59a80d5d-1027-4d9f-94e4-1c87e8eef8ce
+  run ./cntb create tagAssignment $tagid instance de-98546@contabo.net
   assert_success
   run ./cntb create tagAssignment $tagid instance cli-tool2-integration-59a80d5d-1027-4d9f-94e4-1c87e8eef8ce
   assert_success
@@ -59,7 +59,7 @@ function teardown_file() {
   assert_output --partial "$tagid"
   assert_output --partial "foo${TEST_SUFFIX}"
   assert_output --partial "instance"
-  assert_output --partial "cli-tool-integration-59a80d5d-1027-4d9f-94e4-1c87e8eef8ce"
+  assert_output --partial "de-98546@contabo.net"
   assert_output --partial "test_vps"
   assert_output --partial "$tagid"
   assert_output --partial "foo${TEST_SUFFIX}"
@@ -67,7 +67,7 @@ function teardown_file() {
   assert_output --partial "cli-tool2-integration-59a80d5d-1027-4d9f-94e4-1c87e8eef8ce"
   assert_output --partial "test_vps"
 
-  run ./cntb delete tagAssignment $tagid instance cli-tool-integration-59a80d5d-1027-4d9f-94e4-1c87e8eef8ce
+  run ./cntb delete tagAssignment $tagid instance de-98546@contabo.net
   assert_success
   run ./cntb delete tagAssignment $tagid instance cli-tool2-integration-59a80d5d-1027-4d9f-94e4-1c87e8eef8ce
   assert_success
@@ -81,7 +81,7 @@ function teardown_file() {
   tagid="$output"
 
 
-  run ./cntb create tagAssignment $tagid instance cli-tool-integration-59a80d5d-1027-4d9f-94e4-1c87e8eef8ce
+  run ./cntb create tagAssignment $tagid instance de-98546@contabo.net
   assert_success
   run ./cntb create tagAssignment $tagid instance cli-tool2-integration-59a80d5d-1027-4d9f-94e4-1c87e8eef8ce
   assert_success
@@ -103,7 +103,7 @@ function teardown_file() {
   assert_output --partial "cli-tool2-integration-59a80d5d-1027-4d9f-94e4-1c87e8eef8ce"
   assert_output --partial "test_vps"
 
-  run ./cntb delete tagAssignment $tagid instance cli-tool-integration-59a80d5d-1027-4d9f-94e4-1c87e8eef8ce
+  run ./cntb delete tagAssignment $tagid instance de-98546@contabo.net
   assert_success
   run ./cntb delete tagAssignment $tagid instance cli-tool2-integration-59a80d5d-1027-4d9f-94e4-1c87e8eef8ce
   assert_success

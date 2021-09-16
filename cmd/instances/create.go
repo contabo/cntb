@@ -79,7 +79,7 @@ var instanceCreateCmd = &cobra.Command{
 
 		util.HandleErrors(err, httpResp, "while creating instance")
 
-		fmt.Printf("%v", int64(resp.Data[0].InstanceId))
+		fmt.Printf("%v", resp.Data[0].InstanceId)
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
 		contaboCmd.ValidateCreateInput()

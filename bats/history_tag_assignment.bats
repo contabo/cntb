@@ -24,7 +24,7 @@ function teardown_file() {
   assert_success
   tagid="$output"
 
-  run ./cntb create tagAssignment $tagid instance cli-tool-integration-59a80d5d-1027-4d9f-94e4-1c87e8eef8ce
+  run ./cntb create tagAssignment $tagid instance de-98546@contabo.net
   assert_success
 
   run ./cntb history tagAssignment --orderBy=tag_id:asc
@@ -34,7 +34,7 @@ function teardown_file() {
   assert_output --partial 'RESOURCETYPE'
 
     # clean up
-  run ./cntb delete tagAssignment $tagid instance cli-tool-integration-59a80d5d-1027-4d9f-94e4-1c87e8eef8ce
+  run ./cntb delete tagAssignment $tagid instance de-98546@contabo.net
   assert_success
   run ./cntb delete tag "$tagid"
   assert_success
@@ -49,7 +49,7 @@ function teardown_file() {
   assert_success
   tagid="$output"
 
-  run ./cntb create tagAssignment $tagid instance cli-tool-integration-59a80d5d-1027-4d9f-94e4-1c87e8eef8ce
+  run ./cntb create tagAssignment $tagid instance de-98546@contabo.net
   assert_success
 
   run ./cntb history tagAssignment -s 4 -o wide
@@ -66,7 +66,7 @@ function teardown_file() {
 
 
   # clean up
-  run ./cntb delete tagAssignment $tagid instance cli-tool-integration-59a80d5d-1027-4d9f-94e4-1c87e8eef8ce
+  run ./cntb delete tagAssignment $tagid instance de-98546@contabo.net
   assert_success
   run ./cntb delete tag "$tagid"
   assert_success

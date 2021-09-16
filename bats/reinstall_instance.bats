@@ -19,37 +19,25 @@ function teardown_file() {
 ###
 
 @test 'reinstall instance : ok' {
-  run ./cntb create instance -b true -p 12 --imageId "ae423751-50fa-4bf6-9978-015673bf51c4" --addOns '[{"id":1424,"quantity":1}]' --productId "V1" -r "EU"
-  assert_success
-  instanceId="$output"
+  if [ ${INT_ENVIRONMENT} == 'prod' ]; then
+    skip "Skip due to prod environment"
+  fi
 
-  run ./cntb reinstall instance "$instanceId" --imageId="ae423751-50fa-4bf6-9978-015673bf51c4"
+  run ./cntb reinstall instance "${REINSTALL_INSTANCE_ID}" -b true --imageId="${STANDARD_IMAGE_ID2}"
   assert_success
-
 }
 
 @test "reinstall instance wrong instance id type: nok" {
- run ./cntb create instance -b true -p 12 --imageId "ae423751-50fa-4bf6-9978-015673bf51c4" --addOns '[{"id":1424,"quantity":1}]' --productId "V1" -r "EU"
-  assert_success
-
-  run ./cntb reinstall instance abc --imageId="ae423751-50fa-4bf6-9978-015673bf51c4"
+  run ./cntb reinstall instance abc -b true --imageId="${STANDARD_IMAGE_ID2}"
   assert_failure
 }
 
 @test 'reinstall instance inexistent instance id : nok' {
-  run ./cntb create instance -b true -p 12 --imageId "ae423751-50fa-4bf6-9978-015673bf51c4" --addOns '[{"id":1424,"quantity":1}]' --productId "V1" -r "EU"
-  assert_success
-  instanceId=$((output + 10))
-  
-  run ./cntb reinstall instance "$instanceId"
+  run ./cntb reinstall instance 123
   assert_failure
 }
 
-@test 'reinstall instance without imageID: nok' {
-  run ./cntb create instance -b true -p 12 --imageId "ae423751-50fa-4bf6-9978-015673bf51c4" --addOns '[{"id":1424,"quantity":1}]' --productId "V1" -r "EU"
-  assert_success
-  instanceId="$output"
-
-  run ./cntb reinstall instance "$instanceId"
+@test 'reinstall instance without image id: nok' {
+  run ./cntb reinstall instance "${REINSTALL_INSTANCE_ID}" -b true
   assert_failure
 }
