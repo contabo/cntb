@@ -92,7 +92,7 @@ release:
       rm -rf .tmp/
       export GITHUB_TOKEN=$GITHUB_ACCESS_TOKEN
       echo 'deciding if there were changes'
-      GIT_STATUS=$(git status --porcelain)
+      GIT_STATUS=$(git status --porcelain --untracked-files=no)
       if [ -z "$GIT_STATUS" ]; then
         echo "Nothing to release"
         exit
@@ -101,7 +101,7 @@ release:
         VNUM1=${VERSION_BITS[0]}
         VNUM2=${VERSION_BITS[1]}
         VNUM3=${VERSION_BITS[2]}
-        VNUM3=$((VNUM3+1))
+        VNUM3=$((VNUM3+3))
         NEW_TAG="$VNUM1.$VNUM2.$VNUM3"
         echo "Updating $TAG_VERSION to $NEW_TAG"
         git add --all
