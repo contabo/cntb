@@ -89,19 +89,22 @@ release:
     - |
       rm -rf .git
       git clone https://root:$GITHUB_ACCESS_TOKEN@$GITHUB_REPO .tmp/
-      echo 'copy folder'
       cp -r .tmp/.git .
-      echo 'remove folder'
       rm -rf .tmp/
-      echo 'export token'
-      echo 'tag $TAG_VERSION'
       export GITHUB_TOKEN=$GITHUB_ACCESS_TOKEN
       echo 'deciding if there were changes'
       if ! git diff-index --quiet HEAD --; then
+        VERSION_BITS=(${TAG_VERSION//./ })
+        VNUM1=${VERSION_BITS[0]}
+        VNUM2=${VERSION_BITS[1]}
+        VNUM3=${VERSION_BITS[2]}
+        VNUM3=$((VNUM3+1))
+        NEW_TAG="$VNUM1.$VNUM2.$VNUM3"
+        echo "Updating $TAG_VERSION to $NEW_TAG"
         git add --all
-        git commit -m "release $TAG_VERSION"
+        git commit -m "release $NEW_TAG"
         git push https://root:$GITHUB_ACCESS_TOKEN@$GITHUB_REPO
-        git tag $TAG_VERSION
+        git tag $NEW_TAG
         goreleaser release --rm-dist --skip-announce
       else 
         echo "Nothing to release"
