@@ -94,6 +94,7 @@ release:
       echo 'remove folder'
       rm -rf .tmp/
       echo 'export token'
+      echo 'tag $TAG_VERSION'
       export GITHUB_TOKEN=$GITHUB_ACCESS_TOKEN
       echo 'deciding if there were changes'
       if ! git diff-index --quiet HEAD --; then
