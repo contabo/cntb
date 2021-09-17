@@ -63,7 +63,6 @@ test:integration-test:
     - dev
     - test
     - staging
-    - prod
   resource_group: $CI_COMMIT_BRANCH
 
 quality:sonar-qube:
@@ -93,7 +92,11 @@ release:
       rm -rf .tmp/
       export GITHUB_TOKEN=$GITHUB_ACCESS_TOKEN
       echo 'deciding if there were changes'
-      if ! git diff-index --quiet HEAD --; then
+      GIT_STATUS=$(git status --porcelain)
+      if [ -z "$GIT_STATUS" ]; then
+        echo "Nothing to release"
+        exit
+      else
         VERSION_BITS=(${TAG_VERSION//./ })
         VNUM1=${VERSION_BITS[0]}
         VNUM2=${VERSION_BITS[1]}
@@ -106,9 +109,6 @@ release:
         git push https://root:$GITHUB_ACCESS_TOKEN@$GITHUB_REPO
         git tag $NEW_TAG
         goreleaser release --rm-dist --skip-announce
-      else 
-        echo "Nothing to release"
-        exit 0
       fi
   only:
     - prod
