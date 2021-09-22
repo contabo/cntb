@@ -125,10 +125,10 @@ func init() {
 	instanceReinstallCmd.Flags().StringVarP(&instanceImageId, "imageId", "", "", `instance image id`)
 	viper.BindPFlag("imageId", instanceReinstallCmd.Flags().Lookup("imageId"))
 
-	instanceReinstallCmd.Flags().Float32SliceVar(&instanceSshKeys, "sshKeys", nil, `instance ssh keys`)
+	instanceReinstallCmd.Flags().Int64SliceVar(&instanceSshKeys, "sshKeys", nil, `instance ssh keys`)
 	viper.BindPFlag("sshKeys", instanceReinstallCmd.Flags().Lookup("sshKeys"))
 
-	instanceReinstallCmd.Flags().Float32VarP(&instanceRootPassword, "rootPassword", "", 0, `instance root password`)
+	instanceReinstallCmd.Flags().Int64VarP(&instanceRootPassword, "rootPassword", "", 0, `instance root password`)
 	viper.BindPFlag("rootPassword", instanceReinstallCmd.Flags().Lookup("rootPassword"))
 
 	instanceReinstallCmd.Flags().StringVarP(&instanceUserData, "userData", "", "", `instance user data`)

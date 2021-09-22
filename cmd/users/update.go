@@ -123,7 +123,7 @@ func init() {
 	viper.BindPFlag("accessAllResources", userUpdateCmd.Flags().Lookup("accessAllResources"))
 	viper.SetDefault("accessAllResources", false)
 
-	userUpdateCmd.Flags().Float32SliceVarP(&roles, "roles", "r", nil, `list of role ids the user should have`)
+	userUpdateCmd.Flags().Int64SliceVarP(&roles, "roles", "r", nil, `list of role ids the user should have`)
 	viper.BindPFlag("roles", userUpdateCmd.Flags().Lookup("roles"))
 	viper.SetDefault("roles", nil)
 

@@ -55,12 +55,12 @@ var userEditCmd = &cobra.Command{
 		rolesObject, err := json.Marshal(normalized[0]["roles"])
 		var actualRoles []map[string]interface{}
 		json.Unmarshal(rolesObject, &actualRoles)
-		var roleIds []float32
+		var roleIds []int64
 		for i := 0; i < len(actualRoles); i++ {
 			var roleIdString = actualRoles[i]["roleId"]
 			value := reflect.ValueOf(roleIdString)
 			roleId64 := value.Convert(reflect.TypeOf(float64(0)))
-			var roleId float32 = float32(roleId64.Float())
+			var roleId int64 = int64(roleId64.Float())
 			roleIds = append(roleIds, roleId)
 		}
 

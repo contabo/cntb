@@ -58,9 +58,10 @@ It allows to view, create, change, delete various resources. Furthermore it allo
 automate tasks easily without programming.
 
 Examples:
- * create, delete, upgrade compute resources
- * manage and bind storage resources
- * manage access via network resources
+ * create, delete, control compute resources
+ * manage custom images
+ * create subusers
+ * assign tags
 `,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
@@ -124,7 +125,7 @@ func init() {
 	viper.BindPFlag(oauth2ClientSecretDesignation, rootCmd.PersistentFlags().Lookup(oauth2ClientSecretDesignation))
 
 	rootCmd.PersistentFlags().StringVar(&oauth2TokenUrl, oauth2TokenUrlDesignation,
-		"https://idm-dev-int.contabo.intra/auth/realms/contabo/protocol/openid-connect/token",
+		"https://auth.contabo.com/auth/realms/contabo/protocol/openid-connect/token",
 		"OAuth2 Token URL. Please refer to you customer panel to retrieve this information")
 	viper.BindPFlag(oauth2TokenUrlDesignation, rootCmd.PersistentFlags().Lookup(oauth2TokenUrlDesignation))
 

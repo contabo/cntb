@@ -6,7 +6,7 @@ var (
 	name               string
 	action             []string
 	apiPermissions     string
-	resourceTagList    []float32
+	resourceTagList    []int64
 	roleId             int64
 	roleIdFilter       int64
 	parseError         error

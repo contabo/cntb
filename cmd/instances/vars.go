@@ -8,9 +8,9 @@ var (
 	instanceImageId      string
 	instanceProductId    string
 	instanceRegion       string
-	instanceSshKeys      []float32
-	instanceRootPassword float32
+	instanceSshKeys      []int64
+	instanceRootPassword int64
 	instanceUserData     string
-	instancePeriod       float32
+	instancePeriod       int64
 	instanceAddOns       string
 )

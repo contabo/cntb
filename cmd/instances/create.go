@@ -106,10 +106,10 @@ var instanceCreateCmd = &cobra.Command{
 		}
 
 		if float32(viper.GetFloat64("period")) != 0 {
-			instancePeriod = float32(viper.GetFloat64("period"))
+			instancePeriod = int64(viper.GetInt64("period"))
 		}
 		if float32(viper.GetFloat64("rootPassword")) != 0 {
-			instanceRootPassword = float32(viper.GetFloat64("rootPassword"))
+			instanceRootPassword = int64(viper.GetInt64("rootPassword"))
 		}
 
 		if contaboCmd.InputFile == "" {
@@ -140,30 +140,30 @@ var instanceCreateCmd = &cobra.Command{
 func init() {
 	contaboCmd.CreateCmd.AddCommand(instanceCreateCmd)
 
-	instanceCreateCmd.Flags().BoolVarP(&instanceBoot, "boot", "b", false, `instance boot option (default false)`)
+	instanceCreateCmd.Flags().BoolVarP(&instanceBoot, "boot", "b", true, `boot after creation (default true)`)
 	viper.BindPFlag("boot", instanceCreateCmd.Flags().Lookup("boot"))
 
-	instanceCreateCmd.Flags().Float32VarP(&instancePeriod, "period", "p", 0, `instance period`)
+	instanceCreateCmd.Flags().Int64VarP(&instancePeriod, "period", "p", 0, `period contract length (1, 3, 6 or 12 months)`)
 	viper.BindPFlag("period", instanceCreateCmd.Flags().Lookup("period"))
 
-	instanceCreateCmd.Flags().Float32SliceVar(&instanceSshKeys, "sshKeys", nil, `instance ssh keys`)
+	instanceCreateCmd.Flags().Int64SliceVar(&instanceSshKeys, "sshKeys", nil, `ids of stored ssh public keys`)
 	viper.BindPFlag("sshKeys", instanceCreateCmd.Flags().Lookup("sshKeys"))
 
-	instanceCreateCmd.Flags().Float32VarP(&instanceRootPassword, "rootPassword", "", 0, `instance root password`)
+	instanceCreateCmd.Flags().Int64VarP(&instanceRootPassword, "rootPassword", "", 0, `id of stored password`)
 	viper.BindPFlag("rootPassword", instanceCreateCmd.Flags().Lookup("rootPassword"))
 
-	instanceCreateCmd.Flags().StringVarP(&instanceUserData, "userData", "", "", `instance user data`)
+	instanceCreateCmd.Flags().StringVarP(&instanceUserData, "userData", "", "", `cloud-init script (user data)`)
 	viper.BindPFlag("userData", instanceCreateCmd.Flags().Lookup("userData"))
 
-	instanceCreateCmd.Flags().StringVarP(&instanceImageId, "imageId", "", "", `instance image id`)
+	instanceCreateCmd.Flags().StringVarP(&instanceImageId, "imageId", "", "", `standard or custom image id`)
 	viper.BindPFlag("imageId", instanceCreateCmd.Flags().Lookup("imageId"))
 
-	instanceCreateCmd.Flags().StringVarP(&instanceAddOns, "addOns", "", "", `list of the addons`)
+	instanceCreateCmd.Flags().StringVarP(&instanceAddOns, "addOns", "", "", `list of addons. See https://contabo.com/en/product-list/?show_ids=true`)
 	viper.BindPFlag("addOns", instanceCreateCmd.Flags().Lookup("addOns"))
 
-	instanceCreateCmd.Flags().StringVarP(&instanceProductId, "productId", "", "", `instance product id`)
+	instanceCreateCmd.Flags().StringVarP(&instanceProductId, "productId", "", "", `id of product to be used. See https://contabo.com/en/product-list/?show_ids=true`)
 	viper.BindPFlag("productId", instanceCreateCmd.Flags().Lookup("productId"))
 
-	instanceCreateCmd.Flags().StringVarP(&instanceRegion, "region", "r", "", `instance region`)
+	instanceCreateCmd.Flags().StringVarP(&instanceRegion, "region", "r", "", `region where instance should be created [EU, US or APAC].`)
 	viper.BindPFlag("region", instanceCreateCmd.Flags().Lookup("region"))
 }

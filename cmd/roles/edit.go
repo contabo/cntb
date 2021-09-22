@@ -58,7 +58,7 @@ var roleEditCmd = &cobra.Command{
 		if permissionType == "resourcePermission" {
 			// get tagIds
 			tagObject := resp.Data[0].ResourcePermissions
-			var tagIds []float32
+			var tagIds []int64
 
 			for i := 0; i < len(tagObject); i++ {
 				tagIds = append(tagIds, tagObject[i].TagId)

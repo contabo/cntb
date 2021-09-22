@@ -31,11 +31,12 @@ var imageCreateCmd = &cobra.Command{
 		switch content {
 		case nil:
 			createImageRequest.Name = imageName
-			createImageRequest.Description = imageDescription
 			createImageRequest.Url = imageUrl
 			createImageRequest.OsType = imageOsType
 			createImageRequest.Version = imageVersion
-
+			if (imageDescription) != "" {
+				createImageRequest.Description = &imageDescription
+			}
 		default:
 			// from file / stdin
 			var requestFromFile imageClient.CreateCustomImageRequest
@@ -81,18 +82,19 @@ var imageCreateCmd = &cobra.Command{
 		if contaboCmd.InputFile == "" {
 			// arguments required
 			if imageName == "" {
+				cmd.Help()
 				log.Fatal("Argument name is empty. Please provide one.")
 			}
-			if imageDescription == "" {
-				log.Fatal("Argument description is empty please provide one")
-			}
 			if imageUrl == "" {
+				cmd.Help()
 				log.Fatal("Argument url is empty. Please provide one.")
 			}
 			if imageOsType == "" {
+				cmd.Help()
 				log.Fatal("Argument osType is empty please provide one")
 			}
 			if imageVersion == "" {
+				cmd.Help()
 				log.Fatal("Argument version is empty please provide one")
 			}
 		}

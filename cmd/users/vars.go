@@ -7,7 +7,7 @@ var (
 	isUserEnabled         bool
 	isAdmin               bool
 	canAccessAllResources bool
-	roles                 []float32
+	roles                 []int64
 	locale                string
 	userId                string
 	userIdFilter          string

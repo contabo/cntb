@@ -116,6 +116,6 @@ func init() {
 	roleCreateCmd.Flags().StringVarP(&apiPermissions, "apiPermission", "a", "",
 		"provide an array of json objects with the permissions including the api and the actions")
 
-	roleCreateCmd.Flags().Float32SliceVarP(&resourceTagList, "resourcePermission", "r", nil,
+	roleCreateCmd.Flags().Int64SliceVarP(&resourceTagList, "resourcePermission", "r", nil,
 		"provide an array of json objects with the permissions including the api and the actions")
 }

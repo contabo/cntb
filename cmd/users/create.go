@@ -115,7 +115,7 @@ func init() {
 		`can the user access all resources for permissions he has`)
 	viper.BindPFlag("accessAllResources", userManagementCreateCmd.Flags().Lookup("accessAllResources"))
 
-	userManagementCreateCmd.Flags().Float32SliceVarP(&roles, "roles", "r", nil,
+	userManagementCreateCmd.Flags().Int64SliceVarP(&roles, "roles", "r", nil,
 		`list of role ids the user should have`)
 	viper.BindPFlag("roles", userManagementCreateCmd.Flags().Lookup("roles"))
 

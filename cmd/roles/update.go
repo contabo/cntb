@@ -127,6 +127,6 @@ func init() {
 	roleUpdateCmd.Flags().StringVarP(&apiPermissions, "apiPermission", "a", "", "provide an array of json objects with the permissions including the api and the actions")
 	viper.BindPFlag("apiPermission", roleUpdateCmd.Flags().Lookup("apiPermission"))
 
-	roleUpdateCmd.Flags().Float32SliceVarP(&resourceTagList, "resourcePermission", "r", nil, "provide an array of json objects with the permissions including the api and the actions")
+	roleUpdateCmd.Flags().Int64SliceVarP(&resourceTagList, "resourcePermission", "r", nil, "provide an array of json objects with the permissions including the api and the actions")
 	viper.BindPFlag("resourcePermission", roleCreateCmd.Flags().Lookup("resourcePermission"))
 }
