@@ -33,8 +33,8 @@ import (
 
 var instanceCreateCmd = &cobra.Command{
 	Use:   "instance",
-	Short: "Creates a new instance",
-	Long:  `Create a new instances in your account with attribute name and optional attribute color.`,
+	Short: "Creates a new compute instance",
+	Long:  `Create a new compute instances in your account`,
 	Run: func(cmd *cobra.Command, args []string) {
 		createInstanceRequest := *instancesClient.NewCreateInstanceRequestWithDefaults()
 		content := contaboCmd.OpenStdinOrFile()
@@ -83,10 +83,6 @@ var instanceCreateCmd = &cobra.Command{
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
 		contaboCmd.ValidateCreateInput()
-		if len(args) < 1 {
-			cmd.Help()
-			log.Fatal("please provide the required arguments")
-		}
 
 		if viper.GetString("imageId") != "" {
 			instanceImageId = viper.GetString("imageId")
@@ -105,31 +101,36 @@ var instanceCreateCmd = &cobra.Command{
 			instanceBoot = viper.GetBool("boot")
 		}
 
-		if float32(viper.GetFloat64("period")) != 0 {
-			instancePeriod = int64(viper.GetInt64("period"))
+		if viper.GetInt64("period") != 0 {
+			instancePeriod = viper.GetInt64("period")
 		}
-		if float32(viper.GetFloat64("rootPassword")) != 0 {
-			instanceRootPassword = int64(viper.GetInt64("rootPassword"))
+		if viper.GetInt64("rootPassword") != 0 {
+			instanceRootPassword = viper.GetInt64("rootPassword")
 		}
 
 		if contaboCmd.InputFile == "" {
 
 			// arguments required
 			if instanceImageId == "" {
+				cmd.Help()
 				log.Fatal("Argument imageId is empty. Please provide one.")
 			}
 			if instanceProductId == "" {
+				cmd.Help()
 				log.Fatal("Argument productId is empty. Please provide one.")
 			}
 			if instanceRegion == "" {
+				cmd.Help()
 				log.Fatal("Argument region is empty. Please provide one.")
 			}
 
 			if instanceAddOns == "" {
+				cmd.Help()
 				log.Fatal("Argument addOns is empty. Please provide one.")
 			}
 
 			if instancePeriod == 0 {
+				cmd.Help()
 				log.Fatal("Argument period is empty. Please provide one.")
 			}
 		}
@@ -140,11 +141,13 @@ var instanceCreateCmd = &cobra.Command{
 func init() {
 	contaboCmd.CreateCmd.AddCommand(instanceCreateCmd)
 
-	instanceCreateCmd.Flags().BoolVarP(&instanceBoot, "boot", "b", true, `boot after creation (default true)`)
+	instanceCreateCmd.Flags().BoolVarP(&instanceBoot, "boot", "b", true, `boot after creation`)
 	viper.BindPFlag("boot", instanceCreateCmd.Flags().Lookup("boot"))
+	viper.SetDefault("boot", &instanceBoot)
 
-	instanceCreateCmd.Flags().Int64VarP(&instancePeriod, "period", "p", 0, `period contract length (1, 3, 6 or 12 months)`)
+	instanceCreateCmd.Flags().Int64VarP(&instancePeriod, "period", "p", 1, `period contract length (1, 3, 6 or 12 months)`)
 	viper.BindPFlag("period", instanceCreateCmd.Flags().Lookup("period"))
+	viper.SetDefault("period", &instancePeriod)
 
 	instanceCreateCmd.Flags().Int64SliceVar(&instanceSshKeys, "sshKeys", nil, `ids of stored ssh public keys`)
 	viper.BindPFlag("sshKeys", instanceCreateCmd.Flags().Lookup("sshKeys"))

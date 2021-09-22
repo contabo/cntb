@@ -87,11 +87,6 @@ var instanceReinstallCmd = &cobra.Command{
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
 		contaboCmd.ValidateCreateInput()
-		if len(args) < 1 {
-			cmd.Help()
-			log.Fatal("please provide instance id")
-		}
-
 		instanceId64, err := strconv.ParseInt(args[0], 10, 64)
 		if err != nil {
 			log.Fatal(fmt.Sprintf("Specified instanceId %v is not valid", args[0]))
@@ -119,8 +114,9 @@ var instanceReinstallCmd = &cobra.Command{
 func init() {
 	contaboCmd.ReinstallCmd.AddCommand(instanceReinstallCmd)
 
-	instanceReinstallCmd.Flags().BoolVarP(&instanceBoot, "boot", "b", false, `instance boot option (default false)`)
+	instanceReinstallCmd.Flags().BoolVarP(&instanceBoot, "boot", "b", true, `instance boot option (default false)`)
 	viper.BindPFlag("boot", instanceReinstallCmd.Flags().Lookup("boot"))
+	viper.SetDefault("boot", &instanceBoot)
 
 	instanceReinstallCmd.Flags().StringVarP(&instanceImageId, "imageId", "", "", `instance image id`)
 	viper.BindPFlag("imageId", instanceReinstallCmd.Flags().Lookup("imageId"))

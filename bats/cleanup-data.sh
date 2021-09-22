@@ -14,9 +14,10 @@ cat <<EOF > /tmp/cleanup-cntb-testdata.sql
 \c server_compute
 delete from custom_image where customer_id = '98546';
 refresh materialized view mv_image;
+delete from snapshot where customer_id = '98546';
 \c idm_user_management
 delete from role where customer_id = '98546';
-delete from "user" where customer_id = '98546';
+-- delete from "user" where customer_id = '98546';
 \c idm_secret
 delete from secret where customer_id = '98546';
 \c organizing_tags

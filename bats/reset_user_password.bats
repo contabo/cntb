@@ -15,7 +15,7 @@ function teardown_file() {
 }
 
 ###
-### arugments
+### arguments
 ###
 
 @test 'reset password : ok : invalid user id : nok' {
