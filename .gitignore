@@ -1,7 +1,6 @@
 cntb
-dist
-openapi
+dist/
+openapi/
 .DS_Store
 .vscode
 .idea
-dist/
