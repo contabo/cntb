@@ -19,21 +19,20 @@ import (
 )
 
 var snapshotCreateCmd = &cobra.Command{
-	Use:   "snapshot [instanceId]",
-	Short: "Creates a new snapshot",
-	Long:  `Creates a new snapshot based on json / yaml input or arguments.`,
-	Example: `cntb create snapshot 100 --name 'First Snapshot' ` +
-		`--description 'Create a new snapshot'`,
+	Use:     "snapshot [instanceId]",
+	Short:   "Creates a new snapshot",
+	Long:    `Creates a new snapshot based on json / yaml input or arguments.`,
+	Example: `cntb create snapshot 100 --name 'First Snapshot' `,
 	Run: func(cmd *cobra.Command, args []string) {
-
 		createSnapshotRequest := *imageClient.NewCreateSnapshotRequestWithDefaults()
 		content := contaboCmd.OpenStdinOrFile()
 
 		switch content {
 		case nil:
 			createSnapshotRequest.Name = name
-			createSnapshotRequest.Description = description
-
+			if (description) != "" {
+				createSnapshotRequest.Description = &description
+			}
 		default:
 			// from file / stdin
 			var requestFromFile imageClient.CreateSnapshotRequest
@@ -70,9 +69,6 @@ var snapshotCreateCmd = &cobra.Command{
 			// arguments required
 			if name == "" {
 				log.Fatal("Argument name is empty. Please provide one.")
-			}
-			if description == "" {
-				log.Fatal("Argument description is empty. Please provide one.")
 			}
 		}
 

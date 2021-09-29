@@ -167,6 +167,6 @@ func init() {
 	instanceCreateCmd.Flags().StringVarP(&instanceProductId, "productId", "", "", `id of product to be used. See https://contabo.com/en/product-list/?show_ids=true`)
 	viper.BindPFlag("productId", instanceCreateCmd.Flags().Lookup("productId"))
 
-	instanceCreateCmd.Flags().StringVarP(&instanceRegion, "region", "r", "", `region where instance should be created [EU, US or APAC].`)
+	instanceCreateCmd.Flags().StringVarP(&instanceRegion, "region", "r", "", `region where instance should be created [EU, US-central, US-east, US-west or SIN].`)
 	viper.BindPFlag("region", instanceCreateCmd.Flags().Lookup("region"))
 }

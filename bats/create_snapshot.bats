@@ -25,6 +25,16 @@ function teardown_file() {
   assert_success
 }
 
+@test 'create snapshot without description argument: ok' {
+  run ./cntb create snapshot ${INSTANCE_ID} --name="snapshot${TEST_SUFFIX}"
+  assert_success
+  snapshotId=$(echo "$output" | sed -n 's/.*snapshotId\s\+\([0-9a-zA-Z-]\+\).*$/\1/p')
+
+  # clean up
+  run ./cntb delete snapshot ${INSTANCE_ID} "$snapshotId"
+  assert_success
+}
+
 @test 'create snapshot without arguments: nok' {
   run ./cntb create snapshot ${INSTANCE_ID}
   assert_failure
@@ -32,11 +42,6 @@ function teardown_file() {
 
 @test 'create snapshot without name argument: nok' {
   run ./cntb create snapshot ${INSTANCE_ID} --description='test snapshot'
-  assert_failure
-}
-
-@test 'create snapshot without description argument: nok' {
-  run ./cntb create snapshot ${INSTANCE_ID} --name="snapshot${TEST_SUFFIX}"
   assert_failure
 }
 

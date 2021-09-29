@@ -18,7 +18,7 @@ build: generate-api-clients build-only unittest
 .PHONY: generate-api-clients
 generate-api-clients:
 	rm -rf openapi
-	docker run --rm -v $(OPENAPIVOLUME) --env JAVA_OPTS=$(JAVAOPT) openapitools/openapi-generator-cli generate \
+	docker run --rm -v $(OPENAPIVOLUME) --env JAVA_OPTS=$(JAVAOPT) openapitools/openapi-generator-cli:v5.2.1 generate \
 	--skip-validate-spec \
 	--input-spec $(OPENAPIURL) \
 	--generator-name  go \

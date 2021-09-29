@@ -9,6 +9,7 @@ import (
 
 func ApiClient() *apiClient.APIClient {
 	configuration := apiClient.NewConfiguration()
+	configuration.AddDefaultHeader("x-trace-id", "arcus_cli")
 	configuration.HTTPClient = oauth2Client.BearerHttpClient(config.Conf.Oauth2TokenUrl, config.Conf.Oauth2ClientId, config.Conf.Oauth2ClientSecret, config.Conf.Oauth2User, config.Conf.Oauth2Password)
 	var server apiClient.ServerConfiguration
 	server.URL = config.Conf.Api

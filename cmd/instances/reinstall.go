@@ -53,7 +53,7 @@ var instanceReinstallCmd = &cobra.Command{
 					log.Error("I am going to fail now as there is an error")
 					log.Fatal(fmt.Sprintf("Format of addons invalid. Please check you syntax: %v", err))
 				}
-				instanceReinstallRequest.AddOns = &requestAddOns
+				instanceReinstallRequest.AddOns = requestAddOns
 			}
 
 			if len(instanceSshKeys) != 0 {

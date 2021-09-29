@@ -4,12 +4,9 @@
 
 ## Installation
 
-1. Download `cntb` as pre-built executable for your operating system (Windows, MacOS and Linux supported) on the [releases page](https://github.com/contabo-gmbh/cntb/releases).
-  * MacOS
-    * Right-click and select extract or via command line: `unzip <filename>`
-    * Invoke `xattr -r -d com.apple.quarantine cntb`
+1. Download `cntb` as pre-built executable for your operating system (Windows, MacOS and Linux supported) on the [releases page](https://github.com/contabo/cntb/releases).
   * MacOS/Linux
-    * Right-click and select extract or via command line: `unzip <filename>`
+    * curl -L '<link to release>' | tar xz
   * Windows
     * Right-click and select extract
 2. You might move the executable to any location on your disk. You may update your `PATH` environment variable for easier invocation.
@@ -25,11 +22,7 @@
 2. Use the CLI, e.g.
 
 ```sh
-# help
-cntb
 cntb help
-# get list of your compute instances
-cntb get instances
 ```
 
 ## Examples
@@ -43,7 +36,7 @@ cntb get images
 ### Upload custom image
 
 ```sh
-cntb create image --name 'Ubuntu Custom Image' --description 'Ubuntu Server 20.04.2 LTS' --url https://example.com/image.iso --osType Linux --version 20.04.2
+cntb create image --name 'Ubuntu Custom Image' --description 'My Ubuntu Server 20.04.2 LTS' --url https://example.com/image.iso --osType Linux --version 20.04.2
 ```
 
 ### Create / order new Compute Instance
