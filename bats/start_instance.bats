@@ -18,7 +18,7 @@ function teardown_file() {
 @test 'start instance : ok' {
   run ./cntb stop instance ${INSTANCE_ID}
 
-  sleep 2
+  sleep 10
 
   run ./cntb start instance ${INSTANCE_ID}
   assert_success
@@ -27,7 +27,7 @@ function teardown_file() {
   assert_output --partial "${INSTANCE_ID}"
   assert_output --partial 'start'
 
-  sleep 2
+  sleep 10
 
   run ./cntb stop instance ${INSTANCE_ID}
 }
