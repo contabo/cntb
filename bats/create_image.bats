@@ -32,11 +32,6 @@ function teardown_file() {
   assert_failure
 }
 
-@test 'create image : nok : missing description' {
-  run ./cntb create image --name "image${TEST_SUFFIX}" --url "${IMAGE_DOWNLOAD_URL}" --osType Linux --version 20.04
-  assert_failure
-}
-
 @test 'create image : nok : missing url' {
   run ./cntb create image --name "image${TEST_SUFFIX}" --description 'description' --osType Linux --version 20.04
   assert_failure
