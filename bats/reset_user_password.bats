@@ -18,16 +18,17 @@ function teardown_file() {
 ### arguments
 ###
 
-@test 'reset password : ok : invalid user id : nok' {
+@test 'reset password : ok' {
   run ./cntb resetPassword user "$USER_ID"
   assert_success
-
-  run ./cntb resetPassword user 32163657126573126535612
-  assert_failure
-
 }
 
-@test 'wrong user id  : nok' {
+@test 'reset password invalid user id : nok' {
+  run ./cntb resetPassword user 32163657126573126535612 
+  assert_failure
+}
+
+@test 'reset password wrong user id : nok' {
   run ./cntb resetPassword user 78953218-1ba4-4b9b-ae32-1c5ebf037ac0
   assert_failure
 }

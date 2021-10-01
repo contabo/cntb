@@ -26,16 +26,17 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var resetPasswordUserCmd = &cobra.Command{
+var resendEmailVerificationUserCmd = &cobra.Command{
 	Use:     "user [userId]",
-	Short:   "Reset user password",
-	Long:    `Send email for password reset for a specific user`,
-	Example: `cntb resetPassword user 6cdf5968-f9fe-4192-97c2-f349e813c5e8`,
+	Short:   "Resend email verification",
+	Long:    `Resend email verification for a specific user`,
+	Example: `cntb resendEmailVerification user 6cdf5968-f9fe-4192-97c2-f349e813c5e8`,
 	Run: func(cmd *cobra.Command, args []string) {
-		httpResp, err := client.ApiClient().UsersApi.ResetPassword(context.Background(), userId).
+		httpResp, err := client.ApiClient().UsersApi.
+			ResendEmailVerification(context.Background(), userId).
 			XRequestId(uuid.NewV4().String()).Execute()
 
-		util.HandleErrors(err, httpResp, "while resetting user password")
+		util.HandleErrors(err, httpResp, "while resending email verification to user")
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
 		contaboCmd.ValidateCreateInput()
@@ -50,5 +51,5 @@ var resetPasswordUserCmd = &cobra.Command{
 }
 
 func init() {
-	contaboCmd.ResetPasswordCmd.AddCommand(resetPasswordUserCmd)
+	contaboCmd.ResendEmailVerificationCmd.AddCommand(resendEmailVerificationUserCmd)
 }
