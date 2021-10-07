@@ -42,7 +42,6 @@ var instanceCreateCmd = &cobra.Command{
 		switch content {
 		case nil:
 			// from arguments
-			createInstanceRequest.Boot = instanceBoot
 			createInstanceRequest.ImageId = instanceImageId
 			createInstanceRequest.ProductId = instanceProductId
 			createInstanceRequest.Region = instanceRegion
@@ -97,10 +96,6 @@ var instanceCreateCmd = &cobra.Command{
 			instanceAddOns = viper.GetString("addOns")
 		}
 
-		if viper.GetBool("boot") {
-			instanceBoot = viper.GetBool("boot")
-		}
-
 		if viper.GetInt64("period") != 0 {
 			instancePeriod = viper.GetInt64("period")
 		}
@@ -140,10 +135,6 @@ var instanceCreateCmd = &cobra.Command{
 
 func init() {
 	contaboCmd.CreateCmd.AddCommand(instanceCreateCmd)
-
-	instanceCreateCmd.Flags().BoolVarP(&instanceBoot, "boot", "b", true, `boot after creation`)
-	viper.BindPFlag("boot", instanceCreateCmd.Flags().Lookup("boot"))
-	viper.SetDefault("boot", &instanceBoot)
 
 	instanceCreateCmd.Flags().Int64VarP(&instancePeriod, "period", "p", 1, `period contract length (1, 3, 6 or 12 months)`)
 	viper.BindPFlag("period", instanceCreateCmd.Flags().Lookup("period"))

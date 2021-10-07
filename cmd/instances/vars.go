@@ -4,7 +4,6 @@ var (
 	instanceIdFilter     int64
 	instanceNameFilter   string
 	instanceId           int64
-	instanceBoot         bool
 	instanceImageId      string
 	instanceProductId    string
 	instanceRegion       string

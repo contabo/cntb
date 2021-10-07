@@ -43,7 +43,6 @@ var instanceReinstallCmd = &cobra.Command{
 		switch content {
 		case nil:
 			// from arguments
-			instanceReinstallRequest.Boot = instanceBoot
 			instanceReinstallRequest.ImageId = instanceImageId
 
 			if instanceAddOns != "" {
@@ -97,10 +96,6 @@ var instanceReinstallCmd = &cobra.Command{
 			instanceImageId = viper.GetString("imageId")
 		}
 
-		if viper.GetBool("boot") {
-			instanceBoot = viper.GetBool("boot")
-		}
-
 		if contaboCmd.InputFile == "" {
 			// arguments required
 			if instanceImageId == "" {
@@ -113,11 +108,6 @@ var instanceReinstallCmd = &cobra.Command{
 
 func init() {
 	contaboCmd.ReinstallCmd.AddCommand(instanceReinstallCmd)
-
-	instanceReinstallCmd.Flags().BoolVarP(&instanceBoot, "boot", "b", true, `instance boot option (default false)`)
-	viper.BindPFlag("boot", instanceReinstallCmd.Flags().Lookup("boot"))
-	viper.SetDefault("boot", &instanceBoot)
-
 	instanceReinstallCmd.Flags().StringVarP(&instanceImageId, "imageId", "", "", `instance image id`)
 	viper.BindPFlag("imageId", instanceReinstallCmd.Flags().Lookup("imageId"))
 
