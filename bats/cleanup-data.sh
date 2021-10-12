@@ -42,5 +42,5 @@ deleteUser() {
 }
 
 getToken
-KC_USER_NAME="foo.bar${TEST_SUFFIX}@contabo.com" deleteUser
+KC_USER_NAME="testuser${TEST_SUFFIX}@contabo.com" deleteUser
 

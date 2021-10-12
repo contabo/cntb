@@ -23,7 +23,7 @@ function teardown_file() {
     skip "Skip due to prod environment"
   fi
 
-  run ./cntb reinstall instance "${REINSTALL_INSTANCE_ID}" --imageId="${STANDARD_IMAGE_ID}" --addOns '[{ "id": 1424, "quantity": 1}]'
+  run ./cntb reinstall instance "${REINSTALL_INSTANCE_ID}" --imageId="${STANDARD_IMAGE_ID}" 
   assert_success
 }
 

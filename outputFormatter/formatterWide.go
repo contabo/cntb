@@ -30,6 +30,9 @@ func (wf FormatterWide) Format(data []interface{}, config FormatterConfig) [][]s
 				if result != nil && reflect.TypeOf(result).Kind() == reflect.Map {
 					pretty, _ := json.Marshal(result)
 					formattedLine = append(formattedLine, fmt.Sprintf("%v", string(pretty)))
+				} else if result != nil && reflect.TypeOf(result).Kind() == reflect.Float64 {
+					floatNumber, _ := result.(float64)
+					formattedLine = append(formattedLine, fmt.Sprintf("%d", int(floatNumber)))
 				} else {
 					formattedLine = append(formattedLine, fmt.Sprintf("%v", result))
 				}

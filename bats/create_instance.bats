@@ -23,16 +23,16 @@ function teardown_file() {
     skip "Skip due to prod environment"
   fi
 
-  run ./cntb create instance -p 6 --imageId "${STANDARD_IMAGE_ID}" --addOns '[{"id":1424,"quantity":1}]' --productId "V1" -r "EU"
+  run ./cntb create instance -p 6 --imageId "${STANDARD_IMAGE_ID}" --productId "V1" -r "EU"
   assert_success
 }
 
 @test 'create instance : nok : missing arguments' {
-  run ./cntb create instance -p 6 --imageId "${STANDARD_IMAGE_ID}" --addOns '[{"id":1424,"quantity":1}]' -r "EU"
+  run ./cntb create instance -p 6 --imageId "${STANDARD_IMAGE_ID}" -r "EU"
   assert_failure
 }
 
 @test 'create : nok : invalid arguments' {
-  run ./cntb create instance -p 6 --imageId "${STANDARD_IMAGE_ID}" --addOns '[{"id":aba,"quantity":1}]' --productId "V1" -r "EU"
+  run ./cntb create instance -p 6 --imageId "${STANDARD_IMAGE_ID}" --productId 10987 -r "EU"
   assert_failure
 }

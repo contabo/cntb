@@ -45,16 +45,6 @@ var instanceReinstallCmd = &cobra.Command{
 			// from arguments
 			instanceReinstallRequest.ImageId = instanceImageId
 
-			if instanceAddOns != "" {
-				var requestAddOns []instancesClient.AddOnRequest
-				err := json.Unmarshal([]byte(instanceAddOns), &requestAddOns)
-				if err != nil {
-					log.Error("I am going to fail now as there is an error")
-					log.Fatal(fmt.Sprintf("Format of addons invalid. Please check you syntax: %v", err))
-				}
-				instanceReinstallRequest.AddOns = requestAddOns
-			}
-
 			if len(instanceSshKeys) != 0 {
 				instanceReinstallRequest.SshKeys = &instanceSshKeys
 			}

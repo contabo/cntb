@@ -46,12 +46,16 @@ var instanceCreateCmd = &cobra.Command{
 			createInstanceRequest.ProductId = instanceProductId
 			createInstanceRequest.Region = instanceRegion
 			createInstanceRequest.Period = instancePeriod
-			var requestAddOns []instancesClient.AddOnRequest
-			err := json.Unmarshal([]byte(instanceAddOns), &requestAddOns)
-			if err != nil {
-				log.Error("I am going to fail now as there is an error")
-				log.Fatal(fmt.Sprintf("Format of addons invalid. Please check you syntax: %v", err))
+			var requestAddOns *[]instancesClient.AddOnRequest
+
+			if requestAddOns != nil {
+				err := json.Unmarshal([]byte(instanceAddOns), &requestAddOns)
+				if err != nil {
+					log.Error("I am going to fail now as there is an error")
+					log.Fatal(fmt.Sprintf("Format of addons invalid. Please check you syntax: %v", err))
+				}
 			}
+
 			createInstanceRequest.AddOns = requestAddOns
 			if instanceRootPassword != 0 {
 				createInstanceRequest.RootPassword = &instanceRootPassword
@@ -117,11 +121,6 @@ var instanceCreateCmd = &cobra.Command{
 			if instanceRegion == "" {
 				cmd.Help()
 				log.Fatal("Argument region is empty. Please provide one.")
-			}
-
-			if instanceAddOns == "" {
-				cmd.Help()
-				log.Fatal("Argument addOns is empty. Please provide one.")
 			}
 
 			if instancePeriod == 0 {

@@ -19,8 +19,24 @@ function teardown_file() {
 ###
 
 @test 'reset password : ok' {
-  run ./cntb resetPassword user "$USER_ID"
+  run ./cntb create role apiPermission --name="foo${TEST_SUFFIX}" --apiPermission='[{"apiName" : "/v1/users", "actions": ["READ", "CREATE"]}]'
   assert_success
+  roleId="$output"
+
+
+  run ./cntb create user --firstName="foo${TEST_SUFFIX}" --lastName="bar${TEST_SUFFIX}" --email="testuser${TEST_SUFFIX}@contabo.com" --enabled=true --admin=true --accessAllResources=true --roles="$roleId"
+  assert_success
+  userId="$output"
+
+  run ./cntb resetPassword user "$userId"
+  assert_success
+
+   #clean up
+  run ./cntb delete user "$userId"
+  assert_success
+  run ./cntb delete role apiPermission "$roleId"
+  assert_success
+  
 }
 
 @test 'reset password invalid user id : nok' {

@@ -26,7 +26,12 @@ func (nf FormatterNormal) Format(data []interface{}, config FormatterConfig) [][
 			formattedLine := make([]string, 0)
 			for _, filter := range headers {
 				result, _ := jsonpath.Get("$."+filter, entry)
-				formattedLine = append(formattedLine, fmt.Sprintf("%v", result))
+				if result != nil && reflect.TypeOf(result).Kind() == reflect.Float64 {
+					floatNumber, _ := result.(float64)
+					formattedLine = append(formattedLine, fmt.Sprintf("%d", int(floatNumber)))
+				} else {
+					formattedLine = append(formattedLine, fmt.Sprintf("%v", result))
+				}
 			}
 			formattedOutput = append(formattedOutput, formattedLine)
 		}

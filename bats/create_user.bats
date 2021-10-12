@@ -19,7 +19,7 @@ function teardown_file() {
     roleId="$output"
 
 
-    run ./cntb create user --firstName="foo${TEST_SUFFIX}" --lastName="bar${TEST_SUFFIX}" --email="foo.bar${TEST_SUFFIX}@contabo.com" --enabled=true --admin=true --accessAllResources=true --roles="$roleId"
+    run ./cntb create user --firstName="foo${TEST_SUFFIX}" --lastName="bar${TEST_SUFFIX}" --email="testuser${TEST_SUFFIX}@contabo.com" --enabled=true --admin=true --accessAllResources=true --roles="$roleId"
     assert_success
     userId="$output"
 
@@ -37,11 +37,11 @@ function teardown_file() {
     roleId="$output"
 
 
-    run ./cntb create user --firstName="foo${TEST_SUFFIX}" --lastName="bar${TEST_SUFFIX}" --email="foo.bar${TEST_SUFFIX}@contabo.com" --enabled=true --admin=true --accessAllResources=true --roles="$roleId"
+    run ./cntb create user --firstName="foo${TEST_SUFFIX}" --lastName="bar${TEST_SUFFIX}" --email="testuser${TEST_SUFFIX}@contabo.com" --enabled=true --admin=true --accessAllResources=true --roles="$roleId"
     assert_success
     userId="$output"
 
-    run ./cntb create user --firstName="foo${TEST_SUFFIX}" --lastName="bar${TEST_SUFFIX}" --email="foo.bar${TEST_SUFFIX}@contabo.com" --enabled=true --admin=true --accessAllResources=true --roles="$roleId"
+    run ./cntb create user --firstName="foo${TEST_SUFFIX}" --lastName="bar${TEST_SUFFIX}" --email="testuser${TEST_SUFFIX}@contabo.com" --enabled=true --admin=true --accessAllResources=true --roles="$roleId"
     assert_failure
 
 
@@ -60,11 +60,11 @@ function teardown_file() {
 }
 
 @test "create user missing firstName: nok" {
-    run ./cntb create user  --lastName="bar${TEST_SUFFIX}" --email="foo.bar${TEST_SUFFIX}@contabo.com"  --enabled=true --admin=true --accessAllResources=true --roles="$roleId"
+    run ./cntb create user  --lastName="bar${TEST_SUFFIX}" --email="testuser${TEST_SUFFIX}@contabo.com"  --enabled=true --admin=true --accessAllResources=true --roles="$roleId"
     assert_failure
 }
 
 @test "create user missing lastName: nok" {
-    run ./cntb create user --firstName="foo${TEST_SUFFIX}" --email="foo.bar${TEST_SUFFIX}@contabo.com"  --enabled=true --admin=true --accessAllResources=true --roles="$roleId"
+    run ./cntb create user --firstName="foo${TEST_SUFFIX}" --email="testuser${TEST_SUFFIX}@contabo.com"  --enabled=true --admin=true --accessAllResources=true --roles="$roleId"
     assert_failure
 }

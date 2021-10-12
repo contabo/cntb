@@ -72,7 +72,7 @@ function delete_a_lot_of_tags() {
   assert_output --partial 'TAGID'
   assert_output --partial 'NAME'
   assert_equal "${#lines[@]}" "6"
-  assert_line --index 1 --partial "bar6"
+  assert_line --index 2 --partial "bar7"
 
 
   # page size 10
@@ -89,8 +89,7 @@ function delete_a_lot_of_tags() {
   assert_output --partial 'TAGID'
   assert_output --partial 'NAME'
   assert_equal "${#lines[@]}" "11"
-  assert_line --index 1 --partial "bar11"
-  assert_line --index 10 --partial "bar20"
+  assert_line --index 2 --partial "bar12"
 }
 
 @test 'get tags: ok  : filtering' {

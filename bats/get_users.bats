@@ -21,11 +21,11 @@ function teardown_file() {
     roleId="$output"
 
 
-    run ./cntb create user --firstName="foo${TEST_SUFFIX}" --lastName="bar${TEST_SUFFIX}" --email="foo.bar${TEST_SUFFIX}@contabo.com" --enabled=true --admin=true --accessAllResources=true --roles="$roleId"
+    run ./cntb create user --firstName="foo${TEST_SUFFIX}" --lastName="bar${TEST_SUFFIX}" --email="testuser${TEST_SUFFIX}@contabo.com" --enabled=true --admin=true --accessAllResources=true --roles="$roleId"
     assert_success
     userId="$output"
 
-    run ./cntb create user --firstName="bar${TEST_SUFFIX}" --lastName="bar${TEST_SUFFIX}" --email="bar.bar${TEST_SUFFIX}@contabo.com" --enabled=true --admin=true --accessAllResources=true --roles="$roleId"
+    run ./cntb create user --firstName="bar${TEST_SUFFIX}" --lastName="bar${TEST_SUFFIX}" --email="testuser2${TEST_SUFFIX}@contabo.com" --enabled=true --admin=true --accessAllResources=true --roles="$roleId"
     assert_success
     userId2="$output"
 
@@ -55,17 +55,17 @@ function teardown_file() {
     roleId="$output"
 
 
-    run ./cntb create user --firstName="foo${TEST_SUFFIX}" --lastName="bar${TEST_SUFFIX}" --email="foo.bar${TEST_SUFFIX}@contabo.com" --enabled=true --admin=true --accessAllResources=true --roles="$roleId"
+    run ./cntb create user --firstName="foo${TEST_SUFFIX}" --lastName="bar${TEST_SUFFIX}" --email="testuser${TEST_SUFFIX}@contabo.com" --enabled=true --admin=true --accessAllResources=true --roles="$roleId"
     assert_success
     userId="$output"
 
-    run ./cntb create user --firstName="bar${TEST_SUFFIX}" --lastName="barbar${TEST_SUFFIX}" --email="bar.bar${TEST_SUFFIX}@contabo.com" --enabled=true --admin=true --accessAllResources=true --roles="$roleId"
+    run ./cntb create user --firstName="bar${TEST_SUFFIX}" --lastName="barbar${TEST_SUFFIX}" --email="testuser2${TEST_SUFFIX}@contabo.com" --enabled=true --admin=true --accessAllResources=true --roles="$roleId"
     assert_success
     userId2="$output"
 
-    run ./cntb get users --email="bar.bar${TEST_SUFFIX}@contabo.com"
+    run ./cntb get users --email="testuser2${TEST_SUFFIX}@contabo.com"
     assert_success
-    assert_output --partial "barbar${TEST_SUFFIX}"
+    assert_output --partial "testuser2${TEST_SUFFIX}"
 
 
     #clean up
