@@ -18,6 +18,7 @@ package cmd
 import (
 	"context"
 	"encoding/json"
+	"log"
 
 	"contabo.com/cli/cntb/client"
 	contaboCmd "contabo.com/cli/cntb/cmd"
@@ -46,6 +47,15 @@ var imagesGetCmd = &cobra.Command{
 			ApiRetrieveImageListRequest = ApiRetrieveImageListRequest.Name(nameFilter)
 		}
 
+		imageType, _ := cmd.Flags().GetString("imageType")
+		if imageType != "" {
+			if imageType == "standard" {
+				ApiRetrieveImageListRequest = ApiRetrieveImageListRequest.StandardImage(true)
+			} else {
+				ApiRetrieveImageListRequest = ApiRetrieveImageListRequest.StandardImage(false)
+			}
+		}
+
 		resp, httpResp, err := ApiRetrieveImageListRequest.Execute()
 
 		util.HandleErrors(err, httpResp, "while retrieving images")
@@ -64,12 +74,27 @@ var imagesGetCmd = &cobra.Command{
 
 		util.HandleResponse(responseJson, configFormatter)
 	},
+	Args: func(cmd *cobra.Command, args []string) error {
+		givenImageType := viper.GetString("imageType")
+		if givenImageType != "" {
+			if givenImageType != "standard" && givenImageType != "custom" {
+				cmd.Help()
+				log.Fatal("Argument imageType was given. Please provide one of `standard` or `custom`.")
+			}
+		}
+		return nil
+	},
 }
 
 func init() {
 	contaboCmd.GetCmd.AddCommand(imagesGetCmd)
 
 	imagesGetCmd.Flags().StringVarP(
-		&nameFilter, "name", "", "", `Filter by custom image name`)
+		&nameFilter, "name", "", "", `Filter by custom image name.`)
 	viper.BindPFlag("name", imagesGetCmd.Flags().Lookup("name"))
+
+	imagesGetCmd.Flags().StringVarP(
+		&imageTypeFilter, "imageType", "", "",
+		`Filter by type of image. Available values are 'standard' or 'custom'.`)
+	viper.BindPFlag("imageType", imagesGetCmd.Flags().Lookup("imageType"))
 }

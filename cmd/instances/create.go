@@ -82,7 +82,7 @@ var instanceCreateCmd = &cobra.Command{
 
 		util.HandleErrors(err, httpResp, "while creating instance")
 
-		fmt.Printf("%v", resp.Data[0].InstanceId)
+		fmt.Printf("%v\n", resp.Data[0].InstanceId)
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
 		contaboCmd.ValidateCreateInput()
@@ -108,7 +108,6 @@ var instanceCreateCmd = &cobra.Command{
 		}
 
 		if contaboCmd.InputFile == "" {
-
 			// arguments required
 			if instanceImageId == "" {
 				cmd.Help()

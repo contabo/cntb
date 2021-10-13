@@ -71,7 +71,7 @@ var roleCreateCmd = &cobra.Command{
 
 		util.HandleErrors(err, httpResp, "creating role")
 
-		fmt.Printf("%v", resp.Data[0].RoleId)
+		fmt.Printf("%v\n", resp.Data[0].RoleId)
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
 		contaboCmd.ValidateCreateInput()

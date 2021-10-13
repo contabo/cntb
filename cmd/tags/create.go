@@ -61,7 +61,7 @@ var tagCreateCmd = &cobra.Command{
 
 		util.HandleErrors(err, httpResp, "while creating tag")
 
-		fmt.Printf("%v", resp.Data[0].TagId)
+		fmt.Printf("%v\n", resp.Data[0].TagId)
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
 		contaboCmd.ValidateCreateInput()

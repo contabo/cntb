@@ -18,7 +18,7 @@ function teardown_file() {
 @test 'get secrets history: ok' {
   run ./cntb create secret --name="secret${TEST_SUFFIX}" --value="Test12345!" --type="password"
   assert_success
-  secretId=$(echo "$output" | sed -n 's/.*secretId\s\+\([0-9a-zA-Z-]\+\).*$/\1/p')
+  secretId="$output"
 
   run ./cntb history secrets
   assert_success
@@ -36,7 +36,7 @@ function teardown_file() {
 @test 'get secrets history wide: ok' {
   run ./cntb create secret --name="secret${TEST_SUFFIX}" --value="Test12345!" --type="password" -o wide
   assert_success
-  secretId=$(echo "$output" | sed -n 's/.*secretId\s\+\([0-9a-zA-Z-]\+\).*$/\1/p')
+  secretId="$output"
 
   run ./cntb history secrets -o wide
   assert_success

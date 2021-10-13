@@ -18,7 +18,7 @@ function teardown_file() {
 @test 'delete snapshot: ok' {
   run ./cntb create snapshot ${INSTANCE_ID} --name="snapshot${TEST_SUFFIX}" --description='test snapshot'
   assert_success
-  snapshotId=$(echo "$output" | sed -n 's/.*snapshotId\s\+\([0-9a-zA-Z-]\+\).*$/\1/p')
+  snapshotId="$output"
 
   run ./cntb delete snapshot ${INSTANCE_ID} "$snapshotId"
   assert_success

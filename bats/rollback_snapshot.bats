@@ -18,7 +18,7 @@ function teardown_file() {
 @test 'rollback snapshot: ok' {
   run ./cntb create snapshot ${INSTANCE_ID} --name="snapshot${TEST_SUFFIX}" --description='test snapshot1'
   assert_success
-  snapshotId=$(echo "$output" | sed -n 's/.*snapshotId\s\+\([0-9a-zA-Z-]\+\).*$/\1/p')
+  snapshotId="$output"
 
   run ./cntb rollback snapshot ${INSTANCE_ID} "$snapshotId"
   assert_success
@@ -31,11 +31,11 @@ function teardown_file() {
 @test 'rollback older snapshpot: nok' {
   run ./cntb create snapshot ${INSTANCE_ID} --name="snapshot${TEST_SUFFIX}" --description='test snapshot1'
   assert_success
-  snapshotId1=$(echo "$output" | sed -n 's/.*snapshotId\s\+\([0-9a-zA-Z-]\+\).*$/\1/p')
+  snapshotId1="$output"
 
   run ./cntb create snapshot ${INSTANCE_ID} --name="snapshot${TEST_SUFFIX}" --description='test snapshot2'
   assert_success
-  snapshotId2=$(echo "$output" | sed -n 's/.*snapshotId\s\+\([0-9a-zA-Z-]\+\).*$/\1/p')
+  snapshotId2="$output"
 
   run ./cntb rollback snapshot ${INSTANCE_ID} "$snapshotId1"
   assert_failure

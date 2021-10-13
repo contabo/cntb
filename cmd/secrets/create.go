@@ -54,7 +54,7 @@ var secretCreateCmd = &cobra.Command{
 
 		util.HandleErrors(err, httpResp, "while creating secret")
 
-		fmt.Printf("Secret created with secretId %v\n", resp.Data[0].SecretId)
+		fmt.Printf("%v\n", resp.Data[0].SecretId)
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
 		contaboCmd.ValidateCreateInput()
@@ -74,12 +74,15 @@ var secretCreateCmd = &cobra.Command{
 		if contaboCmd.InputFile == "" {
 			// arguments required
 			if secretName == "" {
+				cmd.Help()
 				log.Fatal("Argument name is empty. Please provide one.")
 			}
 			if secretValue == "" {
+				cmd.Help()
 				log.Fatal("Argument value is empty. Please provide one.")
 			}
 			if secretType == "" {
+				cmd.Help()
 				log.Fatal("Argument type is empty. Please provide one.")
 			}
 		}

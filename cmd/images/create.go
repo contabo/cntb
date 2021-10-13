@@ -58,7 +58,7 @@ var imageCreateCmd = &cobra.Command{
 
 		util.HandleErrors(err, httpResp, "while creating image")
 
-		fmt.Printf("Image created with imageId %v\n", resp.Data[0].ImageId)
+		fmt.Printf("%v\n", resp.Data[0].ImageId)
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
 		contaboCmd.ValidateCreateInput()

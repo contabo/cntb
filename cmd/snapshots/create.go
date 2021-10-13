@@ -53,7 +53,7 @@ var snapshotCreateCmd = &cobra.Command{
 
 		util.HandleErrors(err, httpResp, "while creating snapshot")
 
-		fmt.Printf("Snapshot created with snapshotId %v\n", resp.Data[0].SnapshotId)
+		fmt.Printf("%v\n", resp.Data[0].SnapshotId)
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
 		contaboCmd.ValidateCreateInput()
@@ -68,6 +68,7 @@ var snapshotCreateCmd = &cobra.Command{
 		if contaboCmd.InputFile == "" {
 			// arguments required
 			if name == "" {
+				cmd.Help()
 				log.Fatal("Argument name is empty. Please provide one.")
 			}
 		}

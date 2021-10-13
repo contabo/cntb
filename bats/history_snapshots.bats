@@ -18,7 +18,7 @@ function teardown_file() {
 @test 'get snapshots history: ok' {
   run ./cntb create snapshot ${INSTANCE_ID} --name="snapshot${TEST_SUFFIX}" --description='test snapshot'
   assert_success
-  snapshotId=$(echo "$output" | sed -n 's/.*snapshotId\s\+\([0-9a-zA-Z-]\+\).*$/\1/p')
+  snapshotId="$output"
 
   run ./cntb history snapshots
   assert_success
@@ -38,7 +38,7 @@ function teardown_file() {
 @test 'get snapshots history wide: ok' {
   run ./cntb create snapshot ${INSTANCE_ID} --name="snapshot${TEST_SUFFIX}" --description='test snapshot'
   assert_success
-  snapshotId=$(echo "$output" | sed -n 's/.*snapshotId\s\+\([0-9a-zA-Z-]\+\).*$/\1/p')
+  snapshotId="$output"
 
   run ./cntb history snapshots -o wide
   assert_success

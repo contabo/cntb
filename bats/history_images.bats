@@ -56,7 +56,7 @@ function teardown_file() {
   run ./cntb create image --name "image${TEST_SUFFIX}" --description 'description' --url "${IMAGE_DOWNLOAD_URL}" --osType Linux --version 20.04
   assert_success
 
-  image_id=$(echo "$output" | sed -n 's/.*imageId\s\+\([0-9a-zA-Z-]\+\).*$/\1/p')
+  image_id="$output"
 
   run ./cntb delete image "$image_id"
   assert_success
@@ -77,7 +77,7 @@ function teardown_file() {
   run ./cntb create image --name "image${TEST_SUFFIX}" --description 'description' --url "${IMAGE_DOWNLOAD_URL}" --osType Linux --version 20.04
   assert_success
 
-  image_id=$(echo "$output" | sed -n 's/.*imageId\s\+\([0-9a-zA-Z-]\+\).*$/\1/p')
+  image_id="$output"
 
   run ./cntb delete image "$image_id"
   assert_success

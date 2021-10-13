@@ -68,7 +68,7 @@ var userManagementCreateCmd = &cobra.Command{
 
 		util.HandleErrors(err, httpResp, "while creating user")
 
-		fmt.Printf("%v", resp.Data[0].UserId)
+		fmt.Printf("%v\n", resp.Data[0].UserId)
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
 		contaboCmd.ValidateCreateInput()
@@ -77,10 +77,20 @@ var userManagementCreateCmd = &cobra.Command{
 		}
 		if contaboCmd.InputFile == "" {
 			// arguments required
+			if userFirstName == "" {
+				cmd.Help()
+				log.Fatal("firstName is empty please provide one")
+			}
+			if userLastName == "" {
+				cmd.Help()
+				log.Fatal("lastName is empty please provide one")
+			}
 			if userEmail == "" {
+				cmd.Help()
 				log.Fatal("email is empty please provide one")
 			}
 			if locale == "" {
+				cmd.Help()
 				log.Fatal("locale must be set")
 			}
 		}

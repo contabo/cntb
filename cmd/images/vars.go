@@ -8,6 +8,7 @@ var (
 	imageOsType      string
 	imageVersion     string
 	nameFilter       string
+	imageTypeFilter  string
 	imageIdFilter    string
 	requestIdFilter  string
 	changedByFilter  string
