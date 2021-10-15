@@ -22,6 +22,8 @@ function teardown_file() {
 
   run ./cntb create image --name "image${TEST_SUFFIX}" --description 'description' --url "${IMAGE_DOWNLOAD_URL}" --osType Linux --version 20.04
   assert_failure
+  assert_output --partial 'Error'
+  assert_output --partial '409'
 
   run ./cntb delete image "$image_id"
   assert_success
