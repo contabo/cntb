@@ -36,7 +36,7 @@ cntb get images
 ### Upload custom image
 
 ```sh
-cntb create image --name 'Ubuntu Custom Image' --description 'My Ubuntu Server 20.04.2 LTS' --url https://example.com/image.qcow2 --osType Linux --version 20.04.2
+cntb create image --name 'CentOS Cloud Image' --description 'CentOS 7 Cloud Image' --url 'https://cloud.centos.org/altarch/7/images/CentOS-7-x86_64-GenericCloud.qcow2' --osType Linux --version 7
 ```
 
 ### Create / order new Compute Instance
@@ -44,28 +44,32 @@ cntb create image --name 'Ubuntu Custom Image' --description 'My Ubuntu Server 2
 Using Cloud-Init to set ssh public key
 
 ```sh
-cntb create instance --imageId "ae423751-50fa-4bf6-9978-015673bf51c4" --productId "V1" --region "EU" --userData 'ssh_authorized_keys:\n  - ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAGEA3FSyQwBI6Z+nCSjUUk8EEAnnkhXlukKoUPND/RRClWz2s5TCzIkd3Ou5+Cyz71X0XmazM3l5WgeErvtIwQMyT1KjNoMhoJMrJnWqQPOt5Q8zWd9qG7PBl9+eiH5qV7NZ'
+cntb create instance --imageId "ae423751-50fa-4bf6-9978-015673bf51c4" --productId "V1" --region "EU" --userData 'ssh_authorized_keys:
+  - ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAGEA3FSyQwBI6Z+nCSjUUk8EEAnnkhXlukKoUPND/RRClWz2s5TCzIkd3Ou5+Cyz71X0XmazM3l5WgeErvtIwQMyT1KjNoMhoJMrJnWqQPOt5Q8zWd9qG7PBl9+eiH5qV7NZ'
+# once finished please login via ssh
+# in case of the previously uploaded CentOS 7 Cloud Image please use `centos` as user
+# for standard images please use `admin` as user
 ```
 
 Using Cloud-Init to install apache2 with an already stored SSH public key
 
 ```sh
-cntb create instance --imageId "ae423751-50fa-4bf6-9978-015673bf51c4" --productId "V1" --region "EU" --sshKeys '1,2' --userData 'package_update: true\n
-package_upgrade: true\n
-packages:\n
-  - apache2'
+cntb create instance --imageId "ae423751-50fa-4bf6-9978-015673bf51c4" --productId "V1" --region "EU" --sshKeys '1,2' --userData 'package_update: true
+package_upgrade: true
+packages:
+  - httpd'
 ```
 
 ### Stop Compute Instance
 
 ```sh
-cntb start 12345
+cntb start instance 12345
 ```
 
 ### Start Compute Instance
 
 ```sh
-cntb stop 12345
+cntb stop instance 12345
 ```
 
 ## Enable Shell Completion

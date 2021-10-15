@@ -22,7 +22,7 @@ var secretCreateCmd = &cobra.Command{
 	Short: "Creates a new secret",
 	Long:  `Creates a new secret based on json / yaml input or arguments.`,
 	Example: `cntb create secret --name 'First Secret' ` +
-		`--value 'secret'` +
+		`--value 'secret' ` +
 		`--type 'password'`,
 	Run: func(cmd *cobra.Command, args []string) {
 
@@ -108,6 +108,6 @@ func init() {
 	viper.BindPFlag("value", secretCreateCmd.Flags().Lookup("value"))
 
 	secretCreateCmd.Flags().StringVar(&secretType, "type", "",
-		`type of the secret`)
+		`type of the secret, either password or ssh`)
 	viper.BindPFlag("type", secretCreateCmd.Flags().Lookup("type"))
 }
