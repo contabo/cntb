@@ -45,7 +45,7 @@ changelog:
       - '^docs:'
 release:
   github:
-    owner: contabo-gmbh
+    owner: contabo
     name: cntb
   draft: false
   prerelease: auto

@@ -6,7 +6,7 @@
 
 1. Download `cntb` as pre-built executable for your operating system (Windows, MacOS and Linux supported) on the [releases page](https://github.com/contabo/cntb/releases).
   * MacOS/Linux
-    * curl -L '<link to release>' | tar xz
+    * curl -L '&lt;link to release&gt;' | tar xz
   * Windows
     * Right-click and select extract
 2. You might move the executable to any location on your disk. You may update your `PATH` environment variable for easier invocation.
@@ -36,7 +36,7 @@ cntb get images
 ### Upload custom image
 
 ```sh
-cntb create image --name 'Ubuntu Custom Image' --description 'My Ubuntu Server 20.04.2 LTS' --url https://example.com/image.iso --osType Linux --version 20.04.2
+cntb create image --name 'Ubuntu Custom Image' --description 'My Ubuntu Server 20.04.2 LTS' --url https://example.com/image.qcow2 --osType Linux --version 20.04.2
 ```
 
 ### Create / order new Compute Instance
@@ -44,13 +44,13 @@ cntb create image --name 'Ubuntu Custom Image' --description 'My Ubuntu Server 2
 Using Cloud-Init to set ssh public key
 
 ```sh
-cntb create instance --imageId "ae423751-50fa-4bf6-9978-015673bf51c4" --addOns '[{"id":1424,"quantity":1}]' --productId "V1" --region "EU" --userData 'ssh_authorized_keys:\n  - ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAGEA3FSyQwBI6Z+nCSjUUk8EEAnnkhXlukKoUPND/RRClWz2s5TCzIkd3Ou5+Cyz71X0XmazM3l5WgeErvtIwQMyT1KjNoMhoJMrJnWqQPOt5Q8zWd9qG7PBl9+eiH5qV7NZ'
+cntb create instance --imageId "ae423751-50fa-4bf6-9978-015673bf51c4" --productId "V1" --region "EU" --userData 'ssh_authorized_keys:\n  - ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAGEA3FSyQwBI6Z+nCSjUUk8EEAnnkhXlukKoUPND/RRClWz2s5TCzIkd3Ou5+Cyz71X0XmazM3l5WgeErvtIwQMyT1KjNoMhoJMrJnWqQPOt5Q8zWd9qG7PBl9+eiH5qV7NZ'
 ```
 
 Using Cloud-Init to install apache2 with an already stored SSH public key
 
 ```sh
-cntb create instance --imageId "ae423751-50fa-4bf6-9978-015673bf51c4" --addOns '[{"id":1424,"quantity":1}]' --productId "V1" --region "EU" --sshKeys '1,2' --userData 'package_update: true\n
+cntb create instance --imageId "ae423751-50fa-4bf6-9978-015673bf51c4" --productId "V1" --region "EU" --sshKeys '1,2' --userData 'package_update: true\n
 package_upgrade: true\n
 packages:\n
   - apache2'
@@ -109,7 +109,6 @@ PowerShell:
         PS> cntb completion powershell > cntb.ps1
         # and source this file from your PowerShell profile.
 ```
-
 
 ## Building from source
 
