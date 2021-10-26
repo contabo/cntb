@@ -50,14 +50,22 @@ var instancesGetCmd = &cobra.Command{
 
 		util.HandleErrors(err, httpResp, "while retrieving instances")
 
-		responseJson, _ := json.Marshal(resp.Data)
+		arr := make([]jmap, 0)
+		for _, entry := range resp.Data {
+			entryModified, _ := util.StructToMap(entry)
+			entryModified["ipv4"] = entry.IpConfig.V4.Ip
+			entryModified["ipv6"] = entry.IpConfig.V6.Ip
+			arr = append(arr, entryModified)
+		}
+
+		responseJson, _ := json.Marshal(arr)
 
 		configFormatter := outputFormatter.FormatterConfig{
 			Filter: []string{
-				"instanceId", "name", "status", "imageId", "region", "productId",
+				"instanceId", "name", "status", "imageId", "region", "productId", "ipv4", "ipv6",
 			},
 			WideFilter: []string{
-				"instanceId", "name", "status", "imageId", "region", "productId", "customerId", "tenantId",
+				"instanceId", "name", "status", "imageId", "region", "productId", "customerId", "tenantId", "ipv4", "ipv6",
 			},
 			JsonPath: contaboCmd.OutputFormatDetails,
 		}

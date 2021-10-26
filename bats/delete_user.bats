@@ -40,5 +40,5 @@ function teardown_file() {
 @test "delete user not existing: nok" {
   run ./cntb delete user 0
   assert_failure
-  assert_output --partial "404 Not Found"
+  assert_output --partial "Error while deleting user: 404 - Entry User not found by userId"
 }

@@ -9,6 +9,7 @@ require (
 	github.com/hprose/hprose-go v0.0.0-20161031134501-83de97da5004
 	github.com/magefile/mage v1.11.0 // indirect
 	github.com/mitchellh/go-homedir v1.1.0
+	github.com/olekukonko/tablewriter v0.0.5 // indirect
 	github.com/satori/go.uuid v1.2.0
 	github.com/sirupsen/logrus v1.8.0
 	github.com/spf13/cobra v1.1.3

@@ -30,10 +30,7 @@ function teardown_file() {
 @test "delete not existing role" {
   run ./cntb delete role apiPermission 0
   assert_failure
-  assert_output --partial 'Error'
-  assert_output --partial '404,'
-  assert_output --partial "Error while deleting role:"
-
+  assert_output --partial "Error while deleting role: 404 - Entry Role not found by roleId"
 }
 
 @test "use wrong permission type: nok" {

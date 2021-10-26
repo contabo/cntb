@@ -27,12 +27,10 @@ function teardown_file() {
   assert_failure
 }
 
-@test "delete not existing secret: ok" {
+@test "delete not existing secret: nok" {
   run ./cntb delete secret 123
   assert_failure
-  assert_output --partial 'Error'
-  assert_output --partial '404,'
-  assert_output --partial "Error while deleting secret:"
+  assert_output --partial "Error while deleting secret: 404 - Entry Secret not found by secretId"
 }
 
 

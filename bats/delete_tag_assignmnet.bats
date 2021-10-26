@@ -37,10 +37,7 @@ function teardown_file() {
 @test 'delete tag assignment: non existing nok' {
     run ./cntb delete tagAssignment 0 instance testw23
     assert_failure
-    assert_output --partial 'Error'
-    assert_output --partial '404,'
-    assert_output --partial 'Error while deleting tag assignment'
-
+    assert_output --partial 'Error while deleting tag assignment: 404 - Entry Tag not found by tagId'
 }
 
 @test 'delete tag assignmnet: 1 input nok' {

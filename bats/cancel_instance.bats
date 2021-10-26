@@ -37,6 +37,5 @@ function teardown_file() {
   
   run ./cntb cancel instance "$instanceId"
   assert_failure
-  assert_output --partial 'Error'
-  assert_output --partial '500,'
+  assert_output --partial 'Error while canceling the instance: 500'
 }

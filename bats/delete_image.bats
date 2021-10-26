@@ -28,6 +28,5 @@ function teardown_file() {
 @test 'delete image : nok : not existing' {
   run ./cntb delete image a19b8645-79d2-4fbb-ac56-a927d69b8d2b
   assert_failure
-  assert_output --partial 'Error'
-  assert_output --partial '404'
+  assert_output --partial 'Error while deleting image: 404 - Entry Image not found by imageId'
 }

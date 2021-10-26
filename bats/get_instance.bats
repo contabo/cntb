@@ -32,6 +32,9 @@ function teardown_file() {
   assert_output --partial 'INSTANCEID'
   assert_output --partial 'NAME'
   assert_output --partial 'STATUS'
+  assert_output --partial 'IMAGEID'
+  assert_output --partial 'IPV4'
+  assert_output --partial 'IPV6'
 
   run ./cntb get instance "$instanceId" -o wide
   assert_success
@@ -42,6 +45,8 @@ function teardown_file() {
   assert_output --partial 'REGION'
   assert_output --partial 'PRODUCTID'
   assert_output --partial 'CUSTOMERID'
+  assert_output --partial 'IPV4'
+  assert_output --partial 'IPV6'
 
   run ./cntb get instance "$instanceId" -o json
   assert_success
@@ -52,6 +57,10 @@ function teardown_file() {
   assert_output --partial 'region'
   assert_output --partial 'productId'
   assert_output --partial 'customerId'
+  assert_output --partial 'ipv4'
+  assert_output --partial 'ipv6'
+  assert_output --partial 'ipConfig'
+
 
   run ./cntb get instance "$instanceId" -o yaml
   assert_success
@@ -62,7 +71,9 @@ function teardown_file() {
   assert_output --partial 'region:'
   assert_output --partial 'productId:'
   assert_output --partial 'customerId:'
-
+  assert_output --partial 'ipv4:'
+  assert_output --partial 'ipv6:'
+  assert_output --partial 'ipConfig:'
 }
 
 @test "get instance wrong instance id type: nok" {

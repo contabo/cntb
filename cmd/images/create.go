@@ -32,7 +32,7 @@ var imageCreateCmd = &cobra.Command{
 		case nil:
 			createImageRequest.Name = imageName
 			createImageRequest.Url = imageUrl
-			createImageRequest.OsType = imageOsType
+			createImageRequest.OsType = strings.Title(strings.ToLower(imageOsType))
 			createImageRequest.Version = imageVersion
 			if (imageDescription) != "" {
 				createImageRequest.Description = &imageDescription

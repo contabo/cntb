@@ -30,6 +30,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+type jmap map[string]interface{}
+
 var instanceGetCmd = &cobra.Command{
 	Use:   "instance [instanceId]",
 	Short: "Info about a specific instance",
@@ -39,12 +41,20 @@ var instanceGetCmd = &cobra.Command{
 
 		util.HandleErrors(err, httpResp, "while retrieving instance")
 
-		responseJson, _ := json.Marshal(resp.Data)
+		arr := make([]jmap, 0)
+		for _, entry := range resp.Data {
+			entryModified, _ := util.StructToMap(entry)
+			entryModified["ipv4"] = entry.IpConfig.V4.Ip
+			entryModified["ipv6"] = entry.IpConfig.V6.Ip
+			arr = append(arr, entryModified)
+		}
+
+		responseJson, _ := json.Marshal(arr)
 
 		configFormatter := outputFormatter.FormatterConfig{
-			Filter: []string{"instanceId", "name", "status"},
+			Filter: []string{"instanceId", "name", "status", "imageId", "ipv4", "ipv6"},
 			WideFilter: []string{
-				"instanceId", "name", "status", "imageId", "region", "productId", "customerId"},
+				"instanceId", "name", "status", "imageId", "region", "productId", "customerId", "ipv4", "ipv6"},
 			JsonPath: contaboCmd.OutputFormatDetails}
 
 		util.HandleResponse(responseJson, configFormatter)

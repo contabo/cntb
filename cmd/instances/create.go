@@ -46,6 +46,7 @@ var instanceCreateCmd = &cobra.Command{
 			createInstanceRequest.ProductId = instanceProductId
 			createInstanceRequest.Region = instanceRegion
 			createInstanceRequest.Period = instancePeriod
+
 			var requestAddOns *[]instancesClient.AddOnRequest
 
 			if requestAddOns != nil {
@@ -55,8 +56,8 @@ var instanceCreateCmd = &cobra.Command{
 					log.Fatal(fmt.Sprintf("Format of addons invalid. Please check you syntax: %v", err))
 				}
 			}
-
 			createInstanceRequest.AddOns = requestAddOns
+
 			if instanceRootPassword != 0 {
 				createInstanceRequest.RootPassword = &instanceRootPassword
 			}

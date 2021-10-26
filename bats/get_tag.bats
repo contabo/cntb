@@ -61,7 +61,5 @@ function teardown_file() {
 @test 'get tag: nok : non existing tag' {
   run ./cntb get tag 0
   assert_failure
-  assert_output --partial 'Error'
-  assert_output --partial '404,'
-  assert_output --partial "Entry Tag not found by tagId = 0"
+  assert_output --partial 'Error while retrieving tag: 404 - Entry Tag not found by tagId'
 }

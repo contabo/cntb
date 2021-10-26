@@ -13,7 +13,6 @@ type FormatterWide struct {
 }
 
 func (wf FormatterWide) Format(data []interface{}, config FormatterConfig) [][]string {
-
 	formattedOutput := make([][]string, 0)
 
 	// handle header

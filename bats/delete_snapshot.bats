@@ -30,9 +30,7 @@ function teardown_file() {
 @test "delete not existing snapshot: ok" {
   run ./cntb delete snapshot ${INSTANCE_ID} 72f0a447-8040-4098-9cb1-2fa3093a18f7
   assert_failure
-  assert_output --partial 'Error'
-  assert_output --partial '404,'
-  assert_output --partial "Error while deleting snapshot:"
+  assert_output --partial 'Error while deleting snapshot: 404 - Entry Snapshot not found by snapshotId'
 }
 
 

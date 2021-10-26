@@ -1,11 +1,15 @@
 package util
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 
 	log "github.com/sirupsen/logrus"
 )
+
+type jmap map[string]interface{}
 
 func HandleErrors(
 	err error,
@@ -13,7 +17,10 @@ func HandleErrors(
 	info string,
 ) {
 	if err != nil {
-		log.Error(fmt.Sprintf("Error %v: %v; %v\n", info, err, httpResp))
+		apiError := jmap{}
+		responseBody, _ := ioutil.ReadAll(httpResp.Body)
+		json.Unmarshal(responseBody, &apiError)
+		log.Error(fmt.Sprintf("Error %v: %v - %v\n", info, apiError["statusCode"], apiError["message"]))
 		log.Debug(fmt.Sprintf("Full response: %v\n", httpResp))
 		log.Fatal("Aborting, due to errors")
 	}

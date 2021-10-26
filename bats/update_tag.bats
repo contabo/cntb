@@ -52,7 +52,5 @@ function teardown_file() {
 @test 'update tag: nok : non existing  tag' {
   run ./cntb update tag 0 --name "foo"
   assert_failure
-  assert_output --partial 'Error'
-  assert_output --partial '404,'
-  assert_output --partial "Entry Tag not found by tagId = 0"
+  assert_output --partial 'Error while updating tag: 404 - Entry Tag not found by tagId'
 }

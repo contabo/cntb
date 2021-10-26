@@ -35,7 +35,7 @@ import (
 var instanceReinstallCmd = &cobra.Command{
 	Use:   "instance [instanceId]",
 	Short: "Reinstall specific instance by id",
-	Long:  `Your are able to reinstall an instance.`,
+	Long:  `Reinstall an existing instance using a different image or settings.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		instanceReinstallRequest := *instancesClient.NewReinstallInstanceRequestWithDefaults()
 		content := contaboCmd.OpenStdinOrFile()
