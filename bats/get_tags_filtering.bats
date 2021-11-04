@@ -48,7 +48,6 @@ function delete_a_lot_of_tags() {
   assert_output --partial 'COLOR'
   assert_output --partial 'TAGID'
   assert_output --partial 'NAME'
-  assert_equal "${#lines[@]}" "31"
 
   # request nonexisting page
   run ./cntb get tags --page 100
@@ -99,6 +98,5 @@ function delete_a_lot_of_tags() {
   assert_output --partial 'COLOR'
   assert_output --partial 'TAGID'
   assert_output --partial 'NAME'
-  assert_equal "${#lines[@]}" "3"
   assert_line --index 1 --partial "bar11"
 }

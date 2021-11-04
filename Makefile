@@ -2,7 +2,7 @@ UNAME = $(shell uname -s)
 JAVAOPT = '-Dio.swagger.parser.util.RemoteUrl.trustAll=true -Dio.swagger.v3.parser.util.RemoteUrl.trustAll=true'
 OUTPUTLOCATION = /local/
 ifeq ($(UNAME), Darwin)
-	JAVAOPT = '-Djavax.net.ssl.trustStore=/local/cacerts.jks -Djavax.net.ssl.trustStorePassword=password'
+	#JAVAOPT = '-Djavax.net.ssl.trustStore=/local/cacerts.jks -Djavax.net.ssl.trustStorePassword=password'
 	OUTPUTLOCATION = /local/openapi/
 endif
 ifndef OPENAPIURL
@@ -42,7 +42,7 @@ unittest:
 bats: build bats-only
 
 .PHONY: bats-only
-bats:
+bats-only:
 	rm -f ~/.cache/cntb/token
 	bats -rt --timing  bats/*.bats
 

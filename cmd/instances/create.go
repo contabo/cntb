@@ -35,6 +35,8 @@ var instanceCreateCmd = &cobra.Command{
 	Use:   "instance",
 	Short: "Creates a new compute instance",
 	Long:  `Create a new compute instances in your account`,
+	Example: `create instance -p 12 --imageId "1234absv-331vc-776hg-376bgt" ` +
+		`--license "PleskHost" --productId "V1" -r "EU"`,
 	Run: func(cmd *cobra.Command, args []string) {
 		createInstanceRequest := *instancesClient.NewCreateInstanceRequestWithDefaults()
 		content := contaboCmd.OpenStdinOrFile()
@@ -47,16 +49,9 @@ var instanceCreateCmd = &cobra.Command{
 			createInstanceRequest.Region = instanceRegion
 			createInstanceRequest.Period = instancePeriod
 
-			var requestAddOns *[]instancesClient.AddOnRequest
-
-			if requestAddOns != nil {
-				err := json.Unmarshal([]byte(instanceAddOns), &requestAddOns)
-				if err != nil {
-					log.Error("I am going to fail now as there is an error")
-					log.Fatal(fmt.Sprintf("Format of addons invalid. Please check you syntax: %v", err))
-				}
+			if instanceLicense != "" {
+				createInstanceRequest.License = &instanceLicense
 			}
-			createInstanceRequest.AddOns = requestAddOns
 
 			if instanceRootPassword != 0 {
 				createInstanceRequest.RootPassword = &instanceRootPassword
@@ -97,8 +92,8 @@ var instanceCreateCmd = &cobra.Command{
 		if viper.GetString("region") != "" {
 			instanceRegion = viper.GetString("region")
 		}
-		if viper.GetString("addOns") != "" {
-			instanceAddOns = viper.GetString("addOns")
+		if viper.GetString("license") != "" {
+			instanceLicense = viper.GetString("license")
 		}
 
 		if viper.GetInt64("period") != 0 {
@@ -151,8 +146,11 @@ func init() {
 	instanceCreateCmd.Flags().StringVarP(&instanceImageId, "imageId", "", "", `standard or custom image id`)
 	viper.BindPFlag("imageId", instanceCreateCmd.Flags().Lookup("imageId"))
 
-	instanceCreateCmd.Flags().StringVarP(&instanceAddOns, "addOns", "", "", `list of addons. See https://contabo.com/en/product-list/?show_ids=true`)
-	viper.BindPFlag("addOns", instanceCreateCmd.Flags().Lookup("addOns"))
+	instanceCreateCmd.Flags().StringVarP(&instanceLicense, "license", "", "", `additional licence in order to enhance your chosen product. 
+	Valid licenses: "PleskHost" "PleskPro" "PleskAdmin" "cPanel5" "cPanel30" "cPanel50" "cPanel100" "cPanel150"
+	"cPanel200" "cPanel250" "cPanel300" "cPanel350" "cPanel400" "cPanel450" "cPanel500" "cPanel550" "cPanel600"
+	"cPanel650" "cPanel700" "cPanel750" "cPanel800" "cPanel850" "cPanel900" "cPanel950" "cPanel1000"`)
+	viper.BindPFlag("license", instanceCreateCmd.Flags().Lookup("license"))
 
 	instanceCreateCmd.Flags().StringVarP(&instanceProductId, "productId", "", "", `id of product to be used. See https://contabo.com/en/product-list/?show_ids=true`)
 	viper.BindPFlag("productId", instanceCreateCmd.Flags().Lookup("productId"))

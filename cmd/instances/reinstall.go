@@ -76,6 +76,10 @@ var instanceReinstallCmd = &cobra.Command{
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
 		contaboCmd.ValidateCreateInput()
+		if len(args) == 0 {
+			cmd.Help()
+			log.Fatal("No arguments provided.")
+		}
 		instanceId64, err := strconv.ParseInt(args[0], 10, 64)
 		if err != nil {
 			log.Fatal(fmt.Sprintf("Specified instanceId %v is not valid", args[0]))
@@ -89,6 +93,7 @@ var instanceReinstallCmd = &cobra.Command{
 		if contaboCmd.InputFile == "" {
 			// arguments required
 			if instanceImageId == "" {
+				cmd.Help()
 				log.Fatal("Argument imageId is empty. Please provide one.")
 			}
 		}
@@ -101,10 +106,10 @@ func init() {
 	instanceReinstallCmd.Flags().StringVarP(&instanceImageId, "imageId", "", "", `instance image id`)
 	viper.BindPFlag("imageId", instanceReinstallCmd.Flags().Lookup("imageId"))
 
-	instanceReinstallCmd.Flags().Int64SliceVar(&instanceSshKeys, "sshKeys", nil, `instance ssh keys`)
+	instanceReinstallCmd.Flags().Int64SliceVar(&instanceSshKeys, "sshKeys", nil, `ids of stored SSH public keys. Applicable for Linux/BSD systems.`)
 	viper.BindPFlag("sshKeys", instanceReinstallCmd.Flags().Lookup("sshKeys"))
 
-	instanceReinstallCmd.Flags().Int64VarP(&instanceRootPassword, "rootPassword", "", 0, `instance root password`)
+	instanceReinstallCmd.Flags().Int64VarP(&instanceRootPassword, "rootPassword", "", 0, `id of stored password. User is admin with admistrative/root privileges. For Linux/BSD based systems please use SSH. For Windows please use RDP.`)
 	viper.BindPFlag("rootPassword", instanceReinstallCmd.Flags().Lookup("rootPassword"))
 
 	instanceReinstallCmd.Flags().StringVarP(&instanceUserData, "userData", "", "", `instance user data`)
