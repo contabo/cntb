@@ -21,6 +21,7 @@ builds:
     ldflags:
       - -w -s -X contabo.com/cli/cntb/cmd.version={{.Tag}} -X contabo.com/cli/cntb/cmd.commit={{.Commit}} -X contabo.com/cli/cntb/cmd.date={{.Date}}
 archives:
+  name_template: {{ .Binary }}_{{ .Tag }}_{{ .Os }}_{{ .Arch }}
   -
     format_overrides:
       - goos: windows
@@ -49,7 +50,6 @@ release:
     name: cntb
   draft: false
   prerelease: auto
-  name_template: "{{.ProjectName}}-v{{.Version}}"
   header: |
 
   footer: |
