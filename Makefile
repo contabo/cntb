@@ -2,11 +2,10 @@ UNAME = $(shell uname -s)
 JAVAOPT = '-Dio.swagger.parser.util.RemoteUrl.trustAll=true -Dio.swagger.v3.parser.util.RemoteUrl.trustAll=true'
 OUTPUTLOCATION = /local/
 ifeq ($(UNAME), Darwin)
-	#JAVAOPT = '-Djavax.net.ssl.trustStore=/local/cacerts.jks -Djavax.net.ssl.trustStorePassword=password'
 	OUTPUTLOCATION = /local/openapi/
 endif
 ifndef OPENAPIURL
-	OPENAPIURL = https://api-dev-ext.contabo.intra/cloud-features/cloud-features-api.yaml
+	OPENAPIURL = https://api.contabo.com/cloud-features/cloud-features-api.yaml
 endif
 
 ifndef OPENAPIVOLUME
@@ -23,7 +22,7 @@ generate-api-clients:
 	--input-spec $(OPENAPIURL) \
 	--generator-name  go \
 	--output $(OUTPUTLOCATION)
-	docker container create --name dummy -v openapivolume:/openapi gitlab.contabo.intra:5050/arcus/common/images/minimal-image/buster-minimal bash
+	docker container create --name dummy -v openapivolume:/openapi alpine bash
 	docker cp dummy:/openapi/ .
 	docker rm dummy
 
