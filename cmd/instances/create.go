@@ -57,7 +57,11 @@ var instanceCreateCmd = &cobra.Command{
 				createInstanceRequest.RootPassword = &instanceRootPassword
 			}
 			if instanceUserData != "" {
-				createInstanceRequest.UserData = &instanceUserData
+				// user data from argument needs to replace newline char in order to work
+				userData := strings.Replace(instanceUserData, "\\n", "\n", -1)
+				// for debugging user data
+				log.Debug(userData)
+				createInstanceRequest.UserData = &userData
 			}
 			if len(instanceSshKeys) != 0 {
 				createInstanceRequest.SshKeys = &instanceSshKeys
@@ -94,6 +98,10 @@ var instanceCreateCmd = &cobra.Command{
 		}
 		if viper.GetString("license") != "" {
 			instanceLicense = viper.GetString("license")
+		}
+
+		if viper.GetString("userData") != "" {
+			instanceUserData = viper.GetString("userData")
 		}
 
 		if viper.GetInt64("period") != 0 {

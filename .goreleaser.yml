@@ -49,6 +49,7 @@ release:
     name: cntb
   draft: false
   prerelease: auto
+  name_template: "{{.ProjectName}}-v{{.Version}}
   header: |
 
   footer: |
