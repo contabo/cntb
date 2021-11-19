@@ -11,6 +11,5 @@ var (
 	instanceRootPassword int64
 	instanceUserData     string
 	instancePeriod       int64
-	instanceAddOns       string
 	instanceLicense      string
 )

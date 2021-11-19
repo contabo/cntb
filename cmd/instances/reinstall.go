@@ -76,10 +76,6 @@ var instanceReinstallCmd = &cobra.Command{
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
 		contaboCmd.ValidateCreateInput()
-		if len(args) == 0 {
-			cmd.Help()
-			log.Fatal("No arguments provided.")
-		}
 		instanceId64, err := strconv.ParseInt(args[0], 10, 64)
 		if err != nil {
 			log.Fatal(fmt.Sprintf("Specified instanceId %v is not valid", args[0]))
@@ -90,20 +86,13 @@ var instanceReinstallCmd = &cobra.Command{
 			instanceImageId = viper.GetString("imageId")
 		}
 
-		if contaboCmd.InputFile == "" {
-			// arguments required
-			if instanceImageId == "" {
-				cmd.Help()
-				log.Fatal("Argument imageId is empty. Please provide one.")
-			}
-		}
 		return nil
 	},
 }
 
 func init() {
 	contaboCmd.ReinstallCmd.AddCommand(instanceReinstallCmd)
-	instanceReinstallCmd.Flags().StringVarP(&instanceImageId, "imageId", "", "", `instance image id`)
+	instanceReinstallCmd.Flags().StringVarP(&instanceImageId, "imageId", "", "", `instance image id. Defaults to last used imageId and falls back to Ubuntu 20.04 in case it is no longer available.`)
 	viper.BindPFlag("imageId", instanceReinstallCmd.Flags().Lookup("imageId"))
 
 	instanceReinstallCmd.Flags().Int64SliceVar(&instanceSshKeys, "sshKeys", nil, `ids of stored SSH public keys. Applicable for Linux/BSD systems.`)
@@ -114,7 +103,4 @@ func init() {
 
 	instanceReinstallCmd.Flags().StringVarP(&instanceUserData, "userData", "", "", `instance user data`)
 	viper.BindPFlag("userData", instanceReinstallCmd.Flags().Lookup("userData"))
-
-	instanceReinstallCmd.Flags().StringVarP(&instanceAddOns, "addOns", "", "", `list of the addons`)
-	viper.BindPFlag("addOns", instanceReinstallCmd.Flags().Lookup("addOns"))
 }

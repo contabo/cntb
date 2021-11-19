@@ -45,7 +45,7 @@ var historyCmd = &cobra.Command{
 
 		if cmd.Flags().Changed("imageId") {
 			historyRequest = historyRequest.ImageId(
-				viper.GetString("imageId"),
+				imageIdFilter,
 			)
 		}
 
@@ -78,10 +78,6 @@ var historyCmd = &cobra.Command{
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
 		contaboCmd.ValidateOutputFormat()
-
-		if cmd.Flags().Changed("imageId") {
-			imageIdFilter = viper.GetString("imageId")
-		}
 
 		return nil
 	},

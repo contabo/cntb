@@ -27,9 +27,13 @@ function teardown_file() {
   assert_success
 }
 
-@test 'create instance : nok : missing arguments' {
-  run ./cntb create instance -p 6 --imageId "${STANDARD_IMAGE_ID}" -r "EU"
-  assert_failure
+@test 'create instance without arguments : ok' {
+  if [ ${INT_ENVIRONMENT} == 'prod' ]; then
+    skip "Skip due to prod environment"
+  fi
+
+  run ./cntb create instance
+  assert_success
 }
 
 @test 'create : nok : invalid arguments' {

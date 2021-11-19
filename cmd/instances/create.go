@@ -151,18 +151,21 @@ func init() {
 	instanceCreateCmd.Flags().StringVarP(&instanceUserData, "userData", "", "", `cloud-init script (user data)`)
 	viper.BindPFlag("userData", instanceCreateCmd.Flags().Lookup("userData"))
 
-	instanceCreateCmd.Flags().StringVarP(&instanceImageId, "imageId", "", "", `standard or custom image id`)
+	instanceCreateCmd.Flags().StringVarP(&instanceImageId, "imageId", "", "db1409d2-ed92-4f2f-978e-7b2fa4a1ec90", `standard or custom image id. Defaults to Ubuntu 20.04`)
 	viper.BindPFlag("imageId", instanceCreateCmd.Flags().Lookup("imageId"))
+	viper.SetDefault("imageId", "db1409d2-ed92-4f2f-978e-7b2fa4a1ec90")
 
-	instanceCreateCmd.Flags().StringVarP(&instanceLicense, "license", "", "", `additional licence in order to enhance your chosen product. 
+	instanceCreateCmd.Flags().StringVarP(&instanceLicense, "license", "", "", `additional licence in order to enhance your chosen product.
 	Valid licenses: "PleskHost" "PleskPro" "PleskAdmin" "cPanel5" "cPanel30" "cPanel50" "cPanel100" "cPanel150"
 	"cPanel200" "cPanel250" "cPanel300" "cPanel350" "cPanel400" "cPanel450" "cPanel500" "cPanel550" "cPanel600"
 	"cPanel650" "cPanel700" "cPanel750" "cPanel800" "cPanel850" "cPanel900" "cPanel950" "cPanel1000"`)
 	viper.BindPFlag("license", instanceCreateCmd.Flags().Lookup("license"))
 
-	instanceCreateCmd.Flags().StringVarP(&instanceProductId, "productId", "", "", `id of product to be used. See https://contabo.com/en/product-list/?show_ids=true`)
+	instanceCreateCmd.Flags().StringVarP(&instanceProductId, "productId", "", "V1", `id of product to be used. See https://contabo.com/en/product-list/?show_ids=true`)
 	viper.BindPFlag("productId", instanceCreateCmd.Flags().Lookup("productId"))
+	viper.SetDefault("productId", "V1")
 
-	instanceCreateCmd.Flags().StringVarP(&instanceRegion, "region", "r", "", `region where instance should be created [EU, US-central, US-east, US-west or SIN].`)
+	instanceCreateCmd.Flags().StringVarP(&instanceRegion, "region", "r", "EU", `region where instance should be created [EU, US-central, US-east, US-west or SIN].`)
 	viper.BindPFlag("region", instanceCreateCmd.Flags().Lookup("region"))
+	viper.SetDefault("region", "EU")
 }
