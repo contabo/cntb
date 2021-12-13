@@ -17,3 +17,24 @@ load_lib() {
     load "${BATS_INSTALLATION}/${name}/load.bash";
   fi
 }
+
+poll_instance(){
+  echo "polling entered" >&3
+  for i in {0..50}; do
+      run ./cntb get instance "$1"
+      out=$(echo "$output" | grep "running\|error" || true)
+
+      if [[ -n "$out" ]]; then
+        # if status is error, stop polling and return error.
+        if [[ "$out" == "error" ]]; then
+          return 1
+        fi
+        ## Return success
+        return 0
+      fi
+
+      sleep 2
+    done
+
+  return 1
+}

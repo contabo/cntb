@@ -44,10 +44,10 @@ var instanceCancelCmd = &cobra.Command{
 
 		configFormatter := outputFormatter.FormatterConfig{
 			Filter: []string{
-				"tenantId", "customerId", "instanceId", "createdDate", "orderId",
+				"tenantId", "customerId", "instanceId", "cancelDate",
 			},
 			WideFilter: []string{
-				"tenantId", "customerId", "instanceId", "createdDate", "orderId",
+				"tenantId", "customerId", "instanceId", "cancelDate",
 			},
 			JsonPath: contaboCmd.OutputFormatDetails,
 		}

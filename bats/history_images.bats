@@ -91,7 +91,9 @@ function teardown_file() {
   assert_output --partial 'TIMESTAMP'
   assert_output --partial 'CHANGEDBY'
   # content
-  assert_output --partial 'CREATED'
-  assert_output --partial 'DELETED'
-  assert_output --partial "${USER_ID}"
+  assert_output --partial 'TRACEID'
+  assert_output --partial 'CHANGES'
+  assert_output --partial 'USERNAME'
+  assert_output --partial 'TIMESTAMP'
+  assert_output --partial 'REQUESTID'
 }

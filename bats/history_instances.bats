@@ -68,7 +68,7 @@ function teardown_file() {
 }
 
 
-@test 'get image history : ok : filter by changedBy' {
+@test 'get instance history : ok : filter by changedBy' {
   run ./cntb history instances --changedBy "${USER_ID}"
   assert_success
   # header

@@ -1,6 +1,6 @@
 # Contabo Cloud Features Command-Line Interface (CLI)
 
-`cntb` is a command-line interface (CLI) for managing your Contabo Cloud Features like Compute Instances.
+`cntb` is a command-line interface (CLI) for managing your products from Contabo like VPS and VDS.
 
 ## Installation
 
@@ -16,7 +16,7 @@
 1. Configure `cntb` once to use your credentials. You can obtain them from [Customer Control Panel](https://my.contabo.com/api/details).
 
   ```sh
-  cntb config set-credentials --oauth2-clientid=<ClientId from Customer Control Panel> --oauth2-client-secret=<ClientSecret from Customer Control Panel> --oauth2-user=<Cloud Features API User from Customer Control Panel> --oauth2-password=<Cloud Features API Password from Customer Control Panel>
+  cntb config set-credentials --oauth2-clientid=<ClientId from Customer Control Panel> --oauth2-client-secret=<ClientSecret from Customer Control Panel> --oauth2-user=<API User from Customer Control Panel> --oauth2-password=<API Password from Customer Control Panel>
   ```
 
 2. Use the CLI, e.g.
@@ -116,6 +116,10 @@ PowerShell:
 
 ## Building from source
 
+1. Clone the `cntb` project.
+2. Download & install `docker` from the official [Docker page](https://www.docker.com/).
+3. Download & install `go` from the offical [Go page](https://golang.org/doc/install).
+
 ```sh
 make build
 ```
@@ -123,4 +127,3 @@ make build
 ## License
 
 GNU GENERAL PUBLIC LICENSE, Version 3
-

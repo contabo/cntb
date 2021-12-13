@@ -10,6 +10,4 @@ var (
 	nameFilter       string
 	imageTypeFilter  string
 	imageIdFilter    string
-	requestIdFilter  string
-	changedByFilter  string
 )

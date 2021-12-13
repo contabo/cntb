@@ -1,7 +1,5 @@
-UNAME = $(shell uname -s)
 JAVAOPT = '-Dio.swagger.parser.util.RemoteUrl.trustAll=true -Dio.swagger.v3.parser.util.RemoteUrl.trustAll=true'
-OUTPUTLOCATION = /local/
-ifeq ($(UNAME), Darwin)
+ifndef OUTPUTLOCATION
 	OUTPUTLOCATION = /local/openapi/
 endif
 ifndef OPENAPIURL
@@ -9,7 +7,7 @@ ifndef OPENAPIURL
 endif
 
 ifndef OPENAPIVOLUME
-	OPENAPIVOLUME = "${PWD}:/local"
+	OPENAPIVOLUME = "$(CURDIR):/local"
 endif
 .PHONY: build
 build: generate-api-clients build-only unittest
@@ -28,7 +26,6 @@ generate-api-clients:
 
 .PHONY: build-only
 build-only:
-	@echo $(OPENAPIURL)
 	go mod tidy
 	go mod download
 	export VERSION=$$(git rev-list --tags --max-count=1 | xargs -I {} git describe --tags {}); export COMMIT=$$(git rev-parse HEAD); export TIMESTAMP=$$(date -u +"%Y-%m-%dT%H:%M:%SZ"); go build -ldflags="-w -s -X \"contabo.com/cli/cntb/cmd.version=$$VERSION\" -X \"contabo.com/cli/cntb/cmd.commit=$$COMMIT\" -X \"contabo.com/cli/cntb/cmd.date=$$TIMESTAMP\""

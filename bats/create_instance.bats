@@ -40,3 +40,9 @@ function teardown_file() {
   run ./cntb create instance -p 6 --imageId "${STANDARD_IMAGE_ID}" --productId 10987 -r "EU"
   assert_failure
 }
+
+@test 'create : nok : invalid arguments -> product id' {
+  run ./cntb create instance -p 6 --imageId "${STANDARD_IMAGE_ID}" --productId "v1" -r "EU"
+  assert_failure
+  assert_output --partial 'Error while creating instance: 500 - Internal Server Error, retry or contact support'
+}

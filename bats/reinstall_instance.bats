@@ -23,8 +23,15 @@ function teardown_file() {
     skip "Skip due to prod environment"
   fi
 
-  run ./cntb reinstall instance "${INSTANCE_ID}" --imageId="${STANDARD_IMAGE_ID}" 
+  run ./cntb reinstall instance "${REINSTALL_INSTANCE_ID}" --imageId="${STANDARD_IMAGE_ID}"
   assert_success
+
+  poll_instance "${REINSTALL_INSTANCE_ID}"
+
+  if [ $? -ne 0 ]; then
+    run test
+    assert_success
+  fi
 }
 
 @test "reinstall instance wrong instance id type: nok" {
@@ -37,7 +44,14 @@ function teardown_file() {
   assert_failure
 }
 
-@test 'reinstall instance without image id: nok' {
+@test 'reinstall instance without image id: ok' {
   run ./cntb reinstall instance "${REINSTALL_INSTANCE_ID}"
-  assert_failure
+  assert_success
+
+  poll_instance "${REINSTALL_INSTANCE_ID}"
+
+  if [ $? -ne 0 ]; then
+    run test
+    assert_success
+  fi
 }

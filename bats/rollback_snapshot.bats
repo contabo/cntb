@@ -16,6 +16,8 @@ function teardown_file() {
 }
 
 @test 'rollback snapshot: ok' {
+  poll_instance "${INSTANCE_ID}"
+
   run ./cntb create snapshot ${INSTANCE_ID} --name="snapshot${TEST_SUFFIX}" --description='test snapshot1'
   assert_success
   snapshotId="$output"
@@ -29,6 +31,8 @@ function teardown_file() {
 }
 
 @test 'rollback older snapshpot: nok' {
+  poll_instance "${INSTANCE_ID}"
+
   run ./cntb create snapshot ${INSTANCE_ID} --name="snapshot${TEST_SUFFIX}" --description='test snapshot1'
   assert_success
   snapshotId1="$output"
