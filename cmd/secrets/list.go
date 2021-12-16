@@ -50,14 +50,6 @@ var secretsGetCmd = &cobra.Command{
 			ApiRetrieveSecretsListRequest = ApiRetrieveSecretsListRequest.Type_(secretTypeFilter)
 		}
 
-		if cmd.Flags().Changed("xCustomerId") {
-			ApiRetrieveSecretsListRequest = ApiRetrieveSecretsListRequest.XCustomerId(secretCustomerIdFilter)
-		}
-
-		if cmd.Flags().Changed("xTenantId") {
-			ApiRetrieveSecretsListRequest = ApiRetrieveSecretsListRequest.XTenantId(secretTenantIdFilter)
-		}
-
 		resp, httpResp, err := ApiRetrieveSecretsListRequest.Execute()
 
 		util.HandleErrors(err, httpResp, "while retrieving secrets")
@@ -94,12 +86,4 @@ func init() {
 	secretsGetCmd.Flags().StringVarP(
 		&secretTypeFilter, "type", "t", "", `Filter by secret type`)
 	viper.BindPFlag("type", secretsGetCmd.Flags().Lookup("type"))
-
-	secretsGetCmd.Flags().StringVarP(
-		&secretCustomerIdFilter, "xCustomerId", "", "", `Filter by secret customer id`)
-	viper.BindPFlag("xCustomerId", secretsGetCmd.Flags().Lookup("xCustomerId"))
-
-	secretsGetCmd.Flags().StringVarP(
-		&secretTenantIdFilter, "xTenantId", "", "", `Filter by secret tenant id`)
-	viper.BindPFlag("xTenantId", secretsGetCmd.Flags().Lookup("xTenantId"))
 }

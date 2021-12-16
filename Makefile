@@ -3,7 +3,7 @@ ifndef OUTPUTLOCATION
 	OUTPUTLOCATION = /local/openapi/
 endif
 ifndef OPENAPIURL
-	OPENAPIURL = https://api.contabo.com/cloud-features/cloud-features-api.yaml
+	OPENAPIURL = https://api.contabo.com/api-v1.yaml
 endif
 
 ifndef OPENAPIVOLUME
