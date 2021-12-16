@@ -87,7 +87,7 @@ var instanceCreateCmd = &cobra.Command{
 	Args: func(cmd *cobra.Command, args []string) error {
 		contaboCmd.ValidateCreateInput()
 
-		if viper.GetString("imageId") != "" {
+		if instanceImageId == "" && viper.GetString("imageId") != "" {
 			instanceImageId = viper.GetString("imageId")
 		}
 		if viper.GetString("productId") != "" {

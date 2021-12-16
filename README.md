@@ -1,4 +1,4 @@
-# Contabo Cloud Features Command-Line Interface (CLI)
+# Contabo Command-Line Interface (CLI)
 
 `cntb` is a command-line interface (CLI) for managing your products from Contabo like VPS and VDS.
 

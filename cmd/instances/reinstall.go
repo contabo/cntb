@@ -76,6 +76,10 @@ var instanceReinstallCmd = &cobra.Command{
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
 		contaboCmd.ValidateCreateInput()
+		if len(args) < 1 {
+			cmd.Help()
+			log.Fatal("Missing instanceId. Please specify a valid instanceId.")
+		}
 		instanceId64, err := strconv.ParseInt(args[0], 10, 64)
 		if err != nil {
 			log.Fatal(fmt.Sprintf("Specified instanceId %v is not valid", args[0]))

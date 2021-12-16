@@ -83,7 +83,7 @@ func init() {
 	contaboCmd.UpdateCmd.AddCommand(imageUpdateCmd)
 
 	imageUpdateCmd.Flags().StringVar(&imageName, "name", "",
-		`name of the secret`)
+		`new name of the image`)
 	viper.BindPFlag("name", imageUpdateCmd.Flags().Lookup("name"))
 	viper.SetDefault("name", "")
 }
