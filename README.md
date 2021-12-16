@@ -60,13 +60,13 @@ packages:
   - httpd'
 ```
 
-### Stop Compute Instance
+### Start Compute Instance
 
 ```sh
 cntb start instance 12345
 ```
 
-### Start Compute Instance
+### Stop Compute Instance
 
 ```sh
 cntb stop instance 12345
