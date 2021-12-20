@@ -124,6 +124,13 @@ PowerShell:
 make build
 ```
 
+## Affected files and folders
+
+For `cntb` to work it uses some additional files and folders.
+
+* default file for storing settings / preferences is `~/.cntb.yaml`
+* caching folder is `~/.cache/cntb/`
+
 ## License
 
 GNU GENERAL PUBLIC LICENSE, Version 3
