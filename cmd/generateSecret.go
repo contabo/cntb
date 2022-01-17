@@ -9,8 +9,8 @@ import (
 // generateCmd represents the generate command
 var GenerateCmd = &cobra.Command{
 	Use:   "generateSecret",
-	Short: "generate secret for resource",
-	Long:  `Allows to generate and get new secret for resource`,
+	Short: "Generate a secret for resources",
+	Long:  `Allows to generate and get new secret for resources`,
 	Run: func(cmd *cobra.Command, args []string) {
 		cmd.Help()
 		os.Exit(0)

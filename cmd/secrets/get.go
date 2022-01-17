@@ -19,7 +19,7 @@ import (
 var secretGetCmd = &cobra.Command{
 	Use:     "secret [secretId]",
 	Short:   "Info about a specific secret",
-	Long:    `Get attributes values to a specific secret on your account`,
+	Long:    `Get data about a specific secret on your account`,
 	Example: `cntb get secret 21`,
 	Run: func(cmd *cobra.Command, args []string) {
 		ApiRetrieveSecretRequest := client.ApiClient().

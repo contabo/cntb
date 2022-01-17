@@ -69,6 +69,6 @@ func init() {
 	viper.BindPFlag("name", secretsGetCmd.Flags().Lookup("name"))
 
 	secretsGetCmd.Flags().StringVarP(
-		&secretTypeFilter, "type", "t", "", `Filter by secret type`)
+		&secretTypeFilter, "type", "t", "", `Filter by secret type [ssh|password]`)
 	viper.BindPFlag("type", secretsGetCmd.Flags().Lookup("type"))
 }

@@ -17,7 +17,7 @@ var long bool
 // versionCmd represents the version command
 var versionCmd = &cobra.Command{
 	Use:   "version",
-	Short: "Shows the version and exits.",
+	Short: "Shows the version and exits",
 	Long: `Shows the current version of cntb CLI.
 
 For more current versions please check http://contabo.com`,
