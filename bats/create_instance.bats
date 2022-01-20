@@ -36,13 +36,23 @@ function teardown_file() {
   assert_success
 }
 
-@test 'create : nok : invalid arguments' {
+@test 'create instance : nok : invalid arguments' {
   run ./cntb create instance -p 6 --imageId "${STANDARD_IMAGE_ID}" --productId 10987 -r "EU"
   assert_failure
 }
 
-@test 'create : nok : invalid arguments -> product id' {
+@test 'create instance : nok : invalid arguments -> product id' {
   run ./cntb create instance -p 6 --imageId "${STANDARD_IMAGE_ID}" --productId "v1" -r "EU"
   assert_failure
-  assert_output --partial 'Error while creating instance: 500 - Internal Server Error, retry or contact support'
+  assert_output --partial '400'
+  assert_output --partial 'product ID is wrong'
+}
+
+@test 'create instance : nok : invalid env var arguments' {
+  export CNTB_IMAGEID='notauuid'
+  run ./cntb create instance
+  assert_failure
+  assert_output --partial '400'
+  assert_output --partial 'imageId must be a UUID'
+  unset CNTB_IMAGEID
 }

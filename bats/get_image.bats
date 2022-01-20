@@ -26,12 +26,13 @@ function teardown_file() {
   assert_output --partial 'IMAGEID'
   assert_output --partial 'NAME'
   assert_output --partial 'SIZEMB'
+  assert_output --partial 'UPLOADEDSIZEMB'
   assert_output --partial 'OSTYPE'
   assert_output --partial 'VERSION'
   assert_output --partial 'STATUS'
   assert_output --partial "${image_id}"
   assert_output --partial "image${TEST_SUFFIX}"
-  
+
   run ./cntb delete image "$image_id"
   assert_success
 }
@@ -47,6 +48,7 @@ function teardown_file() {
   assert_output --partial 'IMAGEID'
   assert_output --partial 'NAME'
   assert_output --partial 'SIZEMB'
+  assert_output --partial 'UPLOADEDSIZEMB'
   assert_output --partial 'OSTYPE'
   assert_output --partial 'VERSION'
   assert_output --partial 'STATUS'
@@ -56,7 +58,7 @@ function teardown_file() {
   assert_output --partial 'ERRORMESSAGE'
   assert_output --partial "$image_id"
   assert_output --partial "image${TEST_SUFFIX}"
-  
+
   run ./cntb delete image "$image_id"
   assert_success
 }
@@ -72,6 +74,7 @@ function teardown_file() {
   assert_output --partial '"imageId"'
   assert_output --partial '"name"'
   assert_output --partial '"sizeMb"'
+  assert_output --partial '"uploadedSizeMb"'
   assert_output --partial '"osType"'
   assert_output --partial '"version"'
   assert_output --partial '"status"'
@@ -81,7 +84,7 @@ function teardown_file() {
   assert_output --partial '"errorMessage"'
   assert_output --partial "$image_id"
   assert_output --partial "image${TEST_SUFFIX}"
-  
+
   run ./cntb delete image "$image_id"
   assert_success
 }

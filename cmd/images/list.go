@@ -49,10 +49,10 @@ var imagesGetCmd = &cobra.Command{
 
 		configFormatter := outputFormatter.FormatterConfig{
 			Filter: []string{
-				"imageId", "name", "sizeMb", "osType", "version", "status",
+				"imageId", "name", "sizeMb", "uploadedSizeMb", "osType", "version", "status",
 			},
 			WideFilter: []string{
-				"imageId", "name", "sizeMb", "osType", "tags", "version",
+				"imageId", "name", "sizeMb", "uploadedSizeMb", "osType", "tags", "version",
 				"url", "description", "status", "errorMessage", "standardImage",
 			},
 			JsonPath: contaboCmd.OutputFormatDetails}
