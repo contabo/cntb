@@ -9,6 +9,7 @@ import (
 	"contabo.com/cli/cntb/cmd/util"
 	"contabo.com/cli/cntb/outputFormatter"
 	uuid "github.com/satori/go.uuid"
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -25,16 +26,8 @@ var secretsHistoryCmd = &cobra.Command{
 			Size(contaboCmd.Size).
 			OrderBy([]string{contaboCmd.OrderBy})
 
-		if cmd.Flags().Changed("secretId") {
-			historyRequest = historyRequest.SecretId(secretIdFilter)
-		}
-
-		if cmd.Flags().Changed("requestId") {
-			historyRequest = historyRequest.RequestId(contaboCmd.RequestIdFilter)
-		}
-
-		if cmd.Flags().Changed("changedBy") {
-			historyRequest = historyRequest.ChangedBy(contaboCmd.ChangedByFilter)
+		if historySecretIdFilter != 0 {
+			historyRequest = historyRequest.SecretId(historySecretIdFilter)
 		}
 
 		resp, httpResp, err := historyRequest.Execute()
@@ -54,6 +47,14 @@ var secretsHistoryCmd = &cobra.Command{
 	Args: func(cmd *cobra.Command, args []string) error {
 		contaboCmd.ValidateOutputFormat()
 
+		if len(args) > 0 {
+			cmd.Help()
+			log.Fatal("Too many positional arguments.")
+		}
+
+		viper.BindPFlag("secretId", cmd.Flags().Lookup("secretId"))
+		historySecretIdFilter = viper.GetInt64("secretId")
+
 		return nil
 	},
 }
@@ -61,7 +62,6 @@ var secretsHistoryCmd = &cobra.Command{
 func init() {
 	contaboCmd.HistoryCmd.AddCommand(secretsHistoryCmd)
 
-	secretsHistoryCmd.Flags().Int64Var(&secretIdFilter, "secretId", -1,
+	secretsHistoryCmd.Flags().Int64Var(&historySecretIdFilter, "secretId", 0,
 		`To filter audits using Secret Id`)
-	viper.BindPFlag("secretId", secretsHistoryCmd.Flags().Lookup("secretId"))
 }

@@ -17,18 +17,25 @@ var resetPasswordUserCmd = &cobra.Command{
 	Long:    `Send email for password reset for a specific user`,
 	Example: `cntb resetPassword user 6cdf5968-f9fe-4192-97c2-f349e813c5e8`,
 	Run: func(cmd *cobra.Command, args []string) {
-		httpResp, err := client.ApiClient().UsersApi.ResetPassword(context.Background(), userId).
+		httpResp, err := client.ApiClient().UsersApi.
+			ResetPassword(context.Background(), resetPasswordUserId).
 			XRequestId(uuid.NewV4().String()).Execute()
 
 		util.HandleErrors(err, httpResp, "while resetting user password")
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
 		contaboCmd.ValidateCreateInput()
+
+		if len(args) > 1 {
+			cmd.Help()
+			log.Fatal("Too many positional arguments.")
+		}
 		if len(args) < 1 {
 			cmd.Help()
-			log.Fatal("Please specify userId")
+			log.Fatal("Please provide an userId.")
 		}
-		userId = args[0]
+
+		resetPasswordUserId = args[0]
 
 		return nil
 	},

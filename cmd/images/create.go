@@ -19,7 +19,7 @@ import (
 // createCmd represents the create command
 var imageCreateCmd = &cobra.Command{
 	Use:   "image",
-	Short: "Creates a new image",
+	Short: "Creates a new image.",
 	Long:  `Creates a new image based on json / yaml input or arguments.`,
 	Example: `cntb create image --name 'Ubuntu Custom Image' ` +
 		`--description 'Base image for webservers.' --url https://example.com/image.iso ` +
@@ -30,12 +30,12 @@ var imageCreateCmd = &cobra.Command{
 
 		switch content {
 		case nil:
-			createImageRequest.Name = imageName
-			createImageRequest.Url = imageUrl
-			createImageRequest.OsType = strings.Title(strings.ToLower(imageOsType))
-			createImageRequest.Version = imageVersion
-			if (imageDescription) != "" {
-				createImageRequest.Description = &imageDescription
+			createImageRequest.Name = createImageName
+			createImageRequest.Url = createImageUrl
+			createImageRequest.OsType = strings.Title(strings.ToLower(createImageOsType))
+			createImageRequest.Version = createImageVersion
+			if (createImageDescription) != "" {
+				createImageRequest.Description = &createImageDescription
 			}
 		default:
 			// from file / stdin
@@ -56,46 +56,50 @@ var imageCreateCmd = &cobra.Command{
 			XRequestId(uuid.NewV4().String()).
 			CreateCustomImageRequest(createImageRequest).Execute()
 
-		util.HandleErrors(err, httpResp, "while creating image")
+		util.HandleErrors(err, httpResp, "while creating image.")
 
 		fmt.Printf("%v\n", resp.Data[0].ImageId)
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
 		contaboCmd.ValidateCreateInput()
 
-		if viper.GetString("name") != "" {
-			imageName = viper.GetString("name")
+		if len(args) > 0 {
+			cmd.Help()
+			log.Fatal("Too many positional arguments.")
 		}
-		if viper.GetString("description") != "" {
-			imageDescription = viper.GetString("description")
-		}
-		if viper.GetString("url") != "" {
-			imageUrl = viper.GetString("url")
-		}
-		if viper.GetString("osType") != "" {
-			imageOsType = viper.GetString("osType")
-		}
-		if viper.GetString("version") != "" {
-			imageVersion = viper.GetString("version")
-		}
+
+		viper.BindPFlag("name", cmd.Flags().Lookup("name"))
+		createImageName = viper.GetString("name")
+
+		viper.BindPFlag("description", cmd.Flags().Lookup("description"))
+		createImageDescription = viper.GetString("description")
+
+		viper.BindPFlag("url", cmd.Flags().Lookup("url"))
+		createImageUrl = viper.GetString("url")
+
+		viper.BindPFlag("osType", cmd.Flags().Lookup("osType"))
+		createImageOsType = viper.GetString("osType")
+
+		viper.BindPFlag("version", cmd.Flags().Lookup("version"))
+		createImageVersion = viper.GetString("version")
 
 		if contaboCmd.InputFile == "" {
 			// arguments required
-			if imageName == "" {
+			if createImageName == "" {
 				cmd.Help()
 				log.Fatal("Argument name is empty. Please provide one.")
 			}
-			if imageUrl == "" {
+			if createImageUrl == "" {
 				cmd.Help()
 				log.Fatal("Argument url is empty. Please provide one.")
 			}
-			if imageOsType == "" {
+			if createImageOsType == "" {
 				cmd.Help()
-				log.Fatal("Argument osType is empty please provide one")
+				log.Fatal("Argument osType is empty please provide one.")
 			}
-			if imageVersion == "" {
+			if createImageVersion == "" {
 				cmd.Help()
-				log.Fatal("Argument version is empty please provide one")
+				log.Fatal("Argument version is empty please provide one.")
 			}
 		}
 
@@ -106,23 +110,18 @@ var imageCreateCmd = &cobra.Command{
 func init() {
 	contaboCmd.CreateCmd.AddCommand(imageCreateCmd)
 
-	imageCreateCmd.Flags().StringVar(&imageName, "name", "",
-		`custom name of the image`)
-	viper.BindPFlag("name", imageCreateCmd.Flags().Lookup("name"))
+	imageCreateCmd.Flags().StringVarP(&createImageName, "name", "n", "",
+		`Name of the custom image.`)
 
-	imageCreateCmd.Flags().StringVar(&imageDescription, "description", "",
-		`description of the image`)
-	viper.BindPFlag("description", imageCreateCmd.Flags().Lookup("description"))
+	imageCreateCmd.Flags().StringVar(&createImageDescription, "description", "",
+		`Description of the custom image.`)
 
-	imageCreateCmd.Flags().StringVar(&imageUrl, "url", "",
-		`a url from where the image gets downloaded`)
-	viper.BindPFlag("url", imageCreateCmd.Flags().Lookup("url"))
+	imageCreateCmd.Flags().StringVar(&createImageUrl, "url", "",
+		`An url from where the image gets downloaded.`)
 
-	imageCreateCmd.Flags().StringVar(&imageOsType, "osType", "",
-		`os type of the image`)
-	viper.BindPFlag("osType", imageCreateCmd.Flags().Lookup("osType"))
+	imageCreateCmd.Flags().StringVar(&createImageOsType, "osType", "",
+		`Os type of the custom image.`)
 
-	imageCreateCmd.Flags().StringVar(&imageVersion, "version", "",
-		`version of the image`)
-	viper.BindPFlag("version", imageCreateCmd.Flags().Lookup("version"))
+	imageCreateCmd.Flags().StringVar(&createImageVersion, "version", "",
+		`Version of the custom image.`)
 }

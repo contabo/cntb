@@ -17,7 +17,7 @@ function teardown_file() {
 
 
 @test "get role history: normal ok" {
-     run ./cntb create role apiPermission --name="foo${TEST_SUFFIX}" --apiPermission='[{"apiName" : "/v1/users", "actions": ["READ", "CREATE"]}]'
+    run ./cntb create role -n "foo${TEST_SUFFIX}" -p '[{"apiName" : "/v1/users", "actions": ["READ", "CREATE"]}]'
     assert_success
     roleId="$output"
 
@@ -30,14 +30,13 @@ function teardown_file() {
     assert_output --partial 'USERNAME'
     assert_output --partial 'TIMESTAMP'
 
-    #clean up
-    run ./cntb delete role apiPermission "$roleId"
+    # clean up
+    run ./cntb delete role "$roleId"
     assert_success
 }
 
 @test "get role wide: ok" {
-
-   run ./cntb create role apiPermission --name="foo${TEST_SUFFIX}" --apiPermission='[{"apiName" : "/v1/users", "actions": ["READ", "CREATE"]}]'
+    run ./cntb create role -n "foo${TEST_SUFFIX}" -p '[{"apiName" : "/v1/users", "actions": ["READ", "CREATE"]}]'
     assert_success
     roleId="$output"
 
@@ -55,8 +54,7 @@ function teardown_file() {
     assert_output --partial 'TIMESTAMP'
     assert_output --partial 'CHANGED'
 
-    #clean up
-    run ./cntb delete role apiPermission "$roleId"
+    # clean up
+    run ./cntb delete role "$roleId"
     assert_success
-
 }

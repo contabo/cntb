@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"os"
 	"strconv"
 
 	"contabo.com/cli/cntb/client"
@@ -23,7 +22,7 @@ var secretGetCmd = &cobra.Command{
 	Example: `cntb get secret 21`,
 	Run: func(cmd *cobra.Command, args []string) {
 		ApiRetrieveSecretRequest := client.ApiClient().
-			SecretsApi.RetrieveSecret(context.Background(), secretId).
+			SecretsApi.RetrieveSecret(context.Background(), getSecretId).
 			XRequestId(uuid.NewV4().String())
 
 		resp, httpResp, err := ApiRetrieveSecretRequest.Execute()
@@ -46,20 +45,21 @@ var secretGetCmd = &cobra.Command{
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
 		contaboCmd.ValidateOutputFormat()
+
 		if len(args) > 1 {
 			cmd.Help()
-			os.Exit(0)
+			log.Fatal("Too many positional arguments.")
 		}
 		if len(args) < 1 {
 			cmd.Help()
-			log.Fatal("please provide the secretId")
+			log.Fatal("Please provide a secretId.")
 		}
 
 		secretId64, err := strconv.ParseInt(args[0], 10, 64)
 		if err != nil {
-			log.Fatal(fmt.Sprintf("Specified secretId %v is not valid", args[0]))
+			log.Fatal(fmt.Sprintf("Specified secretId %v is not valid.", args[0]))
 		}
-		secretId = secretId64
+		getSecretId = secretId64
 
 		return nil
 	},

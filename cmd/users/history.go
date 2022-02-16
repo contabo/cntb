@@ -8,6 +8,7 @@ import (
 	"contabo.com/cli/cntb/cmd/util"
 	"contabo.com/cli/cntb/outputFormatter"
 	uuid "github.com/satori/go.uuid"
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -17,7 +18,6 @@ var userHistoryCmd = &cobra.Command{
 	Short: "History of your users",
 	Long:  `Show what happend to your users over time.`,
 	Run: func(cmd *cobra.Command, args []string) {
-
 		historyRequest := client.ApiClient().UsersAuditsApi.
 			RetrieveUserAuditsList(context.Background()).
 			XRequestId(uuid.NewV4().String()).
@@ -25,16 +25,8 @@ var userHistoryCmd = &cobra.Command{
 			Size(contaboCmd.Size).
 			OrderBy([]string{contaboCmd.OrderBy})
 
-		if cmd.Flags().Changed("userId") {
-			historyRequest = historyRequest.UserId(userIdFilter)
-		}
-
-		if cmd.Flags().Changed("requestId") {
-			historyRequest = historyRequest.RequestId(contaboCmd.RequestIdFilter)
-		}
-
-		if cmd.Flags().Changed("changedBy") {
-			historyRequest = historyRequest.ChangedBy(contaboCmd.ChangedByFilter)
+		if historyUserId != "" {
+			historyRequest = historyRequest.UserId(historyUserId)
 		}
 
 		resp, httpResp, err := historyRequest.Execute()
@@ -46,20 +38,29 @@ var userHistoryCmd = &cobra.Command{
 		configFormatter := outputFormatter.FormatterConfig{
 			Filter:     []string{"id", "userId", "action", "username", "timestamp"},
 			WideFilter: []string{"id", "userId", "action", "username", "changedBy", "requestId", "traceId", "tenantId", "customerId", "timestamp", "changes"},
-			JsonPath:   contaboCmd.OutputFormatDetails}
+			JsonPath:   contaboCmd.OutputFormatDetails,
+		}
 
 		util.HandleResponse(responseJson, configFormatter)
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
 		contaboCmd.ValidateOutputFormat()
 
+		if len(args) > 0 {
+			cmd.Help()
+			log.Fatal("Too many positional arguments.")
+		}
+
+		viper.BindPFlag("userId", cmd.Flags().Lookup("userId"))
+		historyUserIdFilter = viper.GetString("userId")
+
 		return nil
-	}}
+	},
+}
 
 func init() {
 	contaboCmd.HistoryCmd.AddCommand(userHistoryCmd)
 
-	userHistoryCmd.Flags().StringVarP(&userIdFilter, "userId", "u", "",
+	userHistoryCmd.Flags().StringVarP(&historyUserIdFilter, "userId", "u", "",
 		`To filter audits using Tag Id`)
-	viper.BindPFlag("tagId", userHistoryCmd.Flags().Lookup("userId"))
 }

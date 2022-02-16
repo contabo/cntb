@@ -3,13 +3,13 @@ package cmd
 import (
 	"context"
 	"encoding/json"
-	"os"
 
 	"contabo.com/cli/cntb/client"
 	contaboCmd "contabo.com/cli/cntb/cmd"
 	"contabo.com/cli/cntb/cmd/util"
 	"contabo.com/cli/cntb/outputFormatter"
 	uuid "github.com/satori/go.uuid"
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -26,8 +26,8 @@ var tagsGetCmd = &cobra.Command{
 			Size(contaboCmd.Size).
 			OrderBy([]string{contaboCmd.OrderBy})
 
-		if cmd.Flags().Changed("tagName") {
-			ApiRetrieveTagListRequest = ApiRetrieveTagListRequest.Name(tagNameFilter)
+		if listTagNameFilter != "" {
+			ApiRetrieveTagListRequest = ApiRetrieveTagListRequest.Name(listTagNameFilter)
 		}
 
 		resp, httpResp, err := ApiRetrieveTagListRequest.Execute()
@@ -39,16 +39,21 @@ var tagsGetCmd = &cobra.Command{
 		configFormatter := outputFormatter.FormatterConfig{
 			Filter:     []string{"tagId", "name", "color"},
 			WideFilter: []string{"tagId", "name", "color"},
-			JsonPath:   contaboCmd.OutputFormatDetails}
+			JsonPath:   contaboCmd.OutputFormatDetails,
+		}
 
 		util.HandleResponse(responseJson, configFormatter)
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
 		contaboCmd.ValidateOutputFormat()
+
 		if len(args) > 1 {
 			cmd.Help()
-			os.Exit(0)
+			log.Fatal("Too many positional arguments.")
 		}
+
+		viper.BindPFlag("tagName", cmd.Flags().Lookup("tagName"))
+		listTagNameFilter = viper.GetString("tagName")
 
 		return nil
 	},
@@ -57,6 +62,6 @@ var tagsGetCmd = &cobra.Command{
 func init() {
 	contaboCmd.GetCmd.AddCommand(tagsGetCmd)
 
-	tagsGetCmd.Flags().StringVarP(&tagNameFilter, "tagName", "t", "", `Filter by tag name`)
-	viper.BindPFlag("tagName", tagsGetCmd.Flags().Lookup("tagName"))
+	tagsGetCmd.Flags().StringVarP(&listTagNameFilter, "tagName", "t", "",
+		`Filter by tag name`)
 }

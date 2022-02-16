@@ -15,35 +15,51 @@ function teardown_file() {
 }
 
 
-@test "update role: ok : set different action to api" {
-    run ./cntb create role apiPermission --name="foo${TEST_SUFFIX}" --apiPermission='[{"apiName" : "/v1/users", "actions": ["READ"]}]'
+@test "update role : ok" {
+    name="foo${TEST_SUFFIX}"
+    run ./cntb create role -n "$name" -p '[{"apiName" : "/v1/users", "actions": ["READ", "CREATE"]}]'
     assert_success
     roleId="$output"
 
-    run ./cntb update role apiPermission "$roleId" --name="foo${TEST_SUFFIX}" -a='[{"apiName": "/v1/users", "actions": ["READ", "CREATE"] }]'
+    run ./cntb get role "$roleId"
+    assert_success
+    assert_output --partial "$name"
+
+    run ./cntb update role "$roleId" --name="updated$name" -p '[{"apiName" : "/v1/users", "actions": ["READ", "CREATE"]}]'
     assert_success
 
-    run ./cntb get role apiPermission "$roleId" -o json
+    run ./cntb get role "$roleId"
     assert_success
-    assert_output --partial "CREATE"
+    assert_output --partial "updated$name" 
 
     # cleanup
-
-    run ./cntb delete role apiPermission "$roleId"
+    run ./cntb delete role "$roleId"
     assert_success
-
 }
 
-@test "update role not available action: nok" {
-        run ./cntb create role apiPermission --name="foo${TEST_SUFFIX}" --apiPermission='[{"apiName" : "/v1/users", "actions": ["READ"]}]'
+
+@test "update role without name nor permissions : nok" {
+    run ./cntb create role -n "foo${TEST_SUFFIX}" -p '[{"apiName" : "/v1/users", "actions": ["READ", "CREATE"]}]'
     assert_success
     roleId="$output"
 
-    run ./cntb update role apiPermission "$roleId" --name="foo${TEST_SUFFIX}" -a='[{"apiName": "/v1/users", "actions": ["READ", "UPDATE"] }]'
+    run ./cntb update role "$roleId"
     assert_failure
 
     # cleanup
+    run ./cntb delete role "$roleId"
+    assert_success
+}
 
-    run ./cntb delete role apiPermission "$roleId"
+@test "update role not available action : nok" {
+    run ./cntb create role -n "foo${TEST_SUFFIX}" -p '[{"apiName" : "/v1/users", "actions": ["READ", "CREATE"]}]'
+    assert_success
+    roleId="$output"
+
+    run ./cntb update role "$roleId" --name="foo${TEST_SUFFIX}" -p '[{"apiName": "/v1/users", "actions": ["READ", "UPDATE"] }]'
+    assert_failure
+
+    # cleanup
+    run ./cntb delete role "$roleId"
     assert_success
 }

@@ -25,7 +25,7 @@ var secretEditCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		// get original content
 		resp, httpResp, err := client.ApiClient().
-			SecretsApi.RetrieveSecret(context.Background(), secretId).
+			SecretsApi.RetrieveSecret(context.Background(), editSecretId).
 			XRequestId(uuid.NewV4().String()).
 			Execute()
 
@@ -63,7 +63,7 @@ var secretEditCmd = &cobra.Command{
 			json.NewDecoder(strings.NewReader(string(newContent))).Decode(&updateSecretRequest)
 
 			resp, httpResp, err := client.ApiClient().SecretsApi.
-				UpdateSecret(context.Background(), secretId).
+				UpdateSecret(context.Background(), editSecretId).
 				UpdateSecretRequest(updateSecretRequest).
 				XRequestId(uuid.NewV4().String()).
 				Execute()
@@ -75,16 +75,22 @@ var secretEditCmd = &cobra.Command{
 		}
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
+		contaboCmd.ValidateCreateInput()
+
+		if len(args) > 1 {
+			cmd.Help()
+			log.Fatal("Too many positional arguments.")
+		}
 		if len(args) < 1 {
 			cmd.Help()
-			log.Fatal("Please specify secretId")
+			log.Fatal("Please provide a secretId.")
 		}
 
 		secretId64, err := strconv.ParseInt(args[0], 10, 64)
 		if err != nil {
-			log.Fatal(fmt.Sprintf("Specified secretId %v is not valid", args[0]))
+			log.Fatal(fmt.Sprintf("Provided secretId %v is not valid.", args[0]))
 		}
-		secretId = secretId64
+		editSecretId = secretId64
 
 		return nil
 	},

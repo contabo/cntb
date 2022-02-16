@@ -16,12 +16,12 @@ function teardown_file() {
 }
 
 @test "get user multiple output: ok" {
-    run ./cntb create role apiPermission --name="foo${TEST_SUFFIX}" --apiPermission='[{"apiName" : "/v1/users", "actions": ["READ", "CREATE"]}]'
+    run ./cntb create role -n "foo${TEST_SUFFIX}" -p '[{"apiName" : "/v1/users", "actions": ["READ", "CREATE"]}]'
     assert_success
     roleId="$output"
 
 
-    run ./cntb create user --firstName="foo${TEST_SUFFIX}" --lastName="bar${TEST_SUFFIX}" --email="testuser${TEST_SUFFIX}@contabo.com" --enabled=true --admin=true --accessAllResources=true --roles="$roleId"
+    run ./cntb create user --firstName="foo${TEST_SUFFIX}" --lastName="bar${TEST_SUFFIX}" --email="testuser${TEST_SUFFIX}@contabo.com" --enabled=true --roles="$roleId" --locale de
     assert_success
     userId="$output"
 
@@ -43,7 +43,6 @@ function teardown_file() {
     assert_output --partial "EMAIL"
     assert_output --partial "ENABLED"
     assert_output --partial "TOTP"
-    assert_output --partial "ADMIN"
 
     run ./cntb get user "$userId" -o json
     assert_success
@@ -53,7 +52,6 @@ function teardown_file() {
     assert_output --partial '"email"'
     assert_output --partial '"enabled"'
     assert_output --partial '"totp"'
-    assert_output --partial '"admin"'
     assert_output --partial '"roles"'
 
     run ./cntb get user "$userId" -o yaml
@@ -64,12 +62,12 @@ function teardown_file() {
     assert_output --partial 'email:'
     assert_output --partial 'enabled:'
     assert_output --partial 'totp:'
-    assert_output --partial 'admin:'
     assert_output --partial 'roles:'
-    #clean up
+
+    # clean up
     run ./cntb delete user "$userId"
     assert_success
-    run ./cntb delete role apiPermission "$roleId"
+    run ./cntb delete role "$roleId"
     assert_success
 
 }

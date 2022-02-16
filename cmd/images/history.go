@@ -9,6 +9,7 @@ import (
 	"contabo.com/cli/cntb/cmd/util"
 	"contabo.com/cli/cntb/outputFormatter"
 	uuid "github.com/satori/go.uuid"
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -20,7 +21,6 @@ var historyCmd = &cobra.Command{
 	Long:    `Show what happend to your images over time.`,
 	Example: `cntb history images --imageId 9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d`,
 	Run: func(cmd *cobra.Command, args []string) {
-
 		historyRequest := client.ApiClient().ImagesAuditsApi.
 			RetrieveImageAuditsList(context.Background()).
 			XRequestId(uuid.NewV4().String()).
@@ -28,18 +28,10 @@ var historyCmd = &cobra.Command{
 			Size(contaboCmd.Size).
 			OrderBy([]string{contaboCmd.OrderBy})
 
-		if cmd.Flags().Changed("imageId") {
+		if historyImageIdFilter != "" {
 			historyRequest = historyRequest.ImageId(
-				imageIdFilter,
+				historyImageIdFilter,
 			)
-		}
-
-		if cmd.Flags().Changed("requestId") {
-			historyRequest = historyRequest.RequestId(contaboCmd.RequestIdFilter)
-		}
-
-		if cmd.Flags().Changed("changedBy") {
-			historyRequest = historyRequest.ChangedBy(contaboCmd.ChangedByFilter)
 		}
 
 		resp, httpResp, err := historyRequest.Execute()
@@ -64,6 +56,14 @@ var historyCmd = &cobra.Command{
 	Args: func(cmd *cobra.Command, args []string) error {
 		contaboCmd.ValidateOutputFormat()
 
+		if len(args) > 0 {
+			cmd.Help()
+			log.Fatal("Too many positional arguments.")
+		}
+
+		viper.BindPFlag("imageId", cmd.Flags().Lookup("imageId"))
+		historyImageIdFilter = viper.GetString("imageId")
+
 		return nil
 	},
 }
@@ -71,7 +71,6 @@ var historyCmd = &cobra.Command{
 func init() {
 	contaboCmd.HistoryCmd.AddCommand(historyCmd)
 
-	historyCmd.Flags().StringVar(&imageIdFilter, "imageId", "",
+	historyCmd.Flags().StringVarP(&historyImageIdFilter, "imageId", "i", "",
 		`Filter by a specific image via its imageId.`)
-	viper.BindPFlag("imageId", historyCmd.Flags().Lookup("imageId"))
 }

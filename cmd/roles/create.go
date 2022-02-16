@@ -17,29 +17,41 @@ import (
 )
 
 var roleCreateCmd = &cobra.Command{
-	Use:   "role [permissionType]",
-	Short: "Creates a new role",
-	Long:  `Creates a new role based on a json/yaml that is provided`,
+	Use:   "role",
+	Short: "Creates a new role.",
+	Long:  `Creates a new role based on a json/yaml that is provided.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		createRoleRequest := *userManagementClient.NewCreateRoleRequestWithDefaults()
 		content := contaboCmd.OpenStdinOrFile()
 		switch content {
 		case nil:
-			// fdk	rom arguments
-			createRoleRequest.Name = name
-			if permissionType == "apiPermission" {
-				var apiPermissionType []userManagementClient.ApiPermissionsResponse
-				err := json.Unmarshal([]byte(apiPermissions), &apiPermissionType)
+			// from arguments
+			createRoleRequest.Name = createName
+			createRoleRequest.Admin = createAdmin
+			createRoleRequest.AccessAllResources = createAccessAllResources
 
+			if createPermissions != "" {
+				var permissionsRequest []userManagementClient.PermissionRequest
+				err := json.Unmarshal([]byte(createPermissions), &permissionsRequest)
 				if err != nil {
-					log.Error("I am going to fail now as there is an error")
-					log.Fatal(fmt.Sprintf("Format of api permission invalid. Please check you syntax: %v", err))
+					log.Error("Invalid `permissions`. Please check the JSON syntax.")
+					log.Fatal(fmt.Sprintf("Error: %v", err))
 				}
-				createRoleRequest.ApiPermissions = &apiPermissionType
-			}
 
-			if permissionType == "resourcePermission" {
-				createRoleRequest.ResourcePermissions = resourceTagList
+				for index, permission := range permissionsRequest {
+					if len(permission.Actions) < 1 {
+						log.Fatal("Please make sure each permission has at least one action.")
+					}
+					// add empty array to resources list if it is not given
+					if permission.Resources == nil {
+						resources := make([]int64, 0)
+						permissionsRequest[index].Resources = &resources
+					}
+				}
+				createRoleRequest.Permissions = &permissionsRequest
+			} else if createAdmin {
+				createdAdmin := make([]userManagementClient.PermissionRequest, 0)
+				createRoleRequest.Permissions = &createdAdmin
 			}
 		default:
 			// from file / stdin
@@ -51,7 +63,8 @@ var roleCreateCmd = &cobra.Command{
 			// merge createRoleRequest with one from file to have the defaults there
 			json.NewDecoder(strings.NewReader(string(content))).Decode(&createRoleRequest)
 		}
-		resp, httpResp, err := client.ApiClient().RolesApi.CreateRole(context.Background(), "apiPermission").
+
+		resp, httpResp, err := client.ApiClient().RolesApi.CreateRole(context.Background()).
 			XRequestId(uuid.NewV4().String()).CreateRoleRequest(createRoleRequest).Execute()
 
 		util.HandleErrors(err, httpResp, "creating role")
@@ -61,31 +74,35 @@ var roleCreateCmd = &cobra.Command{
 	Args: func(cmd *cobra.Command, args []string) error {
 		contaboCmd.ValidateCreateInput()
 
-		if len(args) > 1 {
+		if len(args) > 0 {
 			cmd.Help()
-			log.Fatal("you can only provide one permission type")
+			log.Fatal("Too many positional arguments.")
 		}
 
-		if len(args) < 1 {
-			cmd.Help()
-			log.Fatal("Missing permission type please provide one of the following apiPermission or resourcePermission")
-		}
+		viper.BindPFlag("name", cmd.Flags().Lookup("name"))
+		createName = viper.GetString("name")
 
-		if viper.GetString("name") != "" {
-			name = viper.GetString("name")
-		}
+		viper.BindPFlag("permissions", cmd.Flags().Lookup("permissions"))
+		createPermissions = viper.GetString("permissions")
 
-		permissionType = args[0]
+		viper.BindPFlag("admin", cmd.Flags().Lookup("admin"))
+		createAdmin = viper.GetBool("admin")
 
-		if permissionType != "apiPermission" && permissionType != "resourcePermission" {
-			cmd.Help()
-			log.Fatal("Permission type can only be on of the following either apiPermission or resourcePermission")
-		}
+		viper.BindPFlag("accessAllResources", cmd.Flags().Lookup("accessAllResources"))
+		createAccessAllResources = viper.GetBool("accessAllResources")
 
 		if contaboCmd.InputFile == "" {
 			// arguments required
-			if name == "" {
-				log.Fatal("name is empty. Please provide one.")
+			if createName == "" {
+				cmd.Help()
+				log.Fatal("Argument name is empty. Please provide one.")
+			}
+			if createPermissions == "" && !createAdmin {
+				cmd.Help()
+				log.Fatal("Argument permissions is empty. Please provide at least one permission.")
+			}
+			if createAdmin {
+				createAccessAllResources = true
 			}
 		}
 		return nil
@@ -95,12 +112,14 @@ var roleCreateCmd = &cobra.Command{
 func init() {
 	contaboCmd.CreateCmd.AddCommand(roleCreateCmd)
 
-	roleCreateCmd.Flags().StringVar(&name, "name", "", `name of the role`)
-	viper.BindPFlag("name", roleCreateCmd.Flags().Lookup("name"))
+	roleCreateCmd.Flags().StringVarP(&createName, "name", "n", "", `name of the role`)
 
-	roleCreateCmd.Flags().StringVarP(&apiPermissions, "apiPermission", "a", "",
-		"provide an array of json objects with the permissions including the api and the actions")
+	roleCreateCmd.Flags().StringVarP(&createPermissions, "permissions", "p", "",
+		"provide an array of json objects with the permissions including the apiName, the actions and the resources")
 
-	roleCreateCmd.Flags().Int64SliceVarP(&resourceTagList, "resourcePermission", "r", nil,
-		"provide an array of json objects with the permissions including the api and the actions")
+	roleCreateCmd.Flags().BoolVar(&createAdmin, "admin", false,
+		`If user is admin he will have permissions to all API endpoints and resources.`)
+
+	roleCreateCmd.Flags().BoolVar(&createAccessAllResources, "accessAllResources", false,
+		`Allow access to all resources. This will superseed all assigned resources in a role.`)
 }

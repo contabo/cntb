@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"os"
 	"strconv"
 	"strings"
 
@@ -32,11 +31,11 @@ var snapshotUpdateCmd = &cobra.Command{
 
 		switch content {
 		case nil:
-			if name != "" {
-				updateSnapshotRequest.Name = &name
+			if updateName != "" {
+				updateSnapshotRequest.Name = &updateName
 			}
-			if description != "" {
-				updateSnapshotRequest.Description = &description
+			if updateDescription != "" {
+				updateSnapshotRequest.Description = &updateDescription
 			}
 		default:
 			// from file / stdin
@@ -52,7 +51,7 @@ var snapshotUpdateCmd = &cobra.Command{
 		}
 
 		resp, httpResp, err := client.ApiClient().SnapshotsApi.
-			UpdateSnapshot(context.Background(), instanceId, snapshotId).
+			UpdateSnapshot(context.Background(), updateInstanceId, updateSnapshotId).
 			UpdateSnapshotRequest(updateSnapshotRequest).
 			XRequestId(uuid.NewV4().String()).
 			Execute()
@@ -65,29 +64,28 @@ var snapshotUpdateCmd = &cobra.Command{
 	Args: func(cmd *cobra.Command, args []string) error {
 		contaboCmd.ValidateCreateInput()
 
-		if viper.GetString("name") != "" {
-			name = viper.GetString("name")
-		}
-		if viper.GetString("description") != "" {
-			description = viper.GetString("description")
-		}
-
 		if len(args) > 2 {
 			cmd.Help()
-			os.Exit(0)
+			log.Fatal("Too many positional arguments.")
 		}
 		if len(args) < 2 {
 			cmd.Help()
-			log.Fatal("please provide a instanceId and snapshotId")
+			log.Fatal("Please provide an instanceId and a snapshotId.")
 		}
+
+		viper.BindPFlag("name", cmd.Flags().Lookup("name"))
+		updateName = viper.GetString("name")
+
+		viper.BindPFlag("description", cmd.Flags().Lookup("description"))
+		updateDescription = viper.GetString("description")
 
 		instanceId64, err := strconv.ParseInt(args[0], 10, 64)
 		if err != nil {
-			log.Fatal(fmt.Sprintf("Specified instanceId %v is not valid", args[0]))
+			log.Fatal(fmt.Sprintf("Provided instanceId %v is not valid.", args[0]))
 		}
-		instanceId = instanceId64
+		updateInstanceId = instanceId64
 
-		snapshotId = args[1]
+		updateSnapshotId = args[1]
 
 		return nil
 	},
@@ -96,13 +94,10 @@ var snapshotUpdateCmd = &cobra.Command{
 func init() {
 	contaboCmd.UpdateCmd.AddCommand(snapshotUpdateCmd)
 
-	snapshotUpdateCmd.Flags().StringVar(&name, "name", "",
+	snapshotUpdateCmd.Flags().StringVar(&updateName, "name", "",
 		`name of the snapshot`)
-	viper.BindPFlag("name", snapshotUpdateCmd.Flags().Lookup("name"))
-	viper.SetDefault("name", "")
-	snapshotUpdateCmd.Flags().StringVar(&description, "description", "",
+
+	snapshotUpdateCmd.Flags().StringVar(&updateDescription, "description", "",
 		`description of the snapshot`)
-	viper.BindPFlag("description", snapshotUpdateCmd.Flags().Lookup("description"))
-	viper.SetDefault("description", "")
 
 }

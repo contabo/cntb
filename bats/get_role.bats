@@ -16,54 +16,64 @@ function teardown_file() {
 }
 
 
-@test "get api permission role with different outputs" {
-    run ./cntb create role apiPermission --name="foo${TEST_SUFFIX}" --apiPermission='[{"apiName" : "/v1/users", "actions": ["READ", "CREATE"]}]'
+@test "get api permission role with different outputs : ok" {
+    run ./cntb create role -n "foo${TEST_SUFFIX}" -p '[{"apiName" : "/v1/users", "actions": ["READ", "CREATE"]}]'
     assert_success
     roleId="$output"
 
-    run ./cntb get role apiPermission "$roleId"
+    run ./cntb get role "$roleId"
     assert_success
     assert_output --partial 'ROLEID'
     assert_output --partial 'NAME'
     assert_output --partial "${roleId}"
 
-    run ./cntb get role apiPermission "$roleId" -o wide
+    run ./cntb get role "$roleId" -o wide
     assert_success
     assert_output --partial 'ROLEID'
     assert_output --partial 'NAME'
+    assert_output --partial 'ADMIN'
+    assert_output --partial 'ACCESSALLRESOURCES'
     assert_output --partial "${roleId}"
 
 
-    run ./cntb get role apiPermission "$roleId" -o json
+    run ./cntb get role "$roleId" -o json
     assert_success
     assert_output --partial 'roleId'
     assert_output --partial 'name'
-    assert_output --partial 'apiPermissions'
+    assert_output --partial 'admin'
+    assert_output --partial 'accessAllResources'
+    assert_output --partial 'permissions'
     assert_output --partial 'apiName'
 
-    run ./cntb get role apiPermission "$roleId" -o yaml
+    run ./cntb get role "$roleId" -o yaml
     assert_success
     assert_output --partial 'roleId:'
     assert_output --partial 'name:'
-    assert_output --partial 'apiPermissions:'
+    assert_output --partial 'admin:'
+    assert_output --partial 'accessAllResources:'
+    assert_output --partial 'permissions:'
     assert_output --partial 'apiName:'
+
     # clean up
-    run ./cntb delete role apiPermission "${roleId}"
+    run ./cntb delete role "${roleId}"
     assert_success
 }
 
-@test "get role wrong permission type: nok" {
- run ./cntb get role aa 1
- assert_failure
-}
+@test "get role with wrong flags : nok" {
+    run ./cntb create role -n "foo${TEST_SUFFIX}" -p '[{"apiName" : "/v1/users", "actions": ["READ", "CREATE"]}]'
+    assert_success
+    roleId="$output"
 
-@test "create role wrong number of inputs: nok" {
- run ./cntb get role
- assert_failure
+    run ./cntb get role
+    assert_failure
 
- run .run ./cntb create role apiPermission apiPermission
- assert_failure
+    run ./cntb get role resourcePermission $roleId
+    assert_failure
 
- run .run ./cntb create role apiPermission apiPermission
- assert_failure
+    run ./cntb get role $roleId apiPermission
+    assert_failure
+
+    # clean up
+    run ./cntb delete role "${roleId}"
+    assert_success
 }

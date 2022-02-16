@@ -14,37 +14,32 @@ import (
 )
 
 var roleDeleteCmd = &cobra.Command{
-	Use:   "role [permissionType] [roleId]",
+	Use:   "role [roleId]",
 	Short: "Deletes a specific role",
-	Long:  `Specify a role id to delete the specified tag. A role might not be deleted if it is still assigned.`,
+	Long:  `Specify a role id to delete. A role might not be deleted if it is still assigned.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		httpResp, err := client.ApiClient().
-			RolesApi.DeleteRole(context.Background(), permissionType, roleId).
+			RolesApi.DeleteRole(context.Background(), deleteRoleId).
 			XRequestId(uuid.NewV4().String()).Execute()
 
 		util.HandleErrors(err, httpResp, "while deleting role")
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
-		if len(args) < 2 {
+		if len(args) > 1 {
 			cmd.Help()
-			log.Fatal("Please specify permission type and roleId")
+			log.Fatal("Too many positional arguments.")
 		}
 
-		if len(args) > 2 {
+		if len(args) < 1 {
 			cmd.Help()
-			log.Fatal("you can only provide a permission type (apiPermission, resourcePermission) and roleId")
+			log.Fatal("Please provide a roleId")
 		}
 
-		permissionType = args[0]
-		if permissionType != "apiPermission" && permissionType != "resourcePermission" {
-			cmd.Help()
-			log.Fatal("Permission type can only be on of the following either apiPermission or resourcePermission")
-		}
-		roleId64, err := strconv.ParseInt(args[1], 10, 64)
+		roleId64, err := strconv.ParseInt(args[0], 10, 64)
 		if err != nil {
-			log.Fatal(fmt.Sprintf("Specified roleId %v is not valid", args[0]))
+			log.Fatal(fmt.Sprintf("Provided roleId %v is not valid.", args[0]))
 		}
-		roleId = roleId64
+		deleteRoleId = roleId64
 		return nil
 	},
 }

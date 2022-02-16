@@ -3,7 +3,6 @@ package cmd
 import (
 	"context"
 	"encoding/json"
-	"os"
 
 	"contabo.com/cli/cntb/client"
 	contaboCmd "contabo.com/cli/cntb/cmd"
@@ -16,23 +15,25 @@ import (
 )
 
 var rolesGetCmd = &cobra.Command{
-	Use:   "roles [type]",
+	Use:   "roles",
 	Short: "All about your role for a specific type",
 	Long:  `Retrieves information about one or multiple roles for a specific permission type. Filter by name and apiName or tag name`,
 	Run: func(cmd *cobra.Command, args []string) {
 		ApiRetrieveRolesList := client.ApiClient().RolesApi.
-			RetrieveRoleList(context.Background(), permissionType).
+			RetrieveRoleList(context.Background()).
 			XRequestId(uuid.NewV4().String()).
 			Page(contaboCmd.Page).
 			Size(contaboCmd.Size).
 			OrderBy([]string{contaboCmd.OrderBy})
 
-		if cmd.Flags().Changed("tagName") {
-			ApiRetrieveRolesList = ApiRetrieveRolesList.Name(nameFilter)
+		if listRoleNameFilter != "" {
+			ApiRetrieveRolesList = ApiRetrieveRolesList.Name(listRoleNameFilter)
 		}
-
-		if cmd.Flags().Changed("apiName") {
-			ApiRetrieveRolesList = ApiRetrieveRolesList.ApiName(apiNameFilter)
+		if listTagNameFilter != "" {
+			ApiRetrieveRolesList = ApiRetrieveRolesList.TagName(listTagNameFilter)
+		}
+		if listApiNameFilter != "" {
+			ApiRetrieveRolesList = ApiRetrieveRolesList.ApiName(listApiNameFilter)
 		}
 
 		resp, httpResp, err := ApiRetrieveRolesList.Execute()
@@ -41,51 +42,30 @@ var rolesGetCmd = &cobra.Command{
 
 		responseJson, _ := json.Marshal(resp.Data)
 
-		if permissionType == "resourcePermission" {
-			configFormatter = outputFormatter.FormatterConfig{
-				Filter:     []string{"roleId", "name"},
-				WideFilter: []string{"roleId", "tenantId", "customerId", "name", "resourcePermissions"},
-				JsonPath:   contaboCmd.OutputFormatDetails}
-		} else {
-			configFormatter = outputFormatter.FormatterConfig{
-				Filter:     []string{"roleId", "name"},
-				WideFilter: []string{"roleId", "name"},
-				JsonPath:   contaboCmd.OutputFormatDetails}
-		}
+		configFormatter := outputFormatter.FormatterConfig{
+			Filter:     []string{"roleId", "name"},
+			WideFilter: []string{"roleId", "name", "admin", "accessAllResources", "permissions"},
+			JsonPath:   contaboCmd.OutputFormatDetails}
 
 		util.HandleResponse(responseJson, configFormatter)
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
 		contaboCmd.ValidateOutputFormat()
-		if len(args) > 1 {
+
+		if len(args) > 0 {
 			cmd.Help()
-			os.Exit(0)
-		}
-		if len(args) < 1 {
-			cmd.Help()
-			log.Fatal("please provide a permission type ")
+			log.Fatal("Too many positional arguments.")
 		}
 
-		permissionType = args[0]
+		viper.BindPFlag("name", cmd.Flags().Lookup("name"))
+		listRoleNameFilter = viper.GetString("name")
 
-		if permissionType != "apiPermission" && permissionType != "resourcePermission" {
-			cmd.Help()
-			log.Fatal("Permission type can only be on of the following either apiPermission or resourcePermission")
-		}
+		viper.BindPFlag("tagName", cmd.Flags().Lookup("tagName"))
+		listTagNameFilter = viper.GetString("tagName")
 
-		if permissionType == "resourcePermission" && apiNameFilter != "" {
-			cmd.Help()
-			log.Fatal("you can't filter on API name with type resource permission")
-		}
+		viper.BindPFlag("apiName", cmd.Flags().Lookup("apiName"))
+		listApiNameFilter = viper.GetString("apiName")
 
-		if permissionType == "apiPermission" && resourceNameFilter != "" {
-			cmd.Help()
-			log.Fatal("you can't filter on resource name with type api permission")
-		}
-
-		if cmd.Flags().Changed("name") {
-			nameFilter = viper.GetString("name")
-		}
 		return nil
 	},
 }
@@ -93,12 +73,12 @@ var rolesGetCmd = &cobra.Command{
 func init() {
 	contaboCmd.GetCmd.AddCommand(rolesGetCmd)
 
-	rolesGetCmd.Flags().StringVarP(&nameFilter, "tagName", "n", "",
+	rolesGetCmd.Flags().StringVarP(&listRoleNameFilter, "name", "n", "",
+		`Filter by role name`)
+
+	rolesGetCmd.Flags().StringVar(&listTagNameFilter, "tagName", "",
 		`Filter by tag name`)
-	viper.BindPFlag("tagName", rolesGetCmd.Flags().Lookup("tagName"))
 
-	rolesGetCmd.Flags().StringVarP(&apiNameFilter, "apiName", "a", "",
+	rolesGetCmd.Flags().StringVar(&listApiNameFilter, "apiName", "",
 		`filter by api name if the type of role is an api role`)
-	viper.BindPFlag("apiName", rolesGetCmd.Flags().Lookup("apiName"))
-
 }

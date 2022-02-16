@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"os"
 	"strconv"
 	"strings"
 
@@ -29,9 +28,9 @@ var snapshotCreateCmd = &cobra.Command{
 
 		switch content {
 		case nil:
-			createSnapshotRequest.Name = name
-			if (description) != "" {
-				createSnapshotRequest.Description = &description
+			createSnapshotRequest.Name = createName
+			if createDescription != "" {
+				createSnapshotRequest.Description = &createDescription
 			}
 		default:
 			// from file / stdin
@@ -47,7 +46,7 @@ var snapshotCreateCmd = &cobra.Command{
 		}
 
 		resp, httpResp, err := client.ApiClient().SnapshotsApi.
-			CreateSnapshot(context.Background(), instanceId).
+			CreateSnapshot(context.Background(), createInstanceId).
 			XRequestId(uuid.NewV4().String()).
 			CreateSnapshotRequest(createSnapshotRequest).Execute()
 
@@ -58,35 +57,34 @@ var snapshotCreateCmd = &cobra.Command{
 	Args: func(cmd *cobra.Command, args []string) error {
 		contaboCmd.ValidateCreateInput()
 
-		if viper.GetString("name") != "" {
-			name = viper.GetString("name")
+		if len(args) > 1 {
+			cmd.Help()
+			log.Fatal("Too many positional arguments.")
 		}
-		if viper.GetString("description") != "" {
-			description = viper.GetString("description")
+		if len(args) < 1 {
+			cmd.Help()
+			log.Fatal("Please provide an instanceId")
 		}
+
+		viper.BindPFlag("name", cmd.Flags().Lookup("name"))
+		createName = viper.GetString("name")
+
+		viper.BindPFlag("description", cmd.Flags().Lookup("description"))
+		createDescription = viper.GetString("description")
 
 		if contaboCmd.InputFile == "" {
 			// arguments required
-			if name == "" {
+			if createName == "" {
 				cmd.Help()
 				log.Fatal("Argument name is empty. Please provide one.")
 			}
 		}
 
-		if len(args) > 1 {
-			cmd.Help()
-			os.Exit(0)
-		}
-		if len(args) < 1 {
-			cmd.Help()
-			log.Fatal("please provide a instanceId")
-		}
-
 		instanceId64, err := strconv.ParseInt(args[0], 10, 64)
 		if err != nil {
-			log.Fatal(fmt.Sprintf("Specified instanceId %v is not valid", args[0]))
+			log.Fatal(fmt.Sprintf("Provided instanceId %v is not valid", args[0]))
 		}
-		instanceId = instanceId64
+		createInstanceId = instanceId64
 
 		return nil
 	},
@@ -95,11 +93,9 @@ var snapshotCreateCmd = &cobra.Command{
 func init() {
 	contaboCmd.CreateCmd.AddCommand(snapshotCreateCmd)
 
-	snapshotCreateCmd.Flags().StringVar(&name, "name", "",
+	snapshotCreateCmd.Flags().StringVar(&createName, "name", "",
 		`name of the snapshot`)
-	viper.BindPFlag("name", snapshotCreateCmd.Flags().Lookup("name"))
 
-	snapshotCreateCmd.Flags().StringVar(&description, "description", "",
+	snapshotCreateCmd.Flags().StringVar(&createDescription, "description", "",
 		`description of the snapshot`)
-	viper.BindPFlag("description", snapshotCreateCmd.Flags().Lookup("description"))
 }

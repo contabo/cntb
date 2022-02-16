@@ -23,7 +23,7 @@ var restartInstanceCmd = &cobra.Command{
 	Example: `cntb restart instance 12345`,
 	Run: func(cmd *cobra.Command, args []string) {
 		resp, httpResp, err := client.ApiClient().
-			InstanceActionsApi.Restart(context.Background(), instanceId).
+			InstanceActionsApi.Restart(context.Background(), restartInstanceId).
 			XRequestId(uuid.NewV4().String()).Execute()
 
 		util.HandleErrors(err, httpResp, "while restarting instance")
@@ -48,7 +48,7 @@ var restartInstanceCmd = &cobra.Command{
 		if err != nil {
 			log.Fatal(fmt.Sprintf("Specified instanceId %v is not valid", args[0]))
 		}
-		instanceId = instanceId64
+		restartInstanceId = instanceId64
 		contaboCmd.ValidateOutputFormat()
 
 		return nil

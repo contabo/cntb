@@ -1,6 +1,21 @@
 package cmd
 
+// history
 var (
-	instanceId       int64
-	instanceIdFilter int64
+	historyInstanceId int64
+)
+
+// restart
+var (
+	restartInstanceId int64
+)
+
+// start
+var (
+	startInstanceId int64
+)
+
+// stop
+var (
+	stopInstanceId int64
 )

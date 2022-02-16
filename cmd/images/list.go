@@ -3,13 +3,14 @@ package cmd
 import (
 	"context"
 	"encoding/json"
-	"log"
+	"fmt"
 
 	"contabo.com/cli/cntb/client"
 	contaboCmd "contabo.com/cli/cntb/cmd"
 	"contabo.com/cli/cntb/cmd/util"
 	"contabo.com/cli/cntb/outputFormatter"
 	uuid "github.com/satori/go.uuid"
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -29,7 +30,7 @@ var imagesGetCmd = &cobra.Command{
 			OrderBy([]string{contaboCmd.OrderBy})
 
 		if cmd.Flags().Changed("name") {
-			ApiRetrieveImageListRequest = ApiRetrieveImageListRequest.Name(nameFilter)
+			ApiRetrieveImageListRequest = ApiRetrieveImageListRequest.Name(listImageNameFilter)
 		}
 
 		imageType, _ := cmd.Flags().GetString("imageType")
@@ -55,18 +56,34 @@ var imagesGetCmd = &cobra.Command{
 				"imageId", "name", "sizeMb", "uploadedSizeMb", "osType", "tags", "version",
 				"url", "description", "status", "errorMessage", "standardImage",
 			},
-			JsonPath: contaboCmd.OutputFormatDetails}
+			JsonPath: contaboCmd.OutputFormatDetails,
+		}
 
 		util.HandleResponse(responseJson, configFormatter)
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
-		givenImageType := viper.GetString("imageType")
-		if givenImageType != "" {
-			if givenImageType != "standard" && givenImageType != "custom" {
-				cmd.Help()
-				log.Fatal("Argument imageType was given. Please provide one of `standard` or `custom`.")
-			}
+		contaboCmd.ValidateOutputFormat()
+
+		if len(args) > 0 {
+			cmd.Help()
+			log.Fatal("Too many positional arguments.")
 		}
+
+		viper.BindPFlag("name", cmd.Flags().Lookup("name"))
+		listImageNameFilter = viper.GetString("name")
+
+		viper.BindPFlag("imageType", cmd.Flags().Lookup("imageType"))
+		listImageTypeFilter = viper.GetString("imageType")
+
+		if listImageTypeFilter != "" && listImageTypeFilter != "standard" && listImageTypeFilter != "custom" {
+			cmd.Help()
+			log.Fatal(
+				fmt.Sprintf(
+					"Invalid value `%v` for imageType. Please provide one of `standard` or `custom`.",
+					listImageTypeFilter,
+				))
+		}
+
 		return nil
 	},
 }
@@ -74,12 +91,9 @@ var imagesGetCmd = &cobra.Command{
 func init() {
 	contaboCmd.GetCmd.AddCommand(imagesGetCmd)
 
-	imagesGetCmd.Flags().StringVarP(
-		&nameFilter, "name", "", "", `Filter by custom image name.`)
-	viper.BindPFlag("name", imagesGetCmd.Flags().Lookup("name"))
+	imagesGetCmd.Flags().StringVarP(&listImageNameFilter, "name", "n", "",
+		`Filter by image name.`)
 
-	imagesGetCmd.Flags().StringVarP(
-		&imageTypeFilter, "imageType", "", "",
+	imagesGetCmd.Flags().StringVar(&listImageTypeFilter, "imageType", "",
 		`Filter by type of image. Available values are 'standard' or 'custom'.`)
-	viper.BindPFlag("imageType", imagesGetCmd.Flags().Lookup("imageType"))
 }

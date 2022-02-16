@@ -18,27 +18,34 @@ var userGetCmd = &cobra.Command{
 	Short: "Info about a specific user",
 	Long:  `Retrieves information about one user identified by id.`,
 	Run: func(cmd *cobra.Command, args []string) {
+		resp, httpResp, err := client.ApiClient().
+			UsersApi.RetrieveUser(context.Background(), getUserId).
+			XRequestId(uuid.NewV4().String()).Execute()
 
-		resp, httpResp, err := client.ApiClient().UsersApi.RetrieveUser(context.Background(), userId).XRequestId(uuid.NewV4().String()).Execute()
 		util.HandleErrors(err, httpResp, "while retrieving user")
 
 		responseJson, _ := json.Marshal(resp.Data)
 
 		configFormatter := outputFormatter.FormatterConfig{
 			Filter:     []string{"userId", "firstName", "lastName", "email", "enabled"},
-			WideFilter: []string{"userId", "firstName", "lastName", "email", "enabled", "totp", "admin"},
+			WideFilter: []string{"userId", "firstName", "lastName", "email", "enabled", "totp", "roles"},
 			JsonPath:   contaboCmd.OutputFormatDetails}
 
 		util.HandleResponse(responseJson, configFormatter)
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
+		contaboCmd.ValidateOutputFormat()
+
+		if len(args) > 1 {
+			cmd.Help()
+			log.Fatal("Too many positional arguments.")
+		}
 		if len(args) < 1 {
 			cmd.Help()
-			log.Fatal("Please specify tagId")
+			log.Fatal("Please provide an userId.")
 		}
+		getUserId = args[0]
 
-		userId = args[0]
-		contaboCmd.ValidateOutputFormat()
 		return nil
 	},
 }

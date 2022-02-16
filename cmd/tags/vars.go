@@ -1,10 +1,39 @@
 package cmd
 
+// create
 var (
-	TagName       string
-	TagColor      string
-	tagId         int64
-	tagIdFilter   int64
-	parseError    error
-	tagNameFilter string
+	createTagName  string
+	createTagColor string
+)
+
+// delete
+var (
+	deleteTagId int64
+)
+
+// edit
+var (
+	editTagId int64
+)
+
+// get
+var (
+	getTagId int64
+)
+
+// history
+var (
+	historyTagIdFilter int64
+)
+
+// list
+var (
+	listTagNameFilter string
+)
+
+// update
+var (
+	updateTagId    int64
+	updateTagName  string
+	updateTagColor string
 )

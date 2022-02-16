@@ -3,20 +3,20 @@ package cmd
 import (
 	"context"
 	"encoding/json"
-	"os"
 
 	"contabo.com/cli/cntb/client"
 	contaboCmd "contabo.com/cli/cntb/cmd"
 	"contabo.com/cli/cntb/cmd/util"
 	"contabo.com/cli/cntb/outputFormatter"
 	uuid "github.com/satori/go.uuid"
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
 var instancesGetCmd = &cobra.Command{
 	Use:     "instances",
-	Short:   "All about your instances",
+	Short:   "All about your instances.",
 	Long:    `Retrieves information about one or multiple instances. Filter by name.`,
 	Example: `cntb get instances`,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -27,8 +27,8 @@ var instancesGetCmd = &cobra.Command{
 			Size(contaboCmd.Size).
 			OrderBy([]string{contaboCmd.OrderBy})
 
-		if cmd.Flags().Changed("name") {
-			ApiRetrieveInstanceListRequest = ApiRetrieveInstanceListRequest.Name(instanceNameFilter)
+		if listInstanceNameFilter != "" {
+			ApiRetrieveInstanceListRequest = ApiRetrieveInstanceListRequest.Name(listInstanceNameFilter)
 		}
 
 		resp, httpResp, err := ApiRetrieveInstanceListRequest.Execute()
@@ -59,10 +59,14 @@ var instancesGetCmd = &cobra.Command{
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
 		contaboCmd.ValidateOutputFormat()
+
 		if len(args) > 1 {
 			cmd.Help()
-			os.Exit(0)
+			log.Fatal("Too many positional arguments.")
 		}
+
+		viper.BindPFlag("name", cmd.Flags().Lookup("name"))
+		listInstanceNameFilter = viper.GetString("name")
 
 		return nil
 	},
@@ -71,7 +75,6 @@ var instancesGetCmd = &cobra.Command{
 func init() {
 	contaboCmd.GetCmd.AddCommand(instancesGetCmd)
 
-	instancesGetCmd.Flags().StringVarP(
-		&instanceNameFilter, "name", "n", "", `Filter by instance name`)
-	viper.BindPFlag("name", instancesGetCmd.Flags().Lookup("name"))
+	instancesGetCmd.Flags().StringVarP(&listInstanceNameFilter, "name", "n", "",
+		`Filter by instance name`)
 }

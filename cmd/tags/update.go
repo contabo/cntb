@@ -28,11 +28,11 @@ var tagUpdateCmd = &cobra.Command{
 		switch content {
 		case nil:
 			// from arguments
-			if TagName != "" {
-				updateTagRequest.Name = &TagName
+			if updateTagName != "" {
+				updateTagRequest.Name = &updateTagName
 			}
-			if TagColor != "" {
-				updateTagRequest.Color = &TagColor
+			if updateTagColor != "" {
+				updateTagRequest.Color = &updateTagColor
 			}
 		default:
 			// from file / stdin
@@ -45,7 +45,9 @@ var tagUpdateCmd = &cobra.Command{
 			json.NewDecoder(strings.NewReader(string(content))).Decode(&updateTagRequest)
 		}
 
-		resp, httpResp, err := client.ApiClient().TagsApi.UpdateTag(context.Background(), tagId).UpdateTagRequest(updateTagRequest).XRequestId(uuid.NewV4().String()).Execute()
+		resp, httpResp, err := client.ApiClient().TagsApi.
+			UpdateTag(context.Background(), updateTagId).UpdateTagRequest(updateTagRequest).
+			XRequestId(uuid.NewV4().String()).Execute()
 
 		util.HandleErrors(err, httpResp, "while updating tag")
 
@@ -54,21 +56,27 @@ var tagUpdateCmd = &cobra.Command{
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
 		contaboCmd.ValidateCreateInput()
+
+		if len(args) > 1 {
+			cmd.Help()
+			log.Fatal("Too many positional arguments.")
+		}
 		if len(args) < 1 {
 			cmd.Help()
-			log.Fatal("Please specify tagId")
+			log.Fatal("Please provide a tagId.")
 		}
+
+		viper.BindPFlag("name", cmd.Flags().Lookup("name"))
+		updateTagName = viper.GetString("name")
+		viper.BindPFlag("color", cmd.Flags().Lookup("color"))
+		updateTagColor = viper.GetString("color")
+
 		tagId64, err := strconv.ParseInt(args[0], 10, 64)
 		if err != nil {
 			log.Fatal(fmt.Sprintf("Specified tagId %v is not valid", args[0]))
 		}
-		tagId = tagId64
-		if viper.GetString("name") != "" {
-			TagName = viper.GetString("name")
-		}
-		if viper.GetString("color") != "" {
-			TagColor = viper.GetString("color")
-		}
+		updateTagId = tagId64
+
 		return nil
 	},
 }
@@ -76,10 +84,9 @@ var tagUpdateCmd = &cobra.Command{
 func init() {
 	contaboCmd.UpdateCmd.AddCommand(tagUpdateCmd)
 
-	tagUpdateCmd.Flags().StringVarP(&TagName, "name", "n", "", `name of the tag`)
-	viper.BindPFlag("name", tagUpdateCmd.Flags().Lookup("name"))
-	viper.SetDefault("name", "")
-	tagUpdateCmd.Flags().StringVarP(&TagColor, "color", "c", "", `color of the tag`)
-	viper.BindPFlag("color", tagUpdateCmd.Flags().Lookup("color"))
-	viper.SetDefault("color", "")
+	tagUpdateCmd.Flags().StringVarP(&updateTagName, "name", "n", "",
+		`name of the tag`)
+
+	tagUpdateCmd.Flags().StringVarP(&updateTagColor, "color", "c", "",
+		`color of the tag`)
 }

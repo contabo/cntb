@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"strconv"
 	"strings"
 
 	"contabo.com/cli/cntb/client"
@@ -26,26 +27,28 @@ var userUpdateCmd = &cobra.Command{
 		switch content {
 		case nil:
 			// from arguments
-			if cmd.Flags().Changed("email") {
-				updateUserRequest.Email = &userEmail
+			if updateUserEmail != "" {
+				updateUserRequest.Email = &updateUserEmail
 			}
-			if cmd.Flags().Changed("firstName") {
-				updateUserRequest.FirstName = &userFirstName
+			if updateUserFirstName != "" {
+				updateUserRequest.FirstName = &updateUserFirstName
 			}
-			if cmd.Flags().Changed("lastName") {
-				updateUserRequest.LastName = &userLastName
+			if updateUserLastName != "" {
+				updateUserRequest.LastName = &updateUserLastName
 			}
-			if cmd.Flags().Changed("enabled") {
-				updateUserRequest.Enabled = &isUserEnabled
+			if updateIsUserEnabled != "" {
+				isEnabled, _ := strconv.ParseBool(updateIsUserEnabled)
+				updateUserRequest.Enabled = &isEnabled
 			}
-			if cmd.Flags().Changed("admin") {
-				updateUserRequest.Admin = &isAdmin
+			if updateIsTotpEnabeld != "" {
+				isTotp, _ := strconv.ParseBool(updateIsTotpEnabeld)
+				updateUserRequest.Totp = &isTotp
 			}
-			if roles != nil {
-				updateUserRequest.Roles = &roles
+			if updateLocale != "" {
+				updateUserRequest.Locale = &updateLocale
 			}
-			if canAccessAllResources {
-				updateUserRequest.AccessAllResources = &canAccessAllResources
+			if updateRoles != nil {
+				updateUserRequest.Roles = &updateRoles
 			}
 		default:
 			// from file / stdin
@@ -59,7 +62,7 @@ var userUpdateCmd = &cobra.Command{
 		}
 
 		resp, httpResp, err := client.ApiClient().UsersApi.
-			UpdateUser(context.Background(), userId).
+			UpdateUser(context.Background(), updateUserId).
 			UpdateUserRequest(updateUserRequest).
 			XRequestId(uuid.NewV4().String()).
 			Execute()
@@ -71,11 +74,50 @@ var userUpdateCmd = &cobra.Command{
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
 		contaboCmd.ValidateCreateInput()
+
 		if len(args) < 1 {
 			cmd.Help()
-			log.Fatal("Please specify tagId")
+			log.Fatal("Please provide an userId.")
 		}
-		userId = args[0]
+		if len(args) > 1 {
+			cmd.Help()
+			log.Fatal("Too many positional arguments.")
+		}
+
+		viper.BindPFlag("firstName", cmd.Flags().Lookup("firstName"))
+		updateUserFirstName = viper.GetString("firstName")
+
+		viper.BindPFlag("lastName", cmd.Flags().Lookup("lastName"))
+		updateUserLastName = viper.GetString("lastName")
+
+		viper.BindPFlag("email", cmd.Flags().Lookup("email"))
+		updateUserEmail = viper.GetString("email")
+
+		viper.BindPFlag("enabled", cmd.Flags().Lookup("enabled"))
+		updateIsUserEnabled = viper.GetString("enabled")
+
+		if updateIsUserEnabled != "true" && updateIsUserEnabled != "false" && updateIsUserEnabled != "" {
+			cmd.Help()
+			log.Fatal("Invalid Argument enabled, please provide 'true' or 'false'.")
+		}
+
+		viper.BindPFlag("totp", cmd.Flags().Lookup("totp"))
+		updateIsTotpEnabeld = viper.GetString("totp")
+
+		if updateIsTotpEnabeld != "true" && updateIsTotpEnabeld != "false" && updateIsTotpEnabeld != "" {
+			cmd.Help()
+			log.Fatal("Invalid Argument totp, please provide 'true' or 'false'.")
+		}
+
+		viper.BindPFlag("roles", cmd.Flags().Lookup("roles"))
+		for i := range viper.GetIntSlice("roles") {
+			updateRoles[i] = int64(viper.GetIntSlice("roles")[i])
+		}
+
+		viper.BindPFlag("locale", cmd.Flags().Lookup("locale"))
+		updateLocale = viper.GetString("locale")
+
+		updateUserId = args[0]
 
 		return nil
 	},
@@ -84,32 +126,24 @@ var userUpdateCmd = &cobra.Command{
 func init() {
 	contaboCmd.UpdateCmd.AddCommand(userUpdateCmd)
 
-	userUpdateCmd.Flags().StringVar(&userFirstName, "firstName", "", `first name of the user`)
-	viper.BindPFlag("firstName", userUpdateCmd.Flags().Lookup("firstName"))
-	viper.SetDefault("firstName", "")
+	userUpdateCmd.Flags().StringVar(&updateUserFirstName, "firstName", "",
+		`first name of the user`)
 
-	userUpdateCmd.Flags().StringVar(&userLastName, "lastName", "", `last name of the user`)
-	viper.BindPFlag("lastName", userUpdateCmd.Flags().Lookup("lastName"))
-	viper.SetDefault("lastName", "")
+	userUpdateCmd.Flags().StringVar(&updateUserLastName, "lastName", "",
+		`last name of the user`)
 
-	userUpdateCmd.Flags().StringVar(&userEmail, "email", "", `email of the user`)
-	viper.BindPFlag("email", userUpdateCmd.Flags().Lookup("email"))
-	viper.SetDefault("email", "")
+	userUpdateCmd.Flags().StringVar(&updateUserEmail, "email", "",
+		`email of the user`)
 
-	userUpdateCmd.Flags().BoolVar(&isUserEnabled, "enabled", false, `is the user enabled`)
-	viper.BindPFlag("enabled", userUpdateCmd.Flags().Lookup("userEnabled"))
-	viper.SetDefault("enabled", false)
+	userUpdateCmd.Flags().StringVar(&updateIsUserEnabled, "enabled", "",
+		`is the user enabled. ('true' or 'false')`)
 
-	userUpdateCmd.Flags().BoolVar(&isAdmin, "admin", false, `sets the user as an admin and allows him to perform all tasks`)
-	viper.BindPFlag("admin", userUpdateCmd.Flags().Lookup("admin"))
-	viper.SetDefault("admin", false)
+	userUpdateCmd.Flags().StringVar(&updateIsTotpEnabeld, "totp", "",
+		`Enable or disable two-factor authentication (2FA) via time based OTP. ('true' or 'false')`)
 
-	userUpdateCmd.Flags().BoolVar(&canAccessAllResources, "accessAllResources", false, `can the user access all resources for permissions he has`)
-	viper.BindPFlag("accessAllResources", userUpdateCmd.Flags().Lookup("accessAllResources"))
-	viper.SetDefault("accessAllResources", false)
+	userUpdateCmd.Flags().Int64SliceVarP(&updateRoles, "roles", "r", nil,
+		`list of role ids the user should have.`)
 
-	userUpdateCmd.Flags().Int64SliceVarP(&roles, "roles", "r", nil, `list of role ids the user should have`)
-	viper.BindPFlag("roles", userUpdateCmd.Flags().Lookup("roles"))
-	viper.SetDefault("roles", nil)
-
+	userUpdateCmd.Flags().StringVar(&updateLocale, "locale", "",
+		`The locale of the user. This can be de-DE, de, en-US, en`)
 }

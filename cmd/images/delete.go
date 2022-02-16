@@ -3,7 +3,6 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"os"
 
 	"contabo.com/cli/cntb/client"
 	contaboCmd "contabo.com/cli/cntb/cmd"
@@ -20,7 +19,7 @@ var deleteCmd = &cobra.Command{
 	Example: `cntb delete image 9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d`,
 	Run: func(cmd *cobra.Command, args []string) {
 		httpResp, err := client.ApiClient().ImagesApi.
-			DeleteImage(context.Background(), imageId).
+			DeleteImage(context.Background(), deleteImageId).
 			XRequestId(uuid.NewV4().String()).Execute()
 
 		util.HandleErrors(err, httpResp, "while deleting image")
@@ -28,19 +27,22 @@ var deleteCmd = &cobra.Command{
 		fmt.Printf("Image deleted\n")
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
-		contaboCmd.ValidateOutputFormat()
-
 		if len(args) > 1 {
 			cmd.Help()
-			os.Exit(0)
+			log.Fatal("Too many positional arguments.")
 		}
 
 		if len(args) < 1 {
 			cmd.Help()
-			log.Fatal("please provide only imageId")
+			log.Fatal("Please provide an imageId")
 		}
 
-		imageId = args[0]
+		deleteImageId = args[0]
+
+		if deleteImageId == "" {
+			cmd.Help()
+			log.Fatal("Argument imageId is empty. Please provide a non empty imageId.")
+		}
 
 		return nil
 	},

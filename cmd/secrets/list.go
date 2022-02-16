@@ -3,13 +3,13 @@ package cmd
 import (
 	"context"
 	"encoding/json"
-	"os"
 
 	"contabo.com/cli/cntb/client"
 	contaboCmd "contabo.com/cli/cntb/cmd"
 	"contabo.com/cli/cntb/cmd/util"
 	"contabo.com/cli/cntb/outputFormatter"
 	uuid "github.com/satori/go.uuid"
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -27,12 +27,14 @@ var secretsGetCmd = &cobra.Command{
 			Size(contaboCmd.Size).
 			OrderBy([]string{contaboCmd.OrderBy})
 
-		if cmd.Flags().Changed("name") {
-			ApiRetrieveSecretsListRequest = ApiRetrieveSecretsListRequest.Name(secretNameFilter)
+		if listSecretNameFilter != "" {
+			ApiRetrieveSecretsListRequest = ApiRetrieveSecretsListRequest.
+				Name(listSecretNameFilter)
 		}
 
-		if cmd.Flags().Changed("type") {
-			ApiRetrieveSecretsListRequest = ApiRetrieveSecretsListRequest.Type_(secretTypeFilter)
+		if listSecretTypeFilter != "" {
+			ApiRetrieveSecretsListRequest = ApiRetrieveSecretsListRequest.
+				Type_(listSecretTypeFilter)
 		}
 
 		resp, httpResp, err := ApiRetrieveSecretsListRequest.Execute()
@@ -43,19 +45,29 @@ var secretsGetCmd = &cobra.Command{
 
 		configFormatter := outputFormatter.FormatterConfig{
 			Filter: []string{
-				"secretId", "name", "type"},
+				"secretId", "name", "type",
+			},
 			WideFilter: []string{
-				"secretId", "name", "type", "customerId", "tenantId"},
-			JsonPath: contaboCmd.OutputFormatDetails}
+				"secretId", "name", "type", "customerId", "tenantId",
+			},
+			JsonPath: contaboCmd.OutputFormatDetails,
+		}
 
 		util.HandleResponse(responseJson, configFormatter)
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
 		contaboCmd.ValidateOutputFormat()
+
 		if len(args) > 1 {
 			cmd.Help()
-			os.Exit(0)
+			log.Fatal("Too many positional arguments.")
 		}
+
+		viper.BindPFlag("name", cmd.Flags().Lookup("name"))
+		listSecretNameFilter = viper.GetString("name")
+
+		viper.BindPFlag("type", cmd.Flags().Lookup("type"))
+		listSecretTypeFilter = viper.GetString("type")
 
 		return nil
 	},
@@ -64,11 +76,9 @@ var secretsGetCmd = &cobra.Command{
 func init() {
 	contaboCmd.GetCmd.AddCommand(secretsGetCmd)
 
-	secretsGetCmd.Flags().StringVarP(
-		&secretNameFilter, "name", "n", "", `Filter by secret name`)
-	viper.BindPFlag("name", secretsGetCmd.Flags().Lookup("name"))
+	secretsGetCmd.Flags().StringVarP(&listSecretNameFilter, "name", "n", "",
+		`Filter by secret name`)
 
-	secretsGetCmd.Flags().StringVarP(
-		&secretTypeFilter, "type", "t", "", `Filter by secret type [ssh|password]`)
-	viper.BindPFlag("type", secretsGetCmd.Flags().Lookup("type"))
+	secretsGetCmd.Flags().StringVarP(&listSecretTypeFilter, "type", "t", "",
+		`Filter by secret type [ssh|password]`)
 }

@@ -3,7 +3,6 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"os"
 	"strconv"
 
 	"contabo.com/cli/cntb/client"
@@ -21,14 +20,14 @@ var rollbackGetCmd = &cobra.Command{
 	Example: `cntb rollback snapshot 101 5d011d21-41f2-4994-9c05-dbf6bb82221e`,
 	Run: func(cmd *cobra.Command, args []string) {
 		ApiRollbackSnapshotRequest := client.ApiClient().
-			SnapshotsApi.RollbackSnapshot(context.Background(), instanceId, snapshotId).
+			SnapshotsApi.RollbackSnapshot(context.Background(), rollbackInstanceId, rollbackSnapshotId).
 			XRequestId(uuid.NewV4().String())
 
 		resp, httpResp, err := ApiRollbackSnapshotRequest.Execute()
 
 		util.HandleErrors(err, httpResp, "while doing rollback for instance")
 
-		fmt.Printf("Instance %v rollback to snapshotId %v\n", instanceId, snapshotId)
+		fmt.Printf("Instance %v rollback to snapshotId %v\n", rollbackInstanceId, rollbackSnapshotId)
 
 		responseJSON, _ := resp.MarshalJSON()
 		log.Info(fmt.Sprintf("%v", string(responseJSON)))
@@ -37,20 +36,20 @@ var rollbackGetCmd = &cobra.Command{
 		contaboCmd.ValidateOutputFormat()
 		if len(args) > 2 {
 			cmd.Help()
-			os.Exit(0)
+			log.Fatal("Too many positional arguments.")
 		}
 		if len(args) < 2 {
 			cmd.Help()
-			log.Fatal("please provide a instanceId and snapshotId")
+			log.Fatal("Please provide an instanceId and a snapshotId.")
 		}
 
 		instanceId64, err := strconv.ParseInt(args[0], 10, 64)
 		if err != nil {
-			log.Fatal(fmt.Sprintf("Specified instanceId %v is not valid", args[0]))
+			log.Fatal(fmt.Sprintf("Provided instanceId %v is not valid.", args[0]))
 		}
-		instanceId = instanceId64
+		rollbackInstanceId = instanceId64
 
-		snapshotId = args[1]
+		rollbackSnapshotId = args[1]
 
 		return nil
 	},

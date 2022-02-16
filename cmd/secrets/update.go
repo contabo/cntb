@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"os"
 	"strconv"
 	"strings"
 
@@ -30,11 +29,11 @@ var secretUpdateCmd = &cobra.Command{
 
 		switch content {
 		case nil:
-			if secretName != "" {
-				updateSecretRequest.Name = &secretName
+			if updateSecretName != "" {
+				updateSecretRequest.Name = &updateSecretName
 			}
-			if secretValue != "" {
-				updateSecretRequest.Value = &secretValue
+			if updateSecretValue != "" {
+				updateSecretRequest.Value = &updateSecretValue
 			}
 		default:
 			// from file / stdin
@@ -50,7 +49,7 @@ var secretUpdateCmd = &cobra.Command{
 		}
 
 		resp, httpResp, err := client.ApiClient().SecretsApi.
-			UpdateSecret(context.Background(), secretId).
+			UpdateSecret(context.Background(), updateSecretId).
 			UpdateSecretRequest(updateSecretRequest).
 			XRequestId(uuid.NewV4().String()).
 			Execute()
@@ -63,27 +62,26 @@ var secretUpdateCmd = &cobra.Command{
 	Args: func(cmd *cobra.Command, args []string) error {
 		contaboCmd.ValidateCreateInput()
 
-		if viper.GetString("name") != "" {
-			secretName = viper.GetString("name")
-		}
-		if viper.GetString("value") != "" {
-			secretValue = viper.GetString("value")
-		}
-
 		if len(args) > 1 {
 			cmd.Help()
-			os.Exit(0)
+			log.Fatal("Too many positional arguments.")
 		}
 		if len(args) < 1 {
 			cmd.Help()
-			log.Fatal("please provide a secretId")
+			log.Fatal("Please provide a secretId.")
 		}
+
+		viper.BindPFlag("name", cmd.Flags().Lookup("name"))
+		updateSecretName = viper.GetString("name")
+
+		viper.BindPFlag("value", cmd.Flags().Lookup("value"))
+		updateSecretValue = viper.GetString("value")
 
 		secretId64, err := strconv.ParseInt(args[0], 10, 64)
 		if err != nil {
-			log.Fatal(fmt.Sprintf("Specified secretId %v is not valid", args[0]))
+			log.Fatal(fmt.Sprintf("Provided secretId %v is not valid.", args[0]))
 		}
-		secretId = secretId64
+		updateSecretId = secretId64
 
 		return nil
 	},
@@ -92,12 +90,9 @@ var secretUpdateCmd = &cobra.Command{
 func init() {
 	contaboCmd.UpdateCmd.AddCommand(secretUpdateCmd)
 
-	secretUpdateCmd.Flags().StringVar(&secretName, "name", "",
+	secretUpdateCmd.Flags().StringVar(&updateSecretName, "name", "",
 		`name of the secret`)
-	viper.BindPFlag("name", secretUpdateCmd.Flags().Lookup("name"))
-	viper.SetDefault("name", "")
-	secretUpdateCmd.Flags().StringVar(&secretValue, "value", "",
+
+	secretUpdateCmd.Flags().StringVar(&updateSecretValue, "value", "",
 		`value of the secret`)
-	viper.BindPFlag("value", secretUpdateCmd.Flags().Lookup("value"))
-	viper.SetDefault("value", "")
 }

@@ -3,7 +3,6 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"os"
 	"strconv"
 
 	"contabo.com/cli/cntb/client"
@@ -21,7 +20,7 @@ var secretDeleteCmd = &cobra.Command{
 	Example: `cntb delete secret 21`,
 	Run: func(cmd *cobra.Command, args []string) {
 		httpResp, err := client.ApiClient().SecretsApi.
-			DeleteSecret(context.Background(), secretId).
+			DeleteSecret(context.Background(), deleteSecretId).
 			XRequestId(uuid.NewV4().String()).Execute()
 
 		util.HandleErrors(err, httpResp, "while deleting secret")
@@ -33,18 +32,18 @@ var secretDeleteCmd = &cobra.Command{
 
 		if len(args) > 1 {
 			cmd.Help()
-			os.Exit(0)
+			log.Fatal("Too many positional arguments.")
 		}
 		if len(args) < 1 {
 			cmd.Help()
-			log.Fatal("please provide a secretId")
+			log.Fatal("Please provide a secretId.")
 		}
 
 		secretId64, err := strconv.ParseInt(args[0], 10, 64)
 		if err != nil {
-			log.Fatal(fmt.Sprintf("Specified secretId %v is not valid", args[0]))
+			log.Fatal(fmt.Sprintf("Provided secretId %v is not valid.", args[0]))
 		}
-		secretId = secretId64
+		deleteSecretId = secretId64
 
 		return nil
 	},

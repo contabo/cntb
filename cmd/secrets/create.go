@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"os"
 	"strings"
 
 	"contabo.com/cli/cntb/client"
@@ -19,7 +18,7 @@ import (
 
 var secretCreateCmd = &cobra.Command{
 	Use:   "secret",
-	Short: "Creates a new secret",
+	Short: "Creates a new secret.",
 	Long:  `Creates a new secret based on json / yaml input or arguments.`,
 	Example: `cntb create secret --name 'First Secret' ` +
 		`--value 'secret' ` +
@@ -31,9 +30,9 @@ var secretCreateCmd = &cobra.Command{
 
 		switch content {
 		case nil:
-			createSecretRequest.Name = secretName
-			createSecretRequest.Type = secretType
-			createSecretRequest.Value = secretValue
+			createSecretRequest.Name = createSecretName
+			createSecretRequest.Type = createSecretType
+			createSecretRequest.Value = createSecretValue
 		default:
 			// from file / stdin
 			var requestFromFile secretClient.CreateSecretRequest
@@ -59,37 +58,34 @@ var secretCreateCmd = &cobra.Command{
 	Args: func(cmd *cobra.Command, args []string) error {
 		contaboCmd.ValidateCreateInput()
 
-		if viper.GetString("name") != "" {
-			secretName = viper.GetString("name")
+		if len(args) > 0 {
+			cmd.Help()
+			log.Fatal("Too many positional arguments.")
 		}
 
-		if viper.GetString("value") != "" {
-			secretValue = viper.GetString("value")
-		}
+		viper.BindPFlag("name", cmd.Flags().Lookup("name"))
+		createSecretName = viper.GetString("name")
 
-		if viper.GetString("type") != "" {
-			secretType = viper.GetString("type")
-		}
+		viper.BindPFlag("value", cmd.Flags().Lookup("value"))
+		createSecretValue = viper.GetString("value")
+
+		viper.BindPFlag("type", cmd.Flags().Lookup("type"))
+		createSecretType = viper.GetString("type")
 
 		if contaboCmd.InputFile == "" {
 			// arguments required
-			if secretName == "" {
+			if createSecretName == "" {
 				cmd.Help()
 				log.Fatal("Argument name is empty. Please provide one.")
 			}
-			if secretValue == "" {
+			if createSecretValue == "" {
 				cmd.Help()
 				log.Fatal("Argument value is empty. Please provide one.")
 			}
-			if secretType == "" {
+			if createSecretType == "" {
 				cmd.Help()
 				log.Fatal("Argument type is empty. Please provide one.")
 			}
-		}
-
-		if len(args) > 0 {
-			cmd.Help()
-			os.Exit(0)
 		}
 
 		return nil
@@ -99,15 +95,12 @@ var secretCreateCmd = &cobra.Command{
 func init() {
 	contaboCmd.CreateCmd.AddCommand(secretCreateCmd)
 
-	secretCreateCmd.Flags().StringVar(&secretName, "name", "",
+	secretCreateCmd.Flags().StringVar(&createSecretName, "name", "",
 		`name of the secret`)
-	viper.BindPFlag("name", secretCreateCmd.Flags().Lookup("name"))
 
-	secretCreateCmd.Flags().StringVar(&secretValue, "value", "",
+	secretCreateCmd.Flags().StringVar(&createSecretValue, "value", "",
 		`value of the secret`)
-	viper.BindPFlag("value", secretCreateCmd.Flags().Lookup("value"))
 
-	secretCreateCmd.Flags().StringVar(&secretType, "type", "",
+	secretCreateCmd.Flags().StringVar(&createSecretType, "type", "",
 		`type of the secret, either password or ssh`)
-	viper.BindPFlag("type", secretCreateCmd.Flags().Lookup("type"))
 }

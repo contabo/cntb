@@ -9,6 +9,7 @@ import (
 	"contabo.com/cli/cntb/cmd/util"
 	"contabo.com/cli/cntb/outputFormatter"
 	uuid "github.com/satori/go.uuid"
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -25,20 +26,12 @@ var snapshotsHistoryCmd = &cobra.Command{
 			Size(contaboCmd.Size).
 			OrderBy([]string{contaboCmd.OrderBy})
 
-		if cmd.Flags().Changed("instanceId") {
-			historyRequest = historyRequest.InstanceId(instanceIdFilter)
+		if historyInstanceIdFilter != 0 {
+			historyRequest = historyRequest.InstanceId(historyInstanceIdFilter)
 		}
 
-		if cmd.Flags().Changed("snapshotId") {
-			historyRequest = historyRequest.SnapshotId(snapshotIdFilter)
-		}
-
-		if cmd.Flags().Changed("requestId") {
-			historyRequest = historyRequest.RequestId(contaboCmd.RequestIdFilter)
-		}
-
-		if cmd.Flags().Changed("changedBy") {
-			historyRequest = historyRequest.ChangedBy(contaboCmd.ChangedByFilter)
+		if historySnapshotIdFilter != "" {
+			historyRequest = historyRequest.SnapshotId(historySnapshotIdFilter)
 		}
 
 		resp, httpResp, err := historyRequest.Execute()
@@ -58,6 +51,17 @@ var snapshotsHistoryCmd = &cobra.Command{
 	Args: func(cmd *cobra.Command, args []string) error {
 		contaboCmd.ValidateOutputFormat()
 
+		if len(args) > 0 {
+			cmd.Help()
+			log.Fatal("Too many positional arguments.")
+		}
+
+		viper.BindPFlag("instanceId", cmd.Flags().Lookup("instanceId"))
+		historyInstanceIdFilter = viper.GetInt64("instanceId")
+
+		viper.BindPFlag("snapshotId", cmd.Flags().Lookup("snapshotId"))
+		historySnapshotIdFilter = viper.GetString("snapshotId")
+
 		return nil
 	},
 }
@@ -65,11 +69,9 @@ var snapshotsHistoryCmd = &cobra.Command{
 func init() {
 	contaboCmd.HistoryCmd.AddCommand(snapshotsHistoryCmd)
 
-	snapshotsHistoryCmd.Flags().Int64Var(&instanceIdFilter, "instanceId", -1,
+	snapshotsHistoryCmd.Flags().Int64Var(&historyInstanceIdFilter, "instanceId", 0,
 		`To filter audits using Instance Id`)
-	viper.BindPFlag("instanceId", snapshotsHistoryCmd.Flags().Lookup("instanceId"))
 
-	snapshotsHistoryCmd.Flags().StringVar(&snapshotIdFilter, "snapshotId", "",
+	snapshotsHistoryCmd.Flags().StringVar(&historySnapshotIdFilter, "snapshotId", "",
 		`To filter audits using Snapshot Id`)
-	viper.BindPFlag("snapshotId", snapshotsHistoryCmd.Flags().Lookup("snapshotId"))
 }

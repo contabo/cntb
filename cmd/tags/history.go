@@ -9,6 +9,7 @@ import (
 	"contabo.com/cli/cntb/cmd/util"
 	"contabo.com/cli/cntb/outputFormatter"
 	uuid "github.com/satori/go.uuid"
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -25,16 +26,8 @@ var tagsCmd = &cobra.Command{
 			Size(contaboCmd.Size).
 			OrderBy([]string{contaboCmd.OrderBy})
 
-		if cmd.Flags().Changed("tagId") {
-			historyRequest = historyRequest.TagId(tagIdFilter)
-		}
-
-		if cmd.Flags().Changed("requestId") {
-			historyRequest = historyRequest.RequestId(contaboCmd.RequestIdFilter)
-		}
-
-		if cmd.Flags().Changed("changedBy") {
-			historyRequest = historyRequest.ChangedBy(contaboCmd.ChangedByFilter)
+		if historyTagIdFilter != 0 {
+			historyRequest = historyRequest.TagId(historyTagIdFilter)
 		}
 
 		resp, httpResp, err := historyRequest.Execute()
@@ -54,6 +47,13 @@ var tagsCmd = &cobra.Command{
 	Args: func(cmd *cobra.Command, args []string) error {
 		contaboCmd.ValidateOutputFormat()
 
+		if len(args) > 1 {
+			cmd.Help()
+			log.Fatal("Too many positional arguments.")
+		}
+
+		viper.BindPFlag("tagId", cmd.Flags().Lookup("tagId"))
+		historyTagIdFilter = viper.GetInt64("tagId")
 		return nil
 	},
 }
@@ -61,7 +61,6 @@ var tagsCmd = &cobra.Command{
 func init() {
 	contaboCmd.HistoryCmd.AddCommand(tagsCmd)
 
-	tagsCmd.Flags().Int64VarP(&tagIdFilter, "tagId", "t", -1,
+	tagsCmd.Flags().Int64VarP(&historyTagIdFilter, "tagId", "t", 0,
 		`To filter audits using Tag Id`)
-	viper.BindPFlag("tagId", tagsCmd.Flags().Lookup("tagId"))
 }

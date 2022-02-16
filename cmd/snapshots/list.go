@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"os"
 	"strconv"
 
 	"contabo.com/cli/cntb/client"
@@ -24,14 +23,15 @@ var snapshotsGetCmd = &cobra.Command{
 	Example: `cntb get snapshots 101`,
 	Run: func(cmd *cobra.Command, args []string) {
 		ApiRetrieveSnapshotListRequest := client.ApiClient().
-			SnapshotsApi.RetrieveSnapshotList(context.Background(), instanceId).
+			SnapshotsApi.RetrieveSnapshotList(context.Background(), listInstanceId).
 			XRequestId(uuid.NewV4().String()).
 			Page(contaboCmd.Page).
 			Size(contaboCmd.Size).
 			OrderBy([]string{contaboCmd.OrderBy})
 
-		if cmd.Flags().Changed("name") {
-			ApiRetrieveSnapshotListRequest = ApiRetrieveSnapshotListRequest.Name(snapshotNameFilter)
+		if listSnapshotNameFilter != "" {
+			ApiRetrieveSnapshotListRequest = ApiRetrieveSnapshotListRequest.
+				Name(listSnapshotNameFilter)
 		}
 
 		resp, httpResp, err := ApiRetrieveSnapshotListRequest.Execute()
@@ -42,29 +42,36 @@ var snapshotsGetCmd = &cobra.Command{
 
 		configFormatter := outputFormatter.FormatterConfig{
 			Filter: []string{
-				"snapshotId", "name", "description", "instanceId", "createdDate"},
+				"snapshotId", "name", "description", "instanceId", "createdDate",
+			},
 			WideFilter: []string{
-				"snapshotId", "name", "description", "instanceId", "createdDate", "customerId", "tenantId"},
-			JsonPath: contaboCmd.OutputFormatDetails}
+				"snapshotId", "name", "description", "instanceId", "createdDate", "customerId", "tenantId",
+			},
+			JsonPath: contaboCmd.OutputFormatDetails,
+		}
 
 		util.HandleResponse(responseJson, configFormatter)
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
 		contaboCmd.ValidateOutputFormat()
+
 		if len(args) > 1 {
 			cmd.Help()
-			os.Exit(0)
+			log.Fatal("Too many positional arguments.")
 		}
 		if len(args) < 1 {
 			cmd.Help()
-			log.Fatal("please provide a instanceId")
+			log.Fatal("Please provide an instanceId")
 		}
+
+		viper.BindPFlag("name", cmd.Flags().Lookup("name"))
+		listSnapshotNameFilter = viper.GetString("name")
 
 		instanceId64, err := strconv.ParseInt(args[0], 10, 64)
 		if err != nil {
-			log.Fatal(fmt.Sprintf("Specified instanceId %v is not valid", args[0]))
+			log.Fatal(fmt.Sprintf("Provided instanceId %v is not valid.", args[0]))
 		}
-		instanceId = instanceId64
+		listInstanceId = instanceId64
 
 		return nil
 	},
@@ -73,7 +80,6 @@ var snapshotsGetCmd = &cobra.Command{
 func init() {
 	contaboCmd.GetCmd.AddCommand(snapshotsGetCmd)
 
-	snapshotsGetCmd.Flags().StringVarP(
-		&snapshotNameFilter, "name", "n", "", `Filter by snapshot name`)
-	viper.BindPFlag("name", snapshotsGetCmd.Flags().Lookup("name"))
+	snapshotsGetCmd.Flags().StringVarP(&listSnapshotNameFilter, "name", "n", "",
+		`Filter by snapshot name`)
 }

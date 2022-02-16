@@ -17,11 +17,13 @@ import (
 
 var instanceCancelCmd = &cobra.Command{
 	Use:     "instance [instanceId]",
-	Short:   "Cancel specific instance by id",
+	Short:   "Cancel specific instance by id.",
 	Long:    `Your are free to cancel a previously created instances at any time.`,
 	Example: `cntb cancel instance 12345`,
 	Run: func(cmd *cobra.Command, args []string) {
-		resp, httpResp, err := client.ApiClient().InstancesApi.CancelInstance(context.Background(), instanceId).XRequestId(uuid.NewV4().String()).Execute()
+		resp, httpResp, err := client.ApiClient().InstancesApi.
+			CancelInstance(context.Background(), cancelInstanceId).
+			XRequestId(uuid.NewV4().String()).Execute()
 
 		util.HandleErrors(err, httpResp, "while canceling the instance")
 
@@ -41,21 +43,22 @@ var instanceCancelCmd = &cobra.Command{
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
 		contaboCmd.ValidateCreateInput()
-		if len(args) < 1 {
-			cmd.Help()
-			log.Fatal("please provide instance id")
-		}
+		contaboCmd.ValidateOutputFormat()
 
 		if len(args) > 1 {
 			cmd.Help()
-			log.Fatal("the instance id is the only argument allowed")
+			log.Fatal("Too many positional arguments.")
+		}
+		if len(args) < 1 {
+			cmd.Help()
+			log.Fatal("Please provide an instanceId.")
 		}
 
 		instanceId64, err := strconv.ParseInt(args[0], 10, 64)
 		if err != nil {
-			log.Fatal(fmt.Sprintf("Specified instanceId %v is not valid", args[0]))
+			log.Fatal(fmt.Sprintf("Provided instanceId %v is not valid.", args[0]))
 		}
-		instanceId = instanceId64
+		cancelInstanceId = instanceId64
 
 		return nil
 	},

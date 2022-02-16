@@ -15,12 +15,12 @@ function teardown_file() {
 }
 
 @test "update user ok: set firstName" {
-      run ./cntb create role apiPermission --name="foo${TEST_SUFFIX}" --apiPermission='[{"apiName" : "/v1/users", "actions": ["READ", "CREATE"]}]'
+    run ./cntb create role -n "foo${TEST_SUFFIX}" -p '[{"apiName" : "/v1/users", "actions": ["READ", "CREATE"]}]'
     assert_success
     roleId="$output"
 
 
-    run ./cntb create user --firstName="foo${TEST_SUFFIX}" --lastName="bar${TEST_SUFFIX}" --email="testuser${TEST_SUFFIX}@contabo.com" --enabled=true --admin=true --accessAllResources=true --roles="$roleId"
+    run ./cntb create user --firstName="foo${TEST_SUFFIX}" --lastName="bar${TEST_SUFFIX}" --email="testuser${TEST_SUFFIX}@contabo.com" --enabled=true --locale de --roles="$roleId"
     assert_success
     userId="$output"
 
@@ -35,17 +35,17 @@ function teardown_file() {
     #clean up
     run ./cntb delete user "$userId"
     assert_success
-    run ./cntb delete role apiPermission "$roleId"
+    run ./cntb delete role "$roleId"
     assert_success
 }
 
 @test "update user ok: set lastName" {
-      run ./cntb create role apiPermission --name="foo${TEST_SUFFIX}" --apiPermission='[{"apiName" : "/v1/users", "actions": ["READ", "CREATE"]}]'
+    run ./cntb create role -n "foo${TEST_SUFFIX}" -p '[{"apiName" : "/v1/users", "actions": ["READ", "CREATE"]}]'
     assert_success
     roleId="$output"
 
 
-    run ./cntb create user --firstName="foo${TEST_SUFFIX}" --lastName="bar${TEST_SUFFIX}" --email="testuser${TEST_SUFFIX}@contabo.com" --enabled=true --admin=true --accessAllResources=true --roles="$roleId"
+    run ./cntb create user --firstName="foo${TEST_SUFFIX}" --lastName="bar${TEST_SUFFIX}" --email="testuser${TEST_SUFFIX}@contabo.com" --enabled=true --locale de --roles="$roleId"
     assert_success
     userId="$output"
 
@@ -60,17 +60,17 @@ function teardown_file() {
     #clean up
     run ./cntb delete user "$userId"
     assert_success
-    run ./cntb delete role apiPermission "$roleId"
+    run ./cntb delete role "$roleId"
     assert_success
 }
 
 @test "update user ok: set email" {
-      run ./cntb create role apiPermission --name="foo${TEST_SUFFIX}" --apiPermission='[{"apiName" : "/v1/users", "actions": ["READ", "CREATE"]}]'
+    run ./cntb create role -n "foo${TEST_SUFFIX}" -p '[{"apiName" : "/v1/users", "actions": ["READ", "CREATE"]}]'
     assert_success
     roleId="$output"
 
 
-    run ./cntb create user --firstName="foo${TEST_SUFFIX}" --lastName="bar${TEST_SUFFIX}" --email="testuser${TEST_SUFFIX}@contabo.com" --enabled=true --admin=true --accessAllResources=true --roles="$roleId"
+    run ./cntb create user --firstName="foo${TEST_SUFFIX}" --lastName="bar${TEST_SUFFIX}" --email="testuser${TEST_SUFFIX}@contabo.com" --enabled=true --locale de --roles="$roleId"
     assert_success
     userId="$output"
 
@@ -85,6 +85,6 @@ function teardown_file() {
     #clean up
     run ./cntb delete user "$userId"
     assert_success
-    run ./cntb delete role apiPermission "$roleId"
+    run ./cntb delete role "$roleId"
     assert_success
 }

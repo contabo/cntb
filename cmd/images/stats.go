@@ -9,6 +9,7 @@ import (
 	"contabo.com/cli/cntb/cmd/util"
 	"contabo.com/cli/cntb/outputFormatter"
 	uuid "github.com/satori/go.uuid"
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -38,6 +39,16 @@ var imageStatsGetCmd = &cobra.Command{
 		}
 
 		util.HandleResponse(responseJson, configFormatter)
+	},
+	Args: func(cmd *cobra.Command, args []string) error {
+		contaboCmd.ValidateOutputFormat()
+
+		if len(args) > 0 {
+			cmd.Help()
+			log.Fatal("Too many positional arguments.")
+		}
+
+		return nil
 	},
 }
 

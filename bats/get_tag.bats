@@ -58,6 +58,10 @@ function teardown_file() {
   assert_success
 }
 
+@test 'get tag : ok : environment variables' {
+  
+}
+
 @test 'get tag: nok : non existing tag' {
   run ./cntb get tag 0
   assert_failure

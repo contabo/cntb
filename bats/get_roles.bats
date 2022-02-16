@@ -17,35 +17,43 @@ function teardown_file() {
 
 
 @test "get roles: normal ok" {
-    run ./cntb create role apiPermission --name="foo${TEST_SUFFIX}" --apiPermission='[{"apiName" : "/v1/users", "actions": ["READ", "CREATE"]}]'
+    run ./cntb create role -n "foo${TEST_SUFFIX}" -p '[{"apiName" : "/v1/users", "actions": ["READ", "CREATE"]}]'
     assert_success
     roleId="$output"
 
 
-    run ./cntb get role apiPermission "$roleId"
+    run ./cntb get roles
     assert_success
     assert_output --partial 'ROLEID'
     assert_output --partial 'NAME'
     assert_output --partial "${roleId}"
 
-    run ./cntb get roles apiPermission -o wide
+    run ./cntb get roles -o wide
     assert_success
     assert_output --partial 'ROLEID'
     assert_output --partial 'NAME'
+    assert_output --partial 'PERMISSIONS'
+    assert_output --partial 'ADMIN'
+    assert_output --partial 'ACCESSALLRESOURCES'
+
+    run ./cntb get roles -o json
+    assert_success
+    assert_output --partial 'roleId'
+    assert_output --partial 'name'
+    assert_output --partial 'admin'
+    assert_output --partial 'accessAllResources'
+    assert_output --partial 'permissions'
+    assert_output --partial 'apiName'
+
+    run ./cntb get roles -o yaml
+    assert_success
+    assert_output --partial 'roleId:'
+    assert_output --partial 'name:'
+    assert_output --partial 'admin:'
+    assert_output --partial 'accessAllResources:'
+    assert_output --partial 'permissions:'
+    assert_output --partial 'apiName:'
 
     # clean uo
-    run ./cntb delete role apiPermission "$roleId"
-}
-
-@test "get role wrong permission type: nok" {
- run ./cntb get roles aa
- assert_failure
-}
-
-@test "create role wrong number of inputs: nok" {
- run ./cntb get role
- assert_failure
-
- run .run ./cntb create role apiPermission apiPermission
- assert_failure
+    run ./cntb delete role "$roleId"
 }

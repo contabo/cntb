@@ -19,10 +19,12 @@ type jmap map[string]interface{}
 
 var instanceGetCmd = &cobra.Command{
 	Use:   "instance [instanceId]",
-	Short: "Info about a specific instance",
+	Short: "Info about a specific instance.",
 	Long:  `Retrieves information about an instance identified by id.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		resp, httpResp, err := client.ApiClient().InstancesApi.RetrieveInstance(context.Background(), instanceId).XRequestId(uuid.NewV4().String()).Execute()
+		resp, httpResp, err := client.ApiClient().InstancesApi.
+			RetrieveInstance(context.Background(), getInstanceId).
+			XRequestId(uuid.NewV4().String()).Execute()
 
 		util.HandleErrors(err, httpResp, "while retrieving instance")
 
@@ -39,22 +41,30 @@ var instanceGetCmd = &cobra.Command{
 		configFormatter := outputFormatter.FormatterConfig{
 			Filter: []string{"instanceId", "name", "status", "imageId", "ipv4", "ipv6"},
 			WideFilter: []string{
-				"instanceId", "name", "status", "imageId", "region", "productId", "customerId", "ipv4", "ipv6"},
-			JsonPath: contaboCmd.OutputFormatDetails}
+				"instanceId", "name", "status", "imageId", "region", "productId", "customerId", "ipv4", "ipv6",
+			},
+			JsonPath: contaboCmd.OutputFormatDetails,
+		}
 
 		util.HandleResponse(responseJson, configFormatter)
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
+		contaboCmd.ValidateOutputFormat()
+
+		if len(args) > 1 {
+			cmd.Help()
+			log.Fatal("Too many positional arguments.")
+		}
 		if len(args) < 1 {
 			cmd.Help()
-			log.Fatal("Please specify instanceId")
+			log.Fatal("Please provide an instanceId.")
 		}
 		instanceId64, err := strconv.ParseInt(args[0], 10, 64)
 		if err != nil {
-			log.Fatal(fmt.Sprintf("Specified instanceId %v is not valid", args[0]))
+			log.Fatal(fmt.Sprintf("Provided instanceId %v is not valid.", args[0]))
 		}
-		instanceId = instanceId64
-		contaboCmd.ValidateOutputFormat()
+		getInstanceId = instanceId64
+
 		return nil
 	},
 }

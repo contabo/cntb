@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"os"
 	"strconv"
 	"strings"
 
@@ -22,22 +23,24 @@ var instanceReinstallCmd = &cobra.Command{
 	Short: "Reinstall specific instance by id",
 	Long:  `Reinstall an existing instance using a different image or settings.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		instanceReinstallRequest := *instancesClient.NewReinstallInstanceRequestWithDefaults()
+		instanceReinstallRequest := *instancesClient.
+			NewReinstallInstanceRequestWithDefaults()
 		content := contaboCmd.OpenStdinOrFile()
 
 		switch content {
 		case nil:
 			// from arguments
-			instanceReinstallRequest.ImageId = instanceImageId
-
-			if len(instanceSshKeys) != 0 {
-				instanceReinstallRequest.SshKeys = &instanceSshKeys
+			if reinstallInstanceImageId != "" {
+				instanceReinstallRequest.ImageId = reinstallInstanceImageId
 			}
-			if instanceRootPassword != 0 {
-				instanceReinstallRequest.RootPassword = &instanceRootPassword
+			if reinstallInstanceSshKeys != nil {
+				instanceReinstallRequest.SshKeys = &reinstallInstanceSshKeys
 			}
-			if instanceUserData != "" {
-				instanceReinstallRequest.UserData = &instanceUserData
+			if reinstallInstanceRootPassword != 0 {
+				instanceReinstallRequest.RootPassword = &reinstallInstanceRootPassword
+			}
+			if reinstallInstanceUserData != "" {
+				instanceReinstallRequest.UserData = &reinstallInstanceUserData
 			}
 
 		default:
@@ -48,10 +51,14 @@ var instanceReinstallCmd = &cobra.Command{
 				log.Fatal(fmt.Sprintf("Format invalid. Please check your syntax: %v", err))
 			}
 
-			json.NewDecoder(strings.NewReader(string(content))).Decode(&instanceReinstallRequest)
+			json.NewDecoder(strings.NewReader(string(content))).
+				Decode(&instanceReinstallRequest)
 		}
 
-		resp, httpResp, err := client.ApiClient().InstancesApi.ReinstallInstance(context.Background(), instanceId).XRequestId(uuid.NewV4().String()).ReinstallInstanceRequest(instanceReinstallRequest).Execute()
+		resp, httpResp, err := client.ApiClient().InstancesApi.
+			ReinstallInstance(context.Background(), reinstallInstanceId).
+			XRequestId(uuid.NewV4().String()).
+			ReinstallInstanceRequest(instanceReinstallRequest).Execute()
 
 		util.HandleErrors(err, httpResp, "while reinstalling instance")
 
@@ -61,19 +68,44 @@ var instanceReinstallCmd = &cobra.Command{
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
 		contaboCmd.ValidateCreateInput()
+
+		if len(args) > 1 {
+			cmd.Help()
+			os.Exit(1)
+		}
 		if len(args) < 1 {
 			cmd.Help()
-			log.Fatal("Missing instanceId. Please specify a valid instanceId.")
+			log.Fatal("Please provide an instanceId")
 		}
+
+		viper.BindPFlag("imageId", cmd.Flags().Lookup("imageId"))
+		reinstallInstanceImageId = viper.GetString("imageId")
+
+		viper.BindPFlag("sshKeys", cmd.Flags().Lookup("sshKeys"))
+		for i := range viper.GetIntSlice("sshKeys") {
+			reinstallInstanceSshKeys[i] = int64(viper.GetIntSlice("sshKeys")[i])
+		}
+
+		viper.BindPFlag("rootPassword", cmd.Flags().Lookup("rootPassword"))
+		reinstallInstanceRootPassword = viper.GetInt64("rootPassword")
+
+		viper.BindPFlag("userData", cmd.Flags().Lookup("userData"))
+		reinstallInstanceUserData = viper.GetString("userData")
+
 		instanceId64, err := strconv.ParseInt(args[0], 10, 64)
 		if err != nil {
-			log.Fatal(fmt.Sprintf("Specified instanceId %v is not valid", args[0]))
+			log.Fatal(fmt.Sprintf("Provided instanceId %v is not valid", args[0]))
 		}
-		instanceId = instanceId64
 
-		if viper.GetString("imageId") != "" {
-			instanceImageId = viper.GetString("imageId")
+		if contaboCmd.InputFile == "" {
+			// arguments required
+			if reinstallInstanceImageId == "" {
+				cmd.Help()
+				log.Fatal("Argument imageId is empty. Please provide one.")
+			}
 		}
+
+		reinstallInstanceId = instanceId64
 
 		return nil
 	},
@@ -81,15 +113,15 @@ var instanceReinstallCmd = &cobra.Command{
 
 func init() {
 	contaboCmd.ReinstallCmd.AddCommand(instanceReinstallCmd)
-	instanceReinstallCmd.Flags().StringVarP(&instanceImageId, "imageId", "", "", `instance image id. Defaults to last used imageId and falls back to Ubuntu 20.04 in case it is no longer available.`)
-	viper.BindPFlag("imageId", instanceReinstallCmd.Flags().Lookup("imageId"))
+	instanceReinstallCmd.Flags().StringVar(&reinstallInstanceImageId, "imageId", "",
+		`instance image id.`)
 
-	instanceReinstallCmd.Flags().Int64SliceVar(&instanceSshKeys, "sshKeys", nil, `ids of stored SSH public keys. Applicable for Linux/BSD systems.`)
-	viper.BindPFlag("sshKeys", instanceReinstallCmd.Flags().Lookup("sshKeys"))
+	instanceReinstallCmd.Flags().Int64SliceVar(&reinstallInstanceSshKeys, "sshKeys", nil,
+		`ids of stored SSH public keys. Applicable for Linux/BSD systems.`)
 
-	instanceReinstallCmd.Flags().Int64VarP(&instanceRootPassword, "rootPassword", "", 0, `id of stored password. User is admin with admistrative/root privileges. For Linux/BSD based systems please use SSH. For Windows please use RDP.`)
-	viper.BindPFlag("rootPassword", instanceReinstallCmd.Flags().Lookup("rootPassword"))
+	instanceReinstallCmd.Flags().Int64Var(&reinstallInstanceRootPassword, "rootPassword", 0,
+		`id of stored password. User is admin with admistrative/root privileges. For Linux/BSD based systems please use SSH. For Windows please use RDP.`)
 
-	instanceReinstallCmd.Flags().StringVarP(&instanceUserData, "userData", "", "", `instance user data`)
-	viper.BindPFlag("userData", instanceReinstallCmd.Flags().Lookup("userData"))
+	instanceReinstallCmd.Flags().StringVar(&reinstallInstanceUserData, "userData", "",
+		`instance user data`)
 }

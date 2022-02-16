@@ -20,11 +20,13 @@ import (
 
 var tagEditCmd = &cobra.Command{
 	Use:   "tag [tagId]",
-	Short: "Edit a specific tag",
+	Short: "Edit a specific tag.",
 	Long:  `Modify an existing tag in your editor`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// get original content
-		resp, httpResp, err := client.ApiClient().TagsApi.RetrieveTag(context.Background(), tagId).XRequestId(uuid.NewV4().String()).Execute()
+		resp, httpResp, err := client.ApiClient().TagsApi.
+			RetrieveTag(context.Background(), editTagId).
+			XRequestId(uuid.NewV4().String()).Execute()
 
 		util.HandleErrors(err, httpResp, "while editing tags")
 
@@ -58,7 +60,9 @@ var tagEditCmd = &cobra.Command{
 			// merge updateTagRequest with one from file to have the defaults there
 			json.NewDecoder(strings.NewReader(string(newContent))).Decode(&updateTagRequest)
 
-			resp, httpResp, err := client.ApiClient().TagsApi.UpdateTag(context.Background(), tagId).UpdateTagRequest(updateTagRequest).XRequestId(uuid.NewV4().String()).Execute()
+			resp, httpResp, err := client.ApiClient().TagsApi.
+				UpdateTag(context.Background(), editTagId).UpdateTagRequest(updateTagRequest).
+				XRequestId(uuid.NewV4().String()).Execute()
 
 			util.HandleErrors(err, httpResp, "while editing tags")
 
@@ -67,15 +71,22 @@ var tagEditCmd = &cobra.Command{
 		}
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
+		contaboCmd.ValidateCreateInput()
+
+		if len(args) > 1 {
+			cmd.Help()
+			log.Fatal("Too many positional arguments.")
+		}
 		if len(args) < 1 {
 			cmd.Help()
-			log.Fatal("Please specify tagId")
+			log.Fatal("Please provide a tagId.")
 		}
 		tagId64, err := strconv.ParseInt(args[0], 10, 64)
 		if err != nil {
-			log.Fatal(fmt.Sprintf("Specified tagId %v is not valid", args[0]))
+			log.Fatal(fmt.Sprintf("Specified tagId %v is not valid.", args[0]))
 		}
-		tagId = tagId64
+		editTagId = tagId64
+
 		return nil
 	},
 }

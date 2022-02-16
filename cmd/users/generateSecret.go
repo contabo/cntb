@@ -17,7 +17,8 @@ var generateSecretUserCmd = &cobra.Command{
 	Long:    `Generate a new client secret and return it`,
 	Example: `cntb generateSecret user`,
 	Run: func(cmd *cobra.Command, args []string) {
-		resp, httpResp, err := client.ApiClient().UsersApi.GenerateClientSecret(context.Background()).
+		resp, httpResp, err := client.ApiClient().UsersApi.
+			GenerateClientSecret(context.Background()).
 			XRequestId(uuid.NewV4().String()).Execute()
 
 		util.HandleErrors(err, httpResp, "while generating client secret")

@@ -34,7 +34,7 @@ function teardown_file() {
   fi
 }
 
-@test "reinstall instance wrong instance id type: nok" {
+@test "reinstall instance wrong instance id type : nok" {
   run ./cntb reinstall instance abc --imageId="${STANDARD_IMAGE_ID}"
   assert_failure
 }
@@ -44,14 +44,7 @@ function teardown_file() {
   assert_failure
 }
 
-@test 'reinstall instance without image id: ok' {
+@test 'reinstall instance without image id : nok' {
   run ./cntb reinstall instance "${REINSTALL_INSTANCE_ID}"
-  assert_success
-
-  poll_instance "${REINSTALL_INSTANCE_ID}"
-
-  if [ $? -ne 0 ]; then
-    run test
-    assert_success
-  fi
+  assert_failure
 }

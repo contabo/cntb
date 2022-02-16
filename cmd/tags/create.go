@@ -27,9 +27,9 @@ var tagCreateCmd = &cobra.Command{
 		switch content {
 		case nil:
 			// from arguments
-			createTagRequest.Name = TagName
-			if TagColor != "" {
-				createTagRequest.Color = TagColor
+			createTagRequest.Name = createTagName
+			if createTagColor != "" {
+				createTagRequest.Color = createTagColor
 			}
 		default:
 			// from file / stdin
@@ -50,16 +50,22 @@ var tagCreateCmd = &cobra.Command{
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
 		contaboCmd.ValidateCreateInput()
-		if viper.GetString("name") != "" {
-			TagName = viper.GetString("name")
+
+		if len(args) > 0 {
+			cmd.Help()
+			log.Fatal("Too many positional arguments.")
 		}
-		if viper.GetString("color") != "" {
-			TagColor = viper.GetString("color")
-		}
+
+		viper.BindPFlag("name", cmd.Flags().Lookup("name"))
+		createTagName = viper.GetString("name")
+
+		viper.BindPFlag("color", cmd.Flags().Lookup("color"))
+		createTagColor = viper.GetString("color")
+
 		if contaboCmd.InputFile == "" {
 			// arguments required
-			if TagName == "" {
-				log.Fatal("name is empty. Please provide one.")
+			if createTagName == "" {
+				log.Fatal("Argument name is empty. Please provide one.")
 			}
 		}
 		return nil
@@ -69,9 +75,7 @@ var tagCreateCmd = &cobra.Command{
 func init() {
 	contaboCmd.CreateCmd.AddCommand(tagCreateCmd)
 
-	tagCreateCmd.Flags().StringVarP(&TagName, "name", "n", "", `name of the tag`)
-	viper.BindPFlag("name", tagCreateCmd.Flags().Lookup("name"))
+	tagCreateCmd.Flags().StringVarP(&createTagName, "name", "n", "", `Name of the tag.`)
 
-	tagCreateCmd.Flags().StringVarP(&TagColor, "color", "c", "", `color of the tag`)
-	viper.BindPFlag("color", tagCreateCmd.Flags().Lookup("color"))
+	tagCreateCmd.Flags().StringVarP(&createTagColor, "color", "c", "", `Color of the tag.`)
 }

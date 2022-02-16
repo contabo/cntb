@@ -19,12 +19,14 @@ import (
 )
 
 var roleEditCmd = &cobra.Command{
-	Use:   "role [permissionType] [roleId]",
-	Short: "Edit a specific role",
-	Long:  `Modify an existing role in your editor`,
+	Use:   "role [roleId]",
+	Short: "Edit a specific role.",
+	Long:  `Modify an existing role in your editor.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// get original content
-		resp, httpResp, err := client.ApiClient().RolesApi.RetrieveRole(context.Background(), permissionType, roleId).XRequestId(uuid.NewV4().String()).Execute()
+		resp, httpResp, err := client.ApiClient().RolesApi.
+			RetrieveRole(context.Background(), editRoleId).
+			XRequestId(uuid.NewV4().String()).Execute()
 
 		util.HandleErrors(err, httpResp, "while editing role")
 
@@ -39,17 +41,6 @@ var roleEditCmd = &cobra.Command{
 		normalizedContent, _ := json.Marshal(normalized[0])
 		var requestFromNewContent userManagementClient.UpdateRoleRequest
 		json.Unmarshal(normalizedContent, &requestFromNewContent)
-
-		if permissionType == "resourcePermission" {
-			// get tagIds
-			tagObject := resp.Data[0].ResourcePermissions
-			var tagIds []int64
-
-			for i := 0; i < len(tagObject); i++ {
-				tagIds = append(tagIds, tagObject[i].TagId)
-			}
-			requestFromNewContent.ResourcePermissions = tagIds
-		}
 
 		originalContent, _ := json.MarshalIndent(requestFromNewContent, "", "  ")
 
@@ -70,7 +61,9 @@ var roleEditCmd = &cobra.Command{
 			// merge updateRoleRequest with one from file to have the defaults there
 			json.NewDecoder(strings.NewReader(string(newContent))).Decode(&updateRoleRequest)
 
-			resp, httpResp, err := client.ApiClient().RolesApi.UpdateRole(context.Background(), permissionType, roleId).UpdateRoleRequest(updateRoleRequest).XRequestId(uuid.NewV4().String()).Execute()
+			resp, httpResp, err := client.ApiClient().RolesApi.
+				UpdateRole(context.Background(), editRoleId).
+				UpdateRoleRequest(updateRoleRequest).XRequestId(uuid.NewV4().String()).Execute()
 
 			util.HandleErrors(err, httpResp, "while editing role")
 
@@ -79,26 +72,21 @@ var roleEditCmd = &cobra.Command{
 		}
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
-		if len(args) < 2 {
+		if len(args) < 1 {
 			cmd.Help()
-			log.Fatal("Please specify permission type and roleId")
+			log.Fatal("Please specify a roleId.")
 		}
 
-		if len(args) > 2 {
+		if len(args) > 1 {
 			cmd.Help()
-			log.Fatal("you can only provide a permission type (apiPermission, resourcePermission) and roleId")
+			log.Fatal("Too many positional arguments.")
 		}
 
-		permissionType = args[0]
-		if permissionType != "apiPermission" && permissionType != "resourcePermission" {
-			cmd.Help()
-			log.Fatal("Permission type can only be on of the following either apiPermission or resourcePermission")
-		}
 		roleId64, err := strconv.ParseInt(args[1], 10, 64)
 		if err != nil {
-			log.Fatal(fmt.Sprintf("Specified roleId %v is not valid", args[0]))
+			log.Fatal(fmt.Sprintf("Specified roleId %v is not valid.", args[0]))
 		}
-		roleId = roleId64
+		editRoleId = roleId64
 		return nil
 	},
 }

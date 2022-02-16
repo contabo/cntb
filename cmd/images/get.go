@@ -21,7 +21,7 @@ var imageGetCmd = &cobra.Command{
 	Example: `cntb get image 9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d`,
 	Run: func(cmd *cobra.Command, args []string) {
 		resp, httpResp, err := client.ApiClient().
-			ImagesApi.RetrieveImage(context.Background(), imageId).
+			ImagesApi.RetrieveImage(context.Background(), getImageId).
 			XRequestId(uuid.NewV4().String()).Execute()
 
 		util.HandleErrors(err, httpResp, "while retrieving image")
@@ -44,11 +44,22 @@ var imageGetCmd = &cobra.Command{
 	Args: func(cmd *cobra.Command, args []string) error {
 		contaboCmd.ValidateOutputFormat()
 
+		if len(args) > 1 {
+			cmd.Help()
+			log.Fatal("Too many positional arguments.")
+		}
+
 		if len(args) < 1 {
 			cmd.Help()
-			log.Fatal("Please specify imageId")
+			log.Fatal("Please provide an imageId.")
 		}
-		imageId = args[0]
+
+		getImageId = args[0]
+
+		if getImageId == "" {
+			cmd.Help()
+			log.Fatal("Argument imageId is empty. Please provide a non empty imageId.")
+		}
 
 		return nil
 	},

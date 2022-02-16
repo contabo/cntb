@@ -27,17 +27,14 @@ var userManagementCreateCmd = &cobra.Command{
 		switch content {
 		case nil:
 			// from arguments
-			createUserRequest.Email = userEmail
-			createUserRequest.FirstName = userFirstName
-			createUserRequest.LastName = userLastName
-			createUserRequest.Enabled = isUserEnabled
-			createUserRequest.Admin = isAdmin
-			createUserRequest.Locale = locale
-			if roles != nil {
-				createUserRequest.Roles = &roles
-			}
-			if canAccessAllResources {
-				createUserRequest.AccessAllResources = canAccessAllResources
+			createUserRequest.Email = createUserEmail
+			createUserRequest.FirstName = &createUserFirstName
+			createUserRequest.LastName = &createUserLastName
+			createUserRequest.Enabled = createIsUserEnabled
+			createUserRequest.Totp = createIsTotpEnabeld
+			createUserRequest.Locale = createLocale
+			if createRoles != nil {
+				createUserRequest.Roles = &createRoles
 			}
 		default:
 			// from file / stdin
@@ -57,26 +54,52 @@ var userManagementCreateCmd = &cobra.Command{
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
 		contaboCmd.ValidateCreateInput()
-		if viper.GetString("email") != "" {
-			userEmail = viper.GetString("email")
+
+		if len(args) > 0 {
+			cmd.Help()
+			log.Fatal("Too many positional arguments.")
 		}
+
+		viper.BindPFlag("firstName", cmd.Flags().Lookup("firstName"))
+		createUserFirstName = viper.GetString("firstName")
+
+		viper.BindPFlag("lastName", cmd.Flags().Lookup("lastName"))
+		createUserLastName = viper.GetString("lastName")
+
+		viper.BindPFlag("email", cmd.Flags().Lookup("email"))
+		createUserEmail = viper.GetString("email")
+
+		viper.BindPFlag("enabled", cmd.Flags().Lookup("enabled"))
+		createIsUserEnabled = viper.GetBool("enabled")
+
+		viper.BindPFlag("totp", cmd.Flags().Lookup("totp"))
+		createIsTotpEnabeld = viper.GetBool("totp")
+
+		viper.BindPFlag("roles", cmd.Flags().Lookup("roles"))
+		for i := range viper.GetIntSlice("roles") {
+			createRoles[i] = int64(viper.GetIntSlice("roles")[i])
+		}
+
+		viper.BindPFlag("locale", cmd.Flags().Lookup("locale"))
+		createLocale = viper.GetString("locale")
+
 		if contaboCmd.InputFile == "" {
 			// arguments required
-			if userFirstName == "" {
+			if createUserFirstName == "" {
 				cmd.Help()
-				log.Fatal("firstName is empty please provide one")
+				log.Fatal("Argument firstName is empty. Please provide one.")
 			}
-			if userLastName == "" {
+			if createUserLastName == "" {
 				cmd.Help()
-				log.Fatal("lastName is empty please provide one")
+				log.Fatal("Argument lastName is empty. Please provide one.")
 			}
-			if userEmail == "" {
+			if createUserEmail == "" {
 				cmd.Help()
-				log.Fatal("email is empty please provide one")
+				log.Fatal("Argument email is empty. Please provide one.")
 			}
-			if locale == "" {
+			if createLocale == "" {
 				cmd.Help()
-				log.Fatal("locale must be set")
+				log.Fatal("Argument locale is empty. Please provide one.")
 			}
 		}
 		return nil
@@ -86,35 +109,24 @@ var userManagementCreateCmd = &cobra.Command{
 func init() {
 	contaboCmd.CreateCmd.AddCommand(userManagementCreateCmd)
 
-	userManagementCreateCmd.Flags().StringVar(&userFirstName, "firstName", "",
+	userManagementCreateCmd.Flags().StringVar(&createUserFirstName, "firstName", "",
 		`user name of the user`)
-	viper.BindPFlag("firstName", userManagementCreateCmd.Flags().Lookup("firstName"))
 
-	userManagementCreateCmd.Flags().StringVar(&userLastName, "lastName", "",
+	userManagementCreateCmd.Flags().StringVar(&createUserLastName, "lastName", "",
 		`user name of the user`)
-	viper.BindPFlag("lastName", userManagementCreateCmd.Flags().Lookup("lastName"))
 
-	userManagementCreateCmd.Flags().StringVar(&userEmail, "email", "",
+	userManagementCreateCmd.Flags().StringVar(&createUserEmail, "email", "",
 		`email of the user`)
-	viper.BindPFlag("email", userManagementCreateCmd.Flags().Lookup("email"))
 
-	userManagementCreateCmd.Flags().BoolVar(&isUserEnabled, "enabled", false,
+	userManagementCreateCmd.Flags().BoolVar(&createIsUserEnabled, "enabled", false,
 		`is the user enabled`)
-	viper.BindPFlag("enabled", userManagementCreateCmd.Flags().Lookup("userEnabled"))
 
-	userManagementCreateCmd.Flags().BoolVar(&isAdmin, "admin", false,
-		`sets the user as an admin and allows him to perform all tasks`)
-	viper.BindPFlag("admin", userManagementCreateCmd.Flags().Lookup("admin"))
+	userManagementCreateCmd.Flags().BoolVar(&createIsTotpEnabeld, "totp", false,
+		`Enable or disable two-factor authentication (2FA) via time based OTP.`)
 
-	userManagementCreateCmd.Flags().BoolVar(&canAccessAllResources, "accessAllResources", false,
-		`can the user access all resources for permissions he has`)
-	viper.BindPFlag("accessAllResources", userManagementCreateCmd.Flags().Lookup("accessAllResources"))
-
-	userManagementCreateCmd.Flags().Int64SliceVarP(&roles, "roles", "r", nil,
+	userManagementCreateCmd.Flags().Int64SliceVarP(&createRoles, "roles", "r", nil,
 		`list of role ids the user should have`)
-	viper.BindPFlag("roles", userManagementCreateCmd.Flags().Lookup("roles"))
 
-	userManagementCreateCmd.Flags().StringVar(&locale, "locale", "en",
-		`the locale that the user would like to use (de/en)`)
-	viper.BindPFlag("locale", userManagementCreateCmd.Flags().Lookup("locale"))
+	userManagementCreateCmd.Flags().StringVar(&createLocale, "locale", "",
+		`The locale of the user. This can be de-DE, de, en-US, en`)
 }

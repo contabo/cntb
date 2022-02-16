@@ -9,6 +9,7 @@ import (
 	"contabo.com/cli/cntb/cmd/util"
 	"contabo.com/cli/cntb/outputFormatter"
 	uuid "github.com/satori/go.uuid"
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -27,8 +28,8 @@ var instanceHistoryCmd = &cobra.Command{
 			Size(contaboCmd.Size).
 			OrderBy([]string{contaboCmd.OrderBy})
 
-		if cmd.Flags().Changed("instanceId") {
-			historyRequest = historyRequest.InstanceId(viper.GetInt64("instanceId"))
+		if historyInstanceIdFilter != 0 {
+			historyRequest = historyRequest.InstanceId(historyInstanceIdFilter)
 		}
 
 		resp, httpResp, err := historyRequest.Execute()
@@ -53,9 +54,13 @@ var instanceHistoryCmd = &cobra.Command{
 	Args: func(cmd *cobra.Command, args []string) error {
 		contaboCmd.ValidateOutputFormat()
 
-		if cmd.Flags().Changed("instanceId") {
-			instanceIdFilter = viper.GetInt64("instanceId")
+		if len(args) > 0 {
+			cmd.Help()
+			log.Fatal("Too many positional arguments.")
 		}
+
+		viper.BindPFlag("instanceId", cmd.Flags().Lookup("instanceId"))
+		historyInstanceIdFilter = viper.GetInt64("instanceId")
 
 		return nil
 	},
@@ -64,7 +69,6 @@ var instanceHistoryCmd = &cobra.Command{
 func init() {
 	contaboCmd.HistoryCmd.AddCommand(instanceHistoryCmd)
 
-	instanceHistoryCmd.Flags().Int64VarP(&instanceIdFilter, "instanceId", "i", instanceId,
+	instanceHistoryCmd.Flags().Int64VarP(&historyInstanceIdFilter, "instanceId", "i", 0,
 		`Filter by a specific instance via its instanceId.`)
-	viper.BindPFlag("instanceId", instanceHistoryCmd.Flags().Lookup("instanceId"))
 }

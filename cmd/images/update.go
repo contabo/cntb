@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"os"
 	"strings"
 
 	"contabo.com/cli/cntb/client"
@@ -29,8 +28,8 @@ var imageUpdateCmd = &cobra.Command{
 
 		switch content {
 		case nil:
-			if imageName != "" {
-				updateImageRequest.Name = &imageName
+			if updateImageName != "" {
+				updateImageRequest.Name = &updateImageName
 			}
 		default:
 			// from file / stdin
@@ -47,7 +46,7 @@ var imageUpdateCmd = &cobra.Command{
 		}
 
 		resp, httpResp, err := client.ApiClient().ImagesApi.
-			UpdateImage(context.Background(), imageId).
+			UpdateImage(context.Background(), updateImageId).
 			UpdateCustomImageRequest(updateImageRequest).
 			XRequestId(uuid.NewV4().String()).
 			Execute()
@@ -60,20 +59,22 @@ var imageUpdateCmd = &cobra.Command{
 	Args: func(cmd *cobra.Command, args []string) error {
 		contaboCmd.ValidateCreateInput()
 
-		if viper.GetString("name") != "" {
-			imageName = viper.GetString("name")
-		}
-
 		if len(args) > 1 {
 			cmd.Help()
-			os.Exit(0)
+			log.Fatal("Too many positional arguments.")
 		}
 		if len(args) < 1 {
 			cmd.Help()
-			log.Fatal("please provide a imageId")
+			log.Fatal("Please provide an imageId.")
+		}
+		updateImageId = args[0]
+		if updateImageId == "" {
+			cmd.Help()
+			log.Fatal("Argument imageId is empty. Please provide a non empty imageId.")
 		}
 
-		imageId = args[0]
+		viper.BindPFlag("name", cmd.Flags().Lookup("name"))
+		updateImageName = viper.GetString("name")
 
 		return nil
 	},
@@ -82,8 +83,6 @@ var imageUpdateCmd = &cobra.Command{
 func init() {
 	contaboCmd.UpdateCmd.AddCommand(imageUpdateCmd)
 
-	imageUpdateCmd.Flags().StringVar(&imageName, "name", "",
+	imageUpdateCmd.Flags().StringVarP(&updateImageName, "name", "n", "",
 		`new name of the image`)
-	viper.BindPFlag("name", imageUpdateCmd.Flags().Lookup("name"))
-	viper.SetDefault("name", "")
 }

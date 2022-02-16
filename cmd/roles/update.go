@@ -18,9 +18,9 @@ import (
 )
 
 var roleUpdateCmd = &cobra.Command{
-	Use:   "role [permissionType] [roleId]",
-	Short: "Updates a specific tag",
-	Long:  `Updates the specific tag by setting new values either by file input or flags / environment variables`,
+	Use:   "role [roleId]",
+	Short: "Updates a specific tag.",
+	Long:  `Updates the specific tag by setting new values either by file input or flags / environment variables.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		roleUpdateRequest := *userManagementClient.NewUpdateRoleRequestWithDefaults()
 
@@ -28,35 +28,48 @@ var roleUpdateCmd = &cobra.Command{
 		switch content {
 		case nil:
 			// from arguments
-			roleUpdateRequest.Name = name
+			roleUpdateRequest.Name = updateName
+			roleUpdateRequest.Admin = updateAdmin
+			roleUpdateRequest.AccessAllResources = updateAccessAllResources
 
-			if permissionType == "apiPermission" {
-
-				var apiPermissionType []userManagementClient.ApiPermissionsResponse
-				err := json.Unmarshal([]byte(apiPermissions), &apiPermissionType)
+			if updatePermissions != "" {
+				var permissionsRequest []userManagementClient.PermissionRequest
+				err := json.Unmarshal([]byte(updatePermissions), &permissionsRequest)
 				if err != nil {
-					log.Fatal(fmt.Sprintf("Format of api permission invalid. Please check you syntax: %v", err))
+					log.Error("Invalid `permissions`. Please check the JSON syntax.")
+					log.Fatal(fmt.Sprintf("Error: %v", err))
 				}
 
-				roleUpdateRequest.ApiPermissions = &apiPermissionType
-			}
+				for index, permission := range permissionsRequest {
+					if len(permission.Actions) < 1 {
+						log.Fatal("Please make sure each permission has at least one action.")
+					}
+					// add empty array to resources list if it is not given
+					if permission.Resources == nil {
+						resources := make([]int64, 0)
+						permissionsRequest[index].Resources = &resources
+					}
+				}
 
-			if permissionType == "requestPermission" {
-				roleUpdateRequest.ResourcePermissions = resourceTagList
+				roleUpdateRequest.Permissions = &permissionsRequest
+			} else if updateAdmin {
+				// make permissions empty array if admin is set
+				updatedAdmin := make([]userManagementClient.PermissionRequest, 0)
+				roleUpdateRequest.Permissions = &updatedAdmin
 			}
-
 		default:
 			// from file / stdin
 			var requestFromFile userManagementClient.UpdateRoleRequest
 			err := json.Unmarshal(content, &requestFromFile)
 			if err != nil {
-				log.Fatal(fmt.Sprintf("Format invalid. Please check your syntax: %v", err))
+				log.Fatal(fmt.Sprintf("Format invalid. Please check the syntax: %v", err))
 			}
 			// merge roleUpdateRequest with one from file to have the defaults there
 			json.NewDecoder(strings.NewReader(string(content))).Decode(&roleUpdateRequest)
 		}
 
-		resp, httpResp, err := client.ApiClient().RolesApi.UpdateRole(context.Background(), permissionType, roleId).XRequestId(uuid.NewV4().String()).
+		resp, httpResp, err := client.ApiClient().RolesApi.
+			UpdateRole(context.Background(), updateRoleId).XRequestId(uuid.NewV4().String()).
 			UpdateRoleRequest(roleUpdateRequest).Execute()
 
 		util.HandleErrors(err, httpResp, "while updating role")
@@ -66,38 +79,46 @@ var roleUpdateCmd = &cobra.Command{
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
 		contaboCmd.ValidateCreateInput()
-		if len(args) < 2 {
+
+		if len(args) > 1 {
 			cmd.Help()
-			log.Fatal("please provide permission type and permission id")
+			log.Fatal("Too many positional arguments.")
+		}
+		if len(args) < 1 {
+			cmd.Help()
+			log.Fatal("Please provide a roleId")
 		}
 
-		if len(args) > 2 {
-			cmd.Help()
-			log.Fatal("you can only provide permission type (apiPermission, resourcePermission) and permission id")
-		}
+		viper.BindPFlag("name", cmd.Flags().Lookup("name"))
+		updateName = viper.GetString("name")
 
-		permissionType = args[0]
+		viper.BindPFlag("permissions", cmd.Flags().Lookup("permissions"))
+		updatePermissions = viper.GetString("permissions")
 
-		if permissionType != "apiPermission" && permissionType != "resourcePermission" {
-			cmd.Help()
-			log.Fatal("Permission type can only be on of the following either apiPermission or resourcePermission")
-		}
+		viper.BindPFlag("admin", cmd.Flags().Lookup("admin"))
+		updateAdmin = viper.GetBool("admin")
 
-		permissionId64, err := strconv.ParseInt(args[1], 10, 64)
+		viper.BindPFlag("accessAllResources", cmd.Flags().Lookup("accessAllResources"))
+		updateAccessAllResources = viper.GetBool("accessAllResources")
+
+		roleId, err := strconv.ParseInt(args[0], 10, 64)
 		if err != nil {
-			log.Fatal(fmt.Sprintf("Specified permissionId %v is not valid", args[1]))
+			log.Fatal(fmt.Sprintf("Provided roleId %v is not valid.", args[1]))
 		}
-		roleId = permissionId64
+		updateRoleId = roleId
 
-		if viper.GetString("name") != "" {
-			name = viper.GetString("name")
-		}
 		if contaboCmd.InputFile == "" {
 			// arguments required
-			if name == "" && apiPermissions == "" && resourceTagList == nil {
-				log.Fatal("missing file")
+			if updateName == "" {
+				cmd.Help()
+				log.Fatal("Argument name is empty. Please provide one.")
+			}
+			if updatePermissions == "" && !updateAdmin {
+				cmd.Help()
+				log.Fatal("Argument permissions is empty. Please provide one or set admin flag.")
 			}
 		}
+
 		return nil
 	},
 }
@@ -105,13 +126,14 @@ var roleUpdateCmd = &cobra.Command{
 func init() {
 	contaboCmd.UpdateCmd.AddCommand(roleUpdateCmd)
 
-	roleUpdateCmd.Flags().StringVar(&name, "name", "", `name of the role`)
-	viper.BindPFlag("name", roleUpdateCmd.Flags().Lookup("name"))
-	viper.SetDefault("name", "")
+	roleUpdateCmd.Flags().StringVarP(&updateName, "name", "n", "", `Name of the role.`)
 
-	roleUpdateCmd.Flags().StringVarP(&apiPermissions, "apiPermission", "a", "", "provide an array of json objects with the permissions including the api and the actions")
-	viper.BindPFlag("apiPermission", roleUpdateCmd.Flags().Lookup("apiPermission"))
+	roleUpdateCmd.Flags().StringVarP(&updatePermissions, "permissions", "p", "",
+		"Provide an array of json objects with the permissions including the apiName, the actions and the resources.")
 
-	roleUpdateCmd.Flags().Int64SliceVarP(&resourceTagList, "resourcePermission", "r", nil, "provide an array of json objects with the permissions including the api and the actions")
-	viper.BindPFlag("resourcePermission", roleCreateCmd.Flags().Lookup("resourcePermission"))
+	roleUpdateCmd.Flags().BoolVar(&updateAdmin, "admin", false,
+		`If user is admin he will have permissions to all API endpoints and resources.`)
+
+	roleUpdateCmd.Flags().BoolVar(&updateAccessAllResources, "accessAllResources", false,
+		`Allow access to all resources. This will superseed all assigned resources in a role.`)
 }

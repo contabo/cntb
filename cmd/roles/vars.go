@@ -1,18 +1,50 @@
 package cmd
 
-import "contabo.com/cli/cntb/outputFormatter"
-
+// create
 var (
-	name               string
-	action             []string
-	apiPermissions     string
-	resourceTagList    []int64
-	roleId             int64
-	roleIdFilter       int64
-	parseError         error
-	nameFilter         string
-	apiNameFilter      string
-	resourceNameFilter string
-	permissionType     string
-	configFormatter    outputFormatter.FormatterConfig
+	createName               string
+	createPermissions        string
+	createAccessAllResources bool
+	createAdmin              bool
+)
+
+// delete
+var (
+	deleteRoleId int64
+)
+
+// edit
+var (
+	editRoleId int64
+)
+
+// get
+var (
+	getRoleId int64
+)
+
+// history
+var (
+	historyRoleIdFilter int64
+)
+
+// list
+var (
+	listRoleNameFilter string
+	listTagNameFilter  string
+	listApiNameFilter  string
+)
+
+// listApiPermissions
+var (
+	listapipermissionsApiNameFilter string
+)
+
+// update
+var (
+	updateName               string
+	updatePermissions        string
+	updateRoleId             int64
+	updateAccessAllResources bool
+	updateAdmin              bool
 )

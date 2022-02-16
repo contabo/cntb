@@ -23,7 +23,7 @@ var startInstanceCmd = &cobra.Command{
 	Example: `cntb start instance 12345`,
 	Run: func(cmd *cobra.Command, args []string) {
 		resp, httpResp, err := client.ApiClient().
-			InstanceActionsApi.Start(context.Background(), instanceId).
+			InstanceActionsApi.Start(context.Background(), startInstanceId).
 			XRequestId(uuid.NewV4().String()).Execute()
 
 		util.HandleErrors(err, httpResp, "while starting instance")
@@ -39,17 +39,23 @@ var startInstanceCmd = &cobra.Command{
 		util.HandleResponse(responseJson, configFormatter)
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
+		contaboCmd.ValidateOutputFormat()
+
+		if len(args) > 1 {
+			cmd.Help()
+			log.Fatal("Too many positional arguments.")
+		}
+
 		if len(args) < 1 {
 			cmd.Help()
-			log.Fatal("Please specify instanceId")
+			log.Fatal("Please provide an instanceId.")
 		}
 
 		instanceId64, err := strconv.ParseInt(args[0], 10, 64)
 		if err != nil {
-			log.Fatal(fmt.Sprintf("Specified instanceId %v is not valid", args[0]))
+			log.Fatal(fmt.Sprintf("Provided instanceId %v is not valid.", args[0]))
 		}
-		instanceId = instanceId64
-		contaboCmd.ValidateOutputFormat()
+		startInstanceId = instanceId64
 
 		return nil
 	},

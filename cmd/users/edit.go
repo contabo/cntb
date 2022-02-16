@@ -24,7 +24,7 @@ var userEditCmd = &cobra.Command{
 	Long:  `Modify an existing user in your editor`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// get original content
-		resp, httpResp, err := client.ApiClient().UsersApi.RetrieveUser(context.Background(), userId).XRequestId(uuid.NewV4().String()).Execute()
+		resp, httpResp, err := client.ApiClient().UsersApi.RetrieveUser(context.Background(), editUserId).XRequestId(uuid.NewV4().String()).Execute()
 
 		util.HandleErrors(err, httpResp, "while editing users")
 
@@ -37,12 +37,12 @@ var userEditCmd = &cobra.Command{
 		json.Unmarshal(respContent, &normalized)
 
 		// get role ids
-		rolesObject, err := json.Marshal(normalized[0]["roles"])
+		rolesObject, _ := json.Marshal(normalized[0]["roles"])
 		var actualRoles []map[string]interface{}
 		json.Unmarshal(rolesObject, &actualRoles)
 		var roleIds []int64
 		for i := 0; i < len(actualRoles); i++ {
-			var roleIdString = actualRoles[i]["roleId"]
+			roleIdString := actualRoles[i]["roleId"]
 			value := reflect.ValueOf(roleIdString)
 			roleId64 := value.Convert(reflect.TypeOf(float64(0)))
 			var roleId int64 = int64(roleId64.Float())
@@ -72,7 +72,7 @@ var userEditCmd = &cobra.Command{
 			// merge updateUserRequest with one from file to have the defaults there
 			json.NewDecoder(strings.NewReader(string(newContent))).Decode(&updateUserRequest)
 
-			resp, httpResp, err := client.ApiClient().UsersApi.UpdateUser(context.Background(), userId).
+			resp, httpResp, err := client.ApiClient().UsersApi.UpdateUser(context.Background(), editUserId).
 				XRequestId(uuid.NewV4().String()).UpdateUserRequest(updateUserRequest).Execute()
 
 			util.HandleErrors(err, httpResp, "while editing users")
@@ -80,14 +80,18 @@ var userEditCmd = &cobra.Command{
 			responseJSON, _ := resp.MarshalJSON()
 			log.Info(fmt.Sprintf("%v", string(responseJSON)))
 		}
-
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
+
+		if len(args) > 1 {
+			cmd.Help()
+			log.Fatal("Too many positional arguments.")
+		}
 		if len(args) < 1 {
 			cmd.Help()
-			log.Fatal("Please specify tagId")
+			log.Fatal("Please provide an userId.")
 		}
-		userId = args[0]
+		editUserId = args[0]
 		return nil
 	},
 }

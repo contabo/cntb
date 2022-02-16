@@ -8,6 +8,7 @@ import (
 	"contabo.com/cli/cntb/cmd/util"
 	"contabo.com/cli/cntb/outputFormatter"
 	uuid "github.com/satori/go.uuid"
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -24,16 +25,8 @@ var roleHistoryCmd = &cobra.Command{
 			Size(contaboCmd.Size).
 			OrderBy([]string{contaboCmd.OrderBy})
 
-		if cmd.Flags().Changed("roleId") {
-			historyRequest = historyRequest.RoleId(roleIdFilter)
-		}
-
-		if cmd.Flags().Changed("requestId") {
-			historyRequest = historyRequest.RequestId(contaboCmd.RequestIdFilter)
-		}
-
-		if cmd.Flags().Changed("changedBy") {
-			historyRequest = historyRequest.ChangedBy(contaboCmd.ChangedByFilter)
+		if historyRoleIdFilter != 0 {
+			historyRequest = historyRequest.RoleId(historyRoleIdFilter)
 		}
 
 		resp, httpResp, err := historyRequest.Execute()
@@ -53,6 +46,14 @@ var roleHistoryCmd = &cobra.Command{
 	Args: func(cmd *cobra.Command, args []string) error {
 		contaboCmd.ValidateOutputFormat()
 
+		if len(args) > 0 {
+			cmd.Help()
+			log.Fatal("Too many positional arguments.")
+		}
+
+		viper.BindPFlag("roleId", cmd.Flags().Lookup("roleId"))
+		historyRoleIdFilter = viper.GetInt64("roleId")
+
 		return nil
 	},
 }
@@ -60,7 +61,6 @@ var roleHistoryCmd = &cobra.Command{
 func init() {
 	contaboCmd.HistoryCmd.AddCommand(roleHistoryCmd)
 
-	roleHistoryCmd.Flags().Int64VarP(&roleIdFilter, "roleId", "u", -1,
+	roleHistoryCmd.Flags().Int64VarP(&historyRoleIdFilter, "roleId", "u", 0,
 		`to filter audits using role id`)
-	viper.BindPFlag("roleId", roleHistoryCmd.Flags().Lookup("roleId"))
 }

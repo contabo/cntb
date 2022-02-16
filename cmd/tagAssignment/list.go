@@ -17,9 +17,9 @@ import (
 
 var listTagAssignmentsCmd = &cobra.Command{
 	Use:   "tagAssignments [tagId] [filter]",
-	Short: "List all assignments for specific tag",
+	Short: "List all assignments for specific tag.",
 	Long: `Retrive information about many or a single tag assignment that belong to a specific tag.
-	you can filter by resource type`,
+	you can filter by resource type.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		resp, httpResp, err := client.ApiClient().TagAssignmentsApi.
 			RetrieveAssignmentList(context.Background(), tagId).
@@ -45,16 +45,16 @@ var listTagAssignmentsCmd = &cobra.Command{
 	Args: func(cmd *cobra.Command, args []string) error {
 		contaboCmd.ValidateOutputFormat()
 		if len(args) > 1 {
-			contaboCmd.GetCmd.Help()
-			log.Fatal("Please only specify tagId")
+			cmd.Help()
+			log.Fatal("Too many positional arguments.")
 		}
 		if len(args) < 1 {
-			contaboCmd.GetCmd.Help()
+			cmd.Help()
 			log.Fatal("Please specify tagId")
 		}
 		tagId64, err := strconv.ParseInt(args[0], 10, 64)
 		if err != nil {
-			log.Fatal(fmt.Sprintf("Specified tagId %v is not valid", args[0]))
+			log.Fatal(fmt.Sprintf("Provided tagId %v is not valid.", args[0]))
 		}
 
 		tagId = tagId64

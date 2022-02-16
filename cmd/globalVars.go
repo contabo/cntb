@@ -8,7 +8,6 @@ var (
 	OrderBy             string
 	DefaultPage         = 1
 	DefaultPageSize     = 100
-	defaultOrderBy      = "name:asc"
 	RequestIdFilter     string
 	ChangedByFilter     string
 )

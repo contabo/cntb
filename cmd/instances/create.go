@@ -18,9 +18,9 @@ import (
 
 var instanceCreateCmd = &cobra.Command{
 	Use:   "instance",
-	Short: "Creates a new compute instance",
-	Long:  `Create a new compute instances in your account`,
-	Example: `create instance -p 12 --imageId "1234absv-331vc-776hg-376bgt" ` +
+	Short: "Create a new compute instance.",
+	Long:  `Create a new compute instance.`,
+	Example: `create instance -p 12 --imageId "111eebb0-dc70-4bc2-a7d0-c525dbe016a9" ` +
 		`--license "PleskHost" --productId "V1" -r "EU"`,
 	Run: func(cmd *cobra.Command, args []string) {
 		createInstanceRequest := *instancesClient.NewCreateInstanceRequestWithDefaults()
@@ -28,28 +28,28 @@ var instanceCreateCmd = &cobra.Command{
 
 		switch content {
 		case nil:
-			// from arguments
-			createInstanceRequest.ImageId = instanceImageId
-			createInstanceRequest.ProductId = instanceProductId
-			createInstanceRequest.Region = instanceRegion
-			createInstanceRequest.Period = instancePeriod
+			// flags with default values
+			createInstanceRequest.ImageId = createInstanceImageId
+			createInstanceRequest.ProductId = createInstanceProductId
+			createInstanceRequest.Region = createInstanceRegion
+			createInstanceRequest.Period = createInstancePeriod
 
-			if instanceLicense != "" {
-				createInstanceRequest.License = &instanceLicense
+			// optional flags
+			if createInstanceSshKeys != nil {
+				createInstanceRequest.SshKeys = &createInstanceSshKeys
 			}
-
-			if instanceRootPassword != 0 {
-				createInstanceRequest.RootPassword = &instanceRootPassword
+			if createInstanceRootPassword != 0 {
+				createInstanceRequest.RootPassword = &createInstanceRootPassword
 			}
-			if instanceUserData != "" {
+			if createInstanceUserData != "" {
 				// user data from argument needs to replace newline char in order to work
-				userData := strings.Replace(instanceUserData, "\\n", "\n", -1)
+				userData := strings.Replace(createInstanceUserData, "\\n", "\n", -1)
 				// for debugging user data
 				log.Debug(userData)
 				createInstanceRequest.UserData = &userData
 			}
-			if len(instanceSshKeys) != 0 {
-				createInstanceRequest.SshKeys = &instanceSshKeys
+			if createInstanceLicense != "" {
+				createInstanceRequest.License = &createInstanceLicense
 			}
 
 		default:
@@ -57,13 +57,14 @@ var instanceCreateCmd = &cobra.Command{
 			var requestFromFile instancesClient.CreateInstanceRequest
 			err := json.Unmarshal(content, &requestFromFile)
 			if err != nil {
-				log.Fatal(fmt.Sprintf("Format invalid. Please check your syntax: %v", err))
+				log.Fatal(fmt.Sprintf("format invalid. Please check your syntax: %v", err))
 			}
 			// merge createTagRequest with one from file to have the defaults there
 			json.NewDecoder(strings.NewReader(string(content))).Decode(&createInstanceRequest)
 		}
 
-		resp, httpResp, err := client.ApiClient().InstancesApi.CreateInstance(context.Background()).XRequestId(uuid.NewV4().String()).CreateInstanceRequest(createInstanceRequest).Execute()
+		resp, httpResp, err := client.ApiClient().InstancesApi.CreateInstance(context.Background()).
+			XRequestId(uuid.NewV4().String()).CreateInstanceRequest(createInstanceRequest).Execute()
 
 		util.HandleErrors(err, httpResp, "while creating instance")
 
@@ -72,50 +73,39 @@ var instanceCreateCmd = &cobra.Command{
 	Args: func(cmd *cobra.Command, args []string) error {
 		contaboCmd.ValidateCreateInput()
 
-		if instanceImageId == "" && viper.GetString("imageId") != "" {
-			instanceImageId = viper.GetString("imageId")
-		}
-		if viper.GetString("productId") != "" {
-			instanceProductId = viper.GetString("productId")
-		}
-		if viper.GetString("region") != "" {
-			instanceRegion = viper.GetString("region")
-		}
-		if viper.GetString("license") != "" {
-			instanceLicense = viper.GetString("license")
+		if len(args) > 0 {
+			cmd.Help()
+			log.Fatal("Too many positional arguments.")
 		}
 
-		if viper.GetString("userData") != "" {
-			instanceUserData = viper.GetString("userData")
+		// flags with default values
+		viper.BindPFlag("imageId", cmd.Flags().Lookup("imageId"))
+		createInstanceImageId = viper.GetString("imageId")
+
+		viper.BindPFlag("productId", cmd.Flags().Lookup("productId"))
+		createInstanceProductId = viper.GetString("productId")
+
+		viper.BindPFlag("region", cmd.Flags().Lookup("region"))
+		createInstanceRegion = viper.GetString("region")
+
+		viper.BindPFlag("period", cmd.Flags().Lookup("period"))
+		createInstancePeriod = viper.GetInt64("period")
+
+		// optional flags
+		viper.BindPFlag("sshKeys", cmd.Flags().Lookup("sshKeys"))
+		for i := range viper.GetIntSlice("sshKeys") {
+			createInstanceSshKeys[i] = int64(viper.GetIntSlice("sshKeys")[i])
 		}
 
-		if viper.GetInt64("period") != 0 {
-			instancePeriod = viper.GetInt64("period")
-		}
-		if viper.GetInt64("rootPassword") != 0 {
-			instanceRootPassword = viper.GetInt64("rootPassword")
-		}
+		viper.BindPFlag("rootPassword", cmd.Flags().Lookup("rootPassword"))
+		createInstanceRootPassword = viper.GetInt64("rootPassword")
 
-		if contaboCmd.InputFile == "" {
-			// arguments required
-			if instanceImageId == "" {
-				cmd.Help()
-				log.Fatal("Argument imageId is empty. Please provide one.")
-			}
-			if instanceProductId == "" {
-				cmd.Help()
-				log.Fatal("Argument productId is empty. Please provide one.")
-			}
-			if instanceRegion == "" {
-				cmd.Help()
-				log.Fatal("Argument region is empty. Please provide one.")
-			}
+		viper.BindPFlag("userData", cmd.Flags().Lookup("userData"))
+		createInstanceUserData = viper.GetString("userData")
 
-			if instancePeriod == 0 {
-				cmd.Help()
-				log.Fatal("Argument period is empty. Please provide one.")
-			}
-		}
+		viper.BindPFlag("license", cmd.Flags().Lookup("license"))
+		createInstanceLicense = viper.GetString("license")
+
 		return nil
 	},
 }
@@ -123,34 +113,32 @@ var instanceCreateCmd = &cobra.Command{
 func init() {
 	contaboCmd.CreateCmd.AddCommand(instanceCreateCmd)
 
-	instanceCreateCmd.Flags().Int64VarP(&instancePeriod, "period", "p", 1, `period contract length (1, 3, 6 or 12 months)`)
-	viper.BindPFlag("period", instanceCreateCmd.Flags().Lookup("period"))
-	viper.SetDefault("period", &instancePeriod)
+	// flags with default values
+	instanceCreateCmd.Flags().StringVar(&createInstanceImageId, "imageId", "db1409d2-ed92-4f2f-978e-7b2fa4a1ec90",
+		`Standard or custom image id. Defaults to 'Ubuntu 20.04'.`)
 
-	instanceCreateCmd.Flags().Int64SliceVar(&instanceSshKeys, "sshKeys", nil, `ids of stored ssh public keys`)
-	viper.BindPFlag("sshKeys", instanceCreateCmd.Flags().Lookup("sshKeys"))
+	instanceCreateCmd.Flags().StringVar(&createInstanceProductId, "productId", "V1",
+		`Id of product to be used. See https://contabo.com/en/product-list/?show_ids=true`)
 
-	instanceCreateCmd.Flags().Int64VarP(&instanceRootPassword, "rootPassword", "", 0, `id of stored password`)
-	viper.BindPFlag("rootPassword", instanceCreateCmd.Flags().Lookup("rootPassword"))
+	instanceCreateCmd.Flags().StringVarP(&createInstanceRegion, "region", "r", "EU",
+		`Region where instance should be created [EU, US-central, US-east, US-west or SIN]`)
 
-	instanceCreateCmd.Flags().StringVarP(&instanceUserData, "userData", "", "", `cloud-init script (user data)`)
-	viper.BindPFlag("userData", instanceCreateCmd.Flags().Lookup("userData"))
+	instanceCreateCmd.Flags().Int64VarP(&createInstancePeriod, "period", "p", 1,
+		`Period contract length (1, 3, 6 or 12 months)`)
 
-	instanceCreateCmd.Flags().StringVarP(&instanceImageId, "imageId", "", "db1409d2-ed92-4f2f-978e-7b2fa4a1ec90", `standard or custom image id. Defaults to Ubuntu 20.04`)
-	viper.BindPFlag("imageId", instanceCreateCmd.Flags().Lookup("imageId"))
-	viper.SetDefault("imageId", "db1409d2-ed92-4f2f-978e-7b2fa4a1ec90")
+	// optional flags
+	instanceCreateCmd.Flags().Int64SliceVar(&createInstanceSshKeys, "sshKeys", nil,
+		`Ids of stored ssh public keys.`)
 
-	instanceCreateCmd.Flags().StringVarP(&instanceLicense, "license", "", "", `additional licence in order to enhance your chosen product.
-	Valid licenses: "PleskHost" "PleskPro" "PleskAdmin" "cPanel5" "cPanel30" "cPanel50" "cPanel100" "cPanel150"
-	"cPanel200" "cPanel250" "cPanel300" "cPanel350" "cPanel400" "cPanel450" "cPanel500" "cPanel550" "cPanel600"
-	"cPanel650" "cPanel700" "cPanel750" "cPanel800" "cPanel850" "cPanel900" "cPanel950" "cPanel1000"`)
-	viper.BindPFlag("license", instanceCreateCmd.Flags().Lookup("license"))
+	instanceCreateCmd.Flags().Int64Var(&createInstanceRootPassword, "rootPassword", 0,
+		`Id of stored password.`)
 
-	instanceCreateCmd.Flags().StringVarP(&instanceProductId, "productId", "", "V1", `id of product to be used. See https://contabo.com/en/product-list/?show_ids=true`)
-	viper.BindPFlag("productId", instanceCreateCmd.Flags().Lookup("productId"))
-	viper.SetDefault("productId", "V1")
+	instanceCreateCmd.Flags().StringVar(&createInstanceUserData, "userData", "",
+		`Cloud-init script (user data)`)
 
-	instanceCreateCmd.Flags().StringVarP(&instanceRegion, "region", "r", "EU", `region where instance should be created [EU, US-central, US-east, US-west or SIN].`)
-	viper.BindPFlag("region", instanceCreateCmd.Flags().Lookup("region"))
-	viper.SetDefault("region", "EU")
+	instanceCreateCmd.Flags().StringVar(&createInstanceLicense, "license", "",
+		`Additional licence in order to enhance your chosen product.
+		Valid licenses: "PleskHost" "PleskPro" "PleskAdmin" "cPanel5" "cPanel30" "cPanel50" "cPanel100" "cPanel150"
+		"cPanel200" "cPanel250" "cPanel300" "cPanel350" "cPanel400" "cPanel450" "cPanel500" "cPanel550" "cPanel600"
+		"cPanel650" "cPanel700" "cPanel750" "cPanel800" "cPanel850" "cPanel900" "cPanel950" "cPanel1000"`)
 }

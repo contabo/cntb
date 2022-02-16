@@ -18,18 +18,24 @@ var resendEmailVerificationUserCmd = &cobra.Command{
 	Example: `cntb resendEmailVerification user 6cdf5968-f9fe-4192-97c2-f349e813c5e8`,
 	Run: func(cmd *cobra.Command, args []string) {
 		httpResp, err := client.ApiClient().UsersApi.
-			ResendEmailVerification(context.Background(), userId).
+			ResendEmailVerification(context.Background(), resendEmailVerificationUserId).
 			XRequestId(uuid.NewV4().String()).Execute()
 
 		util.HandleErrors(err, httpResp, "while resending email verification to user")
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
 		contaboCmd.ValidateCreateInput()
+
+		if len(args) > 1 {
+			cmd.Help()
+			log.Fatal("Too many positional arguments.")
+		}
 		if len(args) < 1 {
 			cmd.Help()
-			log.Fatal("Please specify userId")
+			log.Fatal("Please provide an userId.")
 		}
-		userId = args[0]
+
+		resendEmailVerificationUserId = args[0]
 
 		return nil
 	},
