@@ -1,7 +1,7 @@
 #!/bin/bash
 
-CURRENTEPOCTIME=`date +%s%N`
-CURRENTEPOCTIME_SECONDS=`date +%s`
+CURRENTEPOCTIME=`date +%s`
+CURRENTEPOCTIME_NANAO=`date +%s%N`
 USER_ID="${OAUTH2_USER_ID:-3e97f2b0-eccd-497b-8516-79a6708a9cf4}"
 TEST_SUFFIX="$CURRENTEPOCTIME-integration-cli"
 IMAGE_DOWNLOAD_URL='https://dl-cdn.alpinelinux.org/alpine/v3.13/releases/s390x/alpine-standard-3.13.5-s390x.iso'
@@ -22,20 +22,31 @@ load_lib() {
 poll_instance(){
   echo "polling entered" >&3
   for i in {0..50}; do
-      run ./cntb get instance "$1"
-      out=$(echo "$output" | grep "running\|error" || true)
+    local status=$(./cntb get instance "$1" -o json | jq -r '.[].status')
 
-      if [[ -n "$out" ]]; then
-        # if status is error, stop polling and return error.
-        if [[ "$out" == "error" ]]; then
-          return 1
-        fi
-        ## Return success
-        return 0
-      fi
+    if [ "$status" == 'running' ]; then
+      return 0
+    elif [ "$status" == 'stopped' ]; then
+      return 0
+    fi
 
-      sleep 2
-    done
+    sleep 2
+  done
 
   return 1
+}
+
+deleteSnapshotsIfExisting() {
+  local instance_id="$1"
+  existingSnapshot=$(./cntb get snapshots $instance_id -s 1 -o json | jq -r '.[].snapshotId')
+
+  if [ -n "$existingSnapshot" ]; then
+    ./cntb delete snapshot "$1" "$existingSnapshot"
+  
+    sleep 4
+
+    deleteSnapshotsIfExisting "$1"
+  else
+    sleep 4
+  fi
 }

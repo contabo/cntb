@@ -16,6 +16,8 @@ function teardown_file() {
 }
 
 @test 'get snapshots history: ok' {
+  deleteSnapshotsIfExisting ${INSTANCE_ID}
+
   run ./cntb create snapshot ${INSTANCE_ID} --name="snapshot${TEST_SUFFIX}" --description='test snapshot'
   assert_success
   snapshotId="$output"
@@ -29,13 +31,11 @@ function teardown_file() {
   assert_output --partial 'USERNAME'
   assert_output --partial 'TIMESTAMP'
   assert_output --partial "$snapshotId"
-
-  # clean up
-  run ./cntb delete snapshot ${INSTANCE_ID} "$snapshotId"
-  assert_success
 }
 
 @test 'get snapshots history wide: ok' {
+  deleteSnapshotsIfExisting ${INSTANCE_ID}
+
   run ./cntb create snapshot ${INSTANCE_ID} --name="snapshot${TEST_SUFFIX}" --description='test snapshot'
   assert_success
   snapshotId="$output"
@@ -50,8 +50,4 @@ function teardown_file() {
   assert_output --partial 'TIMESTAMP'
   assert_output --partial 'CHANGES'
   assert_output --partial "$snapshotId"
-
-  # clean up
-  run ./cntb delete snapshot ${INSTANCE_ID} "$snapshotId"
-  assert_success
 }

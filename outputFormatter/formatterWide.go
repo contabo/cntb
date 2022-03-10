@@ -31,7 +31,11 @@ func (wf FormatterWide) Format(data []interface{}, config FormatterConfig) [][]s
 					formattedLine = append(formattedLine, fmt.Sprintf("%v", string(pretty)))
 				} else if result != nil && reflect.TypeOf(result).Kind() == reflect.Float64 {
 					floatNumber, _ := result.(float64)
-					formattedLine = append(formattedLine, fmt.Sprintf("%d", int(floatNumber)))
+					if (NumDecPlaces(floatNumber) == 0) {
+                        formattedLine = append(formattedLine, fmt.Sprintf("%d", int(floatNumber)))
+                    } else {
+                        formattedLine = append(formattedLine, fmt.Sprintf("%.2f", floatNumber))
+                    }
 				} else {
 					formattedLine = append(formattedLine, fmt.Sprintf("%v", result))
 				}

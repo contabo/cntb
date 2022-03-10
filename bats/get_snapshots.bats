@@ -16,6 +16,8 @@ function teardown_file() {
 }
 
 @test "get snapshots: ok" {
+  deleteSnapshotsIfExisting ${INSTANCE_ID}
+
   run ./cntb create snapshot ${INSTANCE_ID} --name="snapshot${TEST_SUFFIX}" --description='test snapshot'
   assert_success
   snapshotId="$output"
@@ -62,10 +64,6 @@ function teardown_file() {
   assert_output --partial 'CREATEDDATE'
   assert_output --partial "snapshot${TEST_SUFFIX}"
   assert_output --partial "$snapshotId"
-
-  # clean up
-  run ./cntb delete snapshot ${INSTANCE_ID} "$snapshotId"
-  assert_success
 }
 
 @test "get snapshots with invalid instanceId: nok" {

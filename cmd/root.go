@@ -13,19 +13,21 @@ import (
 	"github.com/spf13/viper"
 )
 
-var cfgFile string
-var DebugLevel string
-var ApiBaseUrl string
-var oauth2ClientId string
-var oauth2ClientIdDesignation = "oauth2-clientid"
-var oauth2ClientSecret string
-var oauth2ClientSecretDesignation = "oauth2-client-secret"
-var oauth2TokenUrl string
-var oauth2TokenUrlDesignation = "oauth2-tokenurl"
-var oauth2User string
-var oauth2UserDesignation = "oauth2-user"
-var oauth2Password string
-var oauth2PasswordDesignation = "oauth2-password"
+var (
+	cfgFile                       string
+	DebugLevel                    string
+	ApiBaseUrl                    string
+	oauth2ClientId                string
+	oauth2ClientIdDesignation     = "oauth2-clientid"
+	oauth2ClientSecret            string
+	oauth2ClientSecretDesignation = "oauth2-client-secret"
+	oauth2TokenUrl                string
+	oauth2TokenUrlDesignation     = "oauth2-tokenurl"
+	oauth2User                    string
+	oauth2UserDesignation         = "oauth2-user"
+	oauth2Password                string
+	oauth2PasswordDesignation     = "oauth2-password"
+)
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{

@@ -32,7 +32,7 @@ func cacheToken(token *oauth2.Token) {
 	}
 }
 
-func restoreTokenFromCache() *oauth2.Token {
+func RestoreTokenFromCache() *oauth2.Token {
 	tokenCacheFileName := getCacheFile()
 	serializedToken, err := ioutil.ReadFile(tokenCacheFileName)
 	if err != nil {

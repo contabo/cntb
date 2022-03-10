@@ -16,20 +16,16 @@ function teardown_file() {
 }
 
 @test 'create snapshot: ok' {
+  deleteSnapshotsIfExisting ${INSTANCE_ID}
+
   run ./cntb create snapshot ${INSTANCE_ID} --name="snapshot${TEST_SUFFIX}" --description='test snapshot'
-  assert_success
-  snapshotId="$output"
-  # clean up
-  run ./cntb delete snapshot ${INSTANCE_ID} "$snapshotId"
   assert_success
 }
 
 @test 'create snapshot without description argument: ok' {
+  deleteSnapshotsIfExisting ${INSTANCE_ID}
+
   run ./cntb create snapshot ${INSTANCE_ID} --name="snapshot${TEST_SUFFIX}"
-  assert_success
-  snapshotId="$output"
-  # clean up
-  run ./cntb delete snapshot ${INSTANCE_ID} "$snapshotId"
   assert_success
 }
 

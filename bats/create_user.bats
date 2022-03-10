@@ -67,33 +67,3 @@ function teardown_file() {
 
     unset CNTB_FIRSTNAME CNTB_LASTNAME CNTB_ENABLED CNTB_LOCALE
 }
-
-@test "create user missing firstName: nok" {
-    run ./cntb create user  --lastName="bar${TEST_SUFFIX}" --email="testuser${TEST_SUFFIX}@contabo.com"  --enabled=true --roles="$roleId" --locale de
-    assert_failure
-
-    export CNTB_LASTNAME="bar${TEST_SUFFIX}"
-    export CNTB_ENABLED=true
-    export CNTB_LOCALE=de
-    export CNTB_EMAIL="testuser${TEST_SUFFIX}@contabo.com"
-
-    run ./cntb create user
-    assert_failure
-
-    unset CNTB_EMAIL CNTB_LASTNAME CNTB_ENABLED CNTB_LOCALE
-}
-
-@test "create user missing lastName: nok" {
-    run ./cntb create user --firstName="foo${TEST_SUFFIX}" --email="testuser${TEST_SUFFIX}@contabo.com"  --enabled=true --roles="$roleId" --locale de
-    assert_failure
-
-    export CNTB_FIRSTNAME="foo${TEST_SUFFIX}"
-    export CNTB_ENABLED=true
-    export CNTB_LOCALE=de
-    export CNTB_EMAIL="testuser${TEST_SUFFIX}@contabo.com"
-
-    run ./cntb create user
-    assert_failure
-
-    unset CNTB_FIRSTNAME CNTB_EMAIL CNTB_ENABLED CNTB_LOCALE
-}

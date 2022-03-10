@@ -80,40 +80,44 @@ function teardown_file() {
 }
 
 @test "create role with resources : ok" {
-    run ./cntb create tag --name "foo${TEST_SUFFIX}"
+    run ./cntb create tag --name "foo${CURRENTEPOCTIME_NANAO}"
     assert_success
-    tagid="$output"
+    tagId="$output"
 
-    run ./cntb create role --name "foo${TEST_SUFFIX}" --permissions "[{\"apiName\" : \"/v1/users\", \"actions\": [\"READ\", \"CREATE\"], \"resources\": [$tagid]}]"
+    run ./cntb create role --name "foo${TEST_SUFFIX}" --permissions "[{\"apiName\" : \"/v1/users\", \"actions\": [\"READ\", \"CREATE\"], \"resources\": [$tagId]}]"
     assert_success
     roleId="$output"
 
     # clean up
     run ./cntb delete role "${roleId}"
+    assert_success
+    run ./cntb delete tag "${tagId}"
     assert_success
 }
 
 @test "create role with resources multiple endpoints : ok" {
-    run ./cntb create tag --name "foo${TEST_SUFFIX}"
+    run ./cntb create tag --name "foo${CURRENTEPOCTIME_NANAO}"
     assert_success
-    tagid="$output"
+    tagId="$output"
 
-    run ./cntb create role --name "foo${TEST_SUFFIX}" --permissions "[{\"apiName\" : \"/v1/users\", \"actions\": [\"READ\", \"CREATE\"], \"resources\": [$tagid]}, {\"apiName\":\"/v1/tags\",\"actions\":[\"READ\"], \"resources\": [$tagid]}]"
+    run ./cntb create role --name "foo${TEST_SUFFIX}" --permissions "[{\"apiName\" : \"/v1/users\", \"actions\": [\"READ\", \"CREATE\"], \"resources\": [$tagId]}, {\"apiName\":\"/v1/tags\",\"actions\":[\"READ\"], \"resources\": [$tagId]}]"
     assert_success
     roleId="$output"
 
     # clean up
     run ./cntb delete role "${roleId}"
+    assert_success
+    run ./cntb delete tag "${tagId}"
     assert_success
 }
 
 
 @test "create role with resources multiple endpoints only one with tag : ok" {
-    run ./cntb create tag --name "foo${TEST_SUFFIX}"
+    run ./cntb create tag --name "foo${CURRENTEPOCTIME_NANAO}"
     assert_success
-    tagid="$output"
+    tagId="$output"
 
-    run ./cntb create role --name "foo${TEST_SUFFIX}" --permissions "[{\"apiName\" : \"/v1/users\", \"actions\": [\"READ\", \"CREATE\"], \"resources\": [$tagid]},{\"apiName\":\"/v1/tags\",\"actions\":[\"READ\"]}]"
+    run ./cntb create role --name "foo${TEST_SUFFIX}" --permissions "[{\"apiName\" : \"/v1/users\", \"actions\": [\"READ\", \"CREATE\"], \"resources\": [$tagId]},{\"apiName\":\"/v1/tags\",\"actions\":[\"READ\"]}]"
     assert_success
     roleId="$output"
 
@@ -124,6 +128,8 @@ function teardown_file() {
 
     # clean up
     run ./cntb delete role "${roleId}"
+    assert_success
+    run ./cntb delete tag "${tagId}"
     assert_success
 }
 

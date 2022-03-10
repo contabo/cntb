@@ -27,7 +27,7 @@ var permissionGetCommand = &cobra.Command{
 			Size(contaboCmd.Size).
 			OrderBy([]string{contaboCmd.OrderBy})
 
-		if cmd.Flags().Changed("apiName") {
+		if listapipermissionsApiNameFilter != "" {
 			ApiPermissionRetrieveList = ApiPermissionRetrieveList.ApiName(listapipermissionsApiNameFilter)
 		}
 
