@@ -1,3 +1,5 @@
+#!/bin/bash
+
 OAUTH2_URL="${OAUTH2_URL:-https://idm-dev-int.contabo.intra/auth/realms/contabo/protocol/openid-connect/token}"
 OAUTH2_CLIENT_ID="${OAUTH2_CLIENT_ID:-arcus-playground}"
 OAUTH2_CLIENT_SECRET="${OAUTH2_CLIENT_SECRET:-secret}"
@@ -28,14 +30,36 @@ getInternalToken() {
 }
 
 deleteObjectStorage() {
+
   local internal_token=$(getInternalToken)
   curl -s -k -X DELETE "${DELETE_URL}$1" \
     -H "x-request-id: 8246fe75-dc7d-4aeb-9381-750e22f9c2ba" \
     -H "Content-Type: application/json" \
     -H "Authorization: Bearer ${internal_token}" \
     -H "x-contabo-access: true" || true
-  
+
   echo "deleted $1"
+}
+
+deleteObjectsInBucketIfExisting(){
+  ./cntb delete object --region "$1" --bucket "$2" --path "test"
+}
+
+deleteBucketsInRegionIfExisting(){
+  local buckets=$(./cntb get buckets -r "$1" -o=json)
+
+  if [[ "$buckets" != "null" ]]; then
+    local bucketnames=$(echo "$buckets" | jq -r '.[].name')
+
+    local buckets_array=(`echo ${bucketnames}`)
+
+    local num_of_buckets=${#buckets_array[@]}
+
+    for (( i=0; i<${num_of_buckets}; i++ )); do
+      deleteObjectsInBucketIfExisting "$1" ${buckets_array[$i]}
+      ./cntb delete bucket "$1" ${buckets_array[$i]}
+    done
+  fi
 }
 
 getObjectStorageInRegion(){
@@ -44,12 +68,13 @@ getObjectStorageInRegion(){
   echo "$OBJECTSORAGEID"
 }
 
-deleteObjectStorageIfExisting(){
+deleteObjectStorageIfExisting() {
   existingObjectStorage=$(getObjectStorageInRegion "$1")
 
   if  [ ! -z "$existingObjectStorage" ] ; then
+      deleteBucketsInRegionIfExisting "$1"
       deleteObjectStorage "$existingObjectStorage"
-      
+
       sleep 4
 
       deleteObjectStorageIfExisting "$1"

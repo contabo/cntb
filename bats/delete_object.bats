@@ -30,13 +30,15 @@ function teardown_file() {
   run ./cntb create bucket EU ${TEST_SUFFIX}
   assert_success
 
-  run ./cntb create object --region "EU" --bucket ${TEST_SUFFIX} --prefix '/test/${TEST_SUFFIX}'
+  run ./cntb create object --region "EU" --bucket ${TEST_SUFFIX} --prefix '/test/folder'
   assert_success
 
-  run ./cntb delete object --region "EU" --bucket ${TEST_SUFFIX} --path '/test/${TEST_SUFFIX}'
+  run ./cntb delete object --region "EU" --bucket ${TEST_SUFFIX} --path 'test/folder'
   assert_success
 
-  deleteObjectStorageIfExisting "EU"
+  run ./cntb delete bucket EU ${TEST_SUFFIX}
+  assert_success
+
 }
 
 @test 'delete object : ok : delete file' {
@@ -44,18 +46,16 @@ function teardown_file() {
       skip "Skip: test env has no CMS backend"
   fi
 
-  deleteObjectStorageIfExisting "EU"
-  sleep 5
-  run ./cntb create objectStorage --region "EU" --totalPurchasedSpaceTB 1 --scalingState "enabled" --scalingLimitTB 1
-  assert_success
-
   run ./cntb create bucket EU ${TEST_SUFFIX}
   assert_success
 
-  run ./cntb create object --region "EU" --bucket ${TEST_SUFFIX} --prefix '/test/${TEST_SUFFIX}' --path "go.sum"
+  run ./cntb create object --region "EU" --bucket ${TEST_SUFFIX} --prefix '/test/folder' --path "go.sum"
   assert_success
 
-  run ./cntb delete object --region "EU" --bucket ${TEST_SUFFIX} --path '/test/${TEST_SUFFIX}/go.sum'
+  run ./cntb delete object --region "EU" --bucket ${TEST_SUFFIX} --path 'test/folder/go.sum'
+  assert_success
+
+  run ./cntb delete bucket EU ${TEST_SUFFIX}
   assert_success
 
   deleteObjectStorageIfExisting "EU"
@@ -68,15 +68,15 @@ function teardown_file() {
       skip "Skip: test env has no CMS backend"
   fi
 
-  run ./cntb delete object  --bucket ${TEST_SUFFIX} --path '/test/${TEST_SUFFIX}' 
+  run ./cntb delete object  --bucket ${TEST_SUFFIX} --path '/test/${TEST_SUFFIX}'
   assert_failure
   assert_output --partial 'Argument region is empty.'
 
-  run ./cntb delete object --region "EU"  --path '/test/${TEST_SUFFIX}' 
+  run ./cntb delete object --region "EU"  --path '/test/${TEST_SUFFIX}'
   assert_failure
   assert_output --partial 'Argument bucket is empty.'
 
-  run ./cntb delete object --region "EU" --bucket ${TEST_SUFFIX} 
+  run ./cntb delete object --region "EU" --bucket ${TEST_SUFFIX}
   assert_failure
   assert_output --partial 'Argument path is empty.'
 }

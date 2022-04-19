@@ -10,7 +10,7 @@ import (
 	contaboCmd "contabo.com/cli/cntb/cmd"
 	"contabo.com/cli/cntb/cmd/util"
 	authClient "contabo.com/cli/cntb/oauth2Client"
-	jwt "github.com/dgrijalva/jwt-go"
+	jwt "github.com/golang-jwt/jwt"
 	uuid "github.com/satori/go.uuid"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -25,7 +25,6 @@ func DeleteObject(bucketName string, s3Path string, s3Client *minio.Client) {
 		GovernanceBypass: true,
 	}
 
-	fmt.Println("Key is " + s3Path)
 	// Remove / from begining of the path
 	if s.HasPrefix(s3Path, "/") {
 		s3Path = s3Path[1:]

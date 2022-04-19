@@ -31,6 +31,7 @@ function teardown_file() {
   assert_success
   assert_output --partial 'INSTANCEID'
   assert_output --partial 'NAME'
+  assert_output --partial 'DISPLAYNAME'
   assert_output --partial 'STATUS'
   assert_output --partial 'IMAGEID'
   assert_output --partial 'IPV4'
@@ -40,6 +41,7 @@ function teardown_file() {
   assert_success
   assert_output --partial 'INSTANCEID'
   assert_output --partial 'NAME'
+  assert_output --partial 'DISPLAYNAME'
   assert_output --partial 'STATUS'
   assert_output --partial 'IMAGEID'
   assert_output --partial 'REGION'
@@ -52,6 +54,7 @@ function teardown_file() {
   assert_success
   assert_output --partial 'instanceId'
   assert_output --partial 'name'
+  assert_output --partial 'displayName'
   assert_output --partial 'status'
   assert_output --partial 'imageId'
   assert_output --partial 'region'
@@ -66,6 +69,7 @@ function teardown_file() {
   assert_success
   assert_output --partial 'instanceId:'
   assert_output --partial 'name:'
+  assert_output --partial 'displayName:'
   assert_output --partial 'status:'
   assert_output --partial 'imageId:'
   assert_output --partial 'region:'

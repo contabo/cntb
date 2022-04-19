@@ -10,7 +10,7 @@ import (
 	authClient "contabo.com/cli/cntb/oauth2Client"
 	"contabo.com/cli/cntb/outputFormatter"
 
-	jwt "github.com/dgrijalva/jwt-go"
+	jwt "github.com/golang-jwt/jwt"
 	uuid "github.com/satori/go.uuid"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"

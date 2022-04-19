@@ -6,7 +6,7 @@ require (
 	contabo.com/cli/cntb/openapi v0.0.0-00010101000000-000000000000
 	github.com/PaesslerAG/gval v1.1.2 // indirect
 	github.com/PaesslerAG/jsonpath v0.1.1
-	github.com/dgrijalva/jwt-go v3.2.0+incompatible
+	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/gorilla/websocket v1.5.0 // indirect
 	github.com/hprose/hprose-go v0.0.0-20161031134501-83de97da5004
 	github.com/minio/minio-go/v7 v7.0.23

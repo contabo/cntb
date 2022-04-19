@@ -82,7 +82,7 @@ var roleEditCmd = &cobra.Command{
 			log.Fatal("Too many positional arguments.")
 		}
 
-		roleId64, err := strconv.ParseInt(args[0], 10, 64)
+		roleId64, err := strconv.ParseInt(args[1], 10, 64)
 		if err != nil {
 			log.Fatal(fmt.Sprintf("Specified roleId %v is not valid.", args[0]))
 		}

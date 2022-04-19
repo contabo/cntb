@@ -33,6 +33,7 @@ var instanceCreateCmd = &cobra.Command{
 			createInstanceRequest.ProductId = createInstanceProductId
 			createInstanceRequest.Region = createInstanceRegion
 			createInstanceRequest.Period = createInstancePeriod
+			createInstanceRequest.DisplayName = &createInstanceDisplayName
 
 			// optional flags
 			if createInstanceSshKeys != nil {
@@ -91,6 +92,9 @@ var instanceCreateCmd = &cobra.Command{
 		viper.BindPFlag("period", cmd.Flags().Lookup("period"))
 		createInstancePeriod = viper.GetInt64("period")
 
+		viper.BindPFlag("displayName", cmd.Flags().Lookup("displayName"))
+		createInstanceDisplayName = viper.GetString("displayName")
+
 		// optional flags
 		viper.BindPFlag("sshKeys", cmd.Flags().Lookup("sshKeys"))
 		for i := range viper.GetIntSlice("sshKeys") {
@@ -135,6 +139,9 @@ func init() {
 
 	instanceCreateCmd.Flags().StringVar(&createInstanceUserData, "userData", "",
 		`Cloud-init script (user data)`)
+
+	instanceCreateCmd.Flags().StringVar(&createInstanceDisplayName, "displayName", "",
+		`Display name of the instance`)
 
 	instanceCreateCmd.Flags().StringVar(&createInstanceLicense, "license", "",
 		`Additional licence in order to enhance your chosen product.

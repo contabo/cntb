@@ -30,10 +30,15 @@ function teardown_file() {
   run ./cntb create bucket EU ${TEST_SUFFIX}
   assert_success
 
-  run ./cntb create object --region "EU" --bucket ${TEST_SUFFIX} --prefix '/test/${TEST_SUFFIX}'
+  run ./cntb create object --region "EU" --bucket ${TEST_SUFFIX} --prefix '/test/folder'
   assert_success
 
-  deleteObjectStorageIfExisting "EU"
+  run ./cntb delete object --region "EU" --bucket ${TEST_SUFFIX} --path 'test/folder'
+  assert_success
+
+  run ./cntb delete bucket EU ${TEST_SUFFIX}
+  assert_success
+
 }
 
 @test 'create object : ok : upload file' {
@@ -41,15 +46,16 @@ function teardown_file() {
       skip "Skip: test env has no CMS backend"
   fi
 
-  deleteObjectStorageIfExisting "EU"
-  sleep 5
-  run ./cntb create objectStorage --region "EU" --totalPurchasedSpaceTB 1 --scalingState "enabled" --scalingLimitTB 1
-  assert_success
-
   run ./cntb create bucket EU ${TEST_SUFFIX}
   assert_success
 
-  run ./cntb create object --region "EU" --bucket ${TEST_SUFFIX} --prefix '/test/${TEST_SUFFIX}' --path "go.sum"
+  run ./cntb create object --region "EU" --bucket ${TEST_SUFFIX} --prefix '/test/folder' --path "go.sum"
+  assert_success
+
+  run ./cntb delete object --region "EU" --bucket ${TEST_SUFFIX} --path 'test/folder/go.sum'
+  assert_success
+
+  run ./cntb delete bucket EU ${TEST_SUFFIX}
   assert_success
 
   deleteObjectStorageIfExisting "EU"

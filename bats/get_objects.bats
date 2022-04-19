@@ -29,7 +29,7 @@ function teardown_file() {
   run ./cntb create bucket EU ${TEST_SUFFIX}
   assert_success
 
-  run ./cntb create object --region "EU" --bucket ${TEST_SUFFIX} --prefix '/test/${TEST_SUFFIX}'
+  run ./cntb create object --region "EU" --bucket ${TEST_SUFFIX} --prefix '/test/folder'
   assert_success
 
   run ./cntb get objects --region "EU" --bucket ${TEST_SUFFIX}
@@ -37,6 +37,12 @@ function teardown_file() {
   assert_output --partial 'NAME'
   assert_output --partial 'SIZE'
   assert_output --partial 'LASTMODIFIED'
+
+  run ./cntb delete object --region "EU" --bucket ${TEST_SUFFIX} --path 'test/folder'
+  assert_success
+
+  run ./cntb delete bucket EU ${TEST_SUFFIX}
+  assert_success
 
   deleteObjectStorageIfExisting "EU"
 }

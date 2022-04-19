@@ -28,29 +28,27 @@ function teardown_file() {
   run ./cntb get buckets
   assert_success
   assert_output --partial 'NAME'
+
+  run ./cntb delete EU ${TEST_SUFFIX}
+  assert_success
 }
 
 @test 'get buckets wide: ok' {
-  deleteObjectStorageIfExisting "EU"
 
-  run ./cntb create objectStorage --region "EU" --totalPurchasedSpaceTB 1 --scalingState "enabled" --scalingLimitTB 1
-  assert_success
-
-  run ./cntb create bucket EU ${TEST_SUFFIX}
-  assert_success
+ run ./cntb create bucket EU ${TEST_SUFFIX}
+ assert_success
 
   run ./cntb get buckets -o wide
   assert_success
 
   assert_output --partial 'NAME'
   assert_output --partial 'CREATIONDATE'
+
+  run ./cntb delete bucket EU ${TEST_SUFFIX}
+  assert_success
 }
 
 @test 'get buckets : ok : format json' {
-  deleteObjectStorageIfExisting "EU"
-
-  run ./cntb create objectStorage --region "EU" --totalPurchasedSpaceTB 1 --scalingState "enabled" --scalingLimitTB 1
-  assert_success
 
   run ./cntb create bucket EU ${TEST_SUFFIX}
   assert_success
@@ -60,14 +58,12 @@ function teardown_file() {
 
   assert_output --partial '"creationDate"'
   assert_output --partial '"name"'
+
+  run ./cntb delete bucket EU ${TEST_SUFFIX}
+  assert_success
 }
 
 @test 'get buckets : ok : format yaml' {
-  deleteObjectStorageIfExisting "EU"
-
-  run ./cntb create objectStorage --region "EU" --totalPurchasedSpaceTB 1 --scalingState "enabled" --scalingLimitTB 1
-  assert_success
-
   run ./cntb create bucket EU ${TEST_SUFFIX}
   assert_success
 
@@ -76,13 +72,12 @@ function teardown_file() {
 
   assert_output --partial '"creationDate":'
   assert_output --partial '"name":'
+
+  run ./cntb delete bucket EU ${TEST_SUFFIX}
+  assert_success
 }
 
 @test 'get buckets : ok : specify region' {
-  deleteObjectStorageIfExisting "EU"
-
-  run ./cntb create objectStorage --region "EU" --totalPurchasedSpaceTB 1 --scalingState "enabled" --scalingLimitTB 1
-  assert_success
 
   run ./cntb create bucket EU ${TEST_SUFFIX}
   assert_success
@@ -91,15 +86,15 @@ function teardown_file() {
   assert_success
 
   assert_output --partial 'NAME'
+
+  run ./cntb delete  bucket EU ${TEST_SUFFIX}
+  assert_success
+
+  deleteObjectStorageIfExisting "EU"
 }
 
 
 @test 'get buckets : nok : specify invalid region' {
-  deleteObjectStorageIfExisting "EU"
-
-  run ./cntb create objectStorage --region "EU" --totalPurchasedSpaceTB 1 --scalingState "enabled" --scalingLimitTB 1
-  assert_success
-
   run ./cntb get buckets -r EUO
   assert_failure
   assert_output --partial 'No Object Storage could be found in this region'

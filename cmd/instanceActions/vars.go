@@ -19,3 +19,8 @@ var (
 var (
 	stopInstanceId int64
 )
+
+// stop
+var (
+	shutdownInstanceId int64
+)

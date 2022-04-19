@@ -1,8 +1,8 @@
 #!/usr/bin/env bats
 
-load handling_conf_files.bash
-load globals.bash
-load cleanup-object-storage.bash
+load handling_conf_files
+load globals
+load cleanup-object-storage
 load_lib bats-support
 load_lib bats-assert
 

@@ -27,6 +27,7 @@ function teardown_file() {
   assert_success
   assert_output --partial 'OBJECTSTORAGEID'
   assert_output --partial 'DATACENTER'
+  assert_output --partial 'REGION'
   assert_output --partial 'CREATEDDATE'
   assert_output --partial 'TOTALPURCHASEDSPACETB'
 }
@@ -38,6 +39,7 @@ function teardown_file() {
   assert_success
   assert_output --partial 'OBJECTSTORAGEID'
   assert_output --partial 'DATACENTER'
+  assert_output --partial 'REGION'
   assert_output --partial 'CREATEDDATE'
   assert_output --partial 'STATUS'
   assert_output --partial 'TOTALPURCHASEDSPACETB'
