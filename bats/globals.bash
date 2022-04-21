@@ -4,6 +4,7 @@ CURRENTEPOCTIME=`date +%s`
 CURRENTEPOCTIME_NANAO=`date +%s%N`
 USER_ID="${OAUTH2_USER_ID:-3e97f2b0-eccd-497b-8516-79a6708a9cf4}"
 TEST_SUFFIX="$CURRENTEPOCTIME-integration-cli"
+TEST_BUCKET_NAME="test123-integration-cli"
 IMAGE_DOWNLOAD_URL='https://dl-cdn.alpinelinux.org/alpine/v3.13/releases/s390x/alpine-standard-3.13.5-s390x.iso'
 INSTANCE_ID=100
 REINSTALL_INSTANCE_ID=105

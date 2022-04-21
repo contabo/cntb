@@ -9,7 +9,6 @@ KEYCLOAK_PASSWORD="${KEYCLOAK_PASSWORD:-pass}"
 KEYCLOACK_CLIENT_ID="${KEYCLOACK_CLIENT_ID:-admin-cli}"
 DELETE_URL="${DELETE_URL:-https://storage-object-storage-dev-int.contabo.intra/internal/v1/object-storages/}"
 
-
 getInternalToken() {
   TOKEN=$(curl -s \
     -d "client_id=${KEYCLOACK_CLIENT_ID}" \
@@ -30,7 +29,6 @@ getInternalToken() {
 }
 
 deleteObjectStorage() {
-
   local internal_token=$(getInternalToken)
   curl -s -k -X DELETE "${DELETE_URL}$1" \
     -H "x-request-id: 8246fe75-dc7d-4aeb-9381-750e22f9c2ba" \
@@ -41,44 +39,22 @@ deleteObjectStorage() {
   echo "deleted $1"
 }
 
-deleteObjectsInBucketIfExisting(){
-  ./cntb delete object --region "$1" --bucket "$2" --path "test"
-}
-
-deleteBucketsInRegionIfExisting(){
-  local buckets=$(./cntb get buckets -r "$1" -o=json)
-
-  if [[ "$buckets" != "null" ]]; then
-    local bucketnames=$(echo "$buckets" | jq -r '.[].name')
-
-    local buckets_array=(`echo ${bucketnames}`)
-
-    local num_of_buckets=${#buckets_array[@]}
-
-    for (( i=0; i<${num_of_buckets}; i++ )); do
-      deleteObjectsInBucketIfExisting "$1" ${buckets_array[$i]}
-      ./cntb delete bucket "$1" ${buckets_array[$i]}
-    done
-  fi
-}
-
 getObjectStorageInRegion(){
   OBJECTSTORAGE=$(./cntb get objectStorages --regionName "$1" -o=json)
   OBJECTSORAGEID=$(echo "$OBJECTSTORAGE" | jq -r '.[].objectStorageId')
   echo "$OBJECTSORAGEID"
 }
 
-deleteObjectStorageIfExisting() {
+deleteObjectStorageIfExisting(){
   existingObjectStorage=$(getObjectStorageInRegion "$1")
 
   if  [ ! -z "$existingObjectStorage" ] ; then
-      deleteBucketsInRegionIfExisting "$1"
-      deleteObjectStorage "$existingObjectStorage"
+    deleteObjectStorage "$existingObjectStorage"
 
-      sleep 4
+    sleep 8
 
-      deleteObjectStorageIfExisting "$1"
-  else
-    sleep 4
+    deleteObjectStorageIfExisting "$1"
+  else  
+    sleep 8
   fi
 }

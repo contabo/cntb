@@ -55,7 +55,7 @@ func SaveConfigFile(config *config.Configuration) {
 	if err != nil {
 		log.Fatal(fmt.Sprintf("Could handle new values as they lead to errors %v", err))
 	}
-	err = os.WriteFile(cfgFile, newYamlFile, 0644)
+	err = os.WriteFile(cfgFile, newYamlFile, 0600)
 	if err != nil {
 		log.Fatal(fmt.Sprintf("Could not store to %v due to %v", cfgFile, err))
 	}

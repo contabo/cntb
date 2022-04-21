@@ -3,13 +3,13 @@ package cmd
 import (
 	"context"
 	"fmt"
+	"net/url"
 	"os"
 	"path/filepath"
-
-	//"path"
+	"strings"
+	"time"
 
 	s "strings"
-	"time"
 
 	"contabo.com/cli/cntb/client"
 	contaboCmd "contabo.com/cli/cntb/cmd"
@@ -20,8 +20,6 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-
-	"net/url"
 
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
@@ -36,6 +34,8 @@ func PutObject(localPath string, isDir bool, s3Prefix string, s3Client *minio.Cl
 	relativePath = filepath.ToSlash(relativePath) // converts seperator according os setting to slash
 
 	s3Path := filepath.Join(s3Prefix, relativePath)
+	s3Path = strings.Replace(s3Path, "\\", "/", -1)
+
 	// remove / at the beginning to avoid multiple / in the request url
 	if s.HasPrefix(s3Path, "/") {
 		s3Path = s3Path[1:]
@@ -57,7 +57,6 @@ func PutObject(localPath string, isDir bool, s3Prefix string, s3Client *minio.Cl
 		_, err = s3Client.PutObject(context.Background(), createObjectBucketName, s3Path, object, objectStat.Size(), minio.PutObjectOptions{ContentType: "application/octet-stream"})
 
 		if err != nil {
-
 			if s.Contains(err.Error(), "API rate limit exceeded") { // retry in case of rate limit exceeded eror
 				time.Sleep(1000 * time.Millisecond)
 				_, err = s3Client.PutObject(context.Background(), createObjectBucketName, s3Path, object, objectStat.Size(), minio.PutObjectOptions{ContentType: "application/octet-stream"})
@@ -68,7 +67,6 @@ func PutObject(localPath string, isDir bool, s3Prefix string, s3Client *minio.Cl
 				log.Fatal(fmt.Sprintf("Could not create object file %v. Got error %v", s3Path, err))
 				return
 			}
-
 		}
 
 		fmt.Printf("uploaded file : %s\n", s3Path)
@@ -83,7 +81,6 @@ func PutObject(localPath string, isDir bool, s3Prefix string, s3Client *minio.Cl
 		}
 
 		_, err := s3Client.PutObject(context.Background(), createObjectBucketName, s3Path, nil, 0, minio.PutObjectOptions{})
-
 		if err != nil {
 			if s.Contains(err.Error(), "API rate limit exceeded") { // retry in case of rate limit exceeded eror
 				time.Sleep(1000 * time.Millisecond)
@@ -98,7 +95,6 @@ func PutObject(localPath string, isDir bool, s3Prefix string, s3Client *minio.Cl
 		}
 		fmt.Printf("uploaded folder : %s\n", s3Path)
 	}
-
 }
 
 var objectCreateCmd = &cobra.Command{
@@ -107,7 +103,6 @@ var objectCreateCmd = &cobra.Command{
 	Long:    `Creates a S3 object in the given bucket.`,
 	Example: `cntb create object --region EU --bucket bucket123 --prefix prefix1/ --path  path1 `,
 	Run: func(cmd *cobra.Command, args []string) {
-
 		// get list of object storage
 		ApiRetrieveObjectStorageListRequest := client.ApiClient().
 			ObjectStoragesApi.RetrieveObjectStorageList(context.Background()).
@@ -186,7 +181,6 @@ var objectCreateCmd = &cobra.Command{
 		} else { // if user wants to create folder (prefix) on s3
 			PutObject("", true, createObjectPrefix, s3Client)
 		}
-
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
 		contaboCmd.ValidateCreateInput()
@@ -236,5 +230,4 @@ func init() {
 	objectCreateCmd.Flags().StringVarP(&createObjectBucketName, "bucket", "b", "", `Bucket where the object will be created.`)
 	objectCreateCmd.Flags().StringVar(&createObjectPrefix, "prefix", "", `Prefix to be added to the stored object.`)
 	objectCreateCmd.Flags().StringVar(&createObjectPath, "path", "", `file or folder where the object will be stored.`)
-
 }

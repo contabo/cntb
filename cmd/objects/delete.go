@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/url"
+	"strings"
 	s "strings"
 
 	"contabo.com/cli/cntb/client"
@@ -25,13 +26,14 @@ func DeleteObject(bucketName string, s3Path string, s3Client *minio.Client) {
 		GovernanceBypass: true,
 	}
 
+	s3Path = strings.Replace(s3Path, "\\", "/", -1)
+
 	// Remove / from begining of the path
 	if s.HasPrefix(s3Path, "/") {
 		s3Path = s3Path[1:]
 	}
 
 	err := s3Client.RemoveObject(context.Background(), bucketName, s3Path, opts)
-
 	if err != nil {
 		log.Fatal("Error in deleting object %v . Error is : %v", s3Path, err.Error())
 		return
@@ -110,7 +112,6 @@ var objectDeleteCmd = &cobra.Command{
 
 		}
 		fmt.Printf("Number of deleted objects is %v \n", counter)
-
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
 		contaboCmd.ValidateCreateInput()
@@ -157,5 +158,4 @@ func init() {
 	objectDeleteCmd.Flags().StringVarP(&deleteObjectRegion, "region", "r", "", `Region where the objectStorage is located.`)
 	objectDeleteCmd.Flags().StringVarP(&deleteObjectBucketName, "bucket", "b", "", `Bucket where the object will be deleted from.`)
 	objectDeleteCmd.Flags().StringVarP(&deleteObjectPath, "path", "p", "", `Path where the object will be deleted from.`)
-
 }
