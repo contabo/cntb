@@ -60,6 +60,23 @@ packages:
   - httpd'
 ```
 
+Using Cloud-Init to send files local for your bucket
+```sh
+cntb create object --region "United States (Central) 1" --bucket <your bucket name> --path <path of your file> --prefix /
+```
+Notes: 
+ * the prefix tag is the locale path of the file in the bucket.
+ * the --region is specificities for the region where the bucket is located. You can find the region of your bucket in call the command bellow.
+
+Using Cloud-Init to list all buckets and your regions
+```sh
+cntb get objectStorages 
+
+
+OBJECTSTORAGEID                       DATACENTER                 REGION                   CREATEDDATE               TOTALPURCHASEDSPACETB  
+444e44f4-5555-4f4f-8f88-f1f5555fff1f  United States (Central) 1  United States (Central)  2022-04-30T00:00:13.356Z  0.25 
+```
+
 ### Start Compute Instance
 
 ```sh
