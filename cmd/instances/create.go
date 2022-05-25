@@ -52,6 +52,9 @@ var instanceCreateCmd = &cobra.Command{
 			if createInstanceLicense != "" {
 				createInstanceRequest.License = &createInstanceLicense
 			}
+			if createInstanceDefaultUser != "" {
+				createInstanceRequest.DefaultUser = &createInstanceDefaultUser
+			}
 
 		default:
 			// from file / stdin
@@ -94,6 +97,9 @@ var instanceCreateCmd = &cobra.Command{
 
 		viper.BindPFlag("displayName", cmd.Flags().Lookup("displayName"))
 		createInstanceDisplayName = viper.GetString("displayName")
+
+		viper.BindPFlag("defaultUser", cmd.Flags().Lookup("defaultUser"))
+		createInstanceDefaultUser = viper.GetString("defaultUser")
 
 		// optional flags
 		viper.BindPFlag("sshKeys", cmd.Flags().Lookup("sshKeys"))
@@ -142,6 +148,9 @@ func init() {
 
 	instanceCreateCmd.Flags().StringVar(&createInstanceDisplayName, "displayName", "",
 		`Display name of the instance`)
+
+	instanceCreateCmd.Flags().StringVar(&createInstanceDefaultUser, "defaultUser", "admin",
+		`The default user of the instance [root, admin, administrator]`)
 
 	instanceCreateCmd.Flags().StringVar(&createInstanceLicense, "license", "",
 		`Additional licence in order to enhance your chosen product.

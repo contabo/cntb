@@ -202,8 +202,6 @@ function teardown_file() {
   assert_output --partial 'OBJECTSTORAGEID'
   assert_output --partial 'ACTION'
   assert_output --partial 'TIMESTAMP'
-  # content
-  assert_output --partial 'CREATED'
 }
 
 ## create bucket

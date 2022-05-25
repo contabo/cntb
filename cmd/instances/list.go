@@ -47,10 +47,10 @@ var instancesGetCmd = &cobra.Command{
 
 		configFormatter := outputFormatter.FormatterConfig{
 			Filter: []string{
-				"instanceId", "name", "displayName", "status", "imageId", "region", "productId", "ipv4", "ipv6",
+				"instanceId", "name", "displayName", "status", "imageId", "region", "productId", "ipv4", "ipv6", "defaultUser",
 			},
 			WideFilter: []string{
-				"instanceId", "name", "displayName", "status", "imageId", "region", "productId", "customerId", "tenantId", "ipv4", "ipv6",
+				"instanceId", "name", "displayName", "status", "imageId", "region", "productId", "customerId", "tenantId", "ipv4", "ipv6", "defaultUser",
 			},
 			JsonPath: contaboCmd.OutputFormatDetails,
 		}

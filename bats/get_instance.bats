@@ -36,6 +36,7 @@ function teardown_file() {
   assert_output --partial 'IMAGEID'
   assert_output --partial 'IPV4'
   assert_output --partial 'IPV6'
+  assert_output --partial 'DEFAULTUSER'
 
   run ./cntb get instance "$instanceId" -o wide
   assert_success
@@ -49,6 +50,7 @@ function teardown_file() {
   assert_output --partial 'CUSTOMERID'
   assert_output --partial 'IPV4'
   assert_output --partial 'IPV6'
+  assert_output --partial 'DEFAULTUSER'
 
   run ./cntb get instance "$instanceId" -o json
   assert_success
@@ -63,6 +65,7 @@ function teardown_file() {
   assert_output --partial 'ipv4'
   assert_output --partial 'ipv6'
   assert_output --partial 'ipConfig'
+  assert_output --partial 'defaultUser'
 
 
   run ./cntb get instance "$instanceId" -o yaml
@@ -78,6 +81,7 @@ function teardown_file() {
   assert_output --partial 'ipv4:'
   assert_output --partial 'ipv6:'
   assert_output --partial 'ipConfig:'
+  assert_output --partial 'defaultUser:'
 }
 
 @test "get instance wrong instance id type: nok" {

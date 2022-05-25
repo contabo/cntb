@@ -16,6 +16,7 @@ var (
 	createInstancePeriod       int64
 	createInstanceLicense      string
 	createInstanceDisplayName  string
+	createInstanceDefaultUser  string
 )
 
 // get
@@ -40,10 +41,11 @@ var (
 	reinstallInstanceSshKeys      []int64
 	reinstallInstanceRootPassword int64
 	reinstallInstanceUserData     string
+	reinstallInstanceDefaultUser  string
 )
 
 // update
 var (
-	updateInstanceId           int64
+	updateInstanceId          int64
 	updateInstanceDisplayName string
 )

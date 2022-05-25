@@ -42,6 +42,9 @@ var instanceReinstallCmd = &cobra.Command{
 			if reinstallInstanceUserData != "" {
 				instanceReinstallRequest.UserData = &reinstallInstanceUserData
 			}
+			if reinstallInstanceDefaultUser != "" {
+				instanceReinstallRequest.DefaultUser = &reinstallInstanceDefaultUser
+			}
 
 		default:
 			// from file / stdin
@@ -92,6 +95,9 @@ var instanceReinstallCmd = &cobra.Command{
 		viper.BindPFlag("userData", cmd.Flags().Lookup("userData"))
 		reinstallInstanceUserData = viper.GetString("userData")
 
+		viper.BindPFlag("defaultUser", cmd.Flags().Lookup("defaultUser"))
+		reinstallInstanceDefaultUser = viper.GetString("defaultUser")
+
 		instanceId64, err := strconv.ParseInt(args[0], 10, 64)
 		if err != nil {
 			log.Fatal(fmt.Sprintf("Provided instanceId %v is not valid", args[0]))
@@ -120,8 +126,11 @@ func init() {
 		`ids of stored SSH public keys. Applicable for Linux/BSD systems.`)
 
 	instanceReinstallCmd.Flags().Int64Var(&reinstallInstanceRootPassword, "rootPassword", 0,
-		`id of stored password. User is admin with admistrative/root privileges. For Linux/BSD based systems please use SSH. For Windows please use RDP.`)
+		`id of stored password. User is admin with administrative/root privileges. For Linux/BSD based systems please use SSH. For Windows please use RDP.`)
 
 	instanceReinstallCmd.Flags().StringVar(&reinstallInstanceUserData, "userData", "",
 		`instance user data`)
+
+	instanceReinstallCmd.Flags().StringVar(&reinstallInstanceDefaultUser, "defaultUser", "admin",
+		`The default user of the instance [root, admin, administrator]`)
 }
