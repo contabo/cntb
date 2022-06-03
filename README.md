@@ -66,7 +66,7 @@ cntb create object --region "United States (Central) 1" --bucket <your bucket na
 ```
 Notes: 
  * the prefix tag is the locale path of the file in the bucket.
- * the --region is specificities for the region where the bucket is located. You can find the region of your bucket in call the command bellow.
+ * the --region is specificities for the region where the bucket is located. You can find your bucket region with command below.
 
 Using Cloud-Init to list all buckets and your regions
 ```sh
