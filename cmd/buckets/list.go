@@ -37,8 +37,7 @@ var listBucketsCmd = &cobra.Command{
 			Size(contaboCmd.Size)
 
 		if listRegionFilter != "" {
-			ApiRetrieveObjectStorageListRequest = ApiRetrieveObjectStorageListRequest.
-				DataCenterName(listRegionFilter)
+			ApiRetrieveObjectStorageListRequest = ApiRetrieveObjectStorageListRequest.Region(listRegionFilter)
 		}
 
 		objStorageListresponse, httpResp, err := ApiRetrieveObjectStorageListRequest.Execute()

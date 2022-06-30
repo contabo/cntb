@@ -17,7 +17,7 @@ import (
 var objectsStorageGetCmd = &cobra.Command{
 	Use:     "objectStorages",
 	Short:   "All about your object storages.",
-	Long:    `Retrieves information about one or multiple object storages. Filter by name.`,
+	Long:    `Retrieves information about one or multiple object storages. Filter by region name or region slug`,
 	Example: `cntb get objectStorages`,
 	Run: func(cmd *cobra.Command, args []string) {
 		ApiRetrieveObjectStorageListRequest := client.ApiClient().
@@ -27,8 +27,11 @@ var objectsStorageGetCmd = &cobra.Command{
 			Size(contaboCmd.Size)
 
 		if listRegionNameFilter != "" {
-			ApiRetrieveObjectStorageListRequest = ApiRetrieveObjectStorageListRequest.
-				DataCenterName(listRegionNameFilter)
+			ApiRetrieveObjectStorageListRequest = ApiRetrieveObjectStorageListRequest.DataCenterName(listRegionNameFilter)
+		}
+
+		if listRegionSlugFilter != "" {
+			ApiRetrieveObjectStorageListRequest = ApiRetrieveObjectStorageListRequest.Region(listRegionSlugFilter)
 		}
 
 		resp, httpResp, err := ApiRetrieveObjectStorageListRequest.Execute()
@@ -56,6 +59,9 @@ var objectsStorageGetCmd = &cobra.Command{
 		viper.BindPFlag("regionName", cmd.Flags().Lookup("regionName"))
 		listRegionNameFilter = viper.GetString("regionName")
 
+		viper.BindPFlag("regionSlug", cmd.Flags().Lookup("regionSlug"))
+		listRegionSlugFilter = viper.GetString("regionSlug")
+
 		return nil
 	},
 }
@@ -65,4 +71,7 @@ func init() {
 
 	objectsStorageGetCmd.Flags().StringVar(&listRegionNameFilter, "regionName", "",
 		`Filter by region name.`)
+
+	objectsStorageGetCmd.Flags().StringVar(&listRegionSlugFilter, "regionSlug", "",
+		`Filter by region slug.`)
 }

@@ -35,7 +35,7 @@ func DeleteObject(bucketName string, s3Path string, s3Client *minio.Client) {
 
 	err := s3Client.RemoveObject(context.Background(), bucketName, s3Path, opts)
 	if err != nil {
-		log.Fatal("Error in deleting object %v . Error is : %v", s3Path, err.Error())
+		log.Fatal(fmt.Sprintf("Error in deleting object %v . Error is : %v", s3Path, err))
 		return
 	}
 	fmt.Println("Deleted object  " + s3Path)
@@ -53,8 +53,7 @@ var objectDeleteCmd = &cobra.Command{
 			XRequestId(uuid.NewV4().String()).
 			Page(contaboCmd.Page).
 			Size(contaboCmd.Size)
-		ApiRetrieveObjectStorageListRequest = ApiRetrieveObjectStorageListRequest.
-			DataCenterName(deleteObjectRegion)
+		ApiRetrieveObjectStorageListRequest = ApiRetrieveObjectStorageListRequest.Region(deleteObjectRegion)
 
 		objStorageListresponse, httpResp, err := ApiRetrieveObjectStorageListRequest.Execute()
 		util.HandleErrors(err, httpResp, "while retrieving object storages")

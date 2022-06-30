@@ -54,8 +54,7 @@ var objectsGetCmd = &cobra.Command{
 			Page(contaboCmd.Page).
 			Size(contaboCmd.Size)
 
-		ApiRetrieveObjectStorageListRequest = ApiRetrieveObjectStorageListRequest.
-			DataCenterName(listObjectsRegion)
+		ApiRetrieveObjectStorageListRequest = ApiRetrieveObjectStorageListRequest.Region(listObjectsRegion)
 
 		objStorageListresponse, httpResp, err := ApiRetrieveObjectStorageListRequest.Execute()
 		util.HandleErrors(err, httpResp, "while retrieving object storages")

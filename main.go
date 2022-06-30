@@ -9,6 +9,7 @@ import (
 	_ "contabo.com/cli/cntb/cmd/instances"
 	_ "contabo.com/cli/cntb/cmd/objectStorage"
 	_ "contabo.com/cli/cntb/cmd/objects"
+	_ "contabo.com/cli/cntb/cmd/privateNetwork"
 	_ "contabo.com/cli/cntb/cmd/roles"
 	_ "contabo.com/cli/cntb/cmd/secrets"
 	_ "contabo.com/cli/cntb/cmd/snapshots"

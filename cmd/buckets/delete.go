@@ -30,8 +30,7 @@ var deleteBucketsCmd = &cobra.Command{
 			Page(contaboCmd.Page).
 			Size(contaboCmd.Size)
 
-		ApiRetrieveObjectStorageListRequest = ApiRetrieveObjectStorageListRequest.
-			DataCenterName(deleteRegion)
+		ApiRetrieveObjectStorageListRequest = ApiRetrieveObjectStorageListRequest.Region(deleteRegion)
 
 		objStorageListresponse, httpResp, err := ApiRetrieveObjectStorageListRequest.Execute()
 		util.HandleErrors(err, httpResp, "while retrieving object storages")

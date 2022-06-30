@@ -49,3 +49,9 @@ var (
 	updateInstanceId          int64
 	updateInstanceDisplayName string
 )
+
+//upgrade
+var (
+	upgradeInstanceId  int64
+	upgradeAddonIds  []int64
+)

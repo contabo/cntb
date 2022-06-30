@@ -9,13 +9,16 @@ endif
 ifndef OPENAPIVOLUME
 	OPENAPIVOLUME = "$(CURDIR):/local"
 endif
+ifndef OPENAPIIMAGE
+	OPENAPIIMAGE = "openapitools/openapi-generator-cli:v5.2.1"
+endif
 .PHONY: build
-build: generate-api-clients build-only unittest
+build: generate-api-clients build-only
 
 .PHONY: generate-api-clients
 generate-api-clients:
 	rm -rf openapi
-	docker run --rm -v $(OPENAPIVOLUME) --env JAVA_OPTS=$(JAVAOPT) openapitools/openapi-generator-cli:v5.2.1 generate \
+	docker run --rm -v $(OPENAPIVOLUME) --env JAVA_OPTS=$(JAVAOPT) $(OPENAPIIMAGE) generate \
 	--skip-validate-spec \
 	--input-spec $(OPENAPIURL) \
 	--generator-name  go \
@@ -29,10 +32,6 @@ build-only:
 	go mod tidy
 	go mod download
 	export VERSION=$$(git rev-list --tags --max-count=1 | xargs -I {} git describe --tags {}); export COMMIT=$$(git rev-parse HEAD); export TIMESTAMP=$$(date -u +"%Y-%m-%dT%H:%M:%SZ"); go build -ldflags="-w -s -X \"contabo.com/cli/cntb/cmd.version=$$VERSION\" -X \"contabo.com/cli/cntb/cmd.commit=$$COMMIT\" -X \"contabo.com/cli/cntb/cmd.date=$$TIMESTAMP\""
-
-.PHONY: unittest
-unittest:
-	go test ./...
 
 .PHONY: bats
 bats: build bats-only

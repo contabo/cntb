@@ -38,8 +38,13 @@ var instancesGetCmd = &cobra.Command{
 		arr := make([]jmap, 0)
 		for _, entry := range resp.Data {
 			entryModified, _ := util.StructToMap(entry)
-			entryModified["ipv4"] = entry.IpConfig.V4.Ip
-			entryModified["ipv6"] = entry.IpConfig.V6.Ip
+			if entry.IpConfig != nil {
+				entryModified["ipv4"] = entry.IpConfig.V4.Ip
+				entryModified["ipv6"] = entry.IpConfig.V6.Ip
+			} else {
+				entryModified["ipv4"] = ""
+				entryModified["ipv6"] = ""
+			}
 			arr = append(arr, entryModified)
 		}
 

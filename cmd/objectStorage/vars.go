@@ -18,6 +18,7 @@ var (
 // list
 var (
 	listRegionNameFilter string
+	listRegionSlugFilter string
 )
 
 // resize
