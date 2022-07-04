@@ -12,7 +12,7 @@ type PrivateNetwork struct {
 	PrivateNetworkId int64    `json:"privateNetworkId"`
 	Name             string   `json:"name"`
 	Description      string   `json:"description"`
-	Region           string   `json:"region"`
+	RegionName       string   `json:"regionName"`
 	DataCenter       string   `json:"dataCenter"`
 	Cidr             string   `json:"cidr"`
 	AvailableIps     int64    `json:"availableIps"`
@@ -23,7 +23,7 @@ func SetPrivateNetwork(
 	PrivateNetworkId int64,
 	Name string,
 	Description string,
-	Region string,
+	RegionName string,
 	DataCenter string,
 	Cidr string,
 	AvailableIps int64) *PrivateNetwork {
@@ -31,7 +31,7 @@ func SetPrivateNetwork(
 	privateNetwork.PrivateNetworkId = PrivateNetworkId
 	privateNetwork.Name = Name
 	privateNetwork.Description = Description
-	privateNetwork.Region = Region
+	privateNetwork.RegionName = RegionName
 	privateNetwork.DataCenter = DataCenter
 	privateNetwork.Cidr = Cidr
 	privateNetwork.AvailableIps = AvailableIps
@@ -43,7 +43,7 @@ func mapInstancesToIds(data []openapi.PrivateNetworkResponse) ([]byte, error) {
 	if viper.GetString("output") != "json" && viper.GetString("output") != "yaml" {
 		vpn := data[0]
 		var privateNetworks []*PrivateNetwork
-		privateNetwork := SetPrivateNetwork(vpn.PrivateNetworkId, vpn.Name, vpn.Description, vpn.Region, vpn.DataCenter, vpn.Cidr, vpn.AvailableIps)
+		privateNetwork := SetPrivateNetwork(vpn.PrivateNetworkId, vpn.Name, vpn.Description, vpn.RegionName, vpn.DataCenter, vpn.Cidr, vpn.AvailableIps)
 		var len = len(vpn.Instances)
 		// if instance list has elements
 		if len > 0 {

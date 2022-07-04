@@ -41,7 +41,7 @@ var privateNetworksGetCmd = &cobra.Command{
 		if viper.GetString("output") != "json" && viper.GetString("output") != "yaml" {
 			var privateNetworks []*PrivateNetwork
 			for _, vpn := range resp.Data {
-				privateNetwork := SetPrivateNetwork(vpn.PrivateNetworkId, vpn.Name, vpn.Description, vpn.Region, vpn.DataCenter, vpn.Cidr, vpn.AvailableIps)
+				privateNetwork := SetPrivateNetwork(vpn.PrivateNetworkId, vpn.Name, vpn.Description, vpn.RegionName, vpn.DataCenter, vpn.Cidr, vpn.AvailableIps)
 				var len = len(vpn.Instances)
 				// if instance list has elements
 				if len > 0 {
@@ -57,8 +57,8 @@ var privateNetworksGetCmd = &cobra.Command{
 		}
 
 		configFormatter := outputFormatter.FormatterConfig{
-			Filter:     []string{"privateNetworkId", "name", "description", "region", "dataCenter"},
-			WideFilter: []string{"privateNetworkId", "name", "description", "region", "dataCenter", "cidr", "availableIps", "instances"},
+			Filter:     []string{"privateNetworkId", "name", "description", "regionName", "dataCenter"},
+			WideFilter: []string{"privateNetworkId", "name", "description", "regionName", "dataCenter", "cidr", "availableIps", "instances"},
 			JsonPath:   contaboCmd.OutputFormatDetails,
 		}
 
