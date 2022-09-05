@@ -21,18 +21,16 @@ var instanceUpgradeCmd = &cobra.Command{
 	Use:     "instance [instanceId]",
 	Short:   "Update a specific instance.",
 	Long:    `Updates a specific instance based on json / yaml input or arguments.`,
-	Example: `cntb upgrade instance 123 --addons=1,2`,
+	Example: `cntb upgrade instance 123 --privateNetworking=true`,
 	Run: func(cmd *cobra.Command, args []string) {
 		upgradeInstanceRequest := *instancesClient.NewUpgradeInstanceRequestWithDefaults()
 		content := contaboCmd.OpenStdinOrFile()
 
 		switch content {
 		case nil:
-
-			if upgradeAddonIds != nil {
-				upgradeInstanceRequest.AddOns = upgradeAddonIds
+			if privateNetworking == "true" {
+				upgradeInstanceRequest.PrivateNetworking = &map[string]interface{}{}
 			}
-
 		default:
 			// from file / stdin
 			var requestFromFile instancesClient.UpgradeInstanceRequest
@@ -67,10 +65,21 @@ var instanceUpgradeCmd = &cobra.Command{
 			log.Fatal("Please provide an instanceId")
 		}
 
-		viper.BindPFlag("addons", cmd.Flags().Lookup("addons"))
-		for i := range viper.GetIntSlice("addons") {
-			upgradeAddonIds[i] = int64(viper.GetIntSlice("addons")[i])
+		viper.BindPFlag("privateNetworking", cmd.Flags().Lookup("privateNetworking"))
+		privateNetworking = viper.GetString("privateNetworking")
+
+		isPrivateNetworking, err := strconv.ParseBool(privateNetworking)
+		if err != nil {
+			cmd.Help()
+			log.Fatal("Please only provide 'true' or 'false' for --privateNetworking")
 		}
+
+		if !isPrivateNetworking {
+			log.Fatal("Please provide --privateNetworking=true as it is the only update currently available.")
+		}
+
+		viper.BindPFlag("privateNetworking", cmd.Flags().Lookup("privateNetworking"))
+		privateNetworking = viper.GetString("privateNetworking")
 
 		instanceId64, err := strconv.ParseInt(args[0], 10, 64)
 		if err != nil {
@@ -85,6 +94,6 @@ var instanceUpgradeCmd = &cobra.Command{
 func init() {
 	contaboCmd.UpgradeCmd.AddCommand(instanceUpgradeCmd)
 
-	instanceUpgradeCmd.Flags().Int64SliceVar(&upgradeAddonIds, "addons", nil, 
-		`Provide an array of addon ids that will be assigned to the instance`)
+	instanceUpgradeCmd.Flags().StringVar(&privateNetworking, "privateNetworking", "false",
+		`upgrade the instance to have privateNetworking capability. ('true' or 'false')`)
 }

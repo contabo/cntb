@@ -50,8 +50,8 @@ var (
 	updateInstanceDisplayName string
 )
 
-//upgrade
+// upgrade
 var (
-	upgradeInstanceId  int64
-	upgradeAddonIds  []int64
+	upgradeInstanceId int64
+	privateNetworking string
 )

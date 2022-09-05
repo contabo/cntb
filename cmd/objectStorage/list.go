@@ -26,12 +26,12 @@ var objectsStorageGetCmd = &cobra.Command{
 			Page(contaboCmd.Page).
 			Size(contaboCmd.Size)
 
-		if listRegionNameFilter != "" {
-			ApiRetrieveObjectStorageListRequest = ApiRetrieveObjectStorageListRequest.DataCenterName(listRegionNameFilter)
+		if listRegionFilter != "" {
+			ApiRetrieveObjectStorageListRequest = ApiRetrieveObjectStorageListRequest.DataCenterName(listRegionFilter)
 		}
 
-		if listRegionSlugFilter != "" {
-			ApiRetrieveObjectStorageListRequest = ApiRetrieveObjectStorageListRequest.Region(listRegionSlugFilter)
+		if listDataCenterNameFilter != "" {
+			ApiRetrieveObjectStorageListRequest = ApiRetrieveObjectStorageListRequest.Region(listDataCenterNameFilter)
 		}
 
 		resp, httpResp, err := ApiRetrieveObjectStorageListRequest.Execute()
@@ -56,11 +56,11 @@ var objectsStorageGetCmd = &cobra.Command{
 			log.Fatal("Too many positional arguments.")
 		}
 
-		viper.BindPFlag("regionName", cmd.Flags().Lookup("regionName"))
-		listRegionNameFilter = viper.GetString("regionName")
+		viper.BindPFlag("region", cmd.Flags().Lookup("region"))
+		listRegionFilter = viper.GetString("region")
 
-		viper.BindPFlag("regionSlug", cmd.Flags().Lookup("regionSlug"))
-		listRegionSlugFilter = viper.GetString("regionSlug")
+		viper.BindPFlag("dataCenterName", cmd.Flags().Lookup("dataCenterName"))
+		listDataCenterNameFilter = viper.GetString("dataCenterName")
 
 		return nil
 	},
@@ -69,9 +69,9 @@ var objectsStorageGetCmd = &cobra.Command{
 func init() {
 	contaboCmd.GetCmd.AddCommand(objectsStorageGetCmd)
 
-	objectsStorageGetCmd.Flags().StringVar(&listRegionNameFilter, "regionName", "",
-		`Filter by region name.`)
+	objectsStorageGetCmd.Flags().StringVar(&listRegionFilter, "region", "",
+		`Filter by region, available regions: EU, US-central, SIN.`)
 
-	objectsStorageGetCmd.Flags().StringVar(&listRegionSlugFilter, "regionSlug", "",
-		`Filter by region slug.`)
+	objectsStorageGetCmd.Flags().StringVar(&listDataCenterNameFilter, "dataCenterName", "",
+		`Filter by datacenter name.`)
 }

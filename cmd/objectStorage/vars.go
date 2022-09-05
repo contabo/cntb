@@ -17,8 +17,8 @@ var (
 
 // list
 var (
-	listRegionNameFilter string
-	listRegionSlugFilter string
+	listRegionFilter         string
+	listDataCenterNameFilter string
 )
 
 // resize
