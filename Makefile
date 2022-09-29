@@ -23,9 +23,7 @@ generate-api-clients:
 	--input-spec $(OPENAPIURL) \
 	--generator-name  go \
 	--output $(OUTPUTLOCATION)
-	docker container create --name dummy -v openapivolume:/openapi alpine bash
-	docker cp dummy:/openapi/ .
-	docker rm dummy
+	docker run --rm -it -v $(CURDIR)/openapi:/openapi alpine chown -R $(shell id -u):$(shell id -g) /openapi
 
 .PHONY: build-only
 build-only:
