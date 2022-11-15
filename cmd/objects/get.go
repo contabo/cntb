@@ -9,6 +9,7 @@ import (
 	s "strings"
 
 	"contabo.com/cli/cntb/client"
+	"contabo.com/cli/cntb/config"
 	contaboCmd "contabo.com/cli/cntb/cmd"
 	"contabo.com/cli/cntb/cmd/util"
 	authClient "contabo.com/cli/cntb/oauth2Client"
@@ -49,7 +50,7 @@ var objectGetCmd = &cobra.Command{
 		objStorage := objStorageListresponse.Data[0]
 
 		// get keycloakId from jwt Token
-		jwtAccessToken := authClient.RestoreTokenFromCache().AccessToken
+		jwtAccessToken := authClient.RestoreTokenFromCache(config.Conf.Oauth2User).AccessToken
 		claims := jwt.MapClaims{}
 		_, err = jwt.ParseWithClaims(jwtAccessToken, claims, func(token *jwt.Token) (interface{}, error) {
 			return []byte("<YOUR VERIFICATION KEY>"), nil

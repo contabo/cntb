@@ -47,7 +47,7 @@ func BearerHttpClient(tokenUrl string, clientId string, clientSecret string, use
 	}
 
 	// check if token has been cached
-	token := RestoreTokenFromCache()
+	token := RestoreTokenFromCache(user)
 
 	if token == nil {
 		token, err = conf.PasswordCredentialsToken(ctx, user, pass)

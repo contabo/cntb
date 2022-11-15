@@ -1,14 +1,14 @@
 JAVAOPT = '-Dio.swagger.parser.util.RemoteUrl.trustAll=true -Dio.swagger.v3.parser.util.RemoteUrl.trustAll=true'
 ifndef OUTPUTLOCATION
-	OUTPUTLOCATION = /local/openapi/
+	OUTPUTLOCATION = /local/
 endif
 ifndef OPENAPIURL
 	OPENAPIURL = https://api.contabo.com/api-v1.yaml
 endif
 
-ifndef OPENAPIVOLUME
-	OPENAPIVOLUME = "$(CURDIR):/local"
-endif
+# ifndef OPENAPIVOLUME
+# 	OPENAPIVOLUME = "$(CURDIR):/local"
+# endif
 ifndef OPENAPIIMAGE
 	OPENAPIIMAGE = "openapitools/openapi-generator-cli:v5.2.1"
 endif
@@ -18,12 +18,15 @@ build: generate-api-clients build-only
 .PHONY: generate-api-clients
 generate-api-clients:
 	rm -rf openapi
-	docker run --rm -v $(OPENAPIVOLUME) --env JAVA_OPTS=$(JAVAOPT) $(OPENAPIIMAGE) generate \
+	docker volume create openapivolume
+	docker run --rm -v openapivolume:/local --env JAVA_OPTS=$(JAVAOPT) $(OPENAPIIMAGE) generate \
 	--skip-validate-spec \
 	--input-spec $(OPENAPIURL) \
 	--generator-name  go \
 	--output $(OUTPUTLOCATION)
-	docker run --rm -it -v $(CURDIR)/openapi:/openapi alpine chown -R $(shell id -u):$(shell id -g) /openapi
+	docker container create --name dummy -v openapivolume:/openapi alpine bash
+	docker cp dummy:/openapi/ .
+	docker rm dummy
 
 .PHONY: build-only
 build-only:

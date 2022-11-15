@@ -1,6 +1,5 @@
 cntb
 dist/
-openapi/
 .DS_Store
 .vscode
 .idea

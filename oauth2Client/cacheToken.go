@@ -32,7 +32,7 @@ func cacheToken(token *oauth2.Token) {
 	}
 }
 
-func RestoreTokenFromCache() *oauth2.Token {
+func RestoreTokenFromCache(oauth2User string) *oauth2.Token {
 	tokenCacheFileName := getCacheFile()
 	serializedToken, err := ioutil.ReadFile(tokenCacheFileName)
 	if err != nil {
@@ -46,20 +46,35 @@ func RestoreTokenFromCache() *oauth2.Token {
 	}
 	// check token expiry, take refresh token expiry date if present otherwise fall back to access token expiry
 	accessTokenExpired := token.Expiry.Before(time.Now())
-	jwt := strings.Split(token.RefreshToken, ".")[1]
-	jwtPayloadAsBytes, _ := base64.RawStdEncoding.DecodeString(jwt)
+	// ... expiry date of refresh token
+	jwtRefreshToken := strings.Split(token.RefreshToken, ".")[1]
+	jwtRefreshTokenPayloadAsBytes, _ := base64.RawStdEncoding.DecodeString(jwtRefreshToken)
 	type JwtPayload struct {
 		Exp int64 `json:"exp"`
 	}
 	var jwtPayload JwtPayload
-	json.Unmarshal(jwtPayloadAsBytes, &jwtPayload)
+	json.Unmarshal(jwtRefreshTokenPayloadAsBytes, &jwtPayload)
 	refreshTokenExpiryDate := time.Unix(jwtPayload.Exp, 0)
 	refreshTokenExpired := refreshTokenExpiryDate.Before(time.Now())
 
 	if accessTokenExpired && refreshTokenExpired {
 		return nil
 	}
-	log.Debug(fmt.Sprintf("Token from cache is not outdated, resusing. Access token valid to %v. Refresh token valid to %v.", token.Expiry.String(), refreshTokenExpiryDate.String()))
+	log.Debug(fmt.Sprintf("Token from cache is not outdated, reusing. Access token valid to %v. Refresh token valid to %v.", token.Expiry.String(), refreshTokenExpiryDate.String()))
+
+	// check if user has changed
+	jwtAccessTokenPayloadData := strings.Split(token.AccessToken, ".")[1]
+	jwtAccessTokenPayloadAsBytes, _ := base64.RawStdEncoding.DecodeString(jwtAccessTokenPayloadData)
+	type JwtAccessTokenPayload struct {
+		Preferred_username string `json:"preferred_username"`
+	}
+	var jwtAccessTokenPayload JwtAccessTokenPayload
+	json.Unmarshal(jwtAccessTokenPayloadAsBytes, &jwtAccessTokenPayload)
+	if jwtAccessTokenPayload.Preferred_username != oauth2User {
+		log.Debug(fmt.Sprintf("User changed (old=%v) (new=%v), forcing new token.", jwtAccessTokenPayload.Preferred_username, oauth2User))
+		return nil
+	}
+
 	return &token
 }
 

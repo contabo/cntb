@@ -9,6 +9,7 @@ import (
 	"contabo.com/cli/cntb/client"
 	contaboCmd "contabo.com/cli/cntb/cmd"
 	"contabo.com/cli/cntb/cmd/util"
+	"contabo.com/cli/cntb/config"
 	authClient "contabo.com/cli/cntb/oauth2Client"
 
 	jwt "github.com/golang-jwt/jwt"
@@ -45,7 +46,7 @@ var createBucketCmd = &cobra.Command{
 		objStorage := objStorageListresponse.Data[0]
 
 		// get keycloakId from jwt Token
-		jwtAccessToken := authClient.RestoreTokenFromCache().AccessToken
+		jwtAccessToken := authClient.RestoreTokenFromCache(config.Conf.Oauth2User).AccessToken
 		claims := jwt.MapClaims{}
 		_, err = jwt.ParseWithClaims(jwtAccessToken, claims, func(token *jwt.Token) (interface{}, error) {
 			return []byte("<YOUR VERIFICATION KEY>"), nil
