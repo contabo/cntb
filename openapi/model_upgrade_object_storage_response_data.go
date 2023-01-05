@@ -37,7 +37,7 @@ type UpgradeObjectStorageResponseData struct {
 	TotalPurchasedSpaceTB float64 `json:"totalPurchasedSpaceTB"`
 	// The region where your object storage is located
 	Region string `json:"region"`
-	// Display name for object storage.
+	// Display name helps to differentiate between object storages, especially if they are in the same region.
 	DisplayName string `json:"displayName"`
 }
 

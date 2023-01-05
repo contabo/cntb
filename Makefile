@@ -1,3 +1,4 @@
+MAKEFLAGS := --jobs=1
 JAVAOPT = '-Dio.swagger.parser.util.RemoteUrl.trustAll=true -Dio.swagger.v3.parser.util.RemoteUrl.trustAll=true'
 ifndef OUTPUTLOCATION
 	OUTPUTLOCATION = /local/

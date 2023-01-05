@@ -261,6 +261,8 @@ tags:
   name: Invoices
 - description: Authenticate to Zerops and get Info about you zerops
   name: Zerops
+- description: DPAS API allows you to create and manage dpa.
+  name: DPAS
 - description: The Secret Management API allows you to store and manage your passwords
     and ssh-keys. Usage of the Secret Management API is purely optional. As a convenience
     feature e.g. it allows you to reuse SSH-keys easily.
@@ -5492,6 +5494,669 @@ paths:
         source: 'curl -X GET -H "Content-Type: application/json" -H "Authorization:
           Bearer ${ACCESS_TOKEN}" -H "x-request-id: 51A87ECD-754E-4104-9C54-D01AD0F83406"
           -H  "x-trace-id: 123213" "https://api.contabo.com/v1/zerops/sing-in"'
+  /v1/dpas:
+    get:
+      description: List and filter all Dpas on your account.
+      operationId: retrieveDpaList
+      parameters:
+      - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
+          to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4)
+          to generate them manually.'
+        explode: false
+        in: header
+        name: x-request-id
+        required: true
+        schema:
+          example: 04e0f898-37b4-48bc-a794-1a57abe6aa31
+          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-5][0-9A-Fa-f]{3}-[089abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+          type: string
+        style: simple
+      - description: Identifier to trace group of requests.
+        explode: false
+        in: header
+        name: x-trace-id
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: Number of page to be fetched.
+        example: 1
+        explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          format: int64
+          type: integer
+        style: form
+      - description: Number of elements per page.
+        example: 10
+        explode: true
+        in: query
+        name: size
+        required: false
+        schema:
+          format: int64
+          type: integer
+        style: form
+      - description: Specify fields and ordering (ASC for ascending, DESC for descending)
+          in following format `field:ASC|DESC`.
+        example: name:asc
+        explode: true
+        in: query
+        name: orderBy
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: form
+      - description: The status of the Dpa
+        example: preview
+        explode: true
+        in: query
+        name: status
+        required: false
+        schema:
+          default: concluded,invalid
+          type: string
+        style: form
+      - description: Filter dpas by `serviceName`, `dpaId` or `status`
+        example: preview
+        explode: true
+        in: query
+        name: search
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The dpaServiceId by which we want to filter the Dpas
+        example: "true"
+        explode: true
+        in: query
+        name: dpaServiceId
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListDpaResponse'
+          description: The response will be a JSON object which will contain a paginated
+            list of Dpas.
+      security:
+      - bearer: []
+      summary: List all Dpas
+      tags:
+      - DPAS
+      x-codeSamples:
+      - lang: cURL
+        source: 'curl -X GET -H "Content-Type: application/json" -H "Authorization:
+          Bearer ${ACCESS_TOKEN}" -H "x-request-id: 51A87ECD-754E-4104-9C54-D01AD0F83406"
+          -H  "x-trace-id: 123213" "https://api.contabo.com/v1/dpas"'
+    post:
+      description: Create a new data processing agreement for a specific service that
+        you own.
+      operationId: createDpa
+      parameters:
+      - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
+          to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4)
+          to generate them manually.'
+        explode: false
+        in: header
+        name: x-request-id
+        required: true
+        schema:
+          example: 04e0f898-37b4-48bc-a794-1a57abe6aa31
+          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-5][0-9A-Fa-f]{3}-[089abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+          type: string
+        style: simple
+      - description: Identifier to trace group of requests.
+        explode: false
+        in: header
+        name: x-trace-id
+        required: false
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDpaRequest'
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DpaResponse'
+          description: The response will be a JSON object and contains standard data
+            processing agreement attributes.
+      security:
+      - bearer: []
+      summary: Create a new data processing agreement
+      tags:
+      - DPAS
+      x-codeSamples:
+      - lang: cURL
+        source: "curl -X POST \"https://api.contabo.com/v1/dpas\" -H  \"accept: application/json\"\
+          \ -H \"Authorization: Bearer ${ACCESS_TOKEN}\" -H \"x-request-id: 51A87ECD-754E-4104-9C54-D01AD0F83406\"\
+          \  -H  \"x-trace-id: foo\"  -H  \"x-trace-id: 123213\" -H \"Content-Type:\
+          \ application/json\" -d -d \n    '{\n      \"processedDataType\": {\n  \
+          \      \"billingData\": false,\n        \"addressData\": false,\n      \
+          \  \"offerData\": false,\n        \"authenticationData\": false,\n     \
+          \   \"bankDetails\": false,\n        \"orderData\": false,\n        \"imageFiles\"\
+          : false,\n        \"emails\": false,\n        \"financialData\": false,\n\
+          \        \"communicationData\": false,\n        \"employeeData\": false,\n\
+          \        \"usageData\": false,\n        \"passwordData\": false,\n     \
+          \   \"personnelData\": true,\n        \"personnelMasterData\": false,\n\
+          \        \"programCode\": false,\n        \"profileData\": false,\n    \
+          \    \"transactionData\": false,\n        \"contractData\": false,\n   \
+          \     \"contractBillingData\": false,\n        \"videoFiles\": false,\n\
+          \        \"paymentData\": false,\n        \"ipAddresses\": false,\n    \
+          \    \"other\": {\n          \"value\": false,\n          \"text\": \"\n\
+          \        }\n      },\n      \"personalData\": {\n        \"biometricData\"\
+          : true,\n        \"geneticData\": false,\n        \"healthData\": false,\n\
+          \        \"politicalOpinionData\": false,\n        \"racialAndEthnicOriginData\"\
+          : false,\n        \"religiousAndPhilosophicalBeliefsData\": false,\n   \
+          \     \"laborOrganizationMembershipData\": false,\n        \"sexualLifeData\"\
+          : false,\n        \"personalityData\": false\n      },\n      \"affectedPersons\"\
+          : {\n        \"subscribers\": true,\n        \"relatives\": false,\n   \
+          \     \"trainees\": false,\n        \"applicants\": false,\n        \"consultants\"\
+          : false,\n        \"serviceProviders\": false,\n        \"formerEmployees\"\
+          : false,\n        \"aggrievedParties\": false,\n        \"businessPartners\"\
+          : false,\n        \"shareholders\": false,\n        \"commercialAgents\"\
+          : false,\n        \"interestedParties\": false,\n        \"customers\":\
+          \ false,\n        \"suppliers\": false,\n        \"brokersOrIntermediaries\"\
+          : false,\n        \"tenants\": false,\n        \"employees\": false,\n \
+          \       \"members\": false,\n        \"users\": false,\n        \"interns\"\
+          : false,\n        \"dependents\": false,\n        \"press\": false,\n  \
+          \      \"witnesses\": false,\n        \"other\": {\n          \"value\"\
+          : true,\n          \"text\": \"Asd\"\n        }\n      },\n      \"dataProtectionOfficer\"\
+          : {\n        \"email\": \"john.doe@contabo.de\",\n        \"firstName\"\
+          : \"John\",\n        \"lastName\": \"Doe\",\n        \"address\": {\n  \
+          \        \"street\": \"Hauptstraße\",\n          \"country\": \"Germany\"\
+          ,\n          \"zipCode\": \"123456\",\n          \"city\": \"Berlin\"\n\
+          \        },\n        \"phoneNumber\": \"+49 30 901820\"\n      },\n    \
+          \  \"dpaServiceId\": \"6C65CD0E-572F-4051-9161-0D731DB44B6E\"\n    }'"
+  /v1/dpas/services:
+    get:
+      description: List all services for which you can create a data processing agreement
+      operationId: listDpaServices
+      parameters:
+      - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
+          to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4)
+          to generate them manually.'
+        explode: false
+        in: header
+        name: x-request-id
+        required: true
+        schema:
+          example: 04e0f898-37b4-48bc-a794-1a57abe6aa31
+          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-5][0-9A-Fa-f]{3}-[089abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+          type: string
+        style: simple
+      - description: Identifier to trace group of requests.
+        explode: false
+        in: header
+        name: x-trace-id
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: Number of page to be fetched.
+        example: 1
+        explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          format: int64
+          type: integer
+        style: form
+      - description: Number of elements per page.
+        example: 10
+        explode: true
+        in: query
+        name: size
+        required: false
+        schema:
+          format: int64
+          type: integer
+        style: form
+      - description: 'Specify fields and ordering (ASC for ascending, DESC for descending)
+          in following format `field:ASC|DESC`. Possible fields: `serviceName`, `ipAddress`,
+          `displayName`'
+        example: serviceName:asc
+        explode: true
+        in: query
+        name: orderBy
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: form
+      - description: Filter services by `serviceName`, `ipAddress` or `displayName`
+        example: MyVps2
+        explode: true
+        in: query
+        name: search
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Filters services which already have a concluded DPA (hasConcludedDpa=true)
+          or not (hasConcludedDpa=false)
+        example: false
+        explode: true
+        in: query
+        name: hasConcludedDpa
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListDpaServicesResponse'
+          description: List of all services for which you can create a data processing
+            agreement
+      security:
+      - bearer: []
+      summary: List services
+      tags:
+      - DPAS
+      x-codeSamples:
+      - lang: cURL
+        source: 'curl "https://api.contabo.com/v1/dpas/services" -H "accept: application/json"
+          -H "Authorization: Bearer ${ACCESS_TOKEN}" -H "x-request-id: 51A87ECD-754E-4104-9C54-D01AD0F83406"
+          -H  "x-trace-id: 123213" -H "Content-Type: application/json"'
+  /v1/dpas/{dpaId}:
+    get:
+      description: Get data for a specific Dpa on your account.
+      operationId: retrieveDpa
+      parameters:
+      - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
+          to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4)
+          to generate them manually.'
+        explode: false
+        in: header
+        name: x-request-id
+        required: true
+        schema:
+          example: 04e0f898-37b4-48bc-a794-1a57abe6aa31
+          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-5][0-9A-Fa-f]{3}-[089abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+          type: string
+        style: simple
+      - description: Identifier to trace group of requests.
+        explode: false
+        in: header
+        name: x-trace-id
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: The identifier of the data processing agreement
+        example: 6C65CD0E-572F-4051-9161-0D731DB44B6E
+        explode: false
+        in: path
+        name: dpaId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DpaResponse'
+          description: The response will be a JSON object and contains standard Dpa
+            attributes.
+      security:
+      - bearer: []
+      summary: Get specific Dpa by it's dpaId
+      tags:
+      - DPAS
+      x-codeSamples:
+      - lang: cURL
+        source: 'curl -X GET -H "Content-Type: application/json" -H "Authorization:
+          Bearer ${ACCESS_TOKEN}" -H "x-request-id: 51A87ECD-754E-4104-9C54-D01AD0F83406"
+          -H  "x-trace-id: 123213" "https://api.contabo.com/v1/dpas/ea639fc6-9aae-4d71-af8b-046dda87a9cc"'
+  /v1/dpas/{dpaId}/preview:
+    get:
+      description: Obtain a preview version pdf of the DPA.
+      operationId: downloadPreviewDpa
+      parameters:
+      - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
+          to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4)
+          to generate them manually.'
+        explode: false
+        in: header
+        name: x-request-id
+        required: true
+        schema:
+          example: 04e0f898-37b4-48bc-a794-1a57abe6aa31
+          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-5][0-9A-Fa-f]{3}-[089abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+          type: string
+        style: simple
+      - description: Identifier to trace group of requests.
+        explode: false
+        in: header
+        name: x-trace-id
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: The identifier of the data processing agreement
+        example: 6C65CD0E-572F-4051-9161-0D731DB44B6E
+        explode: false
+        in: path
+        name: dpaId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StreamableFile'
+          description: The response will be a pdf stream.
+      security:
+      - bearer: []
+      summary: Download preview version of DPA
+      tags:
+      - DPAS
+      x-codeSamples:
+      - lang: cURL
+        source: 'curl -X POST "https://api.contabo.com/v1/dpas/60a4e77b-d593-4f14-9ff0-5f110b19965f/preview"
+          -H "Authorization: Bearer ${ACCESS_TOKEN}" -H "x-request-id: 51A87ECD-754E-4104-9C54-D01AD0F83406"  -H  "x-trace-id:
+          666" --output dpa_vps_1.pdf'
+  /v1/dpas/{dpaId}/download:
+    get:
+      description: Download the data processing agreement PDF file
+      operationId: downloadDpaFile
+      parameters:
+      - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
+          to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4)
+          to generate them manually.'
+        explode: false
+        in: header
+        name: x-request-id
+        required: true
+        schema:
+          example: 04e0f898-37b4-48bc-a794-1a57abe6aa31
+          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-5][0-9A-Fa-f]{3}-[089abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+          type: string
+        style: simple
+      - description: Identifier to trace group of requests.
+        explode: false
+        in: header
+        name: x-trace-id
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: The identifier of the data processing agreement
+        example: 6C65CD0E-572F-4051-9161-0D731DB44B6E
+        explode: false
+        in: path
+        name: dpaId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StreamableFile'
+          description: The response will be a binary stream of your data processing
+            agreement PDF
+      security:
+      - bearer: []
+      summary: Download concluded DPA PDF file
+      tags:
+      - DPAS
+      x-codeSamples:
+      - lang: cURL
+        source: 'curl "https://api.contabo.com/v1/dpas/6C65CD0E-572F-4051-9161-0D731DB44B6E/download"
+          -H "accept: application/json" -H "Authorization: Bearer ${ACCESS_TOKEN}"
+          -H "x-request-id: 51A87ECD-754E-4104-9C54-D01AD0F83406" -H  "x-trace-id:
+          123213" -H "Content-Type: application/json" --output 6C65CD0E-572F-4051-9161-0D731DB44B6E-20221117145523.pdf'
+  /v1/dpas/{dpaId}/conclude:
+    post:
+      description: Concludes data processing agreement for a specific service that
+        you own.
+      operationId: concludeDpa
+      parameters:
+      - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
+          to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4)
+          to generate them manually.'
+        explode: false
+        in: header
+        name: x-request-id
+        required: true
+        schema:
+          example: 04e0f898-37b4-48bc-a794-1a57abe6aa31
+          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-5][0-9A-Fa-f]{3}-[089abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+          type: string
+        style: simple
+      - description: Identifier to trace group of requests.
+        explode: false
+        in: header
+        name: x-trace-id
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: The identifier of the data processing agreement
+        example: 6C65CD0E-572F-4051-9161-0D731DB44B6E
+        explode: false
+        in: path
+        name: dpaId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DpaResponse'
+          description: The response will be a JSON object and contains standard data
+            processing agreement attributes.
+      security:
+      - bearer: []
+      summary: Concludes a data processing agreement
+      tags:
+      - DPAS
+      x-codeSamples:
+      - lang: cURL
+        source: 'curl -X POST "https://api.contabo.com/v1/dpas/6C65CD0E-572F-4051-9161-0D731DB44B6E/conclude"
+          -H "accept: application/json" -H "Authorization: Bearer ${ACCESS_TOKEN}"
+          -H "x-request-id: 51A87ECD-754E-4104-9C54-D01AD0F83406" -H  "x-trace-id:
+          123213" -H "Content-Type: application/json"'
+  /v1/dpas/{dpaId}/terminate:
+    post:
+      description: Terminate an existing DPA for a specific service by id.
+      operationId: terminateDpa
+      parameters:
+      - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
+          to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4)
+          to generate them manually.'
+        explode: false
+        in: header
+        name: x-request-id
+        required: true
+        schema:
+          example: 04e0f898-37b4-48bc-a794-1a57abe6aa31
+          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-5][0-9A-Fa-f]{3}-[089abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+          type: string
+        style: simple
+      - description: Identifier to trace group of requests.
+        explode: false
+        in: header
+        name: x-trace-id
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: The identifier of the data processing agreement
+        example: 6C65CD0E-572F-4051-9161-0D731DB44B6E
+        explode: false
+        in: path
+        name: dpaId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: Response body has no content
+      security:
+      - bearer: []
+      summary: Terminate an existing DPA by id
+      tags:
+      - DPAS
+      x-codeSamples:
+      - lang: cURL
+        source: 'curl -X POST -H "Content-Type: application/json" -H "Authorization:
+          Bearer ${ACCESS_TOKEN}" -H "x-request-id: 51A87ECD-754E-4104-9C54-D01AD0F83406"
+          -H  "x-trace-id: foo" "https://api.contabo.com/v1/dpas/6C65CD0E-572F-4051-9161-0D731DB44B6E/terminate"'
+  /v1/dpas/audits:
+    get:
+      description: List and filters the history about your Dpas.
+      operationId: retrieveDpaAuditsList
+      parameters:
+      - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
+          to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4)
+          to generate them manually.'
+        explode: false
+        in: header
+        name: x-request-id
+        required: true
+        schema:
+          example: 04e0f898-37b4-48bc-a794-1a57abe6aa31
+          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-5][0-9A-Fa-f]{3}-[089abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+          type: string
+        style: simple
+      - description: Identifier to trace group of requests.
+        explode: false
+        in: header
+        name: x-trace-id
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: Number of page to be fetched.
+        example: 1
+        explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          format: int64
+          type: integer
+        style: form
+      - description: Number of elements per page.
+        example: 10
+        explode: true
+        in: query
+        name: size
+        required: false
+        schema:
+          format: int64
+          type: integer
+        style: form
+      - description: Specify fields and ordering (ASC for ascending, DESC for descending)
+          in following format `field:ASC|DESC`.
+        example: name:asc
+        explode: true
+        in: query
+        name: orderBy
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: form
+      - description: The identifier of the Dpa.
+        example: 1b943b25a-c8b5-4570-9135-4bbaa7615b812345
+        explode: true
+        in: query
+        name: dpaId
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The requestId of the API call which led to the change.
+        example: D5FD9FAF-58C0-4406-8F46-F449B8E4FEC3
+        explode: true
+        in: query
+        name: requestId
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: User name which did the change.
+        example: 23cbb6d6-cb11-4330-bdff-7bb791df2e23
+        explode: true
+        in: query
+        name: changedBy
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Start of search time range.
+        example: 2021-01-01
+        explode: true
+        in: query
+        name: startDate
+        required: false
+        schema:
+          format: date
+          type: string
+        style: form
+      - description: End of search time range.
+        example: 2021-01-01
+        explode: true
+        in: query
+        name: endDate
+        required: false
+        schema:
+          format: date
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListDpaAuditResponse'
+          description: The response will be a JSON object and contains a paginated
+            list of Dpa audits.
+      security:
+      - bearer: []
+      summary: List history about your Dpas (audit)
+      tags:
+      - Dpa Audits
+      x-codeSamples:
+      - lang: cURL
+        source: 'curl -X GET -H "Content-Type: application/json" -H "Authorization:
+          Bearer ${ACCESS_TOKEN}" -H "x-request-id: 51A87ECD-754E-4104-9C54-D01AD0F83406"
+          -H  "x-trace-id: 123213" "https://api.contabo.com/v1/dpas/audits"'
   /v1/secrets:
     get:
       description: List and filter all secrets in your account.
@@ -16021,6 +16686,1322 @@ components:
       required:
       - data
       type: object
+    OtherData:
+      example:
+        text: Other
+        value: true
+      properties:
+        value:
+          description: Toggle for other data
+          example: true
+          type: boolean
+        text:
+          description: Value of other data
+          example: Other
+          type: string
+      required:
+      - text
+      - value
+      type: object
+    ProcessedDataType:
+      example:
+        authenticationData: true
+        passwordData: true
+        other:
+          text: Other
+          value: true
+        programCode: true
+        imageFiles: true
+        transactionData: true
+        employeeData: true
+        personnelData: true
+        emails: true
+        videoFiles: true
+        bankDetails: true
+        communicationData: true
+        contractBillingData: true
+        usageData: true
+        paymentData: true
+        offerData: true
+        orderData: true
+        ipAddresses: true
+        profileData: true
+        billingData: true
+        addressData: true
+        personnelMasterData: true
+        contractData: true
+        financialData: true
+      properties:
+        billingData:
+          description: Billing Data
+          example: true
+          type: boolean
+        addressData:
+          description: Address Data
+          example: true
+          type: boolean
+        offerData:
+          description: Offer Data
+          example: true
+          type: boolean
+        authenticationData:
+          description: Authentication Data
+          example: true
+          type: boolean
+        bankDetails:
+          description: Bank Details
+          example: true
+          type: boolean
+        orderData:
+          description: Order Data
+          example: true
+          type: boolean
+        imageFiles:
+          description: Image Files
+          example: true
+          type: boolean
+        emails:
+          description: Emails
+          example: true
+          type: boolean
+        financialData:
+          description: Financial Data
+          example: true
+          type: boolean
+        communicationData:
+          description: Communication Data
+          example: true
+          type: boolean
+        employeeData:
+          description: Employee Data
+          example: true
+          type: boolean
+        usageData:
+          description: Usage Data
+          example: true
+          type: boolean
+        passwordData:
+          description: Password Data
+          example: true
+          type: boolean
+        personnelData:
+          description: Personnel Data
+          example: true
+          type: boolean
+        personnelMasterData:
+          description: Personnel Master Data
+          example: true
+          type: boolean
+        programCode:
+          description: Program Code
+          example: true
+          type: boolean
+        profileData:
+          description: Profile Data
+          example: true
+          type: boolean
+        transactionData:
+          description: Transaction Data
+          example: true
+          type: boolean
+        contractData:
+          description: Contract Data
+          example: true
+          type: boolean
+        contractBillingData:
+          description: Contract Billing Data
+          example: true
+          type: boolean
+        videoFiles:
+          description: Video Files
+          example: true
+          type: boolean
+        paymentData:
+          description: Payment Data
+          example: true
+          type: boolean
+        ipAddresses:
+          description: Ip Addresses
+          example: true
+          type: boolean
+        other:
+          $ref: '#/components/schemas/OtherData'
+      required:
+      - addressData
+      - authenticationData
+      - bankDetails
+      - billingData
+      - communicationData
+      - contractBillingData
+      - contractData
+      - emails
+      - employeeData
+      - financialData
+      - imageFiles
+      - ipAddresses
+      - offerData
+      - orderData
+      - other
+      - passwordData
+      - paymentData
+      - personnelData
+      - personnelMasterData
+      - profileData
+      - programCode
+      - transactionData
+      - usageData
+      - videoFiles
+      type: object
+    PersonalData:
+      example:
+        biometricData: true
+        racialAndEthnicOriginData: true
+        religiousAndPhilosophicalBeliefsData: true
+        healthData: true
+        laborOrganizationMembershipData: true
+        sexualLifeData: true
+        politicalOpinionData: true
+        geneticData: true
+        personalityData: true
+      properties:
+        biometricData:
+          description: Biometric Data
+          example: true
+          type: boolean
+        geneticData:
+          description: Genetic Data
+          example: true
+          type: boolean
+        healthData:
+          description: Health Data
+          example: true
+          type: boolean
+        politicalOpinionData:
+          description: Political Opinion Data
+          example: true
+          type: boolean
+        racialAndEthnicOriginData:
+          description: Racial and Ethnic Origin Data
+          example: true
+          type: boolean
+        religiousAndPhilosophicalBeliefsData:
+          description: Data on Religious and Philosophical Beliefs
+          example: true
+          type: boolean
+        laborOrganizationMembershipData:
+          description: Data on Labor Organization Memberships
+          example: true
+          type: boolean
+        sexualLifeData:
+          description: Data on Sexual Life or Sexual Orientation
+          example: true
+          type: boolean
+        personalityData:
+          description: 'Data on the Assessment of Personality, Abilities, Performance
+            and Behavior '
+          example: true
+          type: boolean
+      required:
+      - biometricData
+      - geneticData
+      - healthData
+      - laborOrganizationMembershipData
+      - personalityData
+      - politicalOpinionData
+      - racialAndEthnicOriginData
+      - religiousAndPhilosophicalBeliefsData
+      - sexualLifeData
+      type: object
+    AffectedPersons:
+      example:
+        tenants: true
+        aggrievedParties: true
+        other:
+          text: Other
+          value: true
+        trainees: true
+        shareholders: true
+        suppliers: true
+        subscribers: true
+        applicants: true
+        businessPartners: true
+        relatives: true
+        users: true
+        consultants: true
+        interns: true
+        members: true
+        interestedParties: true
+        brokersOrIntermediaries: true
+        formerEmployees: true
+        dependents: true
+        serviceProviders: true
+        commercialAgents: true
+        customers: true
+        employees: true
+        press: true
+        witnesses: true
+      properties:
+        subscribers:
+          description: Subscribers
+          example: true
+          type: boolean
+        relatives:
+          description: Relatives
+          example: true
+          type: boolean
+        trainees:
+          description: Trainees
+          example: true
+          type: boolean
+        applicants:
+          description: Applicants
+          example: true
+          type: boolean
+        consultants:
+          description: Consultants
+          example: true
+          type: boolean
+        serviceProviders:
+          description: Service Providers
+          example: true
+          type: boolean
+        formerEmployees:
+          description: Former Employees
+          example: true
+          type: boolean
+        aggrievedParties:
+          description: Aggrieved Parties
+          example: true
+          type: boolean
+        businessPartners:
+          description: Business Partners
+          example: true
+          type: boolean
+        shareholders:
+          description: Shareholders
+          example: true
+          type: boolean
+        commercialAgents:
+          description: Commercial Agents
+          example: true
+          type: boolean
+        interestedParties:
+          description: Interested Parties
+          example: true
+          type: boolean
+        customers:
+          description: Customers
+          example: true
+          type: boolean
+        suppliers:
+          description: Suppliers
+          example: true
+          type: boolean
+        brokersOrIntermediaries:
+          description: Brokers/Intermediaries
+          example: true
+          type: boolean
+        tenants:
+          description: Tenants
+          example: true
+          type: boolean
+        employees:
+          description: Employees
+          example: true
+          type: boolean
+        members:
+          description: Members
+          example: true
+          type: boolean
+        users:
+          description: Users
+          example: true
+          type: boolean
+        interns:
+          description: Interns
+          example: true
+          type: boolean
+        dependents:
+          description: Dependents
+          example: true
+          type: boolean
+        press:
+          description: Press
+          example: true
+          type: boolean
+        witnesses:
+          description: Witnesses
+          example: true
+          type: boolean
+        other:
+          $ref: '#/components/schemas/OtherData'
+      required:
+      - aggrievedParties
+      - applicants
+      - brokersOrIntermediaries
+      - businessPartners
+      - commercialAgents
+      - consultants
+      - customers
+      - dependents
+      - employees
+      - formerEmployees
+      - interestedParties
+      - interns
+      - members
+      - other
+      - press
+      - relatives
+      - serviceProviders
+      - shareholders
+      - subscribers
+      - suppliers
+      - tenants
+      - trainees
+      - users
+      - witnesses
+      type: object
+    Address:
+      properties:
+        street:
+          description: Street
+          example: Hauptstraße
+          type: string
+        country:
+          description: Country
+          example: Germany
+          type: string
+        zipCode:
+          description: Zip Code
+          example: "123456"
+          type: string
+        city:
+          description: City
+          example: Berlin
+          type: string
+      required:
+      - city
+      - country
+      - street
+      - zipCode
+      type: object
+    DataProtectionOfficerRequest:
+      example:
+        firstName: John
+        lastName: Doe
+        address: '{street: "Hauptstraße", country: "Germany", zipcode: 123456, city:
+          "Berlin"}'
+        phoneNumber: +49 30 901820
+        email: test@contabo.de
+      properties:
+        email:
+          description: email
+          example: test@contabo.de
+          type: string
+        firstName:
+          description: firstName
+          example: John
+          type: string
+        lastName:
+          description: lastName
+          example: Doe
+          type: string
+        address:
+          allOf:
+          - $ref: '#/components/schemas/Address'
+          description: Address
+          example: '{street: "Hauptstraße", country: "Germany", zipcode: 123456, city:
+            "Berlin"}'
+        phoneNumber:
+          description: Phone Number
+          example: +49 30 901820
+          type: string
+      required:
+      - address
+      - email
+      - firstName
+      - lastName
+      - phoneNumber
+      type: object
+    CreateDpaRequest:
+      example:
+        dataProtectionOfficer:
+          firstName: John
+          lastName: Doe
+          address: '{street: "Hauptstraße", country: "Germany", zipcode: 123456, city:
+            "Berlin"}'
+          phoneNumber: +49 30 901820
+          email: test@contabo.de
+        personalData:
+          biometricData: true
+          racialAndEthnicOriginData: true
+          religiousAndPhilosophicalBeliefsData: true
+          healthData: true
+          laborOrganizationMembershipData: true
+          sexualLifeData: true
+          politicalOpinionData: true
+          geneticData: true
+          personalityData: true
+        affectedPersons:
+          tenants: true
+          aggrievedParties: true
+          other:
+            text: Other
+            value: true
+          trainees: true
+          shareholders: true
+          suppliers: true
+          subscribers: true
+          applicants: true
+          businessPartners: true
+          relatives: true
+          users: true
+          consultants: true
+          interns: true
+          members: true
+          interestedParties: true
+          brokersOrIntermediaries: true
+          formerEmployees: true
+          dependents: true
+          serviceProviders: true
+          commercialAgents: true
+          customers: true
+          employees: true
+          press: true
+          witnesses: true
+        processedDataType:
+          authenticationData: true
+          passwordData: true
+          other:
+            text: Other
+            value: true
+          programCode: true
+          imageFiles: true
+          transactionData: true
+          employeeData: true
+          personnelData: true
+          emails: true
+          videoFiles: true
+          bankDetails: true
+          communicationData: true
+          contractBillingData: true
+          usageData: true
+          paymentData: true
+          offerData: true
+          orderData: true
+          ipAddresses: true
+          profileData: true
+          billingData: true
+          addressData: true
+          personnelMasterData: true
+          contractData: true
+          financialData: true
+        dpaServiceId: "1"
+      properties:
+        processedDataType:
+          $ref: '#/components/schemas/ProcessedDataType'
+        personalData:
+          $ref: '#/components/schemas/PersonalData'
+        affectedPersons:
+          $ref: '#/components/schemas/AffectedPersons'
+        dataProtectionOfficer:
+          $ref: '#/components/schemas/DataProtectionOfficerRequest'
+        dpaServiceId:
+          description: DPA Service Id
+          example: "1"
+          type: string
+      required:
+      - affectedPersons
+      - dpaServiceId
+      - personalData
+      - processedDataType
+      type: object
+    DpaResponseData:
+      example:
+        archivedDate: 2021-06-03T06:27:12Z
+        dpaId: b943b25a-c8b5-4570-9135-4bbaa7615b81
+        dataProtectionOfficer:
+          firstName: John
+          lastName: Doe
+          address: '{street: "Hauptstraße", country: "Germany", zipcode: 123456, city:
+            "Berlin"}'
+          phoneNumber: +49 30 901820
+          email: test@contabo.de
+        personalData:
+          biometricData: true
+          racialAndEthnicOriginData: true
+          religiousAndPhilosophicalBeliefsData: true
+          healthData: true
+          laborOrganizationMembershipData: true
+          sexualLifeData: true
+          politicalOpinionData: true
+          geneticData: true
+          personalityData: true
+        affectedPersons:
+          tenants: true
+          aggrievedParties: true
+          other:
+            text: Other
+            value: true
+          trainees: true
+          shareholders: true
+          suppliers: true
+          subscribers: true
+          applicants: true
+          businessPartners: true
+          relatives: true
+          users: true
+          consultants: true
+          interns: true
+          members: true
+          interestedParties: true
+          brokersOrIntermediaries: true
+          formerEmployees: true
+          dependents: true
+          serviceProviders: true
+          commercialAgents: true
+          customers: true
+          employees: true
+          press: true
+          witnesses: true
+        processedDataType:
+          authenticationData: true
+          passwordData: true
+          other:
+            text: Other
+            value: true
+          programCode: true
+          imageFiles: true
+          transactionData: true
+          employeeData: true
+          personnelData: true
+          emails: true
+          videoFiles: true
+          bankDetails: true
+          communicationData: true
+          contractBillingData: true
+          usageData: true
+          paymentData: true
+          offerData: true
+          orderData: true
+          ipAddresses: true
+          profileData: true
+          billingData: true
+          addressData: true
+          personnelMasterData: true
+          contractData: true
+          financialData: true
+        serviceName: cd5e9016-1b86-4793-867a-00441fd1d073 (vserver-1000685)
+        invalidDate: 2021-06-03T06:27:12Z
+        serviceCancelDate: 2021-06-13T06:27:12Z
+        createdDate: 2021-06-03T06:27:12Z
+        concludedDate: 2021-06-03T06:27:12Z
+        tenantId: DE
+        customerId: "54321"
+        dpaServiceId: "1"
+        status: preview
+      properties:
+        tenantId:
+          description: Your customer tenant id
+          example: DE
+          minLength: 1
+          type: string
+        customerId:
+          description: Your customer number
+          example: "54321"
+          minLength: 1
+          type: string
+        dpaId:
+          description: Your dpa id.
+          example: b943b25a-c8b5-4570-9135-4bbaa7615b81
+          minLength: 1
+          type: string
+        processedDataType:
+          $ref: '#/components/schemas/ProcessedDataType'
+        personalData:
+          $ref: '#/components/schemas/PersonalData'
+        affectedPersons:
+          $ref: '#/components/schemas/AffectedPersons'
+        dataProtectionOfficer:
+          $ref: '#/components/schemas/DataProtectionOfficerRequest'
+        dpaServiceId:
+          description: DPA Service Id
+          example: "1"
+          type: string
+        createdDate:
+          description: The creation date time for the dpa
+          example: 2021-06-03T06:27:12Z
+          format: date-time
+          type: string
+        concludedDate:
+          description: The conclusion date time for the dpa
+          example: 2021-06-03T06:27:12Z
+          format: date-time
+          type: string
+        invalidDate:
+          description: The invalidation date time for the dpa
+          example: 2021-06-03T06:27:12Z
+          format: date-time
+          type: string
+        archivedDate:
+          description: The archiving date time for the dpa
+          example: 2021-06-03T06:27:12Z
+          format: date-time
+          type: string
+        serviceName:
+          description: The service name and subscriptionId
+          example: cd5e9016-1b86-4793-867a-00441fd1d073 (vserver-1000685)
+          type: string
+        serviceCancelDate:
+          description: The cancel date time for the service the dpa covers
+          example: 2021-06-13T06:27:12Z
+          format: date-time
+          type: string
+        status:
+          description: The status of the dpa
+          enum:
+          - invalid
+          - archived
+          - preview
+          - concluded
+          example: preview
+          type: string
+      required:
+      - affectedPersons
+      - archivedDate
+      - concludedDate
+      - createdDate
+      - customerId
+      - dataProtectionOfficer
+      - dpaId
+      - dpaServiceId
+      - invalidDate
+      - personalData
+      - processedDataType
+      - serviceCancelDate
+      - serviceName
+      - status
+      - tenantId
+      type: object
+    DpaResponse:
+      example:
+        data:
+        - archivedDate: 2021-06-03T06:27:12Z
+          dpaId: b943b25a-c8b5-4570-9135-4bbaa7615b81
+          dataProtectionOfficer:
+            firstName: John
+            lastName: Doe
+            address: '{street: "Hauptstraße", country: "Germany", zipcode: 123456,
+              city: "Berlin"}'
+            phoneNumber: +49 30 901820
+            email: test@contabo.de
+          personalData:
+            biometricData: true
+            racialAndEthnicOriginData: true
+            religiousAndPhilosophicalBeliefsData: true
+            healthData: true
+            laborOrganizationMembershipData: true
+            sexualLifeData: true
+            politicalOpinionData: true
+            geneticData: true
+            personalityData: true
+          affectedPersons:
+            tenants: true
+            aggrievedParties: true
+            other:
+              text: Other
+              value: true
+            trainees: true
+            shareholders: true
+            suppliers: true
+            subscribers: true
+            applicants: true
+            businessPartners: true
+            relatives: true
+            users: true
+            consultants: true
+            interns: true
+            members: true
+            interestedParties: true
+            brokersOrIntermediaries: true
+            formerEmployees: true
+            dependents: true
+            serviceProviders: true
+            commercialAgents: true
+            customers: true
+            employees: true
+            press: true
+            witnesses: true
+          processedDataType:
+            authenticationData: true
+            passwordData: true
+            other:
+              text: Other
+              value: true
+            programCode: true
+            imageFiles: true
+            transactionData: true
+            employeeData: true
+            personnelData: true
+            emails: true
+            videoFiles: true
+            bankDetails: true
+            communicationData: true
+            contractBillingData: true
+            usageData: true
+            paymentData: true
+            offerData: true
+            orderData: true
+            ipAddresses: true
+            profileData: true
+            billingData: true
+            addressData: true
+            personnelMasterData: true
+            contractData: true
+            financialData: true
+          serviceName: cd5e9016-1b86-4793-867a-00441fd1d073 (vserver-1000685)
+          invalidDate: 2021-06-03T06:27:12Z
+          serviceCancelDate: 2021-06-13T06:27:12Z
+          createdDate: 2021-06-03T06:27:12Z
+          concludedDate: 2021-06-03T06:27:12Z
+          tenantId: DE
+          customerId: "54321"
+          dpaServiceId: "1"
+          status: preview
+        - archivedDate: 2021-06-03T06:27:12Z
+          dpaId: b943b25a-c8b5-4570-9135-4bbaa7615b81
+          dataProtectionOfficer:
+            firstName: John
+            lastName: Doe
+            address: '{street: "Hauptstraße", country: "Germany", zipcode: 123456,
+              city: "Berlin"}'
+            phoneNumber: +49 30 901820
+            email: test@contabo.de
+          personalData:
+            biometricData: true
+            racialAndEthnicOriginData: true
+            religiousAndPhilosophicalBeliefsData: true
+            healthData: true
+            laborOrganizationMembershipData: true
+            sexualLifeData: true
+            politicalOpinionData: true
+            geneticData: true
+            personalityData: true
+          affectedPersons:
+            tenants: true
+            aggrievedParties: true
+            other:
+              text: Other
+              value: true
+            trainees: true
+            shareholders: true
+            suppliers: true
+            subscribers: true
+            applicants: true
+            businessPartners: true
+            relatives: true
+            users: true
+            consultants: true
+            interns: true
+            members: true
+            interestedParties: true
+            brokersOrIntermediaries: true
+            formerEmployees: true
+            dependents: true
+            serviceProviders: true
+            commercialAgents: true
+            customers: true
+            employees: true
+            press: true
+            witnesses: true
+          processedDataType:
+            authenticationData: true
+            passwordData: true
+            other:
+              text: Other
+              value: true
+            programCode: true
+            imageFiles: true
+            transactionData: true
+            employeeData: true
+            personnelData: true
+            emails: true
+            videoFiles: true
+            bankDetails: true
+            communicationData: true
+            contractBillingData: true
+            usageData: true
+            paymentData: true
+            offerData: true
+            orderData: true
+            ipAddresses: true
+            profileData: true
+            billingData: true
+            addressData: true
+            personnelMasterData: true
+            contractData: true
+            financialData: true
+          serviceName: cd5e9016-1b86-4793-867a-00441fd1d073 (vserver-1000685)
+          invalidDate: 2021-06-03T06:27:12Z
+          serviceCancelDate: 2021-06-13T06:27:12Z
+          createdDate: 2021-06-03T06:27:12Z
+          concludedDate: 2021-06-03T06:27:12Z
+          tenantId: DE
+          customerId: "54321"
+          dpaServiceId: "1"
+          status: preview
+        _links:
+          self: /v1/dpas/8cd3f2ba-65a7-4279-bb54-0fea88dc8860
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/DpaResponseData'
+          type: array
+        _links:
+          allOf:
+          - $ref: '#/components/schemas/SelfLinks'
+          example:
+            self: /v1/dpas/8cd3f2ba-65a7-4279-bb54-0fea88dc8860
+      required:
+      - _links
+      - data
+      type: object
+    DpaServiceResponse:
+      example:
+        displayName: My VPS 1
+        tenantId: DE
+        customerId: 3f184ab8-a600-4e7c-8c9b-3413e21a3752
+        ipAddress: 187.187.4.111
+        serviceName: Virtual Private Server L
+        dpaServiceId: f2c5207d-1a5f-4a82-bdd7-2ebd85d75ebe
+      properties:
+        tenantId:
+          description: Your customer tenant id
+          enum:
+          - DE
+          - INT
+          example: DE
+          minLength: 1
+          type: string
+        customerId:
+          description: Customer ID
+          example: 3f184ab8-a600-4e7c-8c9b-3413e21a3752
+          minLength: 1
+          type: string
+        dpaServiceId:
+          description: ID of the service
+          example: f2c5207d-1a5f-4a82-bdd7-2ebd85d75ebe
+          type: string
+        serviceName:
+          description: Name of the product and service
+          example: Virtual Private Server L
+          type: string
+        displayName:
+          description: Display name of the service
+          example: My VPS 1
+          type: string
+        ipAddress:
+          description: Optional Ip address of the service
+          example: 187.187.4.111
+          type: string
+      required:
+      - customerId
+      - dpaServiceId
+      - serviceName
+      - tenantId
+      type: object
+    ListDpaServicesResponse:
+      example:
+        data:
+        - displayName: My VPS 1
+          tenantId: DE
+          customerId: 3f184ab8-a600-4e7c-8c9b-3413e21a3752
+          ipAddress: 187.187.4.111
+          serviceName: Virtual Private Server L
+          dpaServiceId: f2c5207d-1a5f-4a82-bdd7-2ebd85d75ebe
+        - displayName: My VPS 1
+          tenantId: DE
+          customerId: 3f184ab8-a600-4e7c-8c9b-3413e21a3752
+          ipAddress: 187.187.4.111
+          serviceName: Virtual Private Server L
+          dpaServiceId: f2c5207d-1a5f-4a82-bdd7-2ebd85d75ebe
+        _links:
+          first: /v1/dpas/services
+          previous: ""
+          self: /v1/dpas/services
+          next: /v1/dpas/services?page=2
+          last: /v1/dpas/services?page=10
+        _pagination: ""
+      properties:
+        _pagination:
+          allOf:
+          - $ref: '#/components/schemas/PaginationMeta'
+          description: Data about pagination like how many results, pages, page size.
+        data:
+          items:
+            $ref: '#/components/schemas/DpaServiceResponse'
+          type: array
+        _links:
+          allOf:
+          - $ref: '#/components/schemas/Links'
+          example:
+            first: /v1/dpas/services
+            previous: ""
+            self: /v1/dpas/services
+            next: /v1/dpas/services?page=2
+            last: /v1/dpas/services?page=10
+      required:
+      - _links
+      - _pagination
+      - data
+      type: object
+    ListDpaResponse:
+      example:
+        data:
+        - archivedDate: 2021-06-03T06:27:12Z
+          dpaId: b943b25a-c8b5-4570-9135-4bbaa7615b81
+          dataProtectionOfficer:
+            firstName: John
+            lastName: Doe
+            address: '{street: "Hauptstraße", country: "Germany", zipcode: 123456,
+              city: "Berlin"}'
+            phoneNumber: +49 30 901820
+            email: test@contabo.de
+          personalData:
+            biometricData: true
+            racialAndEthnicOriginData: true
+            religiousAndPhilosophicalBeliefsData: true
+            healthData: true
+            laborOrganizationMembershipData: true
+            sexualLifeData: true
+            politicalOpinionData: true
+            geneticData: true
+            personalityData: true
+          affectedPersons:
+            tenants: true
+            aggrievedParties: true
+            other:
+              text: Other
+              value: true
+            trainees: true
+            shareholders: true
+            suppliers: true
+            subscribers: true
+            applicants: true
+            businessPartners: true
+            relatives: true
+            users: true
+            consultants: true
+            interns: true
+            members: true
+            interestedParties: true
+            brokersOrIntermediaries: true
+            formerEmployees: true
+            dependents: true
+            serviceProviders: true
+            commercialAgents: true
+            customers: true
+            employees: true
+            press: true
+            witnesses: true
+          processedDataType:
+            authenticationData: true
+            passwordData: true
+            other:
+              text: Other
+              value: true
+            programCode: true
+            imageFiles: true
+            transactionData: true
+            employeeData: true
+            personnelData: true
+            emails: true
+            videoFiles: true
+            bankDetails: true
+            communicationData: true
+            contractBillingData: true
+            usageData: true
+            paymentData: true
+            offerData: true
+            orderData: true
+            ipAddresses: true
+            profileData: true
+            billingData: true
+            addressData: true
+            personnelMasterData: true
+            contractData: true
+            financialData: true
+          serviceName: cd5e9016-1b86-4793-867a-00441fd1d073 (vserver-1000685)
+          invalidDate: 2021-06-03T06:27:12Z
+          serviceCancelDate: 2021-06-13T06:27:12Z
+          createdDate: 2021-06-03T06:27:12Z
+          concludedDate: 2021-06-03T06:27:12Z
+          tenantId: DE
+          customerId: "54321"
+          dpaServiceId: "1"
+          status: preview
+        - archivedDate: 2021-06-03T06:27:12Z
+          dpaId: b943b25a-c8b5-4570-9135-4bbaa7615b81
+          dataProtectionOfficer:
+            firstName: John
+            lastName: Doe
+            address: '{street: "Hauptstraße", country: "Germany", zipcode: 123456,
+              city: "Berlin"}'
+            phoneNumber: +49 30 901820
+            email: test@contabo.de
+          personalData:
+            biometricData: true
+            racialAndEthnicOriginData: true
+            religiousAndPhilosophicalBeliefsData: true
+            healthData: true
+            laborOrganizationMembershipData: true
+            sexualLifeData: true
+            politicalOpinionData: true
+            geneticData: true
+            personalityData: true
+          affectedPersons:
+            tenants: true
+            aggrievedParties: true
+            other:
+              text: Other
+              value: true
+            trainees: true
+            shareholders: true
+            suppliers: true
+            subscribers: true
+            applicants: true
+            businessPartners: true
+            relatives: true
+            users: true
+            consultants: true
+            interns: true
+            members: true
+            interestedParties: true
+            brokersOrIntermediaries: true
+            formerEmployees: true
+            dependents: true
+            serviceProviders: true
+            commercialAgents: true
+            customers: true
+            employees: true
+            press: true
+            witnesses: true
+          processedDataType:
+            authenticationData: true
+            passwordData: true
+            other:
+              text: Other
+              value: true
+            programCode: true
+            imageFiles: true
+            transactionData: true
+            employeeData: true
+            personnelData: true
+            emails: true
+            videoFiles: true
+            bankDetails: true
+            communicationData: true
+            contractBillingData: true
+            usageData: true
+            paymentData: true
+            offerData: true
+            orderData: true
+            ipAddresses: true
+            profileData: true
+            billingData: true
+            addressData: true
+            personnelMasterData: true
+            contractData: true
+            financialData: true
+          serviceName: cd5e9016-1b86-4793-867a-00441fd1d073 (vserver-1000685)
+          invalidDate: 2021-06-03T06:27:12Z
+          serviceCancelDate: 2021-06-13T06:27:12Z
+          createdDate: 2021-06-03T06:27:12Z
+          concludedDate: 2021-06-03T06:27:12Z
+          tenantId: DE
+          customerId: "54321"
+          dpaServiceId: "1"
+          status: preview
+        _links:
+          first: //v1/dpas?page=1
+          previous: //v1/dpas?page=19
+          self: //v1/dpas?page=20
+          next: //v1/dpas?page=21
+          last: //v1/dpas?page=101
+        _pagination: ""
+      properties:
+        _pagination:
+          allOf:
+          - $ref: '#/components/schemas/PaginationMeta'
+          description: Data about pagination like how many results, pages, page size.
+        data:
+          items:
+            $ref: '#/components/schemas/DpaResponseData'
+          type: array
+        _links:
+          allOf:
+          - $ref: '#/components/schemas/Links'
+          example:
+            first: //v1/dpas?page=1
+            previous: //v1/dpas?page=19
+            self: //v1/dpas?page=20
+            next: //v1/dpas?page=21
+            last: //v1/dpas?page=101
+      required:
+      - _links
+      - _pagination
+      - data
+      type: object
+    DpaAuditResponse:
+      example:
+        traceId: 78E9A428-94E9-4A2A-92F5-26038C6884F
+        dpaId: b943b25a-c8b5-4570-9135-4bbaa7615b81
+        changedBy: "54321"
+        requestId: A2F56FAF-18N0-4893-11HG-R312M1E4FEC5
+        tenantId: DE
+        customerId: "54321"
+        changes:
+          prev:
+            name: test
+          new:
+            name: test1
+        action: CREATED
+        id: 12345
+        timestamp: 2021-03-30T11:35:06.177Z
+        username: John Doe
+      properties:
+        id:
+          description: The identifier of the audit entry.
+          example: 12345
+          format: int64
+          type: integer
+        dpaId:
+          description: The identifier of the Dpa
+          example: b943b25a-c8b5-4570-9135-4bbaa7615b81
+          type: string
+        action:
+          description: Type of the action.
+          enum:
+          - CREATED
+          - DELETED
+          - UPDATED
+          example: CREATED
+          type: string
+        timestamp:
+          description: When the change took place.
+          example: 2021-03-30T11:35:06.177Z
+          format: date-time
+          type: string
+        tenantId:
+          description: Customer tenant id
+          example: DE
+          minLength: 1
+          type: string
+        customerId:
+          description: Customer number
+          example: "54321"
+          minLength: 1
+          type: string
+        changedBy:
+          description: User id
+          example: "54321"
+          minLength: 1
+          type: string
+        username:
+          description: User name which did the change.
+          example: John Doe
+          type: string
+        requestId:
+          description: The requestId of the API call which led to the change.
+          example: A2F56FAF-18N0-4893-11HG-R312M1E4FEC5
+          type: string
+        traceId:
+          description: The traceId of the API call which led to the change.
+          example: 78E9A428-94E9-4A2A-92F5-26038C6884F
+          type: string
+        changes:
+          description: List of actual changes.
+          example:
+            prev:
+              name: test
+            new:
+              name: test1
+          type: object
+      required:
+      - action
+      - changedBy
+      - customerId
+      - dpaId
+      - id
+      - requestId
+      - tenantId
+      - timestamp
+      - traceId
+      - username
+      type: object
+    ListDpaAuditResponse:
+      example:
+        data:
+        - traceId: 78E9A428-94E9-4A2A-92F5-26038C6884F
+          dpaId: b943b25a-c8b5-4570-9135-4bbaa7615b81
+          changedBy: "54321"
+          requestId: A2F56FAF-18N0-4893-11HG-R312M1E4FEC5
+          tenantId: DE
+          customerId: "54321"
+          changes:
+            prev:
+              name: test
+            new:
+              name: test1
+          action: CREATED
+          id: 12345
+          timestamp: 2021-03-30T11:35:06.177Z
+          username: John Doe
+        - traceId: 78E9A428-94E9-4A2A-92F5-26038C6884F
+          dpaId: b943b25a-c8b5-4570-9135-4bbaa7615b81
+          changedBy: "54321"
+          requestId: A2F56FAF-18N0-4893-11HG-R312M1E4FEC5
+          tenantId: DE
+          customerId: "54321"
+          changes:
+            prev:
+              name: test
+            new:
+              name: test1
+          action: CREATED
+          id: 12345
+          timestamp: 2021-03-30T11:35:06.177Z
+          username: John Doe
+        _links:
+          first: /v1/dpas/audits?page=2
+          previous: /v1/dpas/audits?page=2
+          next: /v1/dpas/audits?page=3
+          last: /v1/dpas/audits?page=10
+          self: /v1/dpas/audits
+        _pagination: ""
+      properties:
+        _pagination:
+          allOf:
+          - $ref: '#/components/schemas/PaginationMeta'
+          description: Data about pagination like how many results, pages, page size.
+        data:
+          items:
+            $ref: '#/components/schemas/DpaAuditResponse'
+          type: array
+        _links:
+          allOf:
+          - $ref: '#/components/schemas/Links'
+          example:
+            first: /v1/dpas/audits?page=2
+            previous: /v1/dpas/audits?page=2
+            next: /v1/dpas/audits?page=3
+            last: /v1/dpas/audits?page=10
+            self: /v1/dpas/audits
+      required:
+      - _links
+      - _pagination
+      - data
+      type: object
     SecretResponse:
       example:
         createdAt: 2021-06-03T06:27:12Z
@@ -18825,6 +20806,7 @@ components:
           - US-west
           - SIN
           - UK
+          - AUS
           example: EU
           minLength: 1
           type: string
@@ -19539,3 +21521,7 @@ x-tagGroups:
   tags:
   - Firewalls
   - Firewalls Audits
+- name: DPAS
+  tags:
+  - DPAS
+  - DPAS Audits

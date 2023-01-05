@@ -52,6 +52,10 @@ type APIClient struct {
 
 	CustomerApi *CustomerApiService
 
+	DPASApi *DPASApiService
+
+	DpaAuditsApi *DpaAuditsApiService
+
 	FirewallsApi *FirewallsApiService
 
 	FirewallsAuditsApi *FirewallsAuditsApiService
@@ -132,6 +136,8 @@ func NewAPIClient(cfg *Configuration) *APIClient {
 
 	// API Services
 	c.CustomerApi = (*CustomerApiService)(&c.common)
+	c.DPASApi = (*DPASApiService)(&c.common)
+	c.DpaAuditsApi = (*DpaAuditsApiService)(&c.common)
 	c.FirewallsApi = (*FirewallsApiService)(&c.common)
 	c.FirewallsAuditsApi = (*FirewallsAuditsApiService)(&c.common)
 	c.ImagesApi = (*ImagesApiService)(&c.common)

@@ -12,6 +12,7 @@ import (
 	contaboCmd "contabo.com/cli/cntb/cmd"
 	"contabo.com/cli/cntb/cmd/util"
 	instancesClient "contabo.com/cli/cntb/openapi"
+	"contabo.com/cli/cntb/outputFormatter"
 	uuid "github.com/satori/go.uuid"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -66,11 +67,18 @@ var instanceReinstallCmd = &cobra.Command{
 		util.HandleErrors(err, httpResp, "while reinstalling instance")
 
 		responseJSON, _ := resp.MarshalJSON()
+		responseDataJSON, _ := json.Marshal(resp.Data)
+
+		configFormatter := outputFormatter.FormatterConfig{
+			JsonPath: contaboCmd.OutputFormatDetails}
+
+		util.HandleResponse(responseDataJSON, configFormatter)
 
 		log.Info(fmt.Sprintf("%v", string(responseJSON)))
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
 		contaboCmd.ValidateCreateInput()
+		contaboCmd.ValidateOutputFormat()
 
 		if len(args) > 1 {
 			cmd.Help()
