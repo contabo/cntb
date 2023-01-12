@@ -25,18 +25,21 @@ type CancelObjectStorageResponseData struct {
 	ObjectStorageId string `json:"objectStorageId"`
 	// Cancellation date for object storage.
 	CancelDate string `json:"cancelDate"`
+	// Display name for object storage.
+	DisplayName string `json:"displayName"`
 }
 
 // NewCancelObjectStorageResponseData instantiates a new CancelObjectStorageResponseData object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCancelObjectStorageResponseData(tenantId string, customerId string, objectStorageId string, cancelDate string) *CancelObjectStorageResponseData {
+func NewCancelObjectStorageResponseData(tenantId string, customerId string, objectStorageId string, cancelDate string, displayName string) *CancelObjectStorageResponseData {
 	this := CancelObjectStorageResponseData{}
 	this.TenantId = tenantId
 	this.CustomerId = customerId
 	this.ObjectStorageId = objectStorageId
 	this.CancelDate = cancelDate
+	this.DisplayName = displayName
 	return &this
 }
 
@@ -144,6 +147,30 @@ func (o *CancelObjectStorageResponseData) SetCancelDate(v string) {
 	o.CancelDate = v
 }
 
+// GetDisplayName returns the DisplayName field value
+func (o *CancelObjectStorageResponseData) GetDisplayName() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.DisplayName
+}
+
+// GetDisplayNameOk returns a tuple with the DisplayName field value
+// and a boolean to check if the value has been set.
+func (o *CancelObjectStorageResponseData) GetDisplayNameOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.DisplayName, true
+}
+
+// SetDisplayName sets field value
+func (o *CancelObjectStorageResponseData) SetDisplayName(v string) {
+	o.DisplayName = v
+}
+
 func (o CancelObjectStorageResponseData) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
 	if true {
@@ -157,6 +184,9 @@ func (o CancelObjectStorageResponseData) MarshalJSON() ([]byte, error) {
 	}
 	if true {
 		toSerialize["cancelDate"] = o.CancelDate
+	}
+	if true {
+		toSerialize["displayName"] = o.DisplayName
 	}
 	return json.Marshal(toSerialize)
 }

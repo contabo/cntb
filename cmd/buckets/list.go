@@ -6,12 +6,10 @@ import (
 	"fmt"
 
 	"contabo.com/cli/cntb/client"
-	"contabo.com/cli/cntb/config"
 	contaboCmd "contabo.com/cli/cntb/cmd"
 	"contabo.com/cli/cntb/cmd/util"
-	authClient "contabo.com/cli/cntb/oauth2Client"
+	"contabo.com/cli/cntb/config"
 	"contabo.com/cli/cntb/outputFormatter"
-	jwt "github.com/golang-jwt/jwt"
 	uuid "github.com/satori/go.uuid"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -24,93 +22,67 @@ import (
 )
 
 var listBucketsCmd = &cobra.Command{
-	Use:     "buckets",
+	Use:     "buckets --storageId [objectStorageId]",
 	Short:   "All about your buckets.",
 	Long:    `Retrieves information about your buckets. Filter by name.`,
 	Example: `cntb get buckets`,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		// get list of object storage
-		ApiRetrieveObjectStorageListRequest := client.ApiClient().
-			ObjectStoragesApi.RetrieveObjectStorageList(context.Background()).
-			XRequestId(uuid.NewV4().String()).
-			Page(contaboCmd.Page).
-			Size(contaboCmd.Size)
+		ApiRetrieveObjectStorageRequest := client.ApiClient().
+			ObjectStoragesApi.RetrieveObjectStorage(context.Background(), listBucketObjectStorageId).
+			XRequestId(uuid.NewV4().String())
 
-		if listRegionFilter != "" {
-			ApiRetrieveObjectStorageListRequest = ApiRetrieveObjectStorageListRequest.Region(listRegionFilter)
+		objStorageRetrieveResponse, httpResp, err := ApiRetrieveObjectStorageRequest.Execute()
+		util.HandleErrors(err, httpResp, fmt.Sprintf("Error while retrieving object storage with id : %v", listBucketObjectStorageId))
+
+		if len(objStorageRetrieveResponse.Data) == 0 {
+			log.Fatal(fmt.Sprintf("No Object Storage could be found with id : %v", listBucketObjectStorageId))
 		}
 
-		objStorageListresponse, httpResp, err := ApiRetrieveObjectStorageListRequest.Execute()
-		util.HandleErrors(err, httpResp, "while retrieving object storages")
+		objStorage := objStorageRetrieveResponse.Data[0]
 
-		if len(objStorageListresponse.Data) == 0 && listRegionFilter != "" {
-			log.Fatal("No Object Storage could be found in this region.")
-		}
-
-		if len(objStorageListresponse.Data) == 0 {
-			log.Fatal("No Object Storage could be found. You have to order an object storage first.")
-		}
-
-		// get keycloakId from jwt Token
-		jwtAccessToken := authClient.RestoreTokenFromCache(config.Conf.Oauth2User).AccessToken
-		claims := jwt.MapClaims{}
-		_, err = jwt.ParseWithClaims(jwtAccessToken, claims, func(token *jwt.Token) (interface{}, error) {
-			return []byte("<YOUR VERIFICATION KEY>"), nil
-		})
-		if err != nil {
-			log.Debug(err)
-		}
-		if claims["sub"] == nil {
-			log.Fatal("Error in getting access token.")
-		}
-		keycloakId := claims["sub"]
+		keycloakId := util.GetKeycloakId(config.Conf.Oauth2User)
 
 		// get user credentials
-		ApiGetObjectStorageCredentialsRequest := client.ApiClient().UsersApi.GetObjectStorageCredentials(context.Background(), keycloakId.(string)).
-			XRequestId(uuid.NewV4().String())
-		retrieveCredentialResponse, httpResp, err := ApiGetObjectStorageCredentialsRequest.Execute()
-		util.HandleErrors(err, httpResp, "while retrieving credentials")
+		retrieveCredentialResponse, httpResp, err := util.GetObjectStorageCredentials(keycloakId, listBucketObjectStorageId)
+		util.HandleErrors(err, httpResp, fmt.Sprintf("Error while getting credentials for object storage with id : %v", listBucketObjectStorageId))
 		awsAccessKeyCred := retrieveCredentialResponse.Data[0].AccessKey
 		awsSecretKeyCred := retrieveCredentialResponse.Data[0].SecretKey
 
-		// loop over object storage list
-		for _, objStorage := range objStorageListresponse.Data {
-			s3Url, err := url.Parse(objStorage.S3Url)
-			if err != nil {
-				log.Fatal(err)
-			}
-
-			client, err := minio.New(s3Url.Host, &minio.Options{
-				Creds: credentials.NewStaticV4(
-					awsAccessKeyCred,
-					awsSecretKeyCred,
-					"",
-				),
-				Secure: true,
-			})
-			if err != nil {
-				log.Fatal(err)
-			}
-
-			buckets, err := client.ListBuckets(context.Background())
-
-			if err != nil {
-				fmt.Println(err)
-				log.Fatal("Error retrieving buckets in region " + objStorageListresponse.Data[0].DataCenter)
-			}
-			responseJson, _ := json.Marshal(buckets)
-			configFormatter := outputFormatter.FormatterConfig{
-				Filter: []string{
-					"name",
-				},
-				WideFilter: []string{
-					"name", "creationDate",
-				},
-				JsonPath: contaboCmd.OutputFormatDetails,
-			}
-			util.HandleResponse(responseJson, configFormatter)
+		s3Url, err := url.Parse(objStorage.S3Url)
+		if err != nil {
+			log.Fatal(err)
 		}
+
+		client, err := minio.New(s3Url.Host, &minio.Options{
+			Creds: credentials.NewStaticV4(
+				awsAccessKeyCred,
+				awsSecretKeyCred,
+				"",
+			),
+			Secure: true,
+		})
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		buckets, err := client.ListBuckets(context.Background())
+
+		if err != nil {
+			fmt.Println(err)
+			log.Fatal(fmt.Sprintf("Error while retrieving buckets for object storage with id : %v", listBucketObjectStorageId))
+		}
+		responseJson, _ := json.Marshal(buckets)
+		configFormatter := outputFormatter.FormatterConfig{
+			Filter: []string{
+				"name",
+			},
+			WideFilter: []string{
+				"name", "creationDate",
+			},
+			JsonPath: contaboCmd.OutputFormatDetails,
+		}
+		util.HandleResponse(responseJson, configFormatter)
 
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
@@ -119,8 +91,8 @@ var listBucketsCmd = &cobra.Command{
 			cmd.Help()
 			log.Fatal("Too many positional arguments.")
 		}
-		viper.BindPFlag("awsRegion", cmd.Flags().Lookup("awsRegion"))
-		listRegionFilter = viper.GetString("awsRegion")
+		viper.BindPFlag("storageId", cmd.Flags().Lookup("storageId"))
+		listBucketObjectStorageId = viper.GetString("storageId")
 
 		return nil
 	},
@@ -128,6 +100,6 @@ var listBucketsCmd = &cobra.Command{
 
 func init() {
 	contaboCmd.GetCmd.AddCommand(listBucketsCmd)
-	listBucketsCmd.Flags().StringVarP(&listRegionFilter, "awsRegion", "r", "",
-		`Name of the region.`)
+	listBucketsCmd.Flags().StringVar(&listBucketObjectStorageId, "storageId", "",
+		`Id of the object storage from where bucket will be listed`)
 }

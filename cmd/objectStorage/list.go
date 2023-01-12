@@ -41,8 +41,8 @@ var objectsStorageGetCmd = &cobra.Command{
 		responseJson, _ := json.Marshal(resp.Data)
 
 		configFormatter := outputFormatter.FormatterConfig{
-			Filter:     []string{"objectStorageId", "dataCenter", "region", "createdDate", "totalPurchasedSpaceTB"},
-			WideFilter: []string{"objectStorageId", "dataCenter", "region", "createdDate", "status", "totalPurchasedSpaceTB", "s3Url"},
+			Filter:     []string{"objectStorageId", "displayName", "dataCenter", "region", "createdDate", "totalPurchasedSpaceTB"},
+			WideFilter: []string{"objectStorageId", "displayName", "dataCenter", "region", "createdDate", "status", "totalPurchasedSpaceTB", "s3Url"},
 			JsonPath:   contaboCmd.OutputFormatDetails,
 		}
 

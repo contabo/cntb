@@ -25,18 +25,30 @@ type CredentialData struct {
 	AccessKey string `json:"accessKey"`
 	// Secret key ID.
 	SecretKey string `json:"secretKey"`
+	// Object Storage ID.
+	ObjectStorageId string `json:"objectStorageId"`
+	// Object Storage Name.
+	DisplayName string `json:"displayName"`
+	// Object Storage Region.
+	Region string `json:"region"`
+	// Object Storage Credential ID
+	CredentialId float32 `json:"credentialId"`
 }
 
 // NewCredentialData instantiates a new CredentialData object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCredentialData(tenantId string, customerId string, accessKey string, secretKey string) *CredentialData {
+func NewCredentialData(tenantId string, customerId string, accessKey string, secretKey string, objectStorageId string, displayName string, region string, credentialId float32) *CredentialData {
 	this := CredentialData{}
 	this.TenantId = tenantId
 	this.CustomerId = customerId
 	this.AccessKey = accessKey
 	this.SecretKey = secretKey
+	this.ObjectStorageId = objectStorageId
+	this.DisplayName = displayName
+	this.Region = region
+	this.CredentialId = credentialId
 	return &this
 }
 
@@ -144,6 +156,102 @@ func (o *CredentialData) SetSecretKey(v string) {
 	o.SecretKey = v
 }
 
+// GetObjectStorageId returns the ObjectStorageId field value
+func (o *CredentialData) GetObjectStorageId() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.ObjectStorageId
+}
+
+// GetObjectStorageIdOk returns a tuple with the ObjectStorageId field value
+// and a boolean to check if the value has been set.
+func (o *CredentialData) GetObjectStorageIdOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.ObjectStorageId, true
+}
+
+// SetObjectStorageId sets field value
+func (o *CredentialData) SetObjectStorageId(v string) {
+	o.ObjectStorageId = v
+}
+
+// GetDisplayName returns the DisplayName field value
+func (o *CredentialData) GetDisplayName() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.DisplayName
+}
+
+// GetDisplayNameOk returns a tuple with the DisplayName field value
+// and a boolean to check if the value has been set.
+func (o *CredentialData) GetDisplayNameOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.DisplayName, true
+}
+
+// SetDisplayName sets field value
+func (o *CredentialData) SetDisplayName(v string) {
+	o.DisplayName = v
+}
+
+// GetRegion returns the Region field value
+func (o *CredentialData) GetRegion() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.Region
+}
+
+// GetRegionOk returns a tuple with the Region field value
+// and a boolean to check if the value has been set.
+func (o *CredentialData) GetRegionOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.Region, true
+}
+
+// SetRegion sets field value
+func (o *CredentialData) SetRegion(v string) {
+	o.Region = v
+}
+
+// GetCredentialId returns the CredentialId field value
+func (o *CredentialData) GetCredentialId() float32 {
+	if o == nil {
+		var ret float32
+		return ret
+	}
+
+	return o.CredentialId
+}
+
+// GetCredentialIdOk returns a tuple with the CredentialId field value
+// and a boolean to check if the value has been set.
+func (o *CredentialData) GetCredentialIdOk() (*float32, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.CredentialId, true
+}
+
+// SetCredentialId sets field value
+func (o *CredentialData) SetCredentialId(v float32) {
+	o.CredentialId = v
+}
+
 func (o CredentialData) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
 	if true {
@@ -157,6 +265,18 @@ func (o CredentialData) MarshalJSON() ([]byte, error) {
 	}
 	if true {
 		toSerialize["secretKey"] = o.SecretKey
+	}
+	if true {
+		toSerialize["objectStorageId"] = o.ObjectStorageId
+	}
+	if true {
+		toSerialize["displayName"] = o.DisplayName
+	}
+	if true {
+		toSerialize["region"] = o.Region
+	}
+	if true {
+		toSerialize["credentialId"] = o.CredentialId
 	}
 	return json.Marshal(toSerialize)
 }

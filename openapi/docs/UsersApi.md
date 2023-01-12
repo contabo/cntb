@@ -7,8 +7,9 @@ Method | HTTP request | Description
 [**CreateUser**](UsersApi.md#CreateUser) | **Post** /v1/users | Create a new user
 [**DeleteUser**](UsersApi.md#DeleteUser) | **Delete** /v1/users/{userId} | Delete existing user by id
 [**GenerateClientSecret**](UsersApi.md#GenerateClientSecret) | **Put** /v1/users/client/secret | Generate new client secret
-[**GetObjectStorageCredentials**](UsersApi.md#GetObjectStorageCredentials) | **Get** /v1/users/{userId}/object-storages/credentials | Get S3 compatible object storage credentials
-[**RegenerateCredentials**](UsersApi.md#RegenerateCredentials) | **Patch** /v1/users/{userId}/object-storages/credentials | Regenerates secret key of specified user for the S3 compatible object storages
+[**GetObjectStorageCredentials**](UsersApi.md#GetObjectStorageCredentials) | **Get** /v1/users/{userId}/object-storages/{objectStorageId}/credentials/{credentialId} | Get S3 compatible object storage credentials
+[**ListObjectStorageCredentials**](UsersApi.md#ListObjectStorageCredentials) | **Get** /v1/users/{userId}/object-storages/credentials | Get list of S3 compatible object storage credentials for user
+[**RegenerateCredentials**](UsersApi.md#RegenerateCredentials) | **Patch** /v1/users/{userId}/object-storages/{objectStorageId}/credentials/{credentialId} | Regenerates secret key of specified user for the S3 compatible object storages
 [**ResendEmailVerification**](UsersApi.md#ResendEmailVerification) | **Post** /v1/users/{userId}/resend-email-verification | Resend email verification
 [**ResetPassword**](UsersApi.md#ResetPassword) | **Post** /v1/users/{userId}/reset-password | Send reset password email
 [**RetrieveUser**](UsersApi.md#RetrieveUser) | **Get** /v1/users/{userId} | Get specific user by id
@@ -230,7 +231,7 @@ Name | Type | Description  | Notes
 
 ## GetObjectStorageCredentials
 
-> CredentialResponse GetObjectStorageCredentials(ctx, userId).XRequestId(xRequestId).XTraceId(xTraceId).Execute()
+> FindCredentialResponse GetObjectStorageCredentials(ctx, userId, objectStorageId, credentialId).XRequestId(xRequestId).XTraceId(xTraceId).Execute()
 
 Get S3 compatible object storage credentials
 
@@ -251,17 +252,101 @@ import (
 func main() {
     xRequestId := "04e0f898-37b4-48bc-a794-1a57abe6aa31" // string | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually.
     userId := "6cdf5968-f9fe-4192-97c2-f349e813c5e8" // string | The identifier of the user
+    objectStorageId := "d8417276-d2d9-43a9-a0a8-9a6fa6060246" // string | The identifier of the S3 object storage
+    credentialId := int64(12345) // int64 | The ID of the object storage credential
     xTraceId := "xTraceId_example" // string | Identifier to trace group of requests. (optional)
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.UsersApi.GetObjectStorageCredentials(context.Background(), userId).XRequestId(xRequestId).XTraceId(xTraceId).Execute()
+    resp, r, err := api_client.UsersApi.GetObjectStorageCredentials(context.Background(), userId, objectStorageId, credentialId).XRequestId(xRequestId).XTraceId(xTraceId).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `UsersApi.GetObjectStorageCredentials``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `GetObjectStorageCredentials`: CredentialResponse
+    // response from `GetObjectStorageCredentials`: FindCredentialResponse
     fmt.Fprintf(os.Stdout, "Response from `UsersApi.GetObjectStorageCredentials`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**userId** | **string** | The identifier of the user | 
+**objectStorageId** | **string** | The identifier of the S3 object storage | 
+**credentialId** | **int64** | The ID of the object storage credential | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiGetObjectStorageCredentialsRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **xRequestId** | **string** | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually. | 
+
+
+
+ **xTraceId** | **string** | Identifier to trace group of requests. | 
+
+### Return type
+
+[**FindCredentialResponse**](FindCredentialResponse.md)
+
+### Authorization
+
+[bearer](../README.md#bearer)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## ListObjectStorageCredentials
+
+> ListCredentialResponse ListObjectStorageCredentials(ctx, userId).XRequestId(xRequestId).XTraceId(xTraceId).Page(page).Size(size).OrderBy(orderBy).ObjectStorageId(objectStorageId).Execute()
+
+Get list of S3 compatible object storage credentials for user
+
+
+
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "./openapi"
+)
+
+func main() {
+    xRequestId := "04e0f898-37b4-48bc-a794-1a57abe6aa31" // string | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually.
+    userId := "6cdf5968-f9fe-4192-97c2-f349e813c5e8" // string | The identifier of the user
+    xTraceId := "xTraceId_example" // string | Identifier to trace group of requests. (optional)
+    page := int64(1) // int64 | Number of page to be fetched. (optional)
+    size := int64(10) // int64 | Number of elements per page. (optional)
+    orderBy := []string{"Inner_example"} // []string | Specify fields and ordering (ASC for ascending, DESC for descending) in following format `field:ASC|DESC`. (optional)
+    objectStorageId := "d8417276-d2d9-43a9-a0a8-9a6fa6060246" // string | The identifier of the S3 object storage (optional)
+
+    configuration := openapiclient.NewConfiguration()
+    api_client := openapiclient.NewAPIClient(configuration)
+    resp, r, err := api_client.UsersApi.ListObjectStorageCredentials(context.Background(), userId).XRequestId(xRequestId).XTraceId(xTraceId).Page(page).Size(size).OrderBy(orderBy).ObjectStorageId(objectStorageId).Execute()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Error when calling `UsersApi.ListObjectStorageCredentials``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `ListObjectStorageCredentials`: ListCredentialResponse
+    fmt.Fprintf(os.Stdout, "Response from `UsersApi.ListObjectStorageCredentials`: %v\n", resp)
 }
 ```
 
@@ -275,7 +360,7 @@ Name | Type | Description  | Notes
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiGetObjectStorageCredentialsRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiListObjectStorageCredentialsRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
@@ -283,10 +368,14 @@ Name | Type | Description  | Notes
  **xRequestId** | **string** | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually. | 
 
  **xTraceId** | **string** | Identifier to trace group of requests. | 
+ **page** | **int64** | Number of page to be fetched. | 
+ **size** | **int64** | Number of elements per page. | 
+ **orderBy** | **[]string** | Specify fields and ordering (ASC for ascending, DESC for descending) in following format &#x60;field:ASC|DESC&#x60;. | 
+ **objectStorageId** | **string** | The identifier of the S3 object storage | 
 
 ### Return type
 
-[**CredentialResponse**](CredentialResponse.md)
+[**ListCredentialResponse**](ListCredentialResponse.md)
 
 ### Authorization
 
@@ -304,7 +393,7 @@ Name | Type | Description  | Notes
 
 ## RegenerateCredentials
 
-> CredentialResponse RegenerateCredentials(ctx, userId).XRequestId(xRequestId).XTraceId(xTraceId).Execute()
+> FindCredentialResponse RegenerateCredentials(ctx, userId, objectStorageId, credentialId).XRequestId(xRequestId).XTraceId(xTraceId).Execute()
 
 Regenerates secret key of specified user for the S3 compatible object storages
 
@@ -325,16 +414,18 @@ import (
 func main() {
     xRequestId := "04e0f898-37b4-48bc-a794-1a57abe6aa31" // string | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually.
     userId := "6cdf5968-f9fe-4192-97c2-f349e813c5e8" // string | The identifier of the user
+    objectStorageId := "d8417276-d2d9-43a9-a0a8-9a6fa6060246" // string | The identifier of the S3 object storage
+    credentialId := int64(12345) // int64 | The ID of the object storage credential
     xTraceId := "xTraceId_example" // string | Identifier to trace group of requests. (optional)
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.UsersApi.RegenerateCredentials(context.Background(), userId).XRequestId(xRequestId).XTraceId(xTraceId).Execute()
+    resp, r, err := api_client.UsersApi.RegenerateCredentials(context.Background(), userId, objectStorageId, credentialId).XRequestId(xRequestId).XTraceId(xTraceId).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `UsersApi.RegenerateCredentials``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `RegenerateCredentials`: CredentialResponse
+    // response from `RegenerateCredentials`: FindCredentialResponse
     fmt.Fprintf(os.Stdout, "Response from `UsersApi.RegenerateCredentials`: %v\n", resp)
 }
 ```
@@ -346,6 +437,8 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
 **userId** | **string** | The identifier of the user | 
+**objectStorageId** | **string** | The identifier of the S3 object storage | 
+**credentialId** | **int64** | The ID of the object storage credential | 
 
 ### Other Parameters
 
@@ -356,11 +449,13 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **xRequestId** | **string** | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually. | 
 
+
+
  **xTraceId** | **string** | Identifier to trace group of requests. | 
 
 ### Return type
 
-[**CredentialResponse**](CredentialResponse.md)
+[**FindCredentialResponse**](FindCredentialResponse.md)
 
 ### Authorization
 

@@ -19,12 +19,13 @@ Name | Type | Description | Notes
 **ServiceName** | **string** | The service name and subscriptionId | 
 **ServiceCancelDate** | **time.Time** | The cancel date time for the service the dpa covers | 
 **Status** | **string** | The status of the dpa | 
+**ServiceDisplayName** | **string** | The display name of the service | 
 
 ## Methods
 
 ### NewDpaResponseData
 
-`func NewDpaResponseData(tenantId string, customerId string, dpaId string, processedDataType ProcessedDataType, personalData PersonalData, affectedPersons AffectedPersons, dataProtectionOfficer DataProtectionOfficerRequest, dpaServiceId string, createdDate time.Time, concludedDate time.Time, invalidDate time.Time, archivedDate time.Time, serviceName string, serviceCancelDate time.Time, status string, ) *DpaResponseData`
+`func NewDpaResponseData(tenantId string, customerId string, dpaId string, processedDataType ProcessedDataType, personalData PersonalData, affectedPersons AffectedPersons, dataProtectionOfficer DataProtectionOfficerRequest, dpaServiceId string, createdDate time.Time, concludedDate time.Time, invalidDate time.Time, archivedDate time.Time, serviceName string, serviceCancelDate time.Time, status string, serviceDisplayName string, ) *DpaResponseData`
 
 NewDpaResponseData instantiates a new DpaResponseData object
 This constructor will assign default values to properties that have it defined,
@@ -337,6 +338,26 @@ and a boolean to check if the value has been set.
 `func (o *DpaResponseData) SetStatus(v string)`
 
 SetStatus sets Status field to given value.
+
+
+### GetServiceDisplayName
+
+`func (o *DpaResponseData) GetServiceDisplayName() string`
+
+GetServiceDisplayName returns the ServiceDisplayName field if non-nil, zero value otherwise.
+
+### GetServiceDisplayNameOk
+
+`func (o *DpaResponseData) GetServiceDisplayNameOk() (*string, bool)`
+
+GetServiceDisplayNameOk returns a tuple with the ServiceDisplayName field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetServiceDisplayName
+
+`func (o *DpaResponseData) SetServiceDisplayName(v string)`
+
+SetServiceDisplayName sets ServiceDisplayName field to given value.
 
 
 

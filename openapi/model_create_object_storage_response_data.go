@@ -46,13 +46,15 @@ type CreateObjectStorageResponseData struct {
 	Status string `json:"status"`
 	// The region where your object storage is located
 	Region string `json:"region"`
+	// Display name for object storage.
+	DisplayName string `json:"displayName"`
 }
 
 // NewCreateObjectStorageResponseData instantiates a new CreateObjectStorageResponseData object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCreateObjectStorageResponseData(tenantId string, customerId string, objectStorageId string, createdDate time.Time, cancelDate string, autoScaling AutoScalingTypeResponse, dataCenter string, totalPurchasedSpaceTB float64, usedSpaceTB float64, usedSpacePercentage float64, s3Url string, s3TenantId string, status string, region string) *CreateObjectStorageResponseData {
+func NewCreateObjectStorageResponseData(tenantId string, customerId string, objectStorageId string, createdDate time.Time, cancelDate string, autoScaling AutoScalingTypeResponse, dataCenter string, totalPurchasedSpaceTB float64, usedSpaceTB float64, usedSpacePercentage float64, s3Url string, s3TenantId string, status string, region string, displayName string) *CreateObjectStorageResponseData {
 	this := CreateObjectStorageResponseData{}
 	this.TenantId = tenantId
 	this.CustomerId = customerId
@@ -68,6 +70,7 @@ func NewCreateObjectStorageResponseData(tenantId string, customerId string, obje
 	this.S3TenantId = s3TenantId
 	this.Status = status
 	this.Region = region
+	this.DisplayName = displayName
 	return &this
 }
 
@@ -415,6 +418,30 @@ func (o *CreateObjectStorageResponseData) SetRegion(v string) {
 	o.Region = v
 }
 
+// GetDisplayName returns the DisplayName field value
+func (o *CreateObjectStorageResponseData) GetDisplayName() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.DisplayName
+}
+
+// GetDisplayNameOk returns a tuple with the DisplayName field value
+// and a boolean to check if the value has been set.
+func (o *CreateObjectStorageResponseData) GetDisplayNameOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.DisplayName, true
+}
+
+// SetDisplayName sets field value
+func (o *CreateObjectStorageResponseData) SetDisplayName(v string) {
+	o.DisplayName = v
+}
+
 func (o CreateObjectStorageResponseData) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
 	if true {
@@ -458,6 +485,9 @@ func (o CreateObjectStorageResponseData) MarshalJSON() ([]byte, error) {
 	}
 	if true {
 		toSerialize["region"] = o.Region
+	}
+	if true {
+		toSerialize["displayName"] = o.DisplayName
 	}
 	return json.Marshal(toSerialize)
 }

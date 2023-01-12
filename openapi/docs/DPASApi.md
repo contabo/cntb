@@ -161,7 +161,7 @@ Name | Type | Description  | Notes
 
 ## DownloadDpaFile
 
-> map[string]interface{} DownloadDpaFile(ctx, dpaId).XRequestId(xRequestId).XTraceId(xTraceId).Execute()
+> map[string]interface{} DownloadDpaFile(ctx, dpaId).XRequestId(xRequestId).XTraceId(xTraceId).ContentDisposition(contentDisposition).Execute()
 
 Download concluded DPA PDF file
 
@@ -183,10 +183,11 @@ func main() {
     xRequestId := "04e0f898-37b4-48bc-a794-1a57abe6aa31" // string | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually.
     dpaId := "6C65CD0E-572F-4051-9161-0D731DB44B6E" // string | The identifier of the data processing agreement
     xTraceId := "xTraceId_example" // string | Identifier to trace group of requests. (optional)
+    contentDisposition := "inline" // string | Set the content dispotion header for download PDF or only preview it. Default is inline (optional)
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.DPASApi.DownloadDpaFile(context.Background(), dpaId).XRequestId(xRequestId).XTraceId(xTraceId).Execute()
+    resp, r, err := api_client.DPASApi.DownloadDpaFile(context.Background(), dpaId).XRequestId(xRequestId).XTraceId(xTraceId).ContentDisposition(contentDisposition).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DPASApi.DownloadDpaFile``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -214,6 +215,7 @@ Name | Type | Description  | Notes
  **xRequestId** | **string** | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually. | 
 
  **xTraceId** | **string** | Identifier to trace group of requests. | 
+ **contentDisposition** | **string** | Set the content dispotion header for download PDF or only preview it. Default is inline | 
 
 ### Return type
 
@@ -235,7 +237,7 @@ Name | Type | Description  | Notes
 
 ## DownloadPreviewDpa
 
-> map[string]interface{} DownloadPreviewDpa(ctx, dpaId).XRequestId(xRequestId).XTraceId(xTraceId).Execute()
+> map[string]interface{} DownloadPreviewDpa(ctx, dpaId).XRequestId(xRequestId).XTraceId(xTraceId).ContentDisposition(contentDisposition).Execute()
 
 Download preview version of DPA
 
@@ -257,10 +259,11 @@ func main() {
     xRequestId := "04e0f898-37b4-48bc-a794-1a57abe6aa31" // string | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually.
     dpaId := "6C65CD0E-572F-4051-9161-0D731DB44B6E" // string | The identifier of the data processing agreement
     xTraceId := "xTraceId_example" // string | Identifier to trace group of requests. (optional)
+    contentDisposition := "inline" // string | Set the content dispotion header for download PDF or only preview it. Default is inline (optional)
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.DPASApi.DownloadPreviewDpa(context.Background(), dpaId).XRequestId(xRequestId).XTraceId(xTraceId).Execute()
+    resp, r, err := api_client.DPASApi.DownloadPreviewDpa(context.Background(), dpaId).XRequestId(xRequestId).XTraceId(xTraceId).ContentDisposition(contentDisposition).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DPASApi.DownloadPreviewDpa``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -288,6 +291,7 @@ Name | Type | Description  | Notes
  **xRequestId** | **string** | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually. | 
 
  **xTraceId** | **string** | Identifier to trace group of requests. | 
+ **contentDisposition** | **string** | Set the content dispotion header for download PDF or only preview it. Default is inline | 
 
 ### Return type
 

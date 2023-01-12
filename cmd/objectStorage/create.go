@@ -34,6 +34,11 @@ var objectStorageCreateCmd = &cobra.Command{
 				SizeLimitTB: createScalingLimitTB,
 			}
 
+			createObjectStorageRequest.DisplayName = &createdisplayName
+			if createdisplayName == "" {
+				createObjectStorageRequest.DisplayName = nil
+			}
+
 			createObjectStorageRequest.AutoScaling = &autoScaling
 			createObjectStorageRequest.Region = createRegion
 			createObjectStorageRequest.TotalPurchasedSpaceTB = createTotalPurchasedSpaceTB
@@ -68,6 +73,9 @@ var objectStorageCreateCmd = &cobra.Command{
 		viper.BindPFlag("region", cmd.Flags().Lookup("region"))
 		createRegion = viper.GetString("region")
 
+		viper.BindPFlag("displayName", cmd.Flags().Lookup("displayName"))
+		createdisplayName = viper.GetString("displayName")
+
 		viper.BindPFlag("scalingState", cmd.Flags().Lookup("scalingState"))
 		createScalingState = viper.GetString("scalingState")
 
@@ -89,6 +97,8 @@ func init() {
 	contaboCmd.CreateCmd.AddCommand(objectStorageCreateCmd)
 
 	objectStorageCreateCmd.Flags().StringVarP(&createRegion, "region", "r", "", `Region where the objectStorage gets deployed.`)
+
+	objectStorageCreateCmd.Flags().StringVarP(&createdisplayName, "displayName", "n", "", `Display name helps to differentiate between object storages.`)
 
 	objectStorageCreateCmd.Flags().StringVarP(&createScalingState, "scalingState", "s", "disabled",
 		`Set scalingState to enable autoscaling (allowed values are enabled|disabled)`)

@@ -1285,6 +1285,103 @@ paths:
         source: cntb get permissions
   /v1/users/{userId}/object-storages/credentials:
     get:
+      description: Get list of S3 compatible object storage credentials for accessing
+        it via S3 compatible tools like `aws` cli.
+      operationId: listObjectStorageCredentials
+      parameters:
+      - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
+          to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4)
+          to generate them manually.'
+        explode: false
+        in: header
+        name: x-request-id
+        required: true
+        schema:
+          example: 04e0f898-37b4-48bc-a794-1a57abe6aa31
+          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-5][0-9A-Fa-f]{3}-[089abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+          type: string
+        style: simple
+      - description: Identifier to trace group of requests.
+        explode: false
+        in: header
+        name: x-trace-id
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: The identifier of the user
+        example: 6cdf5968-f9fe-4192-97c2-f349e813c5e8
+        explode: false
+        in: path
+        name: userId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Number of page to be fetched.
+        example: 1
+        explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          format: int64
+          type: integer
+        style: form
+      - description: Number of elements per page.
+        example: 10
+        explode: true
+        in: query
+        name: size
+        required: false
+        schema:
+          format: int64
+          type: integer
+        style: form
+      - description: Specify fields and ordering (ASC for ascending, DESC for descending)
+          in following format `field:ASC|DESC`.
+        example: name:asc
+        explode: true
+        in: query
+        name: orderBy
+        required: false
+        schema:
+          items:
+            type: string
+          type: array
+        style: form
+      - description: The identifier of the S3 object storage
+        example: d8417276-d2d9-43a9-a0a8-9a6fa6060246
+        explode: true
+        in: query
+        name: objectStorageId
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListCredentialResponse'
+          description: The response will be an array of JSON objects that contains
+            S3 credentials.
+      security:
+      - bearer: []
+      summary: Get list of S3 compatible object storage credentials for user
+      tags:
+      - Users
+      x-codeSamples:
+      - lang: cURL
+        source: 'curl -X GET ''https://api.contabo.com/v1/users/6cdf5968-f9fe-4192-97c2-f349e813c5e8/object-storages/credentials''
+          -H ''Content-Type: application/json'' -H "Authorization: Bearer ${ACCESS_TOKEN}"
+          -H ''x-request-id: 04e0f898-37b4-48bc-a794-1a57abe6aa31'' -H ''x-trace-id:
+          123213'''
+      - lang: cntb CLI
+        source: cntb get user-credentials 6cdf5968-f9fe-4192-97c2-f349e813c5e8
+  /v1/users/{userId}/object-storages/{objectStorageId}/credentials/{credentialId}:
+    get:
       description: Get S3 compatible object storage credentials for accessing it via
         S3 compatible tools like `aws` cli.
       operationId: getObjectStorageCredentials
@@ -1318,12 +1415,31 @@ paths:
         schema:
           type: string
         style: simple
+      - description: The identifier of the S3 object storage
+        example: d8417276-d2d9-43a9-a0a8-9a6fa6060246
+        explode: false
+        in: path
+        name: objectStorageId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The ID of the object storage credential
+        example: 12345
+        explode: false
+        in: path
+        name: credentialId
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CredentialResponse'
+                $ref: '#/components/schemas/FindCredentialResponse'
           description: The response will be a JSON object and contains S3 credentials.
       security:
       - bearer: []
@@ -1332,16 +1448,16 @@ paths:
       - Users
       x-codeSamples:
       - lang: cURL
-        source: 'curl -X GET ''https://api.contabo.com/v1/users/6cdf5968-f9fe-4192-97c2-f349e813c5e8/object-storage/credentials''
+        source: 'curl -X GET ''https://api.contabo.com/v1/users/6cdf5968-f9fe-4192-97c2-f349e813c5e8/object-storages/6641ae21-e45d-4e03-8e70-661067152d1d/credentials/12345''
           -H ''Content-Type: application/json'' -H "Authorization: Bearer ${ACCESS_TOKEN}"
           -H ''x-request-id: 04e0f898-37b4-48bc-a794-1a57abe6aa31'' -H ''x-trace-id:
           123213'''
       - lang: cntb CLI
-        source: cntb get user-credentials 6cdf5968-f9fe-4192-97c2-f349e813c5e8
+        source: cntb get user-credentials 6cdf5968-f9fe-4192-97c2-f349e813c5e8 6641ae21-e45d-4e03-8e70-661067152d1d
+          12345
     patch:
-      description: Regenerates secret key of specified user for the S3 compatible
-        object storages. Please note that these credentials are valid for all object
-        storages at different locations.
+      description: Regenerates secret key of specified user for the a specific S3
+        compatible object storages.
       operationId: regenerateCredentials
       parameters:
       - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
@@ -1373,12 +1489,31 @@ paths:
         schema:
           type: string
         style: simple
+      - description: The identifier of the S3 object storage
+        example: d8417276-d2d9-43a9-a0a8-9a6fa6060246
+        explode: false
+        in: path
+        name: objectStorageId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The ID of the object storage credential
+        example: 12345
+        explode: false
+        in: path
+        name: credentialId
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CredentialResponse'
+                $ref: '#/components/schemas/FindCredentialResponse'
           description: The response will be a JSON object and contains object storage
             S3 credentials.
       security:
@@ -1389,11 +1524,12 @@ paths:
       - Users
       x-codeSamples:
       - lang: cURL
-        source: 'curl -X PATCH ''https://api.contabo.com/v1/users/6cdf5968-f9fe-4192-97c2-f349e813c5e8/object-storage/credentials''
+        source: 'curl -X PATCH ''https://api.contabo.com/v1/users/6cdf5968-f9fe-4192-97c2-f349e813c5e8/object-storages/6641ae21-e45d-4e03-8e70-661067152d1d/credentials/12345''
           -H "Authorization: Bearer ${ACCESS_TOKEN}" -H ''x-request-id: 04e0f898-37b4-48bc-a794-1a57abe6aa31''
           -H ''x-trace-id: 123213'''
       - lang: cntb CLI
         source: cntb regenerate user-credentials 6cdf5968-f9fe-4192-97c2-f349e813c5e8
+          6641ae21-e45d-4e03-8e70-661067152d1d 12345
   /v1/users/audits:
     get:
       description: List and filter the history about your users.
@@ -1645,7 +1781,7 @@ paths:
         source: cntb history roles
   /v1/object-storages:
     get:
-      description: List and filter all Object Storages in your account
+      description: List and filter all object storages in your account
       operationId: retrieveObjectStorageList
       parameters:
       - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
@@ -1739,7 +1875,7 @@ paths:
             list of object storages.
       security:
       - bearer: []
-      summary: List all your Object Storages
+      summary: List all your object storages
       tags:
       - Object Storages
       x-codeSamples:
@@ -1799,11 +1935,12 @@ paths:
         source: 'curl -X POST "https://api.contabo.com/v1/object-storages" -H  "accept:
           application/json" -H "Authorization: Bearer ${ACCESS_TOKEN}" -H "x-request-id:
           51A87ECD-754E-4104-9C54-D01AD0F83406" -H "x-trace-id: 123213" -H "Content-Type:
-          application/json" -d ''{ "region": "EU", "autoScaling": { "state": "enabled",
-          "sizeLimitTB": 1 }, "totalPurchasedSpaceTB": 1 }'''
+          application/json" -d ''{ "displayName": "Object storage EU 1", "region":
+          "EU", "autoScaling": { "state": "enabled", "sizeLimitTB": 1 }, "totalPurchasedSpaceTB":
+          1 }'''
       - lang: cntb CLI
-        source: cntb create objectStorage --region "EU" --totalPurchasedSpaceTB 1
-          --scalingState=enabled --scalingLimitTB 1
+        source: cntb create objectStorage --displayName "Object storage EU 1" --region
+          "EU" --totalPurchasedSpaceTB 1 --scalingState=enabled --scalingLimitTB 1
   /v1/data-centers:
     get:
       description: List all data centers and their corresponding regions.
@@ -1974,6 +2111,68 @@ paths:
           -H  "x-trace-id: 123213" "https://api.contabo.com/v1/object-storages/ea639fc6-9aae-4d71-af8b-046dda87a9cc"'
       - lang: cntb CLI
         source: cntb get objectStorage ea639fc6-9aae-4d71-af8b-046dda87a9cc
+    patch:
+      description: Modifies the display name of object storage. Display name must
+        be unique.
+      operationId: updateObjectStorage
+      parameters:
+      - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
+          to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4)
+          to generate them manually.'
+        explode: false
+        in: header
+        name: x-request-id
+        required: true
+        schema:
+          example: 04e0f898-37b4-48bc-a794-1a57abe6aa31
+          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-5][0-9A-Fa-f]{3}-[089abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+          type: string
+        style: simple
+      - description: Identifier to trace group of requests.
+        explode: false
+        in: header
+        name: x-trace-id
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: The identifier of the object storage
+        example: 4a6f95be-2ac0-4e3c-8eed-0dc67afed640
+        explode: false
+        in: path
+        name: objectStorageId
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchObjectStorageRequest'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CancelObjectStorageResponse'
+          description: The response will be a JSON object and contains the object
+            storage with updated display name.
+      security:
+      - bearer: []
+      summary: Modifies the display name of object storage
+      tags:
+      - Object Storages
+      x-codeSamples:
+      - lang: cURL
+        source: 'curl -X PATCH "https://api.contabo.com/v1/object-storages/ea639fc6-9aae-4d71-af8b-046dda87a9cc"
+          -H  "accept: application/json" -H "Authorization: Bearer ${ACCESS_TOKEN}"
+          -H "x-request-id: 51A87ECD-754E-4104-9C54-D01AD0F83406" -H "x-trace-id:
+          123213" -H "Content-Type: application/json" -d ''{ "displayName": "Object
+          storage EU 2"}'''
+      - lang: cntb CLI
+        source: cntb update objectStorage --displayName "Object storage EU 1"
   /v1/object-storages/{objectStorageId}/resize:
     post:
       description: Upgrade object storage size. You can also adjust the autoscaling
@@ -2021,7 +2220,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UpdateObjectStorageResponse'
+                $ref: '#/components/schemas/UpgradeObjectStorageResponse'
           description: The response will be a JSON object and contains standard object
             storage attributes.
       security:
@@ -5855,6 +6054,19 @@ paths:
         schema:
           type: string
         style: simple
+      - description: Set the content dispotion header for download PDF or only preview
+          it. Default is inline
+        example: inline
+        explode: true
+        in: query
+        name: contentDisposition
+        required: false
+        schema:
+          enum:
+          - inline
+          - attachment
+          type: string
+        style: form
       - description: The identifier of the data processing agreement
         example: 6C65CD0E-572F-4051-9161-0D731DB44B6E
         explode: false
@@ -5906,6 +6118,19 @@ paths:
         schema:
           type: string
         style: simple
+      - description: Set the content dispotion header for download PDF or only preview
+          it. Default is inline
+        example: inline
+        explode: true
+        in: query
+        name: contentDisposition
+        required: false
+        schema:
+          enum:
+          - inline
+          - attachment
+          type: string
+        style: form
       - description: The identifier of the data processing agreement
         example: 6C65CD0E-572F-4051-9161-0D731DB44B6E
         explode: false
@@ -10106,10 +10331,14 @@ components:
       type: object
     CredentialData:
       example:
+        objectStorageId: 9a4c7e20-c326-4a8c-900c-687ad83ba170Y
         secretKey: wJalrXK7MDENGbPxRfiCYEXAMPLEKEY
         accessKey: AKIAIOSFODNN7EXAMPLE
+        displayName: Object Storage Test
         tenantId: DE
         customerId: "54321"
+        credentialId: 12345
+        region: European Union (Germany)
       properties:
         tenantId:
           description: Your customer tenant id
@@ -10129,25 +10358,102 @@ components:
           description: Secret key ID.
           example: wJalrXK7MDENGbPxRfiCYEXAMPLEKEY
           type: string
+        objectStorageId:
+          description: Object Storage ID.
+          example: 9a4c7e20-c326-4a8c-900c-687ad83ba170Y
+          type: string
+        displayName:
+          description: Object Storage Name.
+          example: Object Storage Test
+          type: string
+        region:
+          description: Object Storage Region.
+          example: European Union (Germany)
+          type: string
+        credentialId:
+          description: Object Storage Credential ID
+          example: 12345
+          type: number
       required:
       - accessKey
+      - credentialId
       - customerId
+      - displayName
+      - objectStorageId
+      - region
       - secretKey
       - tenantId
       type: object
-    CredentialResponse:
+    ListCredentialResponse:
       example:
         data:
-        - secretKey: wJalrXK7MDENGbPxRfiCYEXAMPLEKEY
+        - objectStorageId: 9a4c7e20-c326-4a8c-900c-687ad83ba170Y
+          secretKey: wJalrXK7MDENGbPxRfiCYEXAMPLEKEY
           accessKey: AKIAIOSFODNN7EXAMPLE
+          displayName: Object Storage Test
           tenantId: DE
           customerId: "54321"
-        - secretKey: wJalrXK7MDENGbPxRfiCYEXAMPLEKEY
+          credentialId: 12345
+          region: European Union (Germany)
+        - objectStorageId: 9a4c7e20-c326-4a8c-900c-687ad83ba170Y
+          secretKey: wJalrXK7MDENGbPxRfiCYEXAMPLEKEY
           accessKey: AKIAIOSFODNN7EXAMPLE
+          displayName: Object Storage Test
           tenantId: DE
           customerId: "54321"
+          credentialId: 12345
+          region: European Union (Germany)
         _links:
-          self: ${OBJECT_STORAGE_BASE_URL}/credentials
+          first: v1/users/08a92037-01e8-4dff-8565-47cad7be701a/object-storages/credentials?page=1
+          next: v1/users/08a92037-01e8-4dff-8565-47cad7be701a/object-storages/credentials?page=19
+          self: v1/users/08a92037-01e8-4dff-8565-47cad7be701a/object-storages/credentials/12345
+          previous: v1/users/08a92037-01e8-4dff-8565-47cad7be701a/object-storages/credentials?page=21
+          last: v1/users/08a92037-01e8-4dff-8565-47cad7be701a/object-storages/credentials?page=101
+        _pagination: ""
+      properties:
+        _pagination:
+          allOf:
+          - $ref: '#/components/schemas/PaginationMeta'
+          description: Data about pagination like how many results, pages, page size.
+        data:
+          items:
+            $ref: '#/components/schemas/CredentialData'
+          type: array
+        _links:
+          allOf:
+          - $ref: '#/components/schemas/Links'
+          example:
+            first: v1/users/08a92037-01e8-4dff-8565-47cad7be701a/object-storages/credentials?page=1
+            next: v1/users/08a92037-01e8-4dff-8565-47cad7be701a/object-storages/credentials?page=19
+            self: v1/users/08a92037-01e8-4dff-8565-47cad7be701a/object-storages/credentials/12345
+            previous: v1/users/08a92037-01e8-4dff-8565-47cad7be701a/object-storages/credentials?page=21
+            last: v1/users/08a92037-01e8-4dff-8565-47cad7be701a/object-storages/credentials?page=101
+      required:
+      - _links
+      - _pagination
+      - data
+      type: object
+    FindCredentialResponse:
+      example:
+        data:
+        - objectStorageId: 9a4c7e20-c326-4a8c-900c-687ad83ba170Y
+          secretKey: wJalrXK7MDENGbPxRfiCYEXAMPLEKEY
+          accessKey: AKIAIOSFODNN7EXAMPLE
+          displayName: Object Storage Test
+          tenantId: DE
+          customerId: "54321"
+          credentialId: 12345
+          region: European Union (Germany)
+        - objectStorageId: 9a4c7e20-c326-4a8c-900c-687ad83ba170Y
+          secretKey: wJalrXK7MDENGbPxRfiCYEXAMPLEKEY
+          accessKey: AKIAIOSFODNN7EXAMPLE
+          displayName: Object Storage Test
+          tenantId: DE
+          customerId: "54321"
+          credentialId: 12345
+          region: European Union (Germany)
+        _links:
+          self: v1/users/08a92037-01e8-4dff-8565-47cad7be701a/object-storages/e3f0207c-f7fe-433a-92ab-39a9e976642d/credentials/12345
       properties:
         data:
           items:
@@ -10157,7 +10463,7 @@ components:
           allOf:
           - $ref: '#/components/schemas/SelfLinks'
           example:
-            self: ${OBJECT_STORAGE_BASE_URL}/credentials
+            self: v1/users/08a92037-01e8-4dff-8565-47cad7be701a/object-storages/e3f0207c-f7fe-433a-92ab-39a9e976642d/credentials/12345
       required:
       - _links
       - data
@@ -10484,14 +10790,15 @@ components:
         objectStorageId: b943b25a-c8b5-4570-9135-4bbaa7615b81
         cancelDate: 2021-06-02T00:00:00.000+0000
         s3Url: eu1-s3.contabo.com
-        s3TenantId: 2cd2e5e1444a41b0bed16c6410ecaa84
-        createdDate: 2021-06-02T12:32:03.363Z
         autoScaling: ""
         dataCenter: EU
+        displayName: Object storage 1
+        totalPurchasedSpaceTB: 6.25
+        s3TenantId: 2cd2e5e1444a41b0bed16c6410ecaa84
+        createdDate: 2021-06-02T12:32:03.363Z
         tenantId: DE
         customerId: "54321"
         region: European Union (Germany)
-        totalPurchasedSpaceTB: 6.25
         status: READY
       properties:
         tenantId:
@@ -10557,12 +10864,19 @@ components:
           description: The region where your object storage is located
           example: European Union (Germany)
           type: string
+        displayName:
+          description: Display name for object storage.
+          example: Object storage 1
+          maxLength: 255
+          minLength: 1
+          type: string
       required:
       - autoScaling
       - cancelDate
       - createdDate
       - customerId
       - dataCenter
+      - displayName
       - objectStorageId
       - region
       - s3TenantId
@@ -10577,26 +10891,28 @@ components:
         - objectStorageId: b943b25a-c8b5-4570-9135-4bbaa7615b81
           cancelDate: 2021-06-02T00:00:00.000+0000
           s3Url: eu1-s3.contabo.com
-          s3TenantId: 2cd2e5e1444a41b0bed16c6410ecaa84
-          createdDate: 2021-06-02T12:32:03.363Z
           autoScaling: ""
           dataCenter: EU
+          displayName: Object storage 1
+          totalPurchasedSpaceTB: 6.25
+          s3TenantId: 2cd2e5e1444a41b0bed16c6410ecaa84
+          createdDate: 2021-06-02T12:32:03.363Z
           tenantId: DE
           customerId: "54321"
           region: European Union (Germany)
-          totalPurchasedSpaceTB: 6.25
           status: READY
         - objectStorageId: b943b25a-c8b5-4570-9135-4bbaa7615b81
           cancelDate: 2021-06-02T00:00:00.000+0000
           s3Url: eu1-s3.contabo.com
-          s3TenantId: 2cd2e5e1444a41b0bed16c6410ecaa84
-          createdDate: 2021-06-02T12:32:03.363Z
           autoScaling: ""
           dataCenter: EU
+          displayName: Object storage 1
+          totalPurchasedSpaceTB: 6.25
+          s3TenantId: 2cd2e5e1444a41b0bed16c6410ecaa84
+          createdDate: 2021-06-02T12:32:03.363Z
           tenantId: DE
           customerId: "54321"
           region: European Union (Germany)
-          totalPurchasedSpaceTB: 6.25
           status: READY
         _links:
           first: /v1/object-storages?size=10
@@ -10766,6 +11082,7 @@ components:
     CreateObjectStorageRequest:
       example:
         autoScaling: ""
+        displayName: Object storage 1
         region: EU
         totalPurchasedSpaceTB: 6
       properties:
@@ -10785,6 +11102,14 @@ components:
           example: 6
           format: double
           type: number
+        displayName:
+          description: Display name helps to differentiate between object storages,
+            especially if they are in the same region. If display name is not provided,
+            it will be generated. Display name can be changed any time.
+          example: Object storage 1
+          maxLength: 255
+          minLength: 1
+          type: string
       required:
       - region
       - totalPurchasedSpaceTB
@@ -10796,6 +11121,7 @@ components:
         s3Url: eu1-s3.contabo.com
         autoScaling: ""
         dataCenter: EU
+        displayName: Object storage 1
         usedSpacePercentage: 100
         totalPurchasedSpaceTB: 6.25
         s3TenantId: 2cd2e5e1444a41b0bed16c6410ecaa84
@@ -10881,12 +11207,19 @@ components:
           description: The region where your object storage is located
           example: European Union (Germany)
           type: string
+        displayName:
+          description: Display name for object storage.
+          example: Object storage 1
+          maxLength: 255
+          minLength: 1
+          type: string
       required:
       - autoScaling
       - cancelDate
       - createdDate
       - customerId
       - dataCenter
+      - displayName
       - objectStorageId
       - region
       - s3TenantId
@@ -10905,6 +11238,7 @@ components:
           s3Url: eu1-s3.contabo.com
           autoScaling: ""
           dataCenter: EU
+          displayName: Object storage 1
           usedSpacePercentage: 100
           totalPurchasedSpaceTB: 6.25
           s3TenantId: 2cd2e5e1444a41b0bed16c6410ecaa84
@@ -10919,6 +11253,7 @@ components:
           s3Url: eu1-s3.contabo.com
           autoScaling: ""
           dataCenter: EU
+          displayName: Object storage 1
           usedSpacePercentage: 100
           totalPurchasedSpaceTB: 6.25
           s3TenantId: 2cd2e5e1444a41b0bed16c6410ecaa84
@@ -10950,26 +11285,28 @@ components:
         - objectStorageId: b943b25a-c8b5-4570-9135-4bbaa7615b81
           cancelDate: 2021-06-02T00:00:00.000+0000
           s3Url: eu1-s3.contabo.com
-          s3TenantId: 2cd2e5e1444a41b0bed16c6410ecaa84
-          createdDate: 2021-06-02T12:32:03.363Z
           autoScaling: ""
           dataCenter: EU
+          displayName: Object storage 1
+          totalPurchasedSpaceTB: 6.25
+          s3TenantId: 2cd2e5e1444a41b0bed16c6410ecaa84
+          createdDate: 2021-06-02T12:32:03.363Z
           tenantId: DE
           customerId: "54321"
           region: European Union (Germany)
-          totalPurchasedSpaceTB: 6.25
           status: READY
         - objectStorageId: b943b25a-c8b5-4570-9135-4bbaa7615b81
           cancelDate: 2021-06-02T00:00:00.000+0000
           s3Url: eu1-s3.contabo.com
-          s3TenantId: 2cd2e5e1444a41b0bed16c6410ecaa84
-          createdDate: 2021-06-02T12:32:03.363Z
           autoScaling: ""
           dataCenter: EU
+          displayName: Object storage 1
+          totalPurchasedSpaceTB: 6.25
+          s3TenantId: 2cd2e5e1444a41b0bed16c6410ecaa84
+          createdDate: 2021-06-02T12:32:03.363Z
           tenantId: DE
           customerId: "54321"
           region: European Union (Germany)
-          totalPurchasedSpaceTB: 6.25
           status: READY
         _links:
           self: /v1/object-storages/8cd3f2ba-65a7-4279-bb54-0fea88dc8860
@@ -11019,13 +11356,14 @@ components:
           format: double
           type: number
       type: object
-    UpdateObjectStorageResponseData:
+    UpgradeObjectStorageResponseData:
       example:
         objectStorageId: 9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d
         s3Url: eu1-s3.contabo.com
         createdDate: 2021-06-02T12:32:03.363Z
         autoScaling: ""
         dataCenter: EU
+        displayName: Object storage 1
         tenantId: DE
         customerId: "54321"
         region: European Union (Germany)
@@ -11084,11 +11422,18 @@ components:
           description: The region where your object storage is located
           example: European Union (Germany)
           type: string
+        displayName:
+          description: Display name for object storage.
+          example: Object storage 1
+          maxLength: 255
+          minLength: 1
+          type: string
       required:
       - autoScaling
       - createdDate
       - customerId
       - dataCenter
+      - displayName
       - objectStorageId
       - region
       - s3Url
@@ -11096,7 +11441,7 @@ components:
       - tenantId
       - totalPurchasedSpaceTB
       type: object
-    UpdateObjectStorageResponse:
+    UpgradeObjectStorageResponse:
       example:
         data:
         - objectStorageId: 9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d
@@ -11104,6 +11449,7 @@ components:
           createdDate: 2021-06-02T12:32:03.363Z
           autoScaling: ""
           dataCenter: EU
+          displayName: Object storage 1
           tenantId: DE
           customerId: "54321"
           region: European Union (Germany)
@@ -11114,6 +11460,7 @@ components:
           createdDate: 2021-06-02T12:32:03.363Z
           autoScaling: ""
           dataCenter: EU
+          displayName: Object storage 1
           tenantId: DE
           customerId: "54321"
           region: European Union (Germany)
@@ -11129,7 +11476,7 @@ components:
             self: /v1/object-storages/9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d
         data:
           items:
-            $ref: '#/components/schemas/UpdateObjectStorageResponseData'
+            $ref: '#/components/schemas/UpgradeObjectStorageResponseData'
           type: array
       required:
       - _links
@@ -11210,6 +11557,7 @@ components:
       example:
         objectStorageId: objectStorageId
         cancelDate: 2021-06-02T00:00:00.000+0000
+        displayName: Object storage 1
         tenantId: DE
         customerId: "54321"
       properties:
@@ -11231,9 +11579,16 @@ components:
           example: 2021-06-02
           format: date
           type: string
+        displayName:
+          description: Display name for object storage.
+          example: Object storage 1
+          maxLength: 255
+          minLength: 1
+          type: string
       required:
       - cancelDate
       - customerId
+      - displayName
       - objectStorageId
       - tenantId
       type: object
@@ -11242,10 +11597,12 @@ components:
         data:
         - objectStorageId: objectStorageId
           cancelDate: 2021-06-02T00:00:00.000+0000
+          displayName: Object storage 1
           tenantId: DE
           customerId: "54321"
         - objectStorageId: objectStorageId
           cancelDate: 2021-06-02T00:00:00.000+0000
+          displayName: Object storage 1
           tenantId: DE
           customerId: "54321"
         _links:
@@ -11263,6 +11620,20 @@ components:
       required:
       - _links
       - data
+      type: object
+    PatchObjectStorageRequest:
+      example:
+        displayName: Object storage 1
+      properties:
+        displayName:
+          description: Display name helps to differentiate between object storages,
+            especially if they are in the same region.
+          example: Object storage 1
+          maxLength: 255
+          minLength: 1
+          type: string
+      required:
+      - displayName
       type: object
     CreateTicketRequest:
       example:
@@ -17291,6 +17662,7 @@ components:
           personnelMasterData: true
           contractData: true
           financialData: true
+        serviceDisplayName: My Customer VPS
         serviceName: cd5e9016-1b86-4793-867a-00441fd1d073 (vserver-1000685)
         invalidDate: 2021-06-03T06:27:12Z
         serviceCancelDate: 2021-06-13T06:27:12Z
@@ -17366,6 +17738,10 @@ components:
           - concluded
           example: preview
           type: string
+        serviceDisplayName:
+          description: The display name of the service
+          example: My Customer VPS
+          type: string
       required:
       - affectedPersons
       - archivedDate
@@ -17379,6 +17755,7 @@ components:
       - personalData
       - processedDataType
       - serviceCancelDate
+      - serviceDisplayName
       - serviceName
       - status
       - tenantId
@@ -17459,6 +17836,7 @@ components:
             personnelMasterData: true
             contractData: true
             financialData: true
+          serviceDisplayName: My Customer VPS
           serviceName: cd5e9016-1b86-4793-867a-00441fd1d073 (vserver-1000685)
           invalidDate: 2021-06-03T06:27:12Z
           serviceCancelDate: 2021-06-13T06:27:12Z
@@ -17541,6 +17919,7 @@ components:
             personnelMasterData: true
             contractData: true
             financialData: true
+          serviceDisplayName: My Customer VPS
           serviceName: cd5e9016-1b86-4793-867a-00441fd1d073 (vserver-1000685)
           invalidDate: 2021-06-03T06:27:12Z
           serviceCancelDate: 2021-06-13T06:27:12Z
@@ -17731,6 +18110,7 @@ components:
             personnelMasterData: true
             contractData: true
             financialData: true
+          serviceDisplayName: My Customer VPS
           serviceName: cd5e9016-1b86-4793-867a-00441fd1d073 (vserver-1000685)
           invalidDate: 2021-06-03T06:27:12Z
           serviceCancelDate: 2021-06-13T06:27:12Z
@@ -17813,6 +18193,7 @@ components:
             personnelMasterData: true
             contractData: true
             financialData: true
+          serviceDisplayName: My Customer VPS
           serviceName: cd5e9016-1b86-4793-867a-00441fd1d073 (vserver-1000685)
           invalidDate: 2021-06-03T06:27:12Z
           serviceCancelDate: 2021-06-13T06:27:12Z

@@ -29,10 +29,10 @@ var objectStorageCancelCmd = &cobra.Command{
 
 		configFormatter := outputFormatter.FormatterConfig{
 			Filter: []string{
-				"tenantId", "customerId", "objectStorageId", "cancelDate",
+				"tenantId", "customerId", "objectStorageId", "displayName", "cancelDate",
 			},
 			WideFilter: []string{
-				"tenantId", "customerId", "objectStorageId", "cancelDate",
+				"tenantId", "customerId", "objectStorageId", "displayName", "cancelDate",
 			},
 			JsonPath: contaboCmd.OutputFormatDetails,
 		}
@@ -54,7 +54,7 @@ var objectStorageCancelCmd = &cobra.Command{
 		}
 
 		cancelbjectStorageId = args[0]
-	
+
 		return nil
 	},
 }

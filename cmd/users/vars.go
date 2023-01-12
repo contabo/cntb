@@ -59,3 +59,16 @@ var (
 	updateLocale        string
 	updateUserId        string
 )
+
+// retrieveStorageCredentials
+var (
+	retrieveCredentialsUserId          string
+	retrieveCredentialsObjectStorageId string
+)
+
+// regenerateStorageCredentials
+var (
+	regenerateCredentialsUserId          string
+	regenerateCredentialsObjectStorageId string
+	regenerateCredentialsCredentialId    string
+)

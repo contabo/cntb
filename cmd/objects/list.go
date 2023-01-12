@@ -3,15 +3,14 @@ package cmd
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 
 	"contabo.com/cli/cntb/client"
 	contaboCmd "contabo.com/cli/cntb/cmd"
 	"contabo.com/cli/cntb/cmd/util"
 	"contabo.com/cli/cntb/config"
-	authClient "contabo.com/cli/cntb/oauth2Client"
 	"contabo.com/cli/cntb/outputFormatter"
 
-	jwt "github.com/golang-jwt/jwt"
 	uuid "github.com/satori/go.uuid"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -45,46 +44,27 @@ var objectsGetCmd = &cobra.Command{
 	Use:     "objects",
 	Short:   "lists S3 objects in a bucket.",
 	Long:    `lists S3 objects in the given bucket.`,
-	Example: `cntb get objects --region EU --bucket bucket123`,
+	Example: `cntb get objects --storageId f2db70cc-68ce-42fa-a27c-cec87b363619 --bucket bucket123`,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		// get list of object storage
-		ApiRetrieveObjectStorageListRequest := client.ApiClient().
-			ObjectStoragesApi.RetrieveObjectStorageList(context.Background()).
-			XRequestId(uuid.NewV4().String()).
-			Page(contaboCmd.Page).
-			Size(contaboCmd.Size)
+		ApiRetrieveObjectStorageRequest := client.ApiClient().
+			ObjectStoragesApi.RetrieveObjectStorage(context.Background(), listObjectObjectStorageId).
+			XRequestId(uuid.NewV4().String())
 
-		ApiRetrieveObjectStorageListRequest = ApiRetrieveObjectStorageListRequest.Region(listObjectsRegion)
+		objStorageRetrieveResponse, httpResp, err := ApiRetrieveObjectStorageRequest.Execute()
+		util.HandleErrors(err, httpResp, fmt.Sprintf("Error while retrieving object storage with id : %v", listObjectObjectStorageId))
 
-		objStorageListresponse, httpResp, err := ApiRetrieveObjectStorageListRequest.Execute()
-		util.HandleErrors(err, httpResp, "while retrieving object storages")
-
-		if len(objStorageListresponse.Data) == 0 {
-			log.Fatal("No Object Storage could be found in this region.")
-		}
-		objStorage := objStorageListresponse.Data[0]
-
-		// get keycloakId from jwt Token
-		jwtAccessToken := authClient.RestoreTokenFromCache(config.Conf.Oauth2User).AccessToken
-		claims := jwt.MapClaims{}
-		_, err = jwt.ParseWithClaims(jwtAccessToken, claims, func(token *jwt.Token) (interface{}, error) {
-			return []byte("<YOUR VERIFICATION KEY>"), nil
-		})
-		if err != nil {
-			log.Debug(err)
+		if len(objStorageRetrieveResponse.Data) == 0 {
+			log.Fatal(fmt.Sprintf("No Object Storage could be found with id : %v", listObjectObjectStorageId))
 		}
 
-		if claims["sub"] == nil {
-			log.Fatal("Error in getting access token.")
-		}
-		keycloakId := claims["sub"]
+		objStorage := objStorageRetrieveResponse.Data[0]
+
+		keycloakId := util.GetKeycloakId(config.Conf.Oauth2User)
 
 		// get user credentials
-		ApiGetObjectStorageCredentialsRequest := client.ApiClient().UsersApi.GetObjectStorageCredentials(context.Background(), keycloakId.(string)).
-			XRequestId(uuid.NewV4().String())
-		retrieveCredentialResponse, httpResp, err := ApiGetObjectStorageCredentialsRequest.Execute()
-		util.HandleErrors(err, httpResp, "while retrieving credentials")
+		retrieveCredentialResponse, httpResp, err := util.GetObjectStorageCredentials(keycloakId, listObjectObjectStorageId)
+		util.HandleErrors(err, httpResp, fmt.Sprintf("Error while getting credentials for object storage with id : %v", listObjectObjectStorageId))
 		awsAccessKeyCred := retrieveCredentialResponse.Data[0].AccessKey
 		awsSecretKeyCred := retrieveCredentialResponse.Data[0].SecretKey
 
@@ -127,8 +107,8 @@ var objectsGetCmd = &cobra.Command{
 			log.Fatal("Too many positional arguments.")
 		}
 
-		viper.BindPFlag("region", cmd.Flags().Lookup("region"))
-		listObjectsRegion = viper.GetString("region")
+		viper.BindPFlag("storageId", cmd.Flags().Lookup("storageId"))
+		listObjectObjectStorageId = viper.GetString("storageId")
 
 		viper.BindPFlag("bucket", cmd.Flags().Lookup("bucket"))
 		listObjectsBucketName = viper.GetString("bucket")
@@ -138,9 +118,9 @@ var objectsGetCmd = &cobra.Command{
 
 		if contaboCmd.InputFile == "" {
 			// arguments required
-			if listObjectsRegion == "" {
+			if listObjectObjectStorageId == "" {
 				cmd.Help()
-				log.Fatal("Argument region is empty. Please provide one.")
+				log.Fatal("Argument storageId is empty. Please provide one.")
 			}
 			if listObjectsBucketName == "" {
 				cmd.Help()
@@ -155,7 +135,7 @@ var objectsGetCmd = &cobra.Command{
 func init() {
 	contaboCmd.GetCmd.AddCommand(objectsGetCmd)
 
-	objectsGetCmd.Flags().StringVarP(&listObjectsRegion, "region", "r", "", `Region where the objectStorage is located.`)
+	objectsGetCmd.Flags().StringVar(&listObjectObjectStorageId, "storageId", "", `Id of the object storage.`)
 	objectsGetCmd.Flags().StringVar(&listObjectsBucketName, "bucket", "", `Bucket where the objects are stored.`)
 	objectsGetCmd.Flags().StringVar(&listObjectsPrefix, "prefix", "", `Prefix to limit response to all objects starting with this prefix. `)
 }

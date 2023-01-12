@@ -6,61 +6,41 @@ import (
 	"net/url"
 
 	"contabo.com/cli/cntb/client"
-	"contabo.com/cli/cntb/config"
 	contaboCmd "contabo.com/cli/cntb/cmd"
 	"contabo.com/cli/cntb/cmd/util"
-	authClient "contabo.com/cli/cntb/oauth2Client"
-	jwt "github.com/golang-jwt/jwt"
+	"contabo.com/cli/cntb/config"
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
 	uuid "github.com/satori/go.uuid"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 var deleteBucketsCmd = &cobra.Command{
-	Use:     "bucket [region] [bucketName]",
+	Use:     "bucket --storageId [objectStorageId] --name [bucketName]",
 	Short:   "Delete a specific bucket.",
 	Long:    `Delete a bucket you created by its name.`,
-	Example: `cntb delete bucket EU bucket123`,
+	Example: `cntb delete bucket EU --storageId 1de451d4-9737-487d-9e5d-8f50a6c8d558 --name m123`,
 	Run: func(cmd *cobra.Command, args []string) {
-		// get list of object storage
-		ApiRetrieveObjectStorageListRequest := client.ApiClient().
-			ObjectStoragesApi.RetrieveObjectStorageList(context.Background()).
-			XRequestId(uuid.NewV4().String()).
-			Page(contaboCmd.Page).
-			Size(contaboCmd.Size)
+		ApiRetrieveObjectStorageRequest := client.ApiClient().
+			ObjectStoragesApi.RetrieveObjectStorage(context.Background(), deleteBucketObjectStorageId).
+			XRequestId(uuid.NewV4().String())
 
-		ApiRetrieveObjectStorageListRequest = ApiRetrieveObjectStorageListRequest.Region(deleteRegion)
+		objStorageRetrieveResponse, httpResp, err := ApiRetrieveObjectStorageRequest.Execute()
+		util.HandleErrors(err, httpResp, fmt.Sprintf("Error while retrieving object storage with id : %v", deleteBucketObjectStorageId))
 
-		objStorageListresponse, httpResp, err := ApiRetrieveObjectStorageListRequest.Execute()
-		util.HandleErrors(err, httpResp, "while retrieving object storages")
-
-		if len(objStorageListresponse.Data) == 0 {
-			log.Fatal("No Object Storage could be found in this region.")
+		if len(objStorageRetrieveResponse.Data) == 0 {
+			log.Fatal(fmt.Sprintf("No Object Storage could be found with id : %v", deleteBucketObjectStorageId))
 		}
 
-		objStorage := objStorageListresponse.Data[0]
+		objStorage := objStorageRetrieveResponse.Data[0]
 
-		// get keycloakId from jwt Token
-		jwtAccessToken := authClient.RestoreTokenFromCache(config.Conf.Oauth2User).AccessToken
-		claims := jwt.MapClaims{}
-		_, err = jwt.ParseWithClaims(jwtAccessToken, claims, func(token *jwt.Token) (interface{}, error) {
-			return []byte("<YOUR VERIFICATION KEY>"), nil
-		})
-		if err != nil {
-			log.Debug(err)
-		}
-		if claims["sub"] == nil {
-			log.Fatal("Error in getting access token.")
-		}
-		keycloakId := claims["sub"]
+		keycloakId := util.GetKeycloakId(config.Conf.Oauth2User)
 
 		// get user credentials
-		ApiGetObjectStorageCredentialsRequest := client.ApiClient().UsersApi.GetObjectStorageCredentials(context.Background(), keycloakId.(string)).
-			XRequestId(uuid.NewV4().String())
-		retrieveCredentialResponse, httpResp, err := ApiGetObjectStorageCredentialsRequest.Execute()
-		util.HandleErrors(err, httpResp, "while retrieving credentials")
+		retrieveCredentialResponse, httpResp, err := util.GetObjectStorageCredentials(keycloakId, deleteBucketObjectStorageId)
+		util.HandleErrors(err, httpResp, fmt.Sprintf("Error while getting credentials for object storage with id : %v", deleteBucketObjectStorageId))
 		awsAccessKeyCred := retrieveCredentialResponse.Data[0].AccessKey
 		awsSecretKeyCred := retrieveCredentialResponse.Data[0].SecretKey
 
@@ -91,22 +71,20 @@ var deleteBucketsCmd = &cobra.Command{
 		fmt.Printf("Bucket " + deleteBucketName + " deleted.\n")
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
-		if len(args) > 2 {
+		if len(args) > 0 {
 			cmd.Help()
 			log.Fatal("Too many positional arguments.")
 		}
 
-		if len(args) < 2 {
-			cmd.Help()
-			log.Fatal("Please provide a region and a bucketName.")
-		}
+		viper.BindPFlag("storageId", cmd.Flags().Lookup("storageId"))
+		deleteBucketObjectStorageId = viper.GetString("storageId")
 
-		deleteRegion = args[0]
-		deleteBucketName = args[1]
+		viper.BindPFlag("name", cmd.Flags().Lookup("name"))
+		deleteBucketName = viper.GetString("name")
 
-		if deleteRegion == "" {
+		if deleteBucketObjectStorageId == "" {
 			cmd.Help()
-			log.Fatal("Argument region is empty. Please provide a non empty region.")
+			log.Fatal("Argument region is empty. Please provide a non empty storage id.")
 		}
 		if deleteBucketName == "" {
 			cmd.Help()
@@ -119,4 +97,6 @@ var deleteBucketsCmd = &cobra.Command{
 
 func init() {
 	contaboCmd.DeleteCmd.AddCommand(deleteBucketsCmd)
+	deleteBucketsCmd.Flags().StringVarP(&deleteBucketObjectStorageId, "storageId", "s", "", `Id of the objectStorage where the bucket will be deleted`)
+	deleteBucketsCmd.Flags().StringVarP(&deleteBucketName, "name", "n", "", `Name of the bucket that will be deleted`)
 }

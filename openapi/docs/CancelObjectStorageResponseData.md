@@ -8,12 +8,13 @@ Name | Type | Description | Notes
 **CustomerId** | **string** | Your customer number | 
 **ObjectStorageId** | **string** | Object Storage id | 
 **CancelDate** | **string** | Cancellation date for object storage. | 
+**DisplayName** | **string** | Display name for object storage. | 
 
 ## Methods
 
 ### NewCancelObjectStorageResponseData
 
-`func NewCancelObjectStorageResponseData(tenantId string, customerId string, objectStorageId string, cancelDate string, ) *CancelObjectStorageResponseData`
+`func NewCancelObjectStorageResponseData(tenantId string, customerId string, objectStorageId string, cancelDate string, displayName string, ) *CancelObjectStorageResponseData`
 
 NewCancelObjectStorageResponseData instantiates a new CancelObjectStorageResponseData object
 This constructor will assign default values to properties that have it defined,
@@ -106,6 +107,26 @@ and a boolean to check if the value has been set.
 `func (o *CancelObjectStorageResponseData) SetCancelDate(v string)`
 
 SetCancelDate sets CancelDate field to given value.
+
+
+### GetDisplayName
+
+`func (o *CancelObjectStorageResponseData) GetDisplayName() string`
+
+GetDisplayName returns the DisplayName field if non-nil, zero value otherwise.
+
+### GetDisplayNameOk
+
+`func (o *CancelObjectStorageResponseData) GetDisplayNameOk() (*string, bool)`
+
+GetDisplayNameOk returns a tuple with the DisplayName field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetDisplayName
+
+`func (o *CancelObjectStorageResponseData) SetDisplayName(v string)`
+
+SetDisplayName sets DisplayName field to given value.
 
 
 

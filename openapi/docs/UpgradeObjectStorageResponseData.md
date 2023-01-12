@@ -14,7 +14,7 @@ Name | Type | Description | Notes
 **Status** | **string** | The object storage status | 
 **TotalPurchasedSpaceTB** | **float64** | Total purchased object storage space in TB. | 
 **Region** | **string** | The region where your object storage is located | 
-**DisplayName** | **string** | Display name helps to differentiate between object storages, especially if they are in the same region. | 
+**DisplayName** | **string** | Display name for object storage. | 
 
 ## Methods
 

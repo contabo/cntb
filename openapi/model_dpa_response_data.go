@@ -44,13 +44,15 @@ type DpaResponseData struct {
 	ServiceCancelDate time.Time `json:"serviceCancelDate"`
 	// The status of the dpa
 	Status string `json:"status"`
+	// The display name of the service
+	ServiceDisplayName string `json:"serviceDisplayName"`
 }
 
 // NewDpaResponseData instantiates a new DpaResponseData object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewDpaResponseData(tenantId string, customerId string, dpaId string, processedDataType ProcessedDataType, personalData PersonalData, affectedPersons AffectedPersons, dataProtectionOfficer DataProtectionOfficerRequest, dpaServiceId string, createdDate time.Time, concludedDate time.Time, invalidDate time.Time, archivedDate time.Time, serviceName string, serviceCancelDate time.Time, status string) *DpaResponseData {
+func NewDpaResponseData(tenantId string, customerId string, dpaId string, processedDataType ProcessedDataType, personalData PersonalData, affectedPersons AffectedPersons, dataProtectionOfficer DataProtectionOfficerRequest, dpaServiceId string, createdDate time.Time, concludedDate time.Time, invalidDate time.Time, archivedDate time.Time, serviceName string, serviceCancelDate time.Time, status string, serviceDisplayName string) *DpaResponseData {
 	this := DpaResponseData{}
 	this.TenantId = tenantId
 	this.CustomerId = customerId
@@ -67,6 +69,7 @@ func NewDpaResponseData(tenantId string, customerId string, dpaId string, proces
 	this.ServiceName = serviceName
 	this.ServiceCancelDate = serviceCancelDate
 	this.Status = status
+	this.ServiceDisplayName = serviceDisplayName
 	return &this
 }
 
@@ -438,6 +441,30 @@ func (o *DpaResponseData) SetStatus(v string) {
 	o.Status = v
 }
 
+// GetServiceDisplayName returns the ServiceDisplayName field value
+func (o *DpaResponseData) GetServiceDisplayName() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.ServiceDisplayName
+}
+
+// GetServiceDisplayNameOk returns a tuple with the ServiceDisplayName field value
+// and a boolean to check if the value has been set.
+func (o *DpaResponseData) GetServiceDisplayNameOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.ServiceDisplayName, true
+}
+
+// SetServiceDisplayName sets field value
+func (o *DpaResponseData) SetServiceDisplayName(v string) {
+	o.ServiceDisplayName = v
+}
+
 func (o DpaResponseData) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
 	if true {
@@ -484,6 +511,9 @@ func (o DpaResponseData) MarshalJSON() ([]byte, error) {
 	}
 	if true {
 		toSerialize["status"] = o.Status
+	}
+	if true {
+		toSerialize["serviceDisplayName"] = o.ServiceDisplayName
 	}
 	return json.Marshal(toSerialize)
 }

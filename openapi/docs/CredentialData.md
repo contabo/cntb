@@ -8,12 +8,16 @@ Name | Type | Description | Notes
 **CustomerId** | **string** | Your customer number | 
 **AccessKey** | **string** | Access key ID. | 
 **SecretKey** | **string** | Secret key ID. | 
+**ObjectStorageId** | **string** | Object Storage ID. | 
+**DisplayName** | **string** | Object Storage Name. | 
+**Region** | **string** | Object Storage Region. | 
+**CredentialId** | **float32** | Object Storage Credential ID | 
 
 ## Methods
 
 ### NewCredentialData
 
-`func NewCredentialData(tenantId string, customerId string, accessKey string, secretKey string, ) *CredentialData`
+`func NewCredentialData(tenantId string, customerId string, accessKey string, secretKey string, objectStorageId string, displayName string, region string, credentialId float32, ) *CredentialData`
 
 NewCredentialData instantiates a new CredentialData object
 This constructor will assign default values to properties that have it defined,
@@ -106,6 +110,86 @@ and a boolean to check if the value has been set.
 `func (o *CredentialData) SetSecretKey(v string)`
 
 SetSecretKey sets SecretKey field to given value.
+
+
+### GetObjectStorageId
+
+`func (o *CredentialData) GetObjectStorageId() string`
+
+GetObjectStorageId returns the ObjectStorageId field if non-nil, zero value otherwise.
+
+### GetObjectStorageIdOk
+
+`func (o *CredentialData) GetObjectStorageIdOk() (*string, bool)`
+
+GetObjectStorageIdOk returns a tuple with the ObjectStorageId field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetObjectStorageId
+
+`func (o *CredentialData) SetObjectStorageId(v string)`
+
+SetObjectStorageId sets ObjectStorageId field to given value.
+
+
+### GetDisplayName
+
+`func (o *CredentialData) GetDisplayName() string`
+
+GetDisplayName returns the DisplayName field if non-nil, zero value otherwise.
+
+### GetDisplayNameOk
+
+`func (o *CredentialData) GetDisplayNameOk() (*string, bool)`
+
+GetDisplayNameOk returns a tuple with the DisplayName field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetDisplayName
+
+`func (o *CredentialData) SetDisplayName(v string)`
+
+SetDisplayName sets DisplayName field to given value.
+
+
+### GetRegion
+
+`func (o *CredentialData) GetRegion() string`
+
+GetRegion returns the Region field if non-nil, zero value otherwise.
+
+### GetRegionOk
+
+`func (o *CredentialData) GetRegionOk() (*string, bool)`
+
+GetRegionOk returns a tuple with the Region field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetRegion
+
+`func (o *CredentialData) SetRegion(v string)`
+
+SetRegion sets Region field to given value.
+
+
+### GetCredentialId
+
+`func (o *CredentialData) GetCredentialId() float32`
+
+GetCredentialId returns the CredentialId field if non-nil, zero value otherwise.
+
+### GetCredentialIdOk
+
+`func (o *CredentialData) GetCredentialIdOk() (*float32, bool)`
+
+GetCredentialIdOk returns a tuple with the CredentialId field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetCredentialId
+
+`func (o *CredentialData) SetCredentialId(v float32)`
+
+SetCredentialId sets CredentialId field to given value.
 
 
 

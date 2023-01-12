@@ -8,8 +8,9 @@ Method | HTTP request | Description
 [**CreateObjectStorage**](ObjectStoragesApi.md#CreateObjectStorage) | **Post** /v1/object-storages | Create a new object storage
 [**RetrieveDataCenterList**](ObjectStoragesApi.md#RetrieveDataCenterList) | **Get** /v1/data-centers | List data centers
 [**RetrieveObjectStorage**](ObjectStoragesApi.md#RetrieveObjectStorage) | **Get** /v1/object-storages/{objectStorageId} | Get specific object storage by its id
-[**RetrieveObjectStorageList**](ObjectStoragesApi.md#RetrieveObjectStorageList) | **Get** /v1/object-storages | List all your Object Storages
+[**RetrieveObjectStorageList**](ObjectStoragesApi.md#RetrieveObjectStorageList) | **Get** /v1/object-storages | List all your object storages
 [**RetrieveObjectStoragesStats**](ObjectStoragesApi.md#RetrieveObjectStoragesStats) | **Get** /v1/object-storages/{objectStorageId}/stats | List usage statistics about the specified object storage
+[**UpdateObjectStorage**](ObjectStoragesApi.md#UpdateObjectStorage) | **Patch** /v1/object-storages/{objectStorageId} | Modifies the display name of object storage
 [**UpgradeObjectStorage**](ObjectStoragesApi.md#UpgradeObjectStorage) | **Post** /v1/object-storages/{objectStorageId}/resize | Upgrade object storage size resp. update autoscaling settings.
 
 
@@ -318,7 +319,7 @@ Name | Type | Description  | Notes
 
 > ListObjectStorageResponse RetrieveObjectStorageList(ctx).XRequestId(xRequestId).XTraceId(xTraceId).Page(page).Size(size).OrderBy(orderBy).DataCenterName(dataCenterName).S3TenantId(s3TenantId).Region(region).Execute()
 
-List all your Object Storages
+List all your object storages
 
 
 
@@ -468,9 +469,85 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
+## UpdateObjectStorage
+
+> CancelObjectStorageResponse UpdateObjectStorage(ctx, objectStorageId).XRequestId(xRequestId).PatchObjectStorageRequest(patchObjectStorageRequest).XTraceId(xTraceId).Execute()
+
+Modifies the display name of object storage
+
+
+
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "./openapi"
+)
+
+func main() {
+    xRequestId := "04e0f898-37b4-48bc-a794-1a57abe6aa31" // string | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually.
+    objectStorageId := "4a6f95be-2ac0-4e3c-8eed-0dc67afed640" // string | The identifier of the object storage
+    patchObjectStorageRequest := *openapiclient.NewPatchObjectStorageRequest("Object storage 1") // PatchObjectStorageRequest | 
+    xTraceId := "xTraceId_example" // string | Identifier to trace group of requests. (optional)
+
+    configuration := openapiclient.NewConfiguration()
+    api_client := openapiclient.NewAPIClient(configuration)
+    resp, r, err := api_client.ObjectStoragesApi.UpdateObjectStorage(context.Background(), objectStorageId).XRequestId(xRequestId).PatchObjectStorageRequest(patchObjectStorageRequest).XTraceId(xTraceId).Execute()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Error when calling `ObjectStoragesApi.UpdateObjectStorage``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `UpdateObjectStorage`: CancelObjectStorageResponse
+    fmt.Fprintf(os.Stdout, "Response from `ObjectStoragesApi.UpdateObjectStorage`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**objectStorageId** | **string** | The identifier of the object storage | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiUpdateObjectStorageRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **xRequestId** | **string** | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually. | 
+
+ **patchObjectStorageRequest** | [**PatchObjectStorageRequest**](PatchObjectStorageRequest.md) |  | 
+ **xTraceId** | **string** | Identifier to trace group of requests. | 
+
+### Return type
+
+[**CancelObjectStorageResponse**](CancelObjectStorageResponse.md)
+
+### Authorization
+
+[bearer](../README.md#bearer)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
 ## UpgradeObjectStorage
 
-> UpdateObjectStorageResponse UpgradeObjectStorage(ctx, objectStorageId).XRequestId(xRequestId).UpgradeObjectStorageRequest(upgradeObjectStorageRequest).XTraceId(xTraceId).Execute()
+> UpgradeObjectStorageResponse UpgradeObjectStorage(ctx, objectStorageId).XRequestId(xRequestId).UpgradeObjectStorageRequest(upgradeObjectStorageRequest).XTraceId(xTraceId).Execute()
 
 Upgrade object storage size resp. update autoscaling settings.
 
@@ -501,7 +578,7 @@ func main() {
         fmt.Fprintf(os.Stderr, "Error when calling `ObjectStoragesApi.UpgradeObjectStorage``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `UpgradeObjectStorage`: UpdateObjectStorageResponse
+    // response from `UpgradeObjectStorage`: UpgradeObjectStorageResponse
     fmt.Fprintf(os.Stdout, "Response from `ObjectStoragesApi.UpgradeObjectStorage`: %v\n", resp)
 }
 ```
@@ -528,7 +605,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**UpdateObjectStorageResponse**](UpdateObjectStorageResponse.md)
+[**UpgradeObjectStorageResponse**](UpgradeObjectStorageResponse.md)
 
 ### Authorization
 

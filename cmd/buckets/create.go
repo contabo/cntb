@@ -10,61 +10,39 @@ import (
 	contaboCmd "contabo.com/cli/cntb/cmd"
 	"contabo.com/cli/cntb/cmd/util"
 	"contabo.com/cli/cntb/config"
-	authClient "contabo.com/cli/cntb/oauth2Client"
 
-	jwt "github.com/golang-jwt/jwt"
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
 	uuid "github.com/satori/go.uuid"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 var createBucketCmd = &cobra.Command{
-	Use:     "bucket [region] [bucketName]",
+	Use:     "bucket --storageId [objectStorageId] --name [bucketName]",
 	Short:   "Create a bucket.",
 	Long:    `Create a bucket with the given name. See https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-s3-bucket-naming-requirements.html for naming conventions.`,
-	Example: `cntb create bucket EU bucket123`,
+	Example: `cntb create bucket --storageId 1de451d4-9737-487d-9e5d-8f50a6c8d558 --name m123`,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		// get list of object storage
-		ApiRetrieveObjectStorageListRequest := client.ApiClient().
-			ObjectStoragesApi.RetrieveObjectStorageList(context.Background()).
-			XRequestId(uuid.NewV4().String()).
-			Page(contaboCmd.Page).
-			Size(contaboCmd.Size)
-
-		ApiRetrieveObjectStorageListRequest = ApiRetrieveObjectStorageListRequest.Region(createRegion)
-
-		objStorageListresponse, httpResp, err := ApiRetrieveObjectStorageListRequest.Execute()
-		util.HandleErrors(err, httpResp, "while retrieving object storages")
-
-		if len(objStorageListresponse.Data) == 0 {
-			log.Fatal("No Object Storage could be found in this region.")
-		}
-
-		objStorage := objStorageListresponse.Data[0]
-
-		// get keycloakId from jwt Token
-		jwtAccessToken := authClient.RestoreTokenFromCache(config.Conf.Oauth2User).AccessToken
-		claims := jwt.MapClaims{}
-		_, err = jwt.ParseWithClaims(jwtAccessToken, claims, func(token *jwt.Token) (interface{}, error) {
-			return []byte("<YOUR VERIFICATION KEY>"), nil
-		})
-		if err != nil {
-			log.Debug(err)
-		}
-
-		if claims["sub"] == nil {
-			log.Fatal("Error in getting access token.")
-		}
-		keycloakId := claims["sub"]
-
-		// get user credentials
-		ApiGetObjectStorageCredentialsRequest := client.ApiClient().UsersApi.GetObjectStorageCredentials(context.Background(), keycloakId.(string)).
+		ApiRetrieveObjectStorageRequest := client.ApiClient().
+			ObjectStoragesApi.RetrieveObjectStorage(context.Background(), createBucketObjectStorageId).
 			XRequestId(uuid.NewV4().String())
-		retrieveCredentialResponse, httpResp, err := ApiGetObjectStorageCredentialsRequest.Execute()
-		util.HandleErrors(err, httpResp, "while retrieving credentials")
+
+		objStorageRetrieveResponse, httpResp, err := ApiRetrieveObjectStorageRequest.Execute()
+		util.HandleErrors(err, httpResp, fmt.Sprintf("Error while retrieving object storage with id : %v", createBucketObjectStorageId))
+
+		if len(objStorageRetrieveResponse.Data) == 0 {
+			log.Fatal(fmt.Sprintf("No Object Storage could be found with id : %v", createBucketObjectStorageId))
+		}
+
+		objStorage := objStorageRetrieveResponse.Data[0]
+
+		keycloakId := util.GetKeycloakId(config.Conf.Oauth2User)
+		// get user credentials
+		retrieveCredentialResponse, httpResp, err := util.GetObjectStorageCredentials(keycloakId, createBucketObjectStorageId)
+		util.HandleErrors(err, httpResp, fmt.Sprintf("Error while getting credentials for object storage with id : %v", createBucketObjectStorageId))
 		awsAccessKeyCred := retrieveCredentialResponse.Data[0].AccessKey
 		awsSecretKeyCred := retrieveCredentialResponse.Data[0].SecretKey
 
@@ -104,22 +82,20 @@ var createBucketCmd = &cobra.Command{
 	Args: func(cmd *cobra.Command, args []string) error {
 		contaboCmd.ValidateCreateInput()
 
-		if len(args) > 2 {
+		if len(args) > 0 {
 			cmd.Help()
 			log.Fatal("Too many positional arguments.")
 		}
 
-		if len(args) < 2 {
-			cmd.Help()
-			log.Fatal("Please provide a region and a bucketName.")
-		}
+		viper.BindPFlag("storageId", cmd.Flags().Lookup("storageId"))
+		createBucketObjectStorageId = viper.GetString("storageId")
 
-		createRegion = args[0]
-		createBucketName = args[1]
+		viper.BindPFlag("name", cmd.Flags().Lookup("name"))
+		createBucketName = viper.GetString("name")
 
-		if createRegion == "" {
+		if createBucketObjectStorageId == "" {
 			cmd.Help()
-			log.Fatal("Argument region is empty. Please provide a non empty region.")
+			log.Fatal("Argument storageId is empty. Please provide a non empty storageId.")
 		}
 
 		if createBucketName == "" {
@@ -133,4 +109,7 @@ var createBucketCmd = &cobra.Command{
 
 func init() {
 	contaboCmd.CreateCmd.AddCommand(createBucketCmd)
+	createBucketCmd.Flags().StringVarP(&createBucketObjectStorageId, "storageId", "s", "", `Id of the objectStorage where the bucket will be created`)
+	createBucketCmd.Flags().StringVarP(&createBucketName, "name", "n", "", `Name of the bucket that will be created`)
+
 }

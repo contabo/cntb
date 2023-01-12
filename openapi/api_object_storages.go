@@ -661,9 +661,9 @@ func (r ApiRetrieveObjectStorageListRequest) Execute() (ListObjectStorageRespons
 }
 
 /*
-RetrieveObjectStorageList List all your Object Storages
+RetrieveObjectStorageList List all your object storages
 
-List and filter all Object Storages in your account
+List and filter all object storages in your account
 
  @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiRetrieveObjectStorageListRequest
@@ -910,6 +910,141 @@ func (a *ObjectStoragesApiService) RetrieveObjectStoragesStatsExecute(r ApiRetri
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
+type ApiUpdateObjectStorageRequest struct {
+	ctx _context.Context
+	ApiService *ObjectStoragesApiService
+	xRequestId *string
+	objectStorageId string
+	patchObjectStorageRequest *PatchObjectStorageRequest
+	xTraceId *string
+}
+
+// [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually.
+func (r ApiUpdateObjectStorageRequest) XRequestId(xRequestId string) ApiUpdateObjectStorageRequest {
+	r.xRequestId = &xRequestId
+	return r
+}
+func (r ApiUpdateObjectStorageRequest) PatchObjectStorageRequest(patchObjectStorageRequest PatchObjectStorageRequest) ApiUpdateObjectStorageRequest {
+	r.patchObjectStorageRequest = &patchObjectStorageRequest
+	return r
+}
+// Identifier to trace group of requests.
+func (r ApiUpdateObjectStorageRequest) XTraceId(xTraceId string) ApiUpdateObjectStorageRequest {
+	r.xTraceId = &xTraceId
+	return r
+}
+
+func (r ApiUpdateObjectStorageRequest) Execute() (CancelObjectStorageResponse, *_nethttp.Response, error) {
+	return r.ApiService.UpdateObjectStorageExecute(r)
+}
+
+/*
+UpdateObjectStorage Modifies the display name of object storage
+
+Modifies the display name of object storage. Display name must be unique.
+
+ @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param objectStorageId The identifier of the object storage
+ @return ApiUpdateObjectStorageRequest
+*/
+func (a *ObjectStoragesApiService) UpdateObjectStorage(ctx _context.Context, objectStorageId string) ApiUpdateObjectStorageRequest {
+	return ApiUpdateObjectStorageRequest{
+		ApiService: a,
+		ctx: ctx,
+		objectStorageId: objectStorageId,
+	}
+}
+
+// Execute executes the request
+//  @return CancelObjectStorageResponse
+func (a *ObjectStoragesApiService) UpdateObjectStorageExecute(r ApiUpdateObjectStorageRequest) (CancelObjectStorageResponse, *_nethttp.Response, error) {
+	var (
+		localVarHTTPMethod   = _nethttp.MethodPatch
+		localVarPostBody     interface{}
+		localVarFormFileName string
+		localVarFileName     string
+		localVarFileBytes    []byte
+		localVarReturnValue  CancelObjectStorageResponse
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ObjectStoragesApiService.UpdateObjectStorage")
+	if err != nil {
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/object-storages/{objectStorageId}"
+	localVarPath = strings.Replace(localVarPath, "{"+"objectStorageId"+"}", _neturl.PathEscape(parameterToString(r.objectStorageId, "")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := _neturl.Values{}
+	localVarFormParams := _neturl.Values{}
+	if r.xRequestId == nil {
+		return localVarReturnValue, nil, reportError("xRequestId is required and must be specified")
+	}
+	if r.patchObjectStorageRequest == nil {
+		return localVarReturnValue, nil, reportError("patchObjectStorageRequest is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	localVarHeaderParams["x-request-id"] = parameterToString(*r.xRequestId, "")
+	if r.xTraceId != nil {
+		localVarHeaderParams["x-trace-id"] = parameterToString(*r.xTraceId, "")
+	}
+	// body params
+	localVarPostBody = r.patchObjectStorageRequest
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
 type ApiUpgradeObjectStorageRequest struct {
 	ctx _context.Context
 	ApiService *ObjectStoragesApiService
@@ -934,7 +1069,7 @@ func (r ApiUpgradeObjectStorageRequest) XTraceId(xTraceId string) ApiUpgradeObje
 	return r
 }
 
-func (r ApiUpgradeObjectStorageRequest) Execute() (UpdateObjectStorageResponse, *_nethttp.Response, error) {
+func (r ApiUpgradeObjectStorageRequest) Execute() (UpgradeObjectStorageResponse, *_nethttp.Response, error) {
 	return r.ApiService.UpgradeObjectStorageExecute(r)
 }
 
@@ -956,15 +1091,15 @@ func (a *ObjectStoragesApiService) UpgradeObjectStorage(ctx _context.Context, ob
 }
 
 // Execute executes the request
-//  @return UpdateObjectStorageResponse
-func (a *ObjectStoragesApiService) UpgradeObjectStorageExecute(r ApiUpgradeObjectStorageRequest) (UpdateObjectStorageResponse, *_nethttp.Response, error) {
+//  @return UpgradeObjectStorageResponse
+func (a *ObjectStoragesApiService) UpgradeObjectStorageExecute(r ApiUpgradeObjectStorageRequest) (UpgradeObjectStorageResponse, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  UpdateObjectStorageResponse
+		localVarReturnValue  UpgradeObjectStorageResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ObjectStoragesApiService.UpgradeObjectStorage")

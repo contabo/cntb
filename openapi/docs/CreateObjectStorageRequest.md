@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 **Region** | **string** | Region where the object storage should be located. Default is EU. Available regions: EU, US-central, SIN | [default to "EU"]
 **AutoScaling** | Pointer to [**AutoScalingTypeRequest**](AutoScalingTypeRequest.md) | Autoscaling settings | [optional] 
 **TotalPurchasedSpaceTB** | **float64** | Amount of purchased / requested object storage in TB. | 
+**DisplayName** | Pointer to **string** | Display name helps to differentiate between object storages, especially if they are in the same region. If display name is not provided, it will be generated. Display name can be changed any time. | [optional] 
 
 ## Methods
 
@@ -91,6 +92,31 @@ and a boolean to check if the value has been set.
 
 SetTotalPurchasedSpaceTB sets TotalPurchasedSpaceTB field to given value.
 
+
+### GetDisplayName
+
+`func (o *CreateObjectStorageRequest) GetDisplayName() string`
+
+GetDisplayName returns the DisplayName field if non-nil, zero value otherwise.
+
+### GetDisplayNameOk
+
+`func (o *CreateObjectStorageRequest) GetDisplayNameOk() (*string, bool)`
+
+GetDisplayNameOk returns a tuple with the DisplayName field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetDisplayName
+
+`func (o *CreateObjectStorageRequest) SetDisplayName(v string)`
+
+SetDisplayName sets DisplayName field to given value.
+
+### HasDisplayName
+
+`func (o *CreateObjectStorageRequest) HasDisplayName() bool`
+
+HasDisplayName returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

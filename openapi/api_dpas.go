@@ -291,6 +291,7 @@ type ApiDownloadDpaFileRequest struct {
 	xRequestId *string
 	dpaId string
 	xTraceId *string
+	contentDisposition *string
 }
 
 // [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually.
@@ -301,6 +302,11 @@ func (r ApiDownloadDpaFileRequest) XRequestId(xRequestId string) ApiDownloadDpaF
 // Identifier to trace group of requests.
 func (r ApiDownloadDpaFileRequest) XTraceId(xTraceId string) ApiDownloadDpaFileRequest {
 	r.xTraceId = &xTraceId
+	return r
+}
+// Set the content dispotion header for download PDF or only preview it. Default is inline
+func (r ApiDownloadDpaFileRequest) ContentDisposition(contentDisposition string) ApiDownloadDpaFileRequest {
+	r.contentDisposition = &contentDisposition
 	return r
 }
 
@@ -352,6 +358,9 @@ func (a *DPASApiService) DownloadDpaFileExecute(r ApiDownloadDpaFileRequest) (ma
 		return localVarReturnValue, nil, reportError("xRequestId is required and must be specified")
 	}
 
+	if r.contentDisposition != nil {
+		localVarQueryParams.Add("contentDisposition", parameterToString(*r.contentDisposition, ""))
+	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
 
@@ -416,6 +425,7 @@ type ApiDownloadPreviewDpaRequest struct {
 	xRequestId *string
 	dpaId string
 	xTraceId *string
+	contentDisposition *string
 }
 
 // [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually.
@@ -426,6 +436,11 @@ func (r ApiDownloadPreviewDpaRequest) XRequestId(xRequestId string) ApiDownloadP
 // Identifier to trace group of requests.
 func (r ApiDownloadPreviewDpaRequest) XTraceId(xTraceId string) ApiDownloadPreviewDpaRequest {
 	r.xTraceId = &xTraceId
+	return r
+}
+// Set the content dispotion header for download PDF or only preview it. Default is inline
+func (r ApiDownloadPreviewDpaRequest) ContentDisposition(contentDisposition string) ApiDownloadPreviewDpaRequest {
+	r.contentDisposition = &contentDisposition
 	return r
 }
 
@@ -477,6 +492,9 @@ func (a *DPASApiService) DownloadPreviewDpaExecute(r ApiDownloadPreviewDpaReques
 		return localVarReturnValue, nil, reportError("xRequestId is required and must be specified")
 	}
 
+	if r.contentDisposition != nil {
+		localVarQueryParams.Add("contentDisposition", parameterToString(*r.contentDisposition, ""))
+	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
 

@@ -16,12 +16,13 @@ Name | Type | Description | Notes
 **S3TenantId** | **string** | Your S3 tenantId. Only required for public sharing. | 
 **Status** | **string** | The object storage status | 
 **Region** | **string** | The region where your object storage is located | 
+**DisplayName** | **string** | Display name for object storage. | 
 
 ## Methods
 
 ### NewObjectStorageResponse
 
-`func NewObjectStorageResponse(tenantId string, customerId string, objectStorageId string, createdDate time.Time, cancelDate string, autoScaling AutoScalingTypeResponse, dataCenter string, totalPurchasedSpaceTB float64, s3Url string, s3TenantId string, status string, region string, ) *ObjectStorageResponse`
+`func NewObjectStorageResponse(tenantId string, customerId string, objectStorageId string, createdDate time.Time, cancelDate string, autoScaling AutoScalingTypeResponse, dataCenter string, totalPurchasedSpaceTB float64, s3Url string, s3TenantId string, status string, region string, displayName string, ) *ObjectStorageResponse`
 
 NewObjectStorageResponse instantiates a new ObjectStorageResponse object
 This constructor will assign default values to properties that have it defined,
@@ -274,6 +275,26 @@ and a boolean to check if the value has been set.
 `func (o *ObjectStorageResponse) SetRegion(v string)`
 
 SetRegion sets Region field to given value.
+
+
+### GetDisplayName
+
+`func (o *ObjectStorageResponse) GetDisplayName() string`
+
+GetDisplayName returns the DisplayName field if non-nil, zero value otherwise.
+
+### GetDisplayNameOk
+
+`func (o *ObjectStorageResponse) GetDisplayNameOk() (*string, bool)`
+
+GetDisplayNameOk returns a tuple with the DisplayName field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetDisplayName
+
+`func (o *ObjectStorageResponse) SetDisplayName(v string)`
+
+SetDisplayName sets DisplayName field to given value.
 
 
 

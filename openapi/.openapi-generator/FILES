@@ -90,7 +90,6 @@ docs/CreateUserRequest.md
 docs/CreateUserResponse.md
 docs/CreateUserResponseData.md
 docs/CredentialData.md
-docs/CredentialResponse.md
 docs/CustomImagesStatsResponse.md
 docs/CustomImagesStatsResponseData.md
 docs/CustomerAddress.md
@@ -111,6 +110,7 @@ docs/DpaResponseData.md
 docs/DpaServiceResponse.md
 docs/FindAssignmentResponse.md
 docs/FindClientResponse.md
+docs/FindCredentialResponse.md
 docs/FindCustomerResponse.md
 docs/FindFirewallResponse.md
 docs/FindImageResponse.md
@@ -177,6 +177,7 @@ docs/Links.md
 docs/ListApiPermissionResponse.md
 docs/ListAssignmentAuditsResponse.md
 docs/ListAssignmentResponse.md
+docs/ListCredentialResponse.md
 docs/ListDataCenterResponse.md
 docs/ListDpaAuditResponse.md
 docs/ListDpaResponse.md
@@ -225,6 +226,7 @@ docs/PatchFirewallResponse.md
 docs/PatchInstanceRequest.md
 docs/PatchInstanceResponse.md
 docs/PatchInstanceResponseData.md
+docs/PatchObjectStorageRequest.md
 docs/PatchPrivateNetworkRequest.md
 docs/PatchPrivateNetworkResponse.md
 docs/PaymentMethodResponse.md
@@ -279,8 +281,6 @@ docs/UnassignVipResponse.md
 docs/UpdateCustomImageRequest.md
 docs/UpdateCustomImageResponse.md
 docs/UpdateCustomImageResponseData.md
-docs/UpdateObjectStorageResponse.md
-docs/UpdateObjectStorageResponseData.md
 docs/UpdateRoleRequest.md
 docs/UpdateRoleResponse.md
 docs/UpdateSecretRequest.md
@@ -294,6 +294,8 @@ docs/UpdateUserResponse.md
 docs/UpgradeAutoScalingType.md
 docs/UpgradeInstanceRequest.md
 docs/UpgradeObjectStorageRequest.md
+docs/UpgradeObjectStorageResponse.md
+docs/UpgradeObjectStorageResponseData.md
 docs/UserAuditResponse.md
 docs/UserIsPasswordSetResponse.md
 docs/UserResponse.md
@@ -359,7 +361,6 @@ model_create_user_request.go
 model_create_user_response.go
 model_create_user_response_data.go
 model_credential_data.go
-model_credential_response.go
 model_custom_images_stats_response.go
 model_custom_images_stats_response_data.go
 model_customer_address.go
@@ -377,6 +378,7 @@ model_dpa_response_data.go
 model_dpa_service_response.go
 model_find_assignment_response.go
 model_find_client_response.go
+model_find_credential_response.go
 model_find_customer_response.go
 model_find_firewall_response.go
 model_find_image_response.go
@@ -432,6 +434,7 @@ model_links.go
 model_list_api_permission_response.go
 model_list_assignment_audits_response.go
 model_list_assignment_response.go
+model_list_credential_response.go
 model_list_data_center_response.go
 model_list_dpa_audit_response.go
 model_list_dpa_response.go
@@ -478,6 +481,7 @@ model_patch_firewall_response.go
 model_patch_instance_request.go
 model_patch_instance_response.go
 model_patch_instance_response_data.go
+model_patch_object_storage_request.go
 model_patch_private_network_request.go
 model_patch_private_network_response.go
 model_payment_method_response.go
@@ -518,8 +522,6 @@ model_unassign_vip_response.go
 model_update_custom_image_request.go
 model_update_custom_image_response.go
 model_update_custom_image_response_data.go
-model_update_object_storage_response.go
-model_update_object_storage_response_data.go
 model_update_role_request.go
 model_update_role_response.go
 model_update_secret_request.go
@@ -533,6 +535,8 @@ model_update_user_response.go
 model_upgrade_auto_scaling_type.go
 model_upgrade_instance_request.go
 model_upgrade_object_storage_request.go
+model_upgrade_object_storage_response.go
+model_upgrade_object_storage_response_data.go
 model_user_audit_response.go
 model_user_is_password_set_response.go
 model_user_response.go

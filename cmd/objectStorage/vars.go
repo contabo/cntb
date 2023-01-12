@@ -3,6 +3,7 @@ package cmd
 // create
 var (
 	createRegion                string
+	createdisplayName           string
 	createScalingState          string
 	createScalingLimitTB        float64
 	createTotalPurchasedSpaceTB float64
@@ -13,6 +14,18 @@ var (
 // get
 var (
 	getObjectStorageId string
+)
+
+// edit
+var (
+	editObjectStorageId string
+	editDisplayName     string
+)
+
+// update
+var (
+	updateObjectStorageId string
+	updateDisplayName     string
 )
 
 // list

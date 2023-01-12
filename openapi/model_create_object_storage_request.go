@@ -23,6 +23,8 @@ type CreateObjectStorageRequest struct {
 	AutoScaling *AutoScalingTypeRequest `json:"autoScaling,omitempty"`
 	// Amount of purchased / requested object storage in TB.
 	TotalPurchasedSpaceTB float64 `json:"totalPurchasedSpaceTB"`
+	// Display name helps to differentiate between object storages, especially if they are in the same region. If display name is not provided, it will be generated. Display name can be changed any time.
+	DisplayName *string `json:"displayName,omitempty"`
 }
 
 // NewCreateObjectStorageRequest instantiates a new CreateObjectStorageRequest object
@@ -126,6 +128,38 @@ func (o *CreateObjectStorageRequest) SetTotalPurchasedSpaceTB(v float64) {
 	o.TotalPurchasedSpaceTB = v
 }
 
+// GetDisplayName returns the DisplayName field value if set, zero value otherwise.
+func (o *CreateObjectStorageRequest) GetDisplayName() string {
+	if o == nil || o.DisplayName == nil {
+		var ret string
+		return ret
+	}
+	return *o.DisplayName
+}
+
+// GetDisplayNameOk returns a tuple with the DisplayName field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *CreateObjectStorageRequest) GetDisplayNameOk() (*string, bool) {
+	if o == nil || o.DisplayName == nil {
+		return nil, false
+	}
+	return o.DisplayName, true
+}
+
+// HasDisplayName returns a boolean if a field has been set.
+func (o *CreateObjectStorageRequest) HasDisplayName() bool {
+	if o != nil && o.DisplayName != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetDisplayName gets a reference to the given string and assigns it to the DisplayName field.
+func (o *CreateObjectStorageRequest) SetDisplayName(v string) {
+	o.DisplayName = &v
+}
+
 func (o CreateObjectStorageRequest) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
 	if true {
@@ -136,6 +170,9 @@ func (o CreateObjectStorageRequest) MarshalJSON() ([]byte, error) {
 	}
 	if true {
 		toSerialize["totalPurchasedSpaceTB"] = o.TotalPurchasedSpaceTB
+	}
+	if o.DisplayName != nil {
+		toSerialize["displayName"] = o.DisplayName
 	}
 	return json.Marshal(toSerialize)
 }
