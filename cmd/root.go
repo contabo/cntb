@@ -93,7 +93,7 @@ func init() {
 	// will be global for your application.
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "",
-		"config file (Looks up /etc/cntb/.cntb.yaml then $HOME/.cntb.yaml)")
+		"config file (Looks up $CNTB_CONFIG, /etc/cntb/.cntb.yaml then $HOME/.cntb.yaml)")
 
 	rootCmd.PersistentFlags().StringVarP(&DebugLevel, "debug", "d", "warn",
 		"debug level [fatal|error|warn|info|debug|trace]")
@@ -139,6 +139,8 @@ func initConfig() {
 	if cfgFile != "" {
 		// Use config file from the flag.
 		viper.SetConfigFile(cfgFile)
+	} else if s := os.Getenv("CNTB_CONFIG"); s != "" {
+		viper.SetConfigFile(s)
 	} else {
 		// Find home directory.
 		home, err := homedir.Dir()
