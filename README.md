@@ -134,5 +134,3 @@ For `cntb` to work it uses some additional files and folders.
 ## License
 
 GNU GENERAL PUBLIC LICENSE, Version 3
-
-

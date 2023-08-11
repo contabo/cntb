@@ -4,16 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**TenantId** | **string** | Your customer tenant id | 
-**CustomerId** | **string** | Your customer number | 
-**Id** | **string** | Subscription&#39;s id | 
-**Date** | **string** | The Earliest Cancellation Date | 
+**Data** | [**[]EarliestCancellationResponse**](EarliestCancellationResponse.md) |  | 
+**Links** | [**SelfLinks**](SelfLinks.md) |  | 
 
 ## Methods
 
 ### NewEarliestCancellationDateSubscriptionResponse
 
-`func NewEarliestCancellationDateSubscriptionResponse(tenantId string, customerId string, id string, date string, ) *EarliestCancellationDateSubscriptionResponse`
+`func NewEarliestCancellationDateSubscriptionResponse(data []EarliestCancellationResponse, links SelfLinks, ) *EarliestCancellationDateSubscriptionResponse`
 
 NewEarliestCancellationDateSubscriptionResponse instantiates a new EarliestCancellationDateSubscriptionResponse object
 This constructor will assign default values to properties that have it defined,
@@ -28,84 +26,44 @@ NewEarliestCancellationDateSubscriptionResponseWithDefaults instantiates a new E
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetTenantId
+### GetData
 
-`func (o *EarliestCancellationDateSubscriptionResponse) GetTenantId() string`
+`func (o *EarliestCancellationDateSubscriptionResponse) GetData() []EarliestCancellationResponse`
 
-GetTenantId returns the TenantId field if non-nil, zero value otherwise.
+GetData returns the Data field if non-nil, zero value otherwise.
 
-### GetTenantIdOk
+### GetDataOk
 
-`func (o *EarliestCancellationDateSubscriptionResponse) GetTenantIdOk() (*string, bool)`
+`func (o *EarliestCancellationDateSubscriptionResponse) GetDataOk() (*[]EarliestCancellationResponse, bool)`
 
-GetTenantIdOk returns a tuple with the TenantId field if it's non-nil, zero value otherwise
+GetDataOk returns a tuple with the Data field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetTenantId
+### SetData
 
-`func (o *EarliestCancellationDateSubscriptionResponse) SetTenantId(v string)`
+`func (o *EarliestCancellationDateSubscriptionResponse) SetData(v []EarliestCancellationResponse)`
 
-SetTenantId sets TenantId field to given value.
+SetData sets Data field to given value.
 
 
-### GetCustomerId
+### GetLinks
 
-`func (o *EarliestCancellationDateSubscriptionResponse) GetCustomerId() string`
+`func (o *EarliestCancellationDateSubscriptionResponse) GetLinks() SelfLinks`
 
-GetCustomerId returns the CustomerId field if non-nil, zero value otherwise.
+GetLinks returns the Links field if non-nil, zero value otherwise.
 
-### GetCustomerIdOk
+### GetLinksOk
 
-`func (o *EarliestCancellationDateSubscriptionResponse) GetCustomerIdOk() (*string, bool)`
+`func (o *EarliestCancellationDateSubscriptionResponse) GetLinksOk() (*SelfLinks, bool)`
 
-GetCustomerIdOk returns a tuple with the CustomerId field if it's non-nil, zero value otherwise
+GetLinksOk returns a tuple with the Links field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetCustomerId
+### SetLinks
 
-`func (o *EarliestCancellationDateSubscriptionResponse) SetCustomerId(v string)`
+`func (o *EarliestCancellationDateSubscriptionResponse) SetLinks(v SelfLinks)`
 
-SetCustomerId sets CustomerId field to given value.
-
-
-### GetId
-
-`func (o *EarliestCancellationDateSubscriptionResponse) GetId() string`
-
-GetId returns the Id field if non-nil, zero value otherwise.
-
-### GetIdOk
-
-`func (o *EarliestCancellationDateSubscriptionResponse) GetIdOk() (*string, bool)`
-
-GetIdOk returns a tuple with the Id field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetId
-
-`func (o *EarliestCancellationDateSubscriptionResponse) SetId(v string)`
-
-SetId sets Id field to given value.
-
-
-### GetDate
-
-`func (o *EarliestCancellationDateSubscriptionResponse) GetDate() string`
-
-GetDate returns the Date field if non-nil, zero value otherwise.
-
-### GetDateOk
-
-`func (o *EarliestCancellationDateSubscriptionResponse) GetDateOk() (*string, bool)`
-
-GetDateOk returns a tuple with the Date field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetDate
-
-`func (o *EarliestCancellationDateSubscriptionResponse) SetDate(v string)`
-
-SetDate sets Date field to given value.
+SetLinks sets Links field to given value.
 
 
 
