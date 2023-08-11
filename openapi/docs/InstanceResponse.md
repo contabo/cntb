@@ -10,10 +10,12 @@ Name | Type | Description | Notes
 **Name** | **string** | Instance Name | 
 **DisplayName** | **string** | Instance display name | 
 **InstanceId** | **int64** | Instance ID | 
-**Region** | **string** | Instance Region where the compute instance should be located. | 
+**DataCenter** | **string** | The data center where your Private Network is located | 
+**Region** | **string** | Instance region where the compute instance should be located. | 
+**RegionName** | **string** | The name of the region where the instance is located. | 
 **ProductId** | **string** | Product ID | 
 **ImageId** | **string** | Image&#39;s id | 
-**IpConfig** | Pointer to [**IpConfig2**](IpConfig2.md) |  | [optional] 
+**IpConfig** | [**IpConfig**](IpConfig.md) |  | 
 **MacAddress** | **string** | MAC Address | 
 **RamMb** | **float32** | Image RAM size in MB | 
 **CpuCores** | **int64** | CPU core count | 
@@ -27,13 +29,13 @@ Name | Type | Description | Notes
 **AddOns** | [**[]AddOnResponse**](AddOnResponse.md) |  | 
 **ErrorMessage** | Pointer to **string** | Message in case of an error. | [optional] 
 **ProductType** | **string** | Instance&#39;s category depending on Product Id | 
-**DefaultUser** | **string** | Default user name created for login during (re-)installation with administrative privileges. Allowed values for Linux/BSD are &#x60;admin&#x60; (use sudo to apply administrative privileges like root) or &#x60;root&#x60;. Allowed values for Windows are &#x60;admin&#x60; (has administrative privileges like administrator) or &#x60;administrator&#x60;. | 
+**DefaultUser** | Pointer to **string** | Default user name created for login during (re-)installation with administrative privileges. Allowed values for Linux/BSD are &#x60;admin&#x60; (use sudo to apply administrative privileges like root) or &#x60;root&#x60;. Allowed values for Windows are &#x60;admin&#x60; (has administrative privileges like administrator) or &#x60;administrator&#x60;. | [optional] 
 
 ## Methods
 
 ### NewInstanceResponse
 
-`func NewInstanceResponse(tenantId string, customerId string, additionalIps []AdditionalIp, name string, displayName string, instanceId int64, region string, productId string, imageId string, macAddress string, ramMb float32, cpuCores int64, osType string, diskMb float32, sshKeys []int64, createdDate time.Time, cancelDate string, status InstanceStatus, vHostId int64, addOns []AddOnResponse, productType string, defaultUser string, ) *InstanceResponse`
+`func NewInstanceResponse(tenantId string, customerId string, additionalIps []AdditionalIp, name string, displayName string, instanceId int64, dataCenter string, region string, regionName string, productId string, imageId string, ipConfig IpConfig, macAddress string, ramMb float32, cpuCores int64, osType string, diskMb float32, sshKeys []int64, createdDate time.Time, cancelDate string, status InstanceStatus, vHostId int64, addOns []AddOnResponse, productType string, ) *InstanceResponse`
 
 NewInstanceResponse instantiates a new InstanceResponse object
 This constructor will assign default values to properties that have it defined,
@@ -168,6 +170,26 @@ and a boolean to check if the value has been set.
 SetInstanceId sets InstanceId field to given value.
 
 
+### GetDataCenter
+
+`func (o *InstanceResponse) GetDataCenter() string`
+
+GetDataCenter returns the DataCenter field if non-nil, zero value otherwise.
+
+### GetDataCenterOk
+
+`func (o *InstanceResponse) GetDataCenterOk() (*string, bool)`
+
+GetDataCenterOk returns a tuple with the DataCenter field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetDataCenter
+
+`func (o *InstanceResponse) SetDataCenter(v string)`
+
+SetDataCenter sets DataCenter field to given value.
+
+
 ### GetRegion
 
 `func (o *InstanceResponse) GetRegion() string`
@@ -186,6 +208,26 @@ and a boolean to check if the value has been set.
 `func (o *InstanceResponse) SetRegion(v string)`
 
 SetRegion sets Region field to given value.
+
+
+### GetRegionName
+
+`func (o *InstanceResponse) GetRegionName() string`
+
+GetRegionName returns the RegionName field if non-nil, zero value otherwise.
+
+### GetRegionNameOk
+
+`func (o *InstanceResponse) GetRegionNameOk() (*string, bool)`
+
+GetRegionNameOk returns a tuple with the RegionName field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetRegionName
+
+`func (o *InstanceResponse) SetRegionName(v string)`
+
+SetRegionName sets RegionName field to given value.
 
 
 ### GetProductId
@@ -230,28 +272,23 @@ SetImageId sets ImageId field to given value.
 
 ### GetIpConfig
 
-`func (o *InstanceResponse) GetIpConfig() IpConfig2`
+`func (o *InstanceResponse) GetIpConfig() IpConfig`
 
 GetIpConfig returns the IpConfig field if non-nil, zero value otherwise.
 
 ### GetIpConfigOk
 
-`func (o *InstanceResponse) GetIpConfigOk() (*IpConfig2, bool)`
+`func (o *InstanceResponse) GetIpConfigOk() (*IpConfig, bool)`
 
 GetIpConfigOk returns a tuple with the IpConfig field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetIpConfig
 
-`func (o *InstanceResponse) SetIpConfig(v IpConfig2)`
+`func (o *InstanceResponse) SetIpConfig(v IpConfig)`
 
 SetIpConfig sets IpConfig field to given value.
 
-### HasIpConfig
-
-`func (o *InstanceResponse) HasIpConfig() bool`
-
-HasIpConfig returns a boolean if a field has been set.
 
 ### GetMacAddress
 
@@ -537,6 +574,11 @@ and a boolean to check if the value has been set.
 
 SetDefaultUser sets DefaultUser field to given value.
 
+### HasDefaultUser
+
+`func (o *InstanceResponse) HasDefaultUser() bool`
+
+HasDefaultUser returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

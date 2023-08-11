@@ -7,10 +7,10 @@ Name | Type | Description | Notes
 **RoleId** | **int64** | Role&#39;s id | 
 **TenantId** | **string** | Your customer tenant id | 
 **CustomerId** | **string** | Your customer number | 
-**Name** | **string** | Role Name | 
+**Name** | **string** | Role&#39;s name | 
 **Admin** | **bool** | Admin | 
 **AccessAllResources** | **bool** | Access All Resources | 
-**Type** | **string** | Role type can be either &#x60;default&#x60; or &#x60;custom&#x60;. The &#x60;default&#x60; roles cannot be modified or deleted | 
+**Type** | **string** | Role type can be either &#x60;default&#x60; or &#x60;custom&#x60;. The &#x60;default&#x60; roles cannot be modified or deleted. | 
 **Permissions** | Pointer to [**[]PermissionResponse**](PermissionResponse.md) |  | [optional] 
 
 ## Methods

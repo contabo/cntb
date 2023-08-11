@@ -5,7 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **TenantId** | **string** | Your customer tenant id | 
-**CustomerId** | **string** | Your customer number | 
+**CustomerId** | **string** | Your Customer number | 
 **SecretId** | **float32** | Secret&#39;s id | 
 **Name** | **string** | The name assigned to the password/ssh | 
 **Type** | **string** | The type of the secret. This will be available only when retrieving secrets | 

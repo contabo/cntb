@@ -142,7 +142,7 @@ func init() {
 		`Enable or disable two-factor authentication (2FA) via time based OTP. ('true' or 'false')`)
 
 	userUpdateCmd.Flags().Int64SliceVarP(&updateRoles, "roles", "r", nil,
-		`list of role ids the user should have.`)
+		`list of role ids the user should have. (Currently a user can only have one role)`)
 
 	userUpdateCmd.Flags().StringVar(&updateLocale, "locale", "",
 		`The locale of the user. This can be de-DE, de, en-US, en`)

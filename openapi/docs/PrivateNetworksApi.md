@@ -113,7 +113,7 @@ import (
 
 func main() {
     xRequestId := "04e0f898-37b4-48bc-a794-1a57abe6aa31" // string | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually.
-    createPrivateNetworkRequest := *openapiclient.NewCreatePrivateNetworkRequest("EU", "myPrivateNetwork") // CreatePrivateNetworkRequest | 
+    createPrivateNetworkRequest := *openapiclient.NewCreatePrivateNetworkRequest("myPrivateNetwork") // CreatePrivateNetworkRequest | 
     xTraceId := "xTraceId_example" // string | Identifier to trace group of requests. (optional)
 
     configuration := openapiclient.NewConfiguration()
@@ -385,7 +385,7 @@ Name | Type | Description  | Notes
 
 ## RetrievePrivateNetworkList
 
-> ListPrivateNetworkResponse RetrievePrivateNetworkList(ctx).XRequestId(xRequestId).XTraceId(xTraceId).Page(page).Size(size).OrderBy(orderBy).Name(name).InstanceIds(instanceIds).Execute()
+> ListPrivateNetworkResponse RetrievePrivateNetworkList(ctx).XRequestId(xRequestId).XTraceId(xTraceId).Page(page).Size(size).OrderBy(orderBy).Name(name).InstanceIds(instanceIds).Region(region).DataCenter(dataCenter).Execute()
 
 List Private Networks
 
@@ -411,10 +411,12 @@ func main() {
     orderBy := []string{"Inner_example"} // []string | Specify fields and ordering (ASC for ascending, DESC for descending) in following format `field:ASC|DESC`. (optional)
     name := "myPrivateNetwork" // string | The name of the Private Network (optional)
     instanceIds := "100, 101, 102" // string | Comma separated instances identifiers (optional)
+    region := "EU" // string | The slug of the region where your Private Network is located (optional)
+    dataCenter := "European Union (Germany) 1" // string | The data center where your Private Network is located (optional)
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.PrivateNetworksApi.RetrievePrivateNetworkList(context.Background()).XRequestId(xRequestId).XTraceId(xTraceId).Page(page).Size(size).OrderBy(orderBy).Name(name).InstanceIds(instanceIds).Execute()
+    resp, r, err := api_client.PrivateNetworksApi.RetrievePrivateNetworkList(context.Background()).XRequestId(xRequestId).XTraceId(xTraceId).Page(page).Size(size).OrderBy(orderBy).Name(name).InstanceIds(instanceIds).Region(region).DataCenter(dataCenter).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `PrivateNetworksApi.RetrievePrivateNetworkList``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -442,6 +444,8 @@ Name | Type | Description  | Notes
  **orderBy** | **[]string** | Specify fields and ordering (ASC for ascending, DESC for descending) in following format &#x60;field:ASC|DESC&#x60;. | 
  **name** | **string** | The name of the Private Network | 
  **instanceIds** | **string** | Comma separated instances identifiers | 
+ **region** | **string** | The slug of the region where your Private Network is located | 
+ **dataCenter** | **string** | The data center where your Private Network is located | 
 
 ### Return type
 
@@ -483,7 +487,7 @@ import (
 
 func main() {
     xRequestId := "04e0f898-37b4-48bc-a794-1a57abe6aa31" // string | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually.
-    privateNetworkId := int64(12345) // int64 | The identifier of the Private Network
+    privateNetworkId := int64(100) // int64 | The identifier of the Private Network
     instanceId := int64(100) // int64 | The identifier of the instance
     xTraceId := "xTraceId_example" // string | Identifier to trace group of requests. (optional)
 

@@ -6,12 +6,13 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Subject** | **string** | The ticket subject | 
 **Note** | **string** | The ticket note | 
+**Sender** | **string** | Customer email | 
 
 ## Methods
 
 ### NewCreateTicketRequest
 
-`func NewCreateTicketRequest(subject string, note string, ) *CreateTicketRequest`
+`func NewCreateTicketRequest(subject string, note string, sender string, ) *CreateTicketRequest`
 
 NewCreateTicketRequest instantiates a new CreateTicketRequest object
 This constructor will assign default values to properties that have it defined,
@@ -64,6 +65,26 @@ and a boolean to check if the value has been set.
 `func (o *CreateTicketRequest) SetNote(v string)`
 
 SetNote sets Note field to given value.
+
+
+### GetSender
+
+`func (o *CreateTicketRequest) GetSender() string`
+
+GetSender returns the Sender field if non-nil, zero value otherwise.
+
+### GetSenderOk
+
+`func (o *CreateTicketRequest) GetSenderOk() (*string, bool)`
+
+GetSenderOk returns a tuple with the Sender field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetSender
+
+`func (o *CreateTicketRequest) SetSender(v string)`
+
+SetSender sets Sender field to given value.
 
 
 

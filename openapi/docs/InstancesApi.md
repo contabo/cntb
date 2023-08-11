@@ -110,7 +110,7 @@ import (
 
 func main() {
     xRequestId := "04e0f898-37b4-48bc-a794-1a57abe6aa31" // string | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually.
-    createInstanceRequest := *openapiclient.NewCreateInstanceRequest("3f184ab8-a600-4e7c-8c9b-3413e21a3752", "V3", "EU", int64(6)) // CreateInstanceRequest | 
+    createInstanceRequest := *openapiclient.NewCreateInstanceRequest("V3", int64(6)) // CreateInstanceRequest | 
     xTraceId := "xTraceId_example" // string | Identifier to trace group of requests. (optional)
 
     configuration := openapiclient.NewConfiguration()
@@ -386,7 +386,7 @@ Name | Type | Description  | Notes
 
 ## RetrieveInstancesList
 
-> ListInstancesResponse RetrieveInstancesList(ctx).XRequestId(xRequestId).XTraceId(xTraceId).Page(page).Size(size).OrderBy(orderBy).Name(name).Region(region).InstanceId(instanceId).InstanceIds(instanceIds).Status(status).AddOnIds(addOnIds).ProductTypes(productTypes).Execute()
+> ListInstancesResponse RetrieveInstancesList(ctx).XRequestId(xRequestId).XTraceId(xTraceId).Page(page).Size(size).OrderBy(orderBy).Name(name).DisplayName(displayName).DataCenter(dataCenter).Region(region).InstanceId(instanceId).InstanceIds(instanceIds).Status(status).AddOnIds(addOnIds).ProductTypes(productTypes).IpConfig(ipConfig).Execute()
 
 List instances
 
@@ -411,16 +411,19 @@ func main() {
     size := int64(10) // int64 | Number of elements per page. (optional)
     orderBy := []string{"Inner_example"} // []string | Specify fields and ordering (ASC for ascending, DESC for descending) in following format `field:ASC|DESC`. (optional)
     name := "vmd12345" // string | The name of the instance (optional)
+    displayName := "myTestInstance" // string | The display name of the instance (optional)
+    dataCenter := "European Union (Germany) 1" // string | The data center of the instance (optional)
     region := "EU" // string | The Region of the instance (optional)
     instanceId := int64(100) // int64 | The identifier of the instance (deprecated) (optional)
     instanceIds := "100, 101, 102" // string | Comma separated instances identifiers (optional)
     status := "provisioning,installing" // string | The status of the instance (optional)
     addOnIds := "1044,827" // string | Identifiers of Addons the instances have (optional)
     productTypes := "ssd, hdd, nvme" // string | Comma separated instance's category depending on Product Id (optional)
+    ipConfig := true // bool | Filter instances that have an ip config (optional)
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.InstancesApi.RetrieveInstancesList(context.Background()).XRequestId(xRequestId).XTraceId(xTraceId).Page(page).Size(size).OrderBy(orderBy).Name(name).Region(region).InstanceId(instanceId).InstanceIds(instanceIds).Status(status).AddOnIds(addOnIds).ProductTypes(productTypes).Execute()
+    resp, r, err := api_client.InstancesApi.RetrieveInstancesList(context.Background()).XRequestId(xRequestId).XTraceId(xTraceId).Page(page).Size(size).OrderBy(orderBy).Name(name).DisplayName(displayName).DataCenter(dataCenter).Region(region).InstanceId(instanceId).InstanceIds(instanceIds).Status(status).AddOnIds(addOnIds).ProductTypes(productTypes).IpConfig(ipConfig).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `InstancesApi.RetrieveInstancesList``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -447,12 +450,15 @@ Name | Type | Description  | Notes
  **size** | **int64** | Number of elements per page. | 
  **orderBy** | **[]string** | Specify fields and ordering (ASC for ascending, DESC for descending) in following format &#x60;field:ASC|DESC&#x60;. | 
  **name** | **string** | The name of the instance | 
+ **displayName** | **string** | The display name of the instance | 
+ **dataCenter** | **string** | The data center of the instance | 
  **region** | **string** | The Region of the instance | 
  **instanceId** | **int64** | The identifier of the instance (deprecated) | 
  **instanceIds** | **string** | Comma separated instances identifiers | 
  **status** | **string** | The status of the instance | 
  **addOnIds** | **string** | Identifiers of Addons the instances have | 
  **productTypes** | **string** | Comma separated instance&#39;s category depending on Product Id | 
+ **ipConfig** | **bool** | Filter instances that have an ip config | 
 
 ### Return type
 

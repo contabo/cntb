@@ -4,13 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Links** | [**SelfLinks**](SelfLinks.md) | Links for easy navigation. | 
+**Data** | [**[]SnapshotResponse**](SnapshotResponse.md) |  | 
+**Links** | [**SelfLinks**](SelfLinks.md) |  | 
 
 ## Methods
 
 ### NewUpdateSnapshotResponse
 
-`func NewUpdateSnapshotResponse(links SelfLinks, ) *UpdateSnapshotResponse`
+`func NewUpdateSnapshotResponse(data []SnapshotResponse, links SelfLinks, ) *UpdateSnapshotResponse`
 
 NewUpdateSnapshotResponse instantiates a new UpdateSnapshotResponse object
 This constructor will assign default values to properties that have it defined,
@@ -24,6 +25,26 @@ will change when the set of required properties is changed
 NewUpdateSnapshotResponseWithDefaults instantiates a new UpdateSnapshotResponse object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
+
+### GetData
+
+`func (o *UpdateSnapshotResponse) GetData() []SnapshotResponse`
+
+GetData returns the Data field if non-nil, zero value otherwise.
+
+### GetDataOk
+
+`func (o *UpdateSnapshotResponse) GetDataOk() (*[]SnapshotResponse, bool)`
+
+GetDataOk returns a tuple with the Data field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetData
+
+`func (o *UpdateSnapshotResponse) SetData(v []SnapshotResponse)`
+
+SetData sets Data field to given value.
+
 
 ### GetLinks
 

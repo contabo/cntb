@@ -9,7 +9,7 @@ Name | Type | Description | Notes
 **Name** | **string** | Instance name | 
 **ProductId** | **string** | Product id | 
 **PrivateIpConfig** | [**PrivateIpConfig**](PrivateIpConfig.md) |  | 
-**IpConfig** | [**IpConfig1**](IpConfig1.md) |  | 
+**IpConfig** | [**IpConfig**](IpConfig.md) |  | 
 **Status** | **string** | State of the instance in the Private Network | 
 **ErrorMessage** | Pointer to **string** | Message in case of an error. | [optional] 
 
@@ -17,7 +17,7 @@ Name | Type | Description | Notes
 
 ### NewInstances
 
-`func NewInstances(instanceId int64, displayName string, name string, productId string, privateIpConfig PrivateIpConfig, ipConfig IpConfig1, status string, ) *Instances`
+`func NewInstances(instanceId int64, displayName string, name string, productId string, privateIpConfig PrivateIpConfig, ipConfig IpConfig, status string, ) *Instances`
 
 NewInstances instantiates a new Instances object
 This constructor will assign default values to properties that have it defined,
@@ -134,20 +134,20 @@ SetPrivateIpConfig sets PrivateIpConfig field to given value.
 
 ### GetIpConfig
 
-`func (o *Instances) GetIpConfig() IpConfig1`
+`func (o *Instances) GetIpConfig() IpConfig`
 
 GetIpConfig returns the IpConfig field if non-nil, zero value otherwise.
 
 ### GetIpConfigOk
 
-`func (o *Instances) GetIpConfigOk() (*IpConfig1, bool)`
+`func (o *Instances) GetIpConfigOk() (*IpConfig, bool)`
 
 GetIpConfigOk returns a tuple with the IpConfig field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetIpConfig
 
-`func (o *Instances) SetIpConfig(v IpConfig1)`
+`func (o *Instances) SetIpConfig(v IpConfig)`
 
 SetIpConfig sets IpConfig field to given value.
 

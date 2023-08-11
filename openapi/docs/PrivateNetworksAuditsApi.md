@@ -35,7 +35,7 @@ func main() {
     page := int64(1) // int64 | Number of page to be fetched. (optional)
     size := int64(10) // int64 | Number of elements per page. (optional)
     orderBy := []string{"Inner_example"} // []string | Specify fields and ordering (ASC for ascending, DESC for descending) in following format `field:ASC|DESC`. (optional)
-    privateNetworkId := int64(12345) // int64 | The identifier of the Private Network. (optional)
+    privateNetworkId := int64(12345) // int64 | The identifier of the Private Network (optional)
     requestId := "D5FD9FAF-58C0-4406-8F46-F449B8E4FEC3" // string | The requestId of the API call which led to the change. (optional)
     changedBy := "23cbb6d6-cb11-4330-bdff-7bb791df2e23" // string | User name which did the change. (optional)
     startDate := time.Now() // string | Start of search time range. (optional)
@@ -69,7 +69,7 @@ Name | Type | Description  | Notes
  **page** | **int64** | Number of page to be fetched. | 
  **size** | **int64** | Number of elements per page. | 
  **orderBy** | **[]string** | Specify fields and ordering (ASC for ascending, DESC for descending) in following format &#x60;field:ASC|DESC&#x60;. | 
- **privateNetworkId** | **int64** | The identifier of the Private Network. | 
+ **privateNetworkId** | **int64** | The identifier of the Private Network | 
  **requestId** | **string** | The requestId of the API call which led to the change. | 
  **changedBy** | **string** | User name which did the change. | 
  **startDate** | **string** | Start of search time range. | 

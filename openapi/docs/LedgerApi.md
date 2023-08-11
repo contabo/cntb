@@ -1,6 +1,6 @@
 # \LedgerApi
 
-All URIs are relative to *https://api.contabo.com*
+All URIs are relative to *https://api-staging-ext.contabo.intra*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -35,7 +35,7 @@ func main() {
     size := int64(10) // int64 | Number of elements per page. (optional)
     orderBy := []string{"Inner_example"} // []string | Specify fields and ordering (ASC for ascending, DESC for descending) in following format `field:ASC|DESC`. (optional)
     transactionStartDate := "2020-09-01" // string | Start date of the interval in which you want to see the transactions (optional)
-    transactionEndDate := "2020-09-30" // string | Start date of the interval in which you want to see the transactions (optional)
+    transactionEndDate := "2020-09-30" // string | End date of the interval in which you want to see the transactions (optional)
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
@@ -66,7 +66,7 @@ Name | Type | Description  | Notes
  **size** | **int64** | Number of elements per page. | 
  **orderBy** | **[]string** | Specify fields and ordering (ASC for ascending, DESC for descending) in following format &#x60;field:ASC|DESC&#x60;. | 
  **transactionStartDate** | **string** | Start date of the interval in which you want to see the transactions | 
- **transactionEndDate** | **string** | Start date of the interval in which you want to see the transactions | 
+ **transactionEndDate** | **string** | End date of the interval in which you want to see the transactions | 
 
 ### Return type
 

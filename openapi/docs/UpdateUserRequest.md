@@ -7,7 +7,7 @@ Name | Type | Description | Notes
 **FirstName** | Pointer to **string** | The name of the user. Names may contain letters, numbers, colons, dashes, and underscores. There is a limit of 255 characters per user. | [optional] 
 **LastName** | Pointer to **string** | The last name of the user. Users may contain letters, numbers, colons, dashes, and underscores. There is a limit of 255 characters per user. | [optional] 
 **Email** | Pointer to **string** | The email of the user to which activation and forgot password links are being sent to. There is a limit of 255 characters per email. | [optional] 
-**Enabled** | Pointer to **bool** | If uses is not enabled, he can&#39;t login and thus use services any longer. | [optional] 
+**Enabled** | Pointer to **bool** | If user is not enabled, he can&#39;t login and thus use services any longer. | [optional] 
 **Totp** | Pointer to **bool** | Enable or disable two-factor authentication (2FA) via time based OTP. | [optional] 
 **Locale** | Pointer to **string** | The locale of the user. This can be &#x60;de-DE&#x60;, &#x60;de&#x60;, &#x60;en-US&#x60;, &#x60;en&#x60; | [optional] 
 **Roles** | Pointer to **[]int64** | The roles as list of &#x60;roleId&#x60;s of the user. | [optional] 

@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | **int64** | The identifier of the audit entry. | 
+**Id** | **int64** | The ID of the audit entry. | 
 **Action** | **string** | Type of the action. | 
 **Timestamp** | **time.Time** | When the change took place. | 
 **TenantId** | **string** | Customer tenant id | 

@@ -29,7 +29,7 @@ var regenerateStorageCredentialsCmd = &cobra.Command{
 		}
 
 		resp, httpResp, err := client.ApiClient().UsersApi.
-			RegenerateCredentials(context.Background(), regenerateCredentialsUserId, regenerateCredentialsObjectStorageId, credentialId).
+			RegenerateObjectStorageCredentials(context.Background(), regenerateCredentialsUserId, regenerateCredentialsObjectStorageId, credentialId).
 			XRequestId(uuid.NewV4().String()).
 			Execute()
 

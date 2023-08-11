@@ -6,7 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Name** | **string** | Name of the data center | 
 **Slug** | **string** | Slug of the data center | 
-**Capabilities** | [**[]DatacenterCapabilities**](DatacenterCapabilities.md) |  | 
+**Capabilities** | **[]string** |  | 
 **S3Url** | **string** | S3 URL of the data center | 
 **RegionName** | **string** | Name of the region | 
 **RegionSlug** | **string** | Slug of the region | 
@@ -17,7 +17,7 @@ Name | Type | Description | Notes
 
 ### NewDataCenterResponse
 
-`func NewDataCenterResponse(name string, slug string, capabilities []DatacenterCapabilities, s3Url string, regionName string, regionSlug string, tenantId string, customerId string, ) *DataCenterResponse`
+`func NewDataCenterResponse(name string, slug string, capabilities []string, s3Url string, regionName string, regionSlug string, tenantId string, customerId string, ) *DataCenterResponse`
 
 NewDataCenterResponse instantiates a new DataCenterResponse object
 This constructor will assign default values to properties that have it defined,
@@ -74,20 +74,20 @@ SetSlug sets Slug field to given value.
 
 ### GetCapabilities
 
-`func (o *DataCenterResponse) GetCapabilities() []DatacenterCapabilities`
+`func (o *DataCenterResponse) GetCapabilities() []string`
 
 GetCapabilities returns the Capabilities field if non-nil, zero value otherwise.
 
 ### GetCapabilitiesOk
 
-`func (o *DataCenterResponse) GetCapabilitiesOk() (*[]DatacenterCapabilities, bool)`
+`func (o *DataCenterResponse) GetCapabilitiesOk() (*[]string, bool)`
 
 GetCapabilitiesOk returns a tuple with the Capabilities field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetCapabilities
 
-`func (o *DataCenterResponse) SetCapabilities(v []DatacenterCapabilities)`
+`func (o *DataCenterResponse) SetCapabilities(v []string)`
 
 SetCapabilities sets Capabilities field to given value.
 

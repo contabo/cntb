@@ -4,23 +4,23 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**TenantId** | **string** | Your customer tenant id | 
-**CustomerId** | **string** | Your customer number | 
-**Id** | **float32** | The identifier of the audit entry. | 
-**ImageId** | **string** | The identifier of the image | 
+**Id** | **int64** | The ID of the audit entry. | 
 **Action** | **string** | Type of the action. | 
 **Timestamp** | **time.Time** | When the change took place. | 
+**TenantId** | **string** | Customer tenant id | 
+**CustomerId** | **string** | Customer ID | 
 **ChangedBy** | **string** | Id of user who performed the change | 
 **Username** | **string** | Name of the user which led to the change. | 
 **RequestId** | **string** | The requestId of the API call which led to the change. | 
 **TraceId** | **string** | The traceId of the API call which led to the change. | 
+**ImageId** | **string** | The identifier of the image | 
 **Changes** | Pointer to **map[string]interface{}** | List of actual changes. | [optional] 
 
 ## Methods
 
 ### NewImageAuditResponseData
 
-`func NewImageAuditResponseData(tenantId string, customerId string, id float32, imageId string, action string, timestamp time.Time, changedBy string, username string, requestId string, traceId string, ) *ImageAuditResponseData`
+`func NewImageAuditResponseData(id int64, action string, timestamp time.Time, tenantId string, customerId string, changedBy string, username string, requestId string, traceId string, imageId string, ) *ImageAuditResponseData`
 
 NewImageAuditResponseData instantiates a new ImageAuditResponseData object
 This constructor will assign default values to properties that have it defined,
@@ -35,84 +35,24 @@ NewImageAuditResponseDataWithDefaults instantiates a new ImageAuditResponseData 
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetTenantId
-
-`func (o *ImageAuditResponseData) GetTenantId() string`
-
-GetTenantId returns the TenantId field if non-nil, zero value otherwise.
-
-### GetTenantIdOk
-
-`func (o *ImageAuditResponseData) GetTenantIdOk() (*string, bool)`
-
-GetTenantIdOk returns a tuple with the TenantId field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetTenantId
-
-`func (o *ImageAuditResponseData) SetTenantId(v string)`
-
-SetTenantId sets TenantId field to given value.
-
-
-### GetCustomerId
-
-`func (o *ImageAuditResponseData) GetCustomerId() string`
-
-GetCustomerId returns the CustomerId field if non-nil, zero value otherwise.
-
-### GetCustomerIdOk
-
-`func (o *ImageAuditResponseData) GetCustomerIdOk() (*string, bool)`
-
-GetCustomerIdOk returns a tuple with the CustomerId field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetCustomerId
-
-`func (o *ImageAuditResponseData) SetCustomerId(v string)`
-
-SetCustomerId sets CustomerId field to given value.
-
-
 ### GetId
 
-`func (o *ImageAuditResponseData) GetId() float32`
+`func (o *ImageAuditResponseData) GetId() int64`
 
 GetId returns the Id field if non-nil, zero value otherwise.
 
 ### GetIdOk
 
-`func (o *ImageAuditResponseData) GetIdOk() (*float32, bool)`
+`func (o *ImageAuditResponseData) GetIdOk() (*int64, bool)`
 
 GetIdOk returns a tuple with the Id field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetId
 
-`func (o *ImageAuditResponseData) SetId(v float32)`
+`func (o *ImageAuditResponseData) SetId(v int64)`
 
 SetId sets Id field to given value.
-
-
-### GetImageId
-
-`func (o *ImageAuditResponseData) GetImageId() string`
-
-GetImageId returns the ImageId field if non-nil, zero value otherwise.
-
-### GetImageIdOk
-
-`func (o *ImageAuditResponseData) GetImageIdOk() (*string, bool)`
-
-GetImageIdOk returns a tuple with the ImageId field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetImageId
-
-`func (o *ImageAuditResponseData) SetImageId(v string)`
-
-SetImageId sets ImageId field to given value.
 
 
 ### GetAction
@@ -153,6 +93,46 @@ and a boolean to check if the value has been set.
 `func (o *ImageAuditResponseData) SetTimestamp(v time.Time)`
 
 SetTimestamp sets Timestamp field to given value.
+
+
+### GetTenantId
+
+`func (o *ImageAuditResponseData) GetTenantId() string`
+
+GetTenantId returns the TenantId field if non-nil, zero value otherwise.
+
+### GetTenantIdOk
+
+`func (o *ImageAuditResponseData) GetTenantIdOk() (*string, bool)`
+
+GetTenantIdOk returns a tuple with the TenantId field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetTenantId
+
+`func (o *ImageAuditResponseData) SetTenantId(v string)`
+
+SetTenantId sets TenantId field to given value.
+
+
+### GetCustomerId
+
+`func (o *ImageAuditResponseData) GetCustomerId() string`
+
+GetCustomerId returns the CustomerId field if non-nil, zero value otherwise.
+
+### GetCustomerIdOk
+
+`func (o *ImageAuditResponseData) GetCustomerIdOk() (*string, bool)`
+
+GetCustomerIdOk returns a tuple with the CustomerId field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetCustomerId
+
+`func (o *ImageAuditResponseData) SetCustomerId(v string)`
+
+SetCustomerId sets CustomerId field to given value.
 
 
 ### GetChangedBy
@@ -233,6 +213,26 @@ and a boolean to check if the value has been set.
 `func (o *ImageAuditResponseData) SetTraceId(v string)`
 
 SetTraceId sets TraceId field to given value.
+
+
+### GetImageId
+
+`func (o *ImageAuditResponseData) GetImageId() string`
+
+GetImageId returns the ImageId field if non-nil, zero value otherwise.
+
+### GetImageIdOk
+
+`func (o *ImageAuditResponseData) GetImageIdOk() (*string, bool)`
+
+GetImageIdOk returns a tuple with the ImageId field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetImageId
+
+`func (o *ImageAuditResponseData) SetImageId(v string)`
+
+SetImageId sets ImageId field to given value.
 
 
 ### GetChanges

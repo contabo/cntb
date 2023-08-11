@@ -37,7 +37,7 @@ import (
 
 func main() {
     xRequestId := "04e0f898-37b4-48bc-a794-1a57abe6aa31" // string | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually.
-    objectStorageId := "4a6f95be-2ac0-4e3c-8eed-0dc67afed640" // string | The identifier of the object storage
+    objectStorageId := "4a6f95be-2ac0-4e3c-8eed-0dc67afed640" // string | The identifier of the object storage.
     xTraceId := "xTraceId_example" // string | Identifier to trace group of requests. (optional)
 
     configuration := openapiclient.NewConfiguration()
@@ -58,7 +58,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**objectStorageId** | **string** | The identifier of the object storage | 
+**objectStorageId** | **string** | The identifier of the object storage. | 
 
 ### Other Parameters
 
@@ -263,7 +263,7 @@ import (
 
 func main() {
     xRequestId := "04e0f898-37b4-48bc-a794-1a57abe6aa31" // string | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually.
-    objectStorageId := "4a6f95be-2ac0-4e3c-8eed-0dc67afed640" // string | The identifier of the object storage
+    objectStorageId := "4a6f95be-2ac0-4e3c-8eed-0dc67afed640" // string | The identifier of the object storage.
     xTraceId := "xTraceId_example" // string | Identifier to trace group of requests. (optional)
 
     configuration := openapiclient.NewConfiguration()
@@ -284,7 +284,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**objectStorageId** | **string** | The identifier of the object storage | 
+**objectStorageId** | **string** | The identifier of the object storage. | 
 
 ### Other Parameters
 
@@ -417,7 +417,7 @@ import (
 
 func main() {
     xRequestId := "04e0f898-37b4-48bc-a794-1a57abe6aa31" // string | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually.
-    objectStorageId := "4a6f95be-2ac0-4e3c-8eed-0dc67afed640" // string | The identifier of the object storage
+    objectStorageId := "4a6f95be-2ac0-4e3c-8eed-0dc67afed640" // string | The identifier of the object storage.
     xTraceId := "xTraceId_example" // string | Identifier to trace group of requests. (optional)
 
     configuration := openapiclient.NewConfiguration()
@@ -438,7 +438,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**objectStorageId** | **string** | The identifier of the object storage | 
+**objectStorageId** | **string** | The identifier of the object storage. | 
 
 ### Other Parameters
 
@@ -491,7 +491,7 @@ import (
 
 func main() {
     xRequestId := "04e0f898-37b4-48bc-a794-1a57abe6aa31" // string | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually.
-    objectStorageId := "4a6f95be-2ac0-4e3c-8eed-0dc67afed640" // string | The identifier of the object storage
+    objectStorageId := "4a6f95be-2ac0-4e3c-8eed-0dc67afed640" // string | The identifier of the object storage.
     patchObjectStorageRequest := *openapiclient.NewPatchObjectStorageRequest("Object storage 1") // PatchObjectStorageRequest | 
     xTraceId := "xTraceId_example" // string | Identifier to trace group of requests. (optional)
 
@@ -513,7 +513,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**objectStorageId** | **string** | The identifier of the object storage | 
+**objectStorageId** | **string** | The identifier of the object storage. | 
 
 ### Other Parameters
 
@@ -567,7 +567,7 @@ import (
 
 func main() {
     xRequestId := "04e0f898-37b4-48bc-a794-1a57abe6aa31" // string | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually.
-    objectStorageId := "4a6f95be-2ac0-4e3c-8eed-0dc67afed640" // string | The identifier of the object storage
+    objectStorageId := "4a6f95be-2ac0-4e3c-8eed-0dc67afed640" // string | The identifier of the object storage.
     upgradeObjectStorageRequest := *openapiclient.NewUpgradeObjectStorageRequest() // UpgradeObjectStorageRequest | 
     xTraceId := "xTraceId_example" // string | Identifier to trace group of requests. (optional)
 
@@ -589,7 +589,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**objectStorageId** | **string** | The identifier of the object storage | 
+**objectStorageId** | **string** | The identifier of the object storage. | 
 
 ### Other Parameters
 

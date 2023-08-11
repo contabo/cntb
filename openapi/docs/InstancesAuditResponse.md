@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | **int64** | The identifier of the audit entry. | 
+**Id** | **int64** | The ID of the audit entry. | 
 **Action** | **string** | Type of the action. | 
 **Timestamp** | **time.Time** | When the change took place. | 
 **TenantId** | **string** | Customer tenant id | 
@@ -13,7 +13,7 @@ Name | Type | Description | Notes
 **Username** | **string** | Name of the user which led to the change. | 
 **RequestId** | **string** | The requestId of the API call which led to the change. | 
 **TraceId** | **string** | The traceId of the API call which led to the change. | 
-**InstanceId** | **int64** | The identifier of the instances | 
+**InstanceId** | **int64** | The identifier of the instance | 
 **Changes** | Pointer to **map[string]interface{}** | List of actual changes. | [optional] 
 
 ## Methods

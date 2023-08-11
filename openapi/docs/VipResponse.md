@@ -15,7 +15,7 @@ Name | Type | Description | Notes
 **ResourceDisplayName** | **string** | Resource display name. | 
 **IpVersion** | **string** | Version of Ip. | 
 **Type** | Pointer to **string** | The VIP type. | [optional] 
-**V4** | Pointer to [**IpV4**](IpV4.md) |  | [optional] 
+**V4** | Pointer to [**IpV41**](IpV41.md) |  | [optional] 
 
 ## Methods
 
@@ -268,20 +268,20 @@ HasType returns a boolean if a field has been set.
 
 ### GetV4
 
-`func (o *VipResponse) GetV4() IpV4`
+`func (o *VipResponse) GetV4() IpV41`
 
 GetV4 returns the V4 field if non-nil, zero value otherwise.
 
 ### GetV4Ok
 
-`func (o *VipResponse) GetV4Ok() (*IpV4, bool)`
+`func (o *VipResponse) GetV4Ok() (*IpV41, bool)`
 
 GetV4Ok returns a tuple with the V4 field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetV4
 
-`func (o *VipResponse) SetV4(v IpV4)`
+`func (o *VipResponse) SetV4(v IpV41)`
 
 SetV4 sets V4 field to given value.
 

@@ -4,7 +4,7 @@ All URIs are relative to *https://api.contabo.com*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**RetrieveTagAuditsList**](TagsAuditsApi.md#RetrieveTagAuditsList) | **Get** /v1/tags/audits | List history about your tags (audit)
+[**RetrieveTagAuditsList**](TagsAuditsApi.md#RetrieveTagAuditsList) | **Get** /v1/tags/audits | List history about your assignments (audit)
 
 
 
@@ -12,7 +12,7 @@ Method | HTTP request | Description
 
 > ListTagAuditsResponse RetrieveTagAuditsList(ctx).XRequestId(xRequestId).XTraceId(xTraceId).Page(page).Size(size).OrderBy(orderBy).TagId(tagId).RequestId(requestId).ChangedBy(changedBy).StartDate(startDate).EndDate(endDate).Execute()
 
-List history about your tags (audit)
+List history about your assignments (audit)
 
 
 

@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**AssignFirewalls** | Pointer to **[]string** | List of IDs of firewalls the upgraded instance should be assigned to immediately. If the list is empty or this property is not provided the instance will be assigned to your current default firewall. | [optional] 
+**AssignFirewalls** | Pointer to **[]string** | List of IDs of firewalls the upgraded instance should be assigned to immediately.   If the list is empty or this property is not provided the instance will be assigned to   your current default firewall. | [optional] 
 
 ## Methods
 

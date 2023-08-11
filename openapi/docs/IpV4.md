@@ -4,17 +4,15 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Ip** | **string** | IP address | 
+**Ip** | **string** | IP Address | 
+**NetmaskCidr** | **int32** | Netmask CIDR | 
 **Gateway** | **string** | Gateway | 
-**NetmaskCidr** | **int64** | Netmask CIDR | 
-**Broadcast** | **string** | Broadcast address | 
-**Net** | **string** | Net address | 
 
 ## Methods
 
 ### NewIpV4
 
-`func NewIpV4(ip string, gateway string, netmaskCidr int64, broadcast string, net string, ) *IpV4`
+`func NewIpV4(ip string, netmaskCidr int32, gateway string, ) *IpV4`
 
 NewIpV4 instantiates a new IpV4 object
 This constructor will assign default values to properties that have it defined,
@@ -49,6 +47,26 @@ and a boolean to check if the value has been set.
 SetIp sets Ip field to given value.
 
 
+### GetNetmaskCidr
+
+`func (o *IpV4) GetNetmaskCidr() int32`
+
+GetNetmaskCidr returns the NetmaskCidr field if non-nil, zero value otherwise.
+
+### GetNetmaskCidrOk
+
+`func (o *IpV4) GetNetmaskCidrOk() (*int32, bool)`
+
+GetNetmaskCidrOk returns a tuple with the NetmaskCidr field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetNetmaskCidr
+
+`func (o *IpV4) SetNetmaskCidr(v int32)`
+
+SetNetmaskCidr sets NetmaskCidr field to given value.
+
+
 ### GetGateway
 
 `func (o *IpV4) GetGateway() string`
@@ -67,66 +85,6 @@ and a boolean to check if the value has been set.
 `func (o *IpV4) SetGateway(v string)`
 
 SetGateway sets Gateway field to given value.
-
-
-### GetNetmaskCidr
-
-`func (o *IpV4) GetNetmaskCidr() int64`
-
-GetNetmaskCidr returns the NetmaskCidr field if non-nil, zero value otherwise.
-
-### GetNetmaskCidrOk
-
-`func (o *IpV4) GetNetmaskCidrOk() (*int64, bool)`
-
-GetNetmaskCidrOk returns a tuple with the NetmaskCidr field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetNetmaskCidr
-
-`func (o *IpV4) SetNetmaskCidr(v int64)`
-
-SetNetmaskCidr sets NetmaskCidr field to given value.
-
-
-### GetBroadcast
-
-`func (o *IpV4) GetBroadcast() string`
-
-GetBroadcast returns the Broadcast field if non-nil, zero value otherwise.
-
-### GetBroadcastOk
-
-`func (o *IpV4) GetBroadcastOk() (*string, bool)`
-
-GetBroadcastOk returns a tuple with the Broadcast field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetBroadcast
-
-`func (o *IpV4) SetBroadcast(v string)`
-
-SetBroadcast sets Broadcast field to given value.
-
-
-### GetNet
-
-`func (o *IpV4) GetNet() string`
-
-GetNet returns the Net field if non-nil, zero value otherwise.
-
-### GetNetOk
-
-`func (o *IpV4) GetNetOk() (*string, bool)`
-
-GetNetOk returns a tuple with the Net field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetNet
-
-`func (o *IpV4) SetNet(v string)`
-
-SetNet sets Net field to given value.
 
 
 

@@ -4,14 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Data** | [**[]CreateSnapshotResponseData**](CreateSnapshotResponseData.md) |  | 
+**Data** | [**[]SnapshotResponse**](SnapshotResponse.md) |  | 
 **Links** | [**SelfLinks**](SelfLinks.md) |  | 
 
 ## Methods
 
 ### NewCreateSnapshotResponse
 
-`func NewCreateSnapshotResponse(data []CreateSnapshotResponseData, links SelfLinks, ) *CreateSnapshotResponse`
+`func NewCreateSnapshotResponse(data []SnapshotResponse, links SelfLinks, ) *CreateSnapshotResponse`
 
 NewCreateSnapshotResponse instantiates a new CreateSnapshotResponse object
 This constructor will assign default values to properties that have it defined,
@@ -28,20 +28,20 @@ but it doesn't guarantee that properties required by API are set
 
 ### GetData
 
-`func (o *CreateSnapshotResponse) GetData() []CreateSnapshotResponseData`
+`func (o *CreateSnapshotResponse) GetData() []SnapshotResponse`
 
 GetData returns the Data field if non-nil, zero value otherwise.
 
 ### GetDataOk
 
-`func (o *CreateSnapshotResponse) GetDataOk() (*[]CreateSnapshotResponseData, bool)`
+`func (o *CreateSnapshotResponse) GetDataOk() (*[]SnapshotResponse, bool)`
 
 GetDataOk returns a tuple with the Data field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetData
 
-`func (o *CreateSnapshotResponse) SetData(v []CreateSnapshotResponseData)`
+`func (o *CreateSnapshotResponse) SetData(v []SnapshotResponse)`
 
 SetData sets Data field to given value.
 

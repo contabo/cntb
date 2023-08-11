@@ -1,18 +1,18 @@
 # \PaymentMethodsApi
 
-All URIs are relative to *https://api.contabo.com*
+All URIs are relative to *https://api-staging-ext.contabo.intra*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**RetrievePaymentMethodList**](PaymentMethodsApi.md#RetrievePaymentMethodList) | **Get** /v1/payment-methods | List payment methods
+[**RetrievePaymentMethodList**](PaymentMethodsApi.md#RetrievePaymentMethodList) | **Get** /v1/payment-methods | List available payment methods
 
 
 
 ## RetrievePaymentMethodList
 
-> ListPaymentMethodResponse1 RetrievePaymentMethodList(ctx).XRequestId(xRequestId).XTraceId(xTraceId).Page(page).Size(size).OrderBy(orderBy).PaymentMethodId(paymentMethodId).PaymentMethod(paymentMethod).DirectDebit(directDebit).Execute()
+> ListAvailablePaymentMethodResponse RetrievePaymentMethodList(ctx).XRequestId(xRequestId).XTraceId(xTraceId).Page(page).Size(size).OrderBy(orderBy).PaymentMethodId(paymentMethodId).PaymentMethod(paymentMethod).DirectDebit(directDebit).Execute()
 
-List payment methods
+List available payment methods
 
 
 
@@ -45,7 +45,7 @@ func main() {
         fmt.Fprintf(os.Stderr, "Error when calling `PaymentMethodsApi.RetrievePaymentMethodList``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `RetrievePaymentMethodList`: ListPaymentMethodResponse1
+    // response from `RetrievePaymentMethodList`: ListAvailablePaymentMethodResponse
     fmt.Fprintf(os.Stdout, "Response from `PaymentMethodsApi.RetrievePaymentMethodList`: %v\n", resp)
 }
 ```
@@ -72,7 +72,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**ListPaymentMethodResponse1**](ListPaymentMethodResponse1.md)
+[**ListAvailablePaymentMethodResponse**](ListAvailablePaymentMethodResponse.md)
 
 ### Authorization
 

@@ -6,7 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Name** | **string** | The name of the role. There is a limit of 255 characters per role. | 
 **Admin** | **bool** | If user is admin he will have permissions to all API endpoints and resources. Enabling this will superseed all role definitions and &#x60;accessAllResources&#x60;. | 
-**AccessAllResources** | **bool** | Allow access to all resources. This will superseed all assigned resources in a role | 
+**AccessAllResources** | **bool** | Allow access to all resources. This will superseed all assigned resources in a role. | 
 **Permissions** | Pointer to [**[]PermissionRequest**](PermissionRequest.md) |  | [optional] 
 
 ## Methods

@@ -1,6 +1,6 @@
 # \DPASApi
 
-All URIs are relative to *https://api.contabo.com*
+All URIs are relative to *https://api-staging-ext.contabo.intra*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------

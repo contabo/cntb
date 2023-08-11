@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Region** | **string** | Region where the Private Network should be located. Default is &#x60;EU&#x60; | [default to "EU"]
+**Region** | Pointer to **string** | Region where the Private Network should be located. Default is &#x60;EU&#x60; | [optional] [default to "EU"]
 **Name** | **string** | The name of the Private Network. It may contain letters, numbers, colons, dashes, and underscores. There is a limit of 255 characters per Private Network name. | 
 **Description** | Pointer to **string** | The description of the Private Network. There is a limit of 255 characters per Private Network description. | [optional] 
 
@@ -12,7 +12,7 @@ Name | Type | Description | Notes
 
 ### NewCreatePrivateNetworkRequest
 
-`func NewCreatePrivateNetworkRequest(region string, name string, ) *CreatePrivateNetworkRequest`
+`func NewCreatePrivateNetworkRequest(name string, ) *CreatePrivateNetworkRequest`
 
 NewCreatePrivateNetworkRequest instantiates a new CreatePrivateNetworkRequest object
 This constructor will assign default values to properties that have it defined,
@@ -46,6 +46,11 @@ and a boolean to check if the value has been set.
 
 SetRegion sets Region field to given value.
 
+### HasRegion
+
+`func (o *CreatePrivateNetworkRequest) HasRegion() bool`
+
+HasRegion returns a boolean if a field has been set.
 
 ### GetName
 

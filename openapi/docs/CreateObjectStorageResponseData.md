@@ -13,8 +13,8 @@ Name | Type | Description | Notes
 **DataCenter** | **string** | The data center of the storage | 
 **TotalPurchasedSpaceTB** | **float64** | Amount of purchased / requested object storage in TB. | 
 **UsedSpaceTB** | **float64** | Currently used space in TB. | 
-**UsedSpacePercentage** | **float64** | Percentage of currently used space | 
-**S3Url** | **string** | S3 URL to connect to our S3 compatible object storage | 
+**UsedSpacePercentage** | **float64** | Currently used space in percentage. | 
+**S3Url** | **string** | S3 URL to connect to your S3 compatible object storage | 
 **S3TenantId** | **string** | Your S3 tenantId. Only required for public sharing. | 
 **Status** | **string** | The object storage status | 
 **Region** | **string** | The region where your object storage is located | 

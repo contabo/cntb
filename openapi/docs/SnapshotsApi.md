@@ -8,7 +8,7 @@ Method | HTTP request | Description
 [**DeleteSnapshot**](SnapshotsApi.md#DeleteSnapshot) | **Delete** /v1/compute/instances/{instanceId}/snapshots/{snapshotId} | Delete existing snapshot by id
 [**RetrieveSnapshot**](SnapshotsApi.md#RetrieveSnapshot) | **Get** /v1/compute/instances/{instanceId}/snapshots/{snapshotId} | Retrieve a specific snapshot by id
 [**RetrieveSnapshotList**](SnapshotsApi.md#RetrieveSnapshotList) | **Get** /v1/compute/instances/{instanceId}/snapshots | List snapshots
-[**RollbackSnapshot**](SnapshotsApi.md#RollbackSnapshot) | **Post** /v1/compute/instances/{instanceId}/snapshots/{snapshotId}/rollback | Rollback the instance to a specific snapshot by id
+[**RollbackSnapshot**](SnapshotsApi.md#RollbackSnapshot) | **Post** /v1/compute/instances/{instanceId}/snapshots/{snapshotId}/rollback | Revert the instance to a particular snapshot based on its identifier
 [**UpdateSnapshot**](SnapshotsApi.md#UpdateSnapshot) | **Patch** /v1/compute/instances/{instanceId}/snapshots/{snapshotId} | Update specific snapshot by id
 
 
@@ -325,9 +325,9 @@ Name | Type | Description  | Notes
 
 ## RollbackSnapshot
 
-> RollbackSnapshotResponse RollbackSnapshot(ctx, instanceId, snapshotId).XRequestId(xRequestId).XTraceId(xTraceId).Execute()
+> RollbackSnapshotResponse RollbackSnapshot(ctx, instanceId, snapshotId).XRequestId(xRequestId).Body(body).XTraceId(xTraceId).Execute()
 
-Rollback the instance to a specific snapshot by id
+Revert the instance to a particular snapshot based on its identifier
 
 
 
@@ -347,11 +347,12 @@ func main() {
     xRequestId := "04e0f898-37b4-48bc-a794-1a57abe6aa31" // string | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually.
     instanceId := int64(12345) // int64 | The identifier of the instance
     snapshotId := "snap1628603855" // string | The identifier of the snapshot
+    body := map[string]interface{}(Object) // map[string]interface{} | 
     xTraceId := "xTraceId_example" // string | Identifier to trace group of requests. (optional)
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.SnapshotsApi.RollbackSnapshot(context.Background(), instanceId, snapshotId).XRequestId(xRequestId).XTraceId(xTraceId).Execute()
+    resp, r, err := api_client.SnapshotsApi.RollbackSnapshot(context.Background(), instanceId, snapshotId).XRequestId(xRequestId).Body(body).XTraceId(xTraceId).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `SnapshotsApi.RollbackSnapshot``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -380,6 +381,7 @@ Name | Type | Description  | Notes
  **xRequestId** | **string** | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually. | 
 
 
+ **body** | **map[string]interface{}** |  | 
  **xTraceId** | **string** | Identifier to trace group of requests. | 
 
 ### Return type
@@ -392,7 +394,7 @@ Name | Type | Description  | Notes
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
+- **Content-Type**: application/json
 - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)

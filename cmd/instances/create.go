@@ -29,9 +29,9 @@ var instanceCreateCmd = &cobra.Command{
 		switch content {
 		case nil:
 			// flags with default values
-			createInstanceRequest.ImageId = createInstanceImageId
+			createInstanceRequest.ImageId = &createInstanceImageId
 			createInstanceRequest.ProductId = createInstanceProductId
-			createInstanceRequest.Region = createInstanceRegion
+			createInstanceRequest.Region = &createInstanceRegion
 			createInstanceRequest.Period = createInstancePeriod
 			createInstanceRequest.DisplayName = &createInstanceDisplayName
 

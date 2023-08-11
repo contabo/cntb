@@ -4,13 +4,13 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Links** | [**InstanceAssignmentSelfLinks1**](InstanceAssignmentSelfLinks1.md) | Links for easy navigation. | 
+**Links** | [**InstanceAssignmentSelfLinks**](InstanceAssignmentSelfLinks.md) | Links for easy navigation. | 
 
 ## Methods
 
 ### NewAssignInstancePrivateNetworkResponse
 
-`func NewAssignInstancePrivateNetworkResponse(links InstanceAssignmentSelfLinks1, ) *AssignInstancePrivateNetworkResponse`
+`func NewAssignInstancePrivateNetworkResponse(links InstanceAssignmentSelfLinks, ) *AssignInstancePrivateNetworkResponse`
 
 NewAssignInstancePrivateNetworkResponse instantiates a new AssignInstancePrivateNetworkResponse object
 This constructor will assign default values to properties that have it defined,
@@ -27,20 +27,20 @@ but it doesn't guarantee that properties required by API are set
 
 ### GetLinks
 
-`func (o *AssignInstancePrivateNetworkResponse) GetLinks() InstanceAssignmentSelfLinks1`
+`func (o *AssignInstancePrivateNetworkResponse) GetLinks() InstanceAssignmentSelfLinks`
 
 GetLinks returns the Links field if non-nil, zero value otherwise.
 
 ### GetLinksOk
 
-`func (o *AssignInstancePrivateNetworkResponse) GetLinksOk() (*InstanceAssignmentSelfLinks1, bool)`
+`func (o *AssignInstancePrivateNetworkResponse) GetLinksOk() (*InstanceAssignmentSelfLinks, bool)`
 
 GetLinksOk returns a tuple with the Links field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetLinks
 
-`func (o *AssignInstancePrivateNetworkResponse) SetLinks(v InstanceAssignmentSelfLinks1)`
+`func (o *AssignInstancePrivateNetworkResponse) SetLinks(v InstanceAssignmentSelfLinks)`
 
 SetLinks sets Links field to given value.
 

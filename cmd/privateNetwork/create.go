@@ -30,7 +30,7 @@ var privateNetworkCreateCmd = &cobra.Command{
 
 			// from arguments
 			createPrivateNetworkRequest.Name = createVpnName
-			createPrivateNetworkRequest.Region = createVpnRegion
+			createPrivateNetworkRequest.Region = &createVpnRegion
 			if (createVpnDescription) != "" {
 				createPrivateNetworkRequest.Description = &createVpnDescription
 			}
@@ -74,11 +74,11 @@ var privateNetworkCreateCmd = &cobra.Command{
 		if contaboCmd.InputFile == "" {
 			// arguments required
 			if createVpnName == "" {
-			    cmd.Help()
+				cmd.Help()
 				log.Fatal("Argument name is empty. Please provide one.")
 			}
 			if createVpnRegion == "" {
-			    cmd.Help()
+				cmd.Help()
 				log.Fatal("Argument region is empty. Please provide one.")
 			}
 		}

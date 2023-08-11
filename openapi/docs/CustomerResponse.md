@@ -8,7 +8,8 @@ Name | Type | Description | Notes
 **CustomerId** | **string** | Your customer number | 
 **Salutation** | **string** | Customer salutation | 
 **Type** | **string** | Customer type | 
-**Private** | [**CustomerTypePrivate**](CustomerTypePrivate.md) |  | 
+**FirstName** | **string** | Customer first name | 
+**LastName** | **string** | Customer last name | 
 **Business** | [**CustomerTypeBusiness**](CustomerTypeBusiness.md) |  | 
 **TaxPercentage** | **float64** | Customer tax percentage | 
 **Currency** | **string** | Customer currency | 
@@ -25,7 +26,7 @@ Name | Type | Description | Notes
 
 ### NewCustomerResponse
 
-`func NewCustomerResponse(tenantId string, customerId string, salutation string, type_ string, private CustomerTypePrivate, business CustomerTypeBusiness, taxPercentage float64, currency string, balance float64, locale string, addresses []CustomerAddress, emails []CustomerEmail, phones []CustomerPhone, status string, createdDate time.Time, monthlyRecurringRevenue float32, ) *CustomerResponse`
+`func NewCustomerResponse(tenantId string, customerId string, salutation string, type_ string, firstName string, lastName string, business CustomerTypeBusiness, taxPercentage float64, currency string, balance float64, locale string, addresses []CustomerAddress, emails []CustomerEmail, phones []CustomerPhone, status string, createdDate time.Time, monthlyRecurringRevenue float32, ) *CustomerResponse`
 
 NewCustomerResponse instantiates a new CustomerResponse object
 This constructor will assign default values to properties that have it defined,
@@ -120,24 +121,44 @@ and a boolean to check if the value has been set.
 SetType sets Type field to given value.
 
 
-### GetPrivate
+### GetFirstName
 
-`func (o *CustomerResponse) GetPrivate() CustomerTypePrivate`
+`func (o *CustomerResponse) GetFirstName() string`
 
-GetPrivate returns the Private field if non-nil, zero value otherwise.
+GetFirstName returns the FirstName field if non-nil, zero value otherwise.
 
-### GetPrivateOk
+### GetFirstNameOk
 
-`func (o *CustomerResponse) GetPrivateOk() (*CustomerTypePrivate, bool)`
+`func (o *CustomerResponse) GetFirstNameOk() (*string, bool)`
 
-GetPrivateOk returns a tuple with the Private field if it's non-nil, zero value otherwise
+GetFirstNameOk returns a tuple with the FirstName field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetPrivate
+### SetFirstName
 
-`func (o *CustomerResponse) SetPrivate(v CustomerTypePrivate)`
+`func (o *CustomerResponse) SetFirstName(v string)`
 
-SetPrivate sets Private field to given value.
+SetFirstName sets FirstName field to given value.
+
+
+### GetLastName
+
+`func (o *CustomerResponse) GetLastName() string`
+
+GetLastName returns the LastName field if non-nil, zero value otherwise.
+
+### GetLastNameOk
+
+`func (o *CustomerResponse) GetLastNameOk() (*string, bool)`
+
+GetLastNameOk returns a tuple with the LastName field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetLastName
+
+`func (o *CustomerResponse) SetLastName(v string)`
+
+SetLastName sets LastName field to given value.
 
 
 ### GetBusiness

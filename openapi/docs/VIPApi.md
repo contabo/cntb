@@ -1,13 +1,13 @@
 # \VIPApi
 
-All URIs are relative to *https://api.contabo.com*
+All URIs are relative to *https://api-staging-ext.contabo.intra*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**AssignIp**](VIPApi.md#AssignIp) | **Post** /v1/vips/{ip}/instances/{instanceId} | Assign a VIP to a VPS/VDS
 [**RetrieveVip**](VIPApi.md#RetrieveVip) | **Get** /v1/vips/{ip} | Get specific VIP by ip
 [**RetrieveVipList**](VIPApi.md#RetrieveVipList) | **Get** /v1/vips | List VIPs
-[**UnassignIp**](VIPApi.md#UnassignIp) | **Delete** /v1/vips/{ip}/instances/{instanceId} | Unassign a VIP from a VPS/VDS
+[**UnassignIp**](VIPApi.md#UnassignIp) | **Delete** /v1/vips/{ip}/instances/{instanceId} | Unassign a VIP to a VPS/VDS
 
 
 
@@ -197,7 +197,7 @@ func main() {
     ip := "10.214.121.145" // string | The ip of the VIP (optional)
     type_ := "additional" // string | The VIP type. (optional)
     dataCenter := "European Union (Germany) 3" // string | The dataCenter of the VIP. (optional)
-    region := "European Union (Germany)" // string | The region of the VIP. (optional)
+    region := "EU" // string | The region of the VIP. (optional)
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
@@ -258,9 +258,9 @@ Name | Type | Description  | Notes
 
 ## UnassignIp
 
-> UnassignVipResponse UnassignIp(ctx, instanceId, ip).XRequestId(xRequestId).XTraceId(xTraceId).Execute()
+> UnassignIp(ctx, instanceId, ip).XRequestId(xRequestId).XTraceId(xTraceId).Execute()
 
-Unassign a VIP from a VPS/VDS
+Unassign a VIP to a VPS/VDS
 
 
 
@@ -289,8 +289,6 @@ func main() {
         fmt.Fprintf(os.Stderr, "Error when calling `VIPApi.UnassignIp``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `UnassignIp`: UnassignVipResponse
-    fmt.Fprintf(os.Stdout, "Response from `VIPApi.UnassignIp`: %v\n", resp)
 }
 ```
 
@@ -317,7 +315,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**UnassignVipResponse**](UnassignVipResponse.md)
+ (empty response body)
 
 ### Authorization
 
@@ -326,7 +324,7 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: application/json
+- **Accept**: Not defined
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
 [[Back to Model list]](../README.md#documentation-for-models)

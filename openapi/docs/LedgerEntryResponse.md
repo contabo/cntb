@@ -10,7 +10,7 @@ Name | Type | Description | Notes
 **SubscriptionId** | **float32** | Ledger entry subscription id | 
 **TransactionDate** | **time.Time** | The transaction date | 
 **BillingStartDate** | **time.Time** | The billing start the for the service | 
-**BillingEndDate** | **time.Time** | The billing end date for the service | 
+**BillingEndDate** | **time.Time** | The billing end date the for the service | 
 **GrossMonthlyPrice** | **float32** | The monthly price of the service | 
 **Subject** | **string** | The subject of the transaction | 
 **BalanceAfter** | **float32** | Your balance after you paid for the service | 

@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**TagId** | **int64** | Tag ID | 
+**TagId** | **int64** | Tag&#39;s id | 
 **TagName** | **string** | Tag name. The resriction is based on the resources which have been assigned to that tag. If no resource has been assigned to the given tag, no access will be possible. | 
 
 ## Methods

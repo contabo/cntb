@@ -4,7 +4,7 @@ All URIs are relative to *https://api.contabo.com*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**RetrieveInstancesAuditsList**](InstancesAuditsApi.md#RetrieveInstancesAuditsList) | **Get** /v1/compute/instances/audits | List history about your instances (audit) triggered via the API
+[**RetrieveInstancesAuditsList**](InstancesAuditsApi.md#RetrieveInstancesAuditsList) | **Get** /v1/compute/instances/audits | List history about your custom images (audit)
 
 
 
@@ -12,7 +12,7 @@ Method | HTTP request | Description
 
 > ListInstancesAuditResponse RetrieveInstancesAuditsList(ctx).XRequestId(xRequestId).XTraceId(xTraceId).Page(page).Size(size).OrderBy(orderBy).InstanceId(instanceId).RequestId(requestId).ChangedBy(changedBy).StartDate(startDate).EndDate(endDate).Execute()
 
-List history about your instances (audit) triggered via the API
+List history about your custom images (audit)
 
 
 
