@@ -17,18 +17,26 @@ import (
 
 // EarliestCancellationDateSubscriptionResponse struct for EarliestCancellationDateSubscriptionResponse
 type EarliestCancellationDateSubscriptionResponse struct {
-	Data []EarliestCancellationResponse `json:"data"`
-	Links SelfLinks `json:"_links"`
+	// Your customer tenant id
+	TenantId string `json:"tenantId"`
+	// Your customer number
+	CustomerId string `json:"customerId"`
+	// Subscription's id
+	Id string `json:"id"`
+	// The Earliest Cancellation Date
+	Date string `json:"date"`
 }
 
 // NewEarliestCancellationDateSubscriptionResponse instantiates a new EarliestCancellationDateSubscriptionResponse object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewEarliestCancellationDateSubscriptionResponse(data []EarliestCancellationResponse, links SelfLinks) *EarliestCancellationDateSubscriptionResponse {
+func NewEarliestCancellationDateSubscriptionResponse(tenantId string, customerId string, id string, date string) *EarliestCancellationDateSubscriptionResponse {
 	this := EarliestCancellationDateSubscriptionResponse{}
-	this.Data = data
-	this.Links = links
+	this.TenantId = tenantId
+	this.CustomerId = customerId
+	this.Id = id
+	this.Date = date
 	return &this
 }
 
@@ -40,61 +48,115 @@ func NewEarliestCancellationDateSubscriptionResponseWithDefaults() *EarliestCanc
 	return &this
 }
 
-// GetData returns the Data field value
-func (o *EarliestCancellationDateSubscriptionResponse) GetData() []EarliestCancellationResponse {
+// GetTenantId returns the TenantId field value
+func (o *EarliestCancellationDateSubscriptionResponse) GetTenantId() string {
 	if o == nil {
-		var ret []EarliestCancellationResponse
+		var ret string
 		return ret
 	}
 
-	return o.Data
+	return o.TenantId
 }
 
-// GetDataOk returns a tuple with the Data field value
+// GetTenantIdOk returns a tuple with the TenantId field value
 // and a boolean to check if the value has been set.
-func (o *EarliestCancellationDateSubscriptionResponse) GetDataOk() (*[]EarliestCancellationResponse, bool) {
+func (o *EarliestCancellationDateSubscriptionResponse) GetTenantIdOk() (*string, bool) {
 	if o == nil  {
 		return nil, false
 	}
-	return &o.Data, true
+	return &o.TenantId, true
 }
 
-// SetData sets field value
-func (o *EarliestCancellationDateSubscriptionResponse) SetData(v []EarliestCancellationResponse) {
-	o.Data = v
+// SetTenantId sets field value
+func (o *EarliestCancellationDateSubscriptionResponse) SetTenantId(v string) {
+	o.TenantId = v
 }
 
-// GetLinks returns the Links field value
-func (o *EarliestCancellationDateSubscriptionResponse) GetLinks() SelfLinks {
+// GetCustomerId returns the CustomerId field value
+func (o *EarliestCancellationDateSubscriptionResponse) GetCustomerId() string {
 	if o == nil {
-		var ret SelfLinks
+		var ret string
 		return ret
 	}
 
-	return o.Links
+	return o.CustomerId
 }
 
-// GetLinksOk returns a tuple with the Links field value
+// GetCustomerIdOk returns a tuple with the CustomerId field value
 // and a boolean to check if the value has been set.
-func (o *EarliestCancellationDateSubscriptionResponse) GetLinksOk() (*SelfLinks, bool) {
+func (o *EarliestCancellationDateSubscriptionResponse) GetCustomerIdOk() (*string, bool) {
 	if o == nil  {
 		return nil, false
 	}
-	return &o.Links, true
+	return &o.CustomerId, true
 }
 
-// SetLinks sets field value
-func (o *EarliestCancellationDateSubscriptionResponse) SetLinks(v SelfLinks) {
-	o.Links = v
+// SetCustomerId sets field value
+func (o *EarliestCancellationDateSubscriptionResponse) SetCustomerId(v string) {
+	o.CustomerId = v
+}
+
+// GetId returns the Id field value
+func (o *EarliestCancellationDateSubscriptionResponse) GetId() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.Id
+}
+
+// GetIdOk returns a tuple with the Id field value
+// and a boolean to check if the value has been set.
+func (o *EarliestCancellationDateSubscriptionResponse) GetIdOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.Id, true
+}
+
+// SetId sets field value
+func (o *EarliestCancellationDateSubscriptionResponse) SetId(v string) {
+	o.Id = v
+}
+
+// GetDate returns the Date field value
+func (o *EarliestCancellationDateSubscriptionResponse) GetDate() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.Date
+}
+
+// GetDateOk returns a tuple with the Date field value
+// and a boolean to check if the value has been set.
+func (o *EarliestCancellationDateSubscriptionResponse) GetDateOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.Date, true
+}
+
+// SetDate sets field value
+func (o *EarliestCancellationDateSubscriptionResponse) SetDate(v string) {
+	o.Date = v
 }
 
 func (o EarliestCancellationDateSubscriptionResponse) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
 	if true {
-		toSerialize["data"] = o.Data
+		toSerialize["tenantId"] = o.TenantId
 	}
 	if true {
-		toSerialize["_links"] = o.Links
+		toSerialize["customerId"] = o.CustomerId
+	}
+	if true {
+		toSerialize["id"] = o.Id
+	}
+	if true {
+		toSerialize["date"] = o.Date
 	}
 	return json.Marshal(toSerialize)
 }

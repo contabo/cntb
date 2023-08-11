@@ -19,8 +19,8 @@ import (
 type InstanceAssignmentSelfLinks1 struct {
 	// Link to current resource.
 	Self string `json:"self"`
-	// Link to related firewall.
-	Firewall string `json:"firewall"`
+	// Link to related Private Network.
+	VirtualPrivateCloud string `json:"virtualPrivateCloud"`
 	// Link to assigned instance.
 	Instance string `json:"instance"`
 }
@@ -29,10 +29,10 @@ type InstanceAssignmentSelfLinks1 struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewInstanceAssignmentSelfLinks1(self string, firewall string, instance string) *InstanceAssignmentSelfLinks1 {
+func NewInstanceAssignmentSelfLinks1(self string, virtualPrivateCloud string, instance string) *InstanceAssignmentSelfLinks1 {
 	this := InstanceAssignmentSelfLinks1{}
 	this.Self = self
-	this.Firewall = firewall
+	this.VirtualPrivateCloud = virtualPrivateCloud
 	this.Instance = instance
 	return &this
 }
@@ -69,28 +69,28 @@ func (o *InstanceAssignmentSelfLinks1) SetSelf(v string) {
 	o.Self = v
 }
 
-// GetFirewall returns the Firewall field value
-func (o *InstanceAssignmentSelfLinks1) GetFirewall() string {
+// GetVirtualPrivateCloud returns the VirtualPrivateCloud field value
+func (o *InstanceAssignmentSelfLinks1) GetVirtualPrivateCloud() string {
 	if o == nil {
 		var ret string
 		return ret
 	}
 
-	return o.Firewall
+	return o.VirtualPrivateCloud
 }
 
-// GetFirewallOk returns a tuple with the Firewall field value
+// GetVirtualPrivateCloudOk returns a tuple with the VirtualPrivateCloud field value
 // and a boolean to check if the value has been set.
-func (o *InstanceAssignmentSelfLinks1) GetFirewallOk() (*string, bool) {
+func (o *InstanceAssignmentSelfLinks1) GetVirtualPrivateCloudOk() (*string, bool) {
 	if o == nil  {
 		return nil, false
 	}
-	return &o.Firewall, true
+	return &o.VirtualPrivateCloud, true
 }
 
-// SetFirewall sets field value
-func (o *InstanceAssignmentSelfLinks1) SetFirewall(v string) {
-	o.Firewall = v
+// SetVirtualPrivateCloud sets field value
+func (o *InstanceAssignmentSelfLinks1) SetVirtualPrivateCloud(v string) {
+	o.VirtualPrivateCloud = v
 }
 
 // GetInstance returns the Instance field value
@@ -123,7 +123,7 @@ func (o InstanceAssignmentSelfLinks1) MarshalJSON() ([]byte, error) {
 		toSerialize["self"] = o.Self
 	}
 	if true {
-		toSerialize["firewall"] = o.Firewall
+		toSerialize["virtualPrivateCloud"] = o.VirtualPrivateCloud
 	}
 	if true {
 		toSerialize["instance"] = o.Instance

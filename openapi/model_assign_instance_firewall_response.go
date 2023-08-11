@@ -18,14 +18,14 @@ import (
 // AssignInstanceFirewallResponse struct for AssignInstanceFirewallResponse
 type AssignInstanceFirewallResponse struct {
 	// Links for easy navigation.
-	Links InstanceAssignmentSelfLinks1 `json:"_links"`
+	Links InstanceAssignmentSelfLinks `json:"_links"`
 }
 
 // NewAssignInstanceFirewallResponse instantiates a new AssignInstanceFirewallResponse object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewAssignInstanceFirewallResponse(links InstanceAssignmentSelfLinks1) *AssignInstanceFirewallResponse {
+func NewAssignInstanceFirewallResponse(links InstanceAssignmentSelfLinks) *AssignInstanceFirewallResponse {
 	this := AssignInstanceFirewallResponse{}
 	this.Links = links
 	return &this
@@ -40,9 +40,9 @@ func NewAssignInstanceFirewallResponseWithDefaults() *AssignInstanceFirewallResp
 }
 
 // GetLinks returns the Links field value
-func (o *AssignInstanceFirewallResponse) GetLinks() InstanceAssignmentSelfLinks1 {
+func (o *AssignInstanceFirewallResponse) GetLinks() InstanceAssignmentSelfLinks {
 	if o == nil {
-		var ret InstanceAssignmentSelfLinks1
+		var ret InstanceAssignmentSelfLinks
 		return ret
 	}
 
@@ -51,7 +51,7 @@ func (o *AssignInstanceFirewallResponse) GetLinks() InstanceAssignmentSelfLinks1
 
 // GetLinksOk returns a tuple with the Links field value
 // and a boolean to check if the value has been set.
-func (o *AssignInstanceFirewallResponse) GetLinksOk() (*InstanceAssignmentSelfLinks1, bool) {
+func (o *AssignInstanceFirewallResponse) GetLinksOk() (*InstanceAssignmentSelfLinks, bool) {
 	if o == nil  {
 		return nil, false
 	}
@@ -59,7 +59,7 @@ func (o *AssignInstanceFirewallResponse) GetLinksOk() (*InstanceAssignmentSelfLi
 }
 
 // SetLinks sets field value
-func (o *AssignInstanceFirewallResponse) SetLinks(v InstanceAssignmentSelfLinks1) {
+func (o *AssignInstanceFirewallResponse) SetLinks(v InstanceAssignmentSelfLinks) {
 	o.Links = v
 }
 

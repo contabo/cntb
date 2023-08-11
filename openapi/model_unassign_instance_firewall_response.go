@@ -18,14 +18,14 @@ import (
 // UnassignInstanceFirewallResponse struct for UnassignInstanceFirewallResponse
 type UnassignInstanceFirewallResponse struct {
 	// Links for easy navigation.
-	Links InstanceAssignmentSelfLinks1 `json:"_links"`
+	Links InstanceAssignmentSelfLinks `json:"_links"`
 }
 
 // NewUnassignInstanceFirewallResponse instantiates a new UnassignInstanceFirewallResponse object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewUnassignInstanceFirewallResponse(links InstanceAssignmentSelfLinks1) *UnassignInstanceFirewallResponse {
+func NewUnassignInstanceFirewallResponse(links InstanceAssignmentSelfLinks) *UnassignInstanceFirewallResponse {
 	this := UnassignInstanceFirewallResponse{}
 	this.Links = links
 	return &this
@@ -40,9 +40,9 @@ func NewUnassignInstanceFirewallResponseWithDefaults() *UnassignInstanceFirewall
 }
 
 // GetLinks returns the Links field value
-func (o *UnassignInstanceFirewallResponse) GetLinks() InstanceAssignmentSelfLinks1 {
+func (o *UnassignInstanceFirewallResponse) GetLinks() InstanceAssignmentSelfLinks {
 	if o == nil {
-		var ret InstanceAssignmentSelfLinks1
+		var ret InstanceAssignmentSelfLinks
 		return ret
 	}
 
@@ -51,7 +51,7 @@ func (o *UnassignInstanceFirewallResponse) GetLinks() InstanceAssignmentSelfLink
 
 // GetLinksOk returns a tuple with the Links field value
 // and a boolean to check if the value has been set.
-func (o *UnassignInstanceFirewallResponse) GetLinksOk() (*InstanceAssignmentSelfLinks1, bool) {
+func (o *UnassignInstanceFirewallResponse) GetLinksOk() (*InstanceAssignmentSelfLinks, bool) {
 	if o == nil  {
 		return nil, false
 	}
@@ -59,7 +59,7 @@ func (o *UnassignInstanceFirewallResponse) GetLinksOk() (*InstanceAssignmentSelf
 }
 
 // SetLinks sets field value
-func (o *UnassignInstanceFirewallResponse) SetLinks(v InstanceAssignmentSelfLinks1) {
+func (o *UnassignInstanceFirewallResponse) SetLinks(v InstanceAssignmentSelfLinks) {
 	o.Links = v
 }
 

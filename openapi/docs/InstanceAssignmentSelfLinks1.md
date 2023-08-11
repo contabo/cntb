@@ -5,14 +5,14 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Self** | **string** | Link to current resource. | 
-**Firewall** | **string** | Link to related firewall. | 
+**VirtualPrivateCloud** | **string** | Link to related Private Network. | 
 **Instance** | **string** | Link to assigned instance. | 
 
 ## Methods
 
 ### NewInstanceAssignmentSelfLinks1
 
-`func NewInstanceAssignmentSelfLinks1(self string, firewall string, instance string, ) *InstanceAssignmentSelfLinks1`
+`func NewInstanceAssignmentSelfLinks1(self string, virtualPrivateCloud string, instance string, ) *InstanceAssignmentSelfLinks1`
 
 NewInstanceAssignmentSelfLinks1 instantiates a new InstanceAssignmentSelfLinks1 object
 This constructor will assign default values to properties that have it defined,
@@ -47,24 +47,24 @@ and a boolean to check if the value has been set.
 SetSelf sets Self field to given value.
 
 
-### GetFirewall
+### GetVirtualPrivateCloud
 
-`func (o *InstanceAssignmentSelfLinks1) GetFirewall() string`
+`func (o *InstanceAssignmentSelfLinks1) GetVirtualPrivateCloud() string`
 
-GetFirewall returns the Firewall field if non-nil, zero value otherwise.
+GetVirtualPrivateCloud returns the VirtualPrivateCloud field if non-nil, zero value otherwise.
 
-### GetFirewallOk
+### GetVirtualPrivateCloudOk
 
-`func (o *InstanceAssignmentSelfLinks1) GetFirewallOk() (*string, bool)`
+`func (o *InstanceAssignmentSelfLinks1) GetVirtualPrivateCloudOk() (*string, bool)`
 
-GetFirewallOk returns a tuple with the Firewall field if it's non-nil, zero value otherwise
+GetVirtualPrivateCloudOk returns a tuple with the VirtualPrivateCloud field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetFirewall
+### SetVirtualPrivateCloud
 
-`func (o *InstanceAssignmentSelfLinks1) SetFirewall(v string)`
+`func (o *InstanceAssignmentSelfLinks1) SetVirtualPrivateCloud(v string)`
 
-SetFirewall sets Firewall field to given value.
+SetVirtualPrivateCloud sets VirtualPrivateCloud field to given value.
 
 
 ### GetInstance
