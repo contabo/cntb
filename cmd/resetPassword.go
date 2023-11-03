@@ -17,7 +17,7 @@ var ResetPasswordCmd = &cobra.Command{
 	},
 	Args:       cobra.OnlyValidArgs,
 	SuggestFor: []string{"resetPassword"},
-	ValidArgs:  []string{"user"},
+	ValidArgs:  []string{"user", "instance"},
 }
 
 func init() {

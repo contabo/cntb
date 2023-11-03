@@ -55,3 +55,11 @@ var (
 	upgradeInstanceId int64
 	privateNetworking string
 )
+
+// reset password
+var (
+	resetPasswordInstanceId   int64
+	resetPasswordRootPassword int64
+	resetPasswordSshKeys      []int64
+	resetPasswordUserData     string
+)

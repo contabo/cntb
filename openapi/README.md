@@ -77,11 +77,13 @@ Invoke-WebRequest -Uri 'https://api.contabo.com/v1/compute/instances' -Method 'G
 
 
 
+
    ```sh
    cntb config set-credentials --oauth2-clientid=<ClientId from Customer Control Panel> --oauth2-client-secret=<ClientSecret from Customer Control Panel> --oauth2-user=<API User from Customer Control Panel> --oauth2-password='<API Password from Customer Control Panel>'
    ```
 
 5. Use the CLI
+
 
 
 
@@ -144,8 +146,10 @@ If you need to allow other persons or automation scripts to access specific API 
 
 
 
+
    This allows you to specify a restriction to certain functions of an API by allowing control over POST (=Create), GET (=Read), PUT/PATCH (=Update) and DELETE (=Delete) methods for each API endpoint (URL) individually.
 * `resourcePermission`
+
 
 
 
@@ -375,6 +379,9 @@ Class | Method | HTTP request | Description
  - [AddOnResponse](docs/AddOnResponse.md)
  - [AdditionalIp](docs/AdditionalIp.md)
  - [ApiPermissionsResponse](docs/ApiPermissionsResponse.md)
+ - [ApplicationConfig](docs/ApplicationConfig.md)
+ - [ApplicationRequirements](docs/ApplicationRequirements.md)
+ - [ApplicationResponse](docs/ApplicationResponse.md)
  - [AssignInstancePrivateNetworkResponse](docs/AssignInstancePrivateNetworkResponse.md)
  - [AssignmentAuditResponse](docs/AssignmentAuditResponse.md)
  - [AssignmentResponse](docs/AssignmentResponse.md)
@@ -465,6 +472,7 @@ Class | Method | HTTP request | Description
  - [IpV6](docs/IpV6.md)
  - [Links](docs/Links.md)
  - [ListApiPermissionResponse](docs/ListApiPermissionResponse.md)
+ - [ListApplicationsResponse](docs/ListApplicationsResponse.md)
  - [ListAssignmentAuditsResponse](docs/ListAssignmentAuditsResponse.md)
  - [ListAssignmentResponse](docs/ListAssignmentResponse.md)
  - [ListCredentialResponse](docs/ListCredentialResponse.md)
@@ -490,10 +498,12 @@ Class | Method | HTTP request | Description
  - [ListTagResponse](docs/ListTagResponse.md)
  - [ListUserAuditResponse](docs/ListUserAuditResponse.md)
  - [ListUserResponse](docs/ListUserResponse.md)
+ - [MinimumRequirements](docs/MinimumRequirements.md)
  - [ObjectStorageAuditResponse](docs/ObjectStorageAuditResponse.md)
  - [ObjectStorageResponse](docs/ObjectStorageResponse.md)
  - [ObjectStoragesStatsResponse](docs/ObjectStoragesStatsResponse.md)
  - [ObjectStoragesStatsResponseData](docs/ObjectStoragesStatsResponseData.md)
+ - [OptimalRequirements](docs/OptimalRequirements.md)
  - [PaginationMeta](docs/PaginationMeta.md)
  - [PatchInstanceRequest](docs/PatchInstanceRequest.md)
  - [PatchInstanceResponse](docs/PatchInstanceResponse.md)

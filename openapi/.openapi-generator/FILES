@@ -1,4 +1,5 @@
 .gitignore
+.openapi-generator-ignore
 .travis.yml
 README.md
 api/openapi.yaml
@@ -32,6 +33,9 @@ docs/AddOnRequest.md
 docs/AddOnResponse.md
 docs/AdditionalIp.md
 docs/ApiPermissionsResponse.md
+docs/ApplicationConfig.md
+docs/ApplicationRequirements.md
+docs/ApplicationResponse.md
 docs/AssignInstancePrivateNetworkResponse.md
 docs/AssignmentAuditResponse.md
 docs/AssignmentResponse.md
@@ -129,6 +133,7 @@ docs/IpV4.md
 docs/IpV6.md
 docs/Links.md
 docs/ListApiPermissionResponse.md
+docs/ListApplicationsResponse.md
 docs/ListAssignmentAuditsResponse.md
 docs/ListAssignmentResponse.md
 docs/ListCredentialResponse.md
@@ -154,12 +159,14 @@ docs/ListTagAuditsResponse.md
 docs/ListTagResponse.md
 docs/ListUserAuditResponse.md
 docs/ListUserResponse.md
+docs/MinimumRequirements.md
 docs/ObjectStorageAuditResponse.md
 docs/ObjectStorageResponse.md
 docs/ObjectStoragesApi.md
 docs/ObjectStoragesAuditsApi.md
 docs/ObjectStoragesStatsResponse.md
 docs/ObjectStoragesStatsResponseData.md
+docs/OptimalRequirements.md
 docs/PaginationMeta.md
 docs/PatchInstanceRequest.md
 docs/PatchInstanceResponse.md
@@ -234,6 +241,9 @@ model_add_on_request.go
 model_add_on_response.go
 model_additional_ip.go
 model_api_permissions_response.go
+model_application_config.go
+model_application_requirements.go
+model_application_response.go
 model_assign_instance_private_network_response.go
 model_assignment_audit_response.go
 model_assignment_response.go
@@ -324,6 +334,7 @@ model_ip_v4.go
 model_ip_v6.go
 model_links.go
 model_list_api_permission_response.go
+model_list_applications_response.go
 model_list_assignment_audits_response.go
 model_list_assignment_response.go
 model_list_credential_response.go
@@ -349,10 +360,12 @@ model_list_tag_audits_response.go
 model_list_tag_response.go
 model_list_user_audit_response.go
 model_list_user_response.go
+model_minimum_requirements.go
 model_object_storage_audit_response.go
 model_object_storage_response.go
 model_object_storages_stats_response.go
 model_object_storages_stats_response_data.go
+model_optimal_requirements.go
 model_pagination_meta.go
 model_patch_instance_request.go
 model_patch_instance_response.go

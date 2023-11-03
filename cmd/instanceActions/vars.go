@@ -24,3 +24,11 @@ var (
 var (
 	shutdownInstanceId int64
 )
+
+// Rescue
+var (
+	rescueInstanceId   int64
+	rescueRootPassword int64
+	rescueSshKeys      []int64
+	rescueUserData     string
+)

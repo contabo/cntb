@@ -81,11 +81,13 @@ info:
 
 
 
+
        ```sh
        cntb config set-credentials --oauth2-clientid=<ClientId from Customer Control Panel> --oauth2-client-secret=<ClientSecret from Customer Control Panel> --oauth2-user=<API User from Customer Control Panel> --oauth2-password='<API Password from Customer Control Panel>'
        ```
 
     5. Use the CLI
+
 
 
 
@@ -148,8 +150,10 @@ info:
 
 
 
+
        This allows you to specify a restriction to certain functions of an API by allowing control over POST (=Create), GET (=Read), PUT/PATCH (=Update) and DELETE (=Delete) methods for each API endpoint (URL) individually.
     * `resourcePermission`
+
 
 
 
@@ -649,6 +653,7 @@ paths:
 
 
 
+
               user: root
               ssh_pwauth: true
               disable_root: false
@@ -845,8 +850,16 @@ paths:
           enum:
           - provisioning
           - uninstalled
+          - running
+          - stopped
           - error
           - installing
+          - unknown
+          - manual_provisioning
+          - product_not_available
+          - verification_required
+          - rescue
+          - pending_payment
           - other
           type: string
         style: form
@@ -899,11 +912,12 @@ paths:
         source: cntb get instances
     post:
       description: Create a new instance for your account with the provided parameters.         <table>           <tr><th>ProductId</th><th>Product</th><th>Disk
-        Size</th></tr>           <tr><td>V1</td><td>VPS S SSD</td><td>200 GB SSD</td></tr>           <tr><td>V35</td><td>VPS
-        S Storage</td><td>400 GB SSD</td></tr>           <tr><td>V12</td><td>VPS S
-        NVMe</td><td>50 GB NVMe</td></tr>           <tr><td>V2</td><td>VPS M SSD</td><td>400
-        GB SSD</td></tr>           <tr><td>V36</td><td>VPS M Storage</td><td>800 GB
-        SSD</td></tr>           <tr><td>V13</td><td>VPS M NVMe</td><td>100 GB NVMe</td></tr>           <tr><td>V3</td><td>VPS
+        Size</th></tr>           <tr><td>V41</td><td>VPS XS SSD</td><td>100 GB SSD</td></tr>           <tr><td>V40</td><td>VPS
+        XS NVME</td><td>35 GB NVMe</td></tr>           <tr><td>V1</td><td>VPS S SSD</td><td>200
+        GB SSD</td></tr>           <tr><td>V35</td><td>VPS S Storage</td><td>400 GB
+        SSD</td></tr>           <tr><td>V12</td><td>VPS S NVMe</td><td>50 GB NVMe</td></tr>           <tr><td>V2</td><td>VPS
+        M SSD</td><td>400 GB SSD</td></tr>           <tr><td>V36</td><td>VPS M Storage</td><td>800
+        GB SSD</td></tr>           <tr><td>V13</td><td>VPS M NVMe</td><td>100 GB NVMe</td></tr>           <tr><td>V3</td><td>VPS
         L SSD</td><td>800 GB SSD</td></tr>           <tr><td>V37</td><td>VPS L Storage</td><td>1600
         GB SSD</td></tr>           <tr><td>V14</td><td>VPS L NVMe</td><td>200 GB NVMe</td></tr>           <tr><td>V4</td><td>VPS
         XL SSD</td><td>1600 GB SSD</td></tr>           <tr><td>V38</td><td>VPS XL
@@ -7293,16 +7307,12 @@ components:
       - error
       - installing
       - unknown
-      - installed
       - manual_provisioning
       - product_not_available
-      - limit_exceeded
-      - cancelled
       - verification_required
-      - completed
-      - order_processing
       - rescue
       - pending_payment
+      - other
       type: string
     AddOnResponse:
       example:
@@ -8087,6 +8097,7 @@ components:
            expire: False
         defaultUser: root
         sshKeys: '[123, 125]'
+        applicationId: 3f184ab8-a600-4e7c-8c9b-3413e21a3752
         rootPassword: 1
       properties:
         imageId:
@@ -8131,6 +8142,10 @@ components:
           - admin
           - administrator
           example: root
+          type: string
+        applicationId:
+          description: Application ID
+          example: 3f184ab8-a600-4e7c-8c9b-3413e21a3752
           type: string
       required:
       - imageId
@@ -8277,6 +8292,7 @@ components:
         defaultUser: root
         sshKeys: '[123, 125]'
         region: EU
+        applicationId: 3f184ab8-a600-4e7c-8c9b-3413e21a3752
         rootPassword: 1
       properties:
         imageId:
@@ -8399,6 +8415,10 @@ components:
             additionalIps: {}
             extraStorage: {}
             customImage: {}
+        applicationId:
+          description: Application ID
+          example: 3f184ab8-a600-4e7c-8c9b-3413e21a3752
+          type: string
       required:
       - period
       - productId
@@ -9867,6 +9887,149 @@ components:
             self: /v1/compute/instances/12345/snapshots/snap1628603855
       required:
       - _links
+      type: object
+    ApplicationConfig:
+      properties:
+        imageId:
+          description: Image ID
+          example: 9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d
+          type: string
+        userDataId:
+          description: User Data ID
+          example: 8b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d
+          type: string
+        userData:
+          description: '[Cloud-Init](https://cloud-init.io/) Config in order to customize
+            during start of compute instance.'
+          example: |-
+            #cloud-config
+            user: admin
+            timezone: Europe/Berlin
+            chpasswd:
+             expire: False
+          type: string
+      required:
+      - imageId
+      - userData
+      - userDataId
+      type: object
+    MinimumRequirements:
+      properties:
+        cpuCores:
+          description: CPU Cores Requirement
+          example: 2
+          type: number
+        ramMb:
+          description: Memory Requirement in MB
+          example: 100
+          type: number
+        diskMb:
+          description: Storage Requirement in MB
+          example: 500
+          type: number
+      type: object
+    OptimalRequirements:
+      properties:
+        cpuCores:
+          description: CPU Cores Requirement
+          example: 2
+          type: number
+        ramMb:
+          description: Memory Requirement in MB
+          example: 100
+          type: number
+        diskMb:
+          description: Storage Requirement in MB
+          example: 500
+          type: number
+      type: object
+    ApplicationRequirements:
+      properties:
+        minimum:
+          allOf:
+          - $ref: '#/components/schemas/MinimumRequirements'
+          description: Application minimum requirements
+        optimal:
+          allOf:
+          - $ref: '#/components/schemas/OptimalRequirements'
+          description: Application optimal requirements
+      type: object
+    ApplicationResponse:
+      properties:
+        applicationId:
+          description: Application ID
+          example: 9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d
+          type: string
+        tenantId:
+          description: Tenant ID
+          enum:
+          - DE
+          - INT
+          example: DE
+          minLength: 1
+          type: string
+        customerId:
+          description: Customer ID
+          example: "12345"
+          minLength: 1
+          type: string
+        name:
+          description: Application Name
+          example: Webmin
+          type: string
+        description:
+          description: Application Description
+          example: Webmin cloud init
+          type: string
+        type:
+          description: Application type
+          enum:
+          - standard
+          - crypto
+          example: standard
+          type: string
+        applicationConfig:
+          description: Application Config
+          items:
+            $ref: '#/components/schemas/ApplicationConfig'
+          type: array
+        requirements:
+          allOf:
+          - $ref: '#/components/schemas/ApplicationRequirements'
+          description: Application Requirements
+      required:
+      - applicationConfig
+      - applicationId
+      - customerId
+      - description
+      - name
+      - requirements
+      - tenantId
+      - type
+      type: object
+    ListApplicationsResponse:
+      properties:
+        _pagination:
+          allOf:
+          - $ref: '#/components/schemas/PaginationMeta'
+          description: Data about pagination like how many results, pages, page size.
+        data:
+          items:
+            $ref: '#/components/schemas/ApplicationResponse'
+          type: array
+        _links:
+          allOf:
+          - $ref: '#/components/schemas/Links'
+          example:
+            first: /v1/compute/applications?page=1
+            previous: /v1/compute/applications?page=19
+            self: /v1/compute/applications?page=20
+            next: /v1/compute/applications?page=21
+            last: /v1/compute/applications?page=101
+      required:
+      - _links
+      - _pagination
+      - data
       type: object
     VncResponse:
       properties:
@@ -15467,6 +15630,7 @@ x-tagGroups:
   - Instance Actions Audits
   - Snapshots
   - Snapshots Audits
+  - Applications
 - name: Compute images
   tags:
   - Images
