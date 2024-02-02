@@ -19,8 +19,8 @@ import (
 
 var userUpdateCmd = &cobra.Command{
 	Use:   "user [userId]",
-	Short: "Updates a specific user",
-	Long:  `Updates the specific user details`,
+	Short: "Updates a specific tag",
+	Long:  `Updates the specific tag by setting new values either by file input or flags / environment variables`,
 	Run: func(cmd *cobra.Command, args []string) {
 		updateUserRequest := *userManagementClient.NewUpdateUserRequestWithDefaults()
 		content := contaboCmd.OpenStdinOrFile()

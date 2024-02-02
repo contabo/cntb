@@ -12,127 +12,269 @@ Contact: support@contabo.com
 package openapi
 
 import (
-	"encoding/json"
+	"bytes"
+	_context "context"
+	_ioutil "io/ioutil"
+	_nethttp "net/http"
+	_neturl "net/url"
 )
 
-// FindTagResponse struct for FindTagResponse
-type FindTagResponse struct {
-	Data []TagResponse `json:"data"`
-	Links SelfLinks `json:"_links"`
+// Linger please
+var (
+	_ _context.Context
+)
+
+// TicketsApiService TicketsApi service
+type TicketsApiService service
+
+type ApiCreateSupportTicketRequest struct {
+	ctx _context.Context
+	ApiService *TicketsApiService
+	xRequestId *string
+	ticketCreateRequest *TicketCreateRequest
+	xTraceId *string
 }
 
-// NewFindTagResponse instantiates a new FindTagResponse object
-// This constructor will assign default values to properties that have it defined,
-// and makes sure properties required by API are set, but the set of arguments
-// will change when the set of required properties is changed
-func NewFindTagResponse(data []TagResponse, links SelfLinks) *FindTagResponse {
-	this := FindTagResponse{}
-	this.Data = data
-	this.Links = links
-	return &this
+// [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually.
+func (r ApiCreateSupportTicketRequest) XRequestId(xRequestId string) ApiCreateSupportTicketRequest {
+	r.xRequestId = &xRequestId
+	return r
+}
+func (r ApiCreateSupportTicketRequest) TicketCreateRequest(ticketCreateRequest TicketCreateRequest) ApiCreateSupportTicketRequest {
+	r.ticketCreateRequest = &ticketCreateRequest
+	return r
+}
+// Identifier to trace group of requests.
+func (r ApiCreateSupportTicketRequest) XTraceId(xTraceId string) ApiCreateSupportTicketRequest {
+	r.xTraceId = &xTraceId
+	return r
 }
 
-// NewFindTagResponseWithDefaults instantiates a new FindTagResponse object
-// This constructor will only assign default values to properties that have it defined,
-// but it doesn't guarantee that properties required by API are set
-func NewFindTagResponseWithDefaults() *FindTagResponse {
-	this := FindTagResponse{}
-	return &this
+func (r ApiCreateSupportTicketRequest) Execute() (TicketCreateResponse, *_nethttp.Response, error) {
+	return r.ApiService.CreateSupportTicketExecute(r)
 }
 
-// GetData returns the Data field value
-func (o *FindTagResponse) GetData() []TagResponse {
-	if o == nil {
-		var ret []TagResponse
-		return ret
+/*
+CreateSupportTicket Create a new support ticket
+
+Create a new support ticket
+
+ @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiCreateSupportTicketRequest
+*/
+func (a *TicketsApiService) CreateSupportTicket(ctx _context.Context) ApiCreateSupportTicketRequest {
+	return ApiCreateSupportTicketRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return TicketCreateResponse
+func (a *TicketsApiService) CreateSupportTicketExecute(r ApiCreateSupportTicketRequest) (TicketCreateResponse, *_nethttp.Response, error) {
+	var (
+		localVarHTTPMethod   = _nethttp.MethodPost
+		localVarPostBody     interface{}
+		localVarFormFileName string
+		localVarFileName     string
+		localVarFileBytes    []byte
+		localVarReturnValue  TicketCreateResponse
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TicketsApiService.CreateSupportTicket")
+	if err != nil {
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
-	return o.Data
-}
+	localVarPath := localBasePath + "/v1/tickets"
 
-// GetDataOk returns a tuple with the Data field value
-// and a boolean to check if the value has been set.
-func (o *FindTagResponse) GetDataOk() (*[]TagResponse, bool) {
-	if o == nil  {
-		return nil, false
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := _neturl.Values{}
+	localVarFormParams := _neturl.Values{}
+	if r.xRequestId == nil {
+		return localVarReturnValue, nil, reportError("xRequestId is required and must be specified")
 	}
-	return &o.Data, true
-}
-
-// SetData sets field value
-func (o *FindTagResponse) SetData(v []TagResponse) {
-	o.Data = v
-}
-
-// GetLinks returns the Links field value
-func (o *FindTagResponse) GetLinks() SelfLinks {
-	if o == nil {
-		var ret SelfLinks
-		return ret
+	if r.ticketCreateRequest == nil {
+		return localVarReturnValue, nil, reportError("ticketCreateRequest is required and must be specified")
 	}
 
-	return o.Links
-}
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
 
-// GetLinksOk returns a tuple with the Links field value
-// and a boolean to check if the value has been set.
-func (o *FindTagResponse) GetLinksOk() (*SelfLinks, bool) {
-	if o == nil  {
-		return nil, false
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
 	}
-	return &o.Links, true
-}
 
-// SetLinks sets field value
-func (o *FindTagResponse) SetLinks(v SelfLinks) {
-	o.Links = v
-}
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
 
-func (o FindTagResponse) MarshalJSON() ([]byte, error) {
-	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["data"] = o.Data
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
-	if true {
-		toSerialize["_links"] = o.Links
+	localVarHeaderParams["x-request-id"] = parameterToString(*r.xRequestId, "")
+	if r.xTraceId != nil {
+		localVarHeaderParams["x-trace-id"] = parameterToString(*r.xTraceId, "")
 	}
-	return json.Marshal(toSerialize)
+	// body params
+	localVarPostBody = r.ticketCreateRequest
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type NullableFindTagResponse struct {
-	value *FindTagResponse
-	isSet bool
+type ApiRetrieveTicketMetadataRequest struct {
+	ctx _context.Context
+	ApiService *TicketsApiService
+	xRequestId *string
+	xTraceId *string
 }
 
-func (v NullableFindTagResponse) Get() *FindTagResponse {
-	return v.value
+// [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually.
+func (r ApiRetrieveTicketMetadataRequest) XRequestId(xRequestId string) ApiRetrieveTicketMetadataRequest {
+	r.xRequestId = &xRequestId
+	return r
+}
+// Identifier to trace group of requests.
+func (r ApiRetrieveTicketMetadataRequest) XTraceId(xTraceId string) ApiRetrieveTicketMetadataRequest {
+	r.xTraceId = &xTraceId
+	return r
 }
 
-func (v *NullableFindTagResponse) Set(val *FindTagResponse) {
-	v.value = val
-	v.isSet = true
+func (r ApiRetrieveTicketMetadataRequest) Execute() (ListTicketMetadataResponse, *_nethttp.Response, error) {
+	return r.ApiService.RetrieveTicketMetadataExecute(r)
 }
 
-func (v NullableFindTagResponse) IsSet() bool {
-	return v.isSet
+/*
+RetrieveTicketMetadata Retrieve ticket metadata
+
+Retrieve ticket metadata
+
+ @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiRetrieveTicketMetadataRequest
+*/
+func (a *TicketsApiService) RetrieveTicketMetadata(ctx _context.Context) ApiRetrieveTicketMetadataRequest {
+	return ApiRetrieveTicketMetadataRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
 }
 
-func (v *NullableFindTagResponse) Unset() {
-	v.value = nil
-	v.isSet = false
+// Execute executes the request
+//  @return ListTicketMetadataResponse
+func (a *TicketsApiService) RetrieveTicketMetadataExecute(r ApiRetrieveTicketMetadataRequest) (ListTicketMetadataResponse, *_nethttp.Response, error) {
+	var (
+		localVarHTTPMethod   = _nethttp.MethodGet
+		localVarPostBody     interface{}
+		localVarFormFileName string
+		localVarFileName     string
+		localVarFileBytes    []byte
+		localVarReturnValue  ListTicketMetadataResponse
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "TicketsApiService.RetrieveTicketMetadata")
+	if err != nil {
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/tickets/metadata"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := _neturl.Values{}
+	localVarFormParams := _neturl.Values{}
+	if r.xRequestId == nil {
+		return localVarReturnValue, nil, reportError("xRequestId is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	localVarHeaderParams["x-request-id"] = parameterToString(*r.xRequestId, "")
+	if r.xTraceId != nil {
+		localVarHeaderParams["x-trace-id"] = parameterToString(*r.xTraceId, "")
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
-
-func NewNullableFindTagResponse(val *FindTagResponse) *NullableFindTagResponse {
-	return &NullableFindTagResponse{value: val, isSet: true}
-}
-
-func (v NullableFindTagResponse) MarshalJSON() ([]byte, error) {
-	return json.Marshal(v.value)
-}
-
-func (v *NullableFindTagResponse) UnmarshalJSON(src []byte) error {
-	v.isSet = true
-	return json.Unmarshal(src, &v.value)
-}
-
-

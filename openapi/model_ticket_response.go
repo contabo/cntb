@@ -15,519 +15,454 @@ import (
 	"encoding/json"
 )
 
-// CreateInstanceRequest struct for CreateInstanceRequest
-type CreateInstanceRequest struct {
-	// ImageId to be used to setup the compute instance. Default is Ubuntu 22.04
-	ImageId *string `json:"imageId,omitempty"`
-	// Default is V45
-	ProductId *string `json:"productId,omitempty"`
-	// Instance Region where the compute instance should be located. Default is EU
-	Region *string `json:"region,omitempty"`
-	// Array of `secretId`s of public SSH keys for logging into as `defaultUser` with administrator/root privileges. Applies to Linux/BSD systems. Please refer to Secrets Management API.
-	SshKeys *[]int64 `json:"sshKeys,omitempty"`
-	// `secretId` of the password for the `defaultUser` with administrator/root privileges. For Linux/BSD please use SSH, for Windows RDP. Please refer to Secrets Management API.
-	RootPassword *int64 `json:"rootPassword,omitempty"`
-	// [Cloud-Init](https://cloud-init.io/) Config in order to customize during start of compute instance.
-	UserData *string `json:"userData,omitempty"`
-	// Additional licence in order to enhance your chosen product, mainly needed for software licenses on your product (not needed for windows).
-	License *string `json:"license,omitempty"`
-	// Initial contract period in months. Available periods are: 1, 3, 6 and 12 months. Default to 1 month
-	Period int64 `json:"period"`
-	// The display name of the instance
-	DisplayName *string `json:"displayName,omitempty"`
-	// Default user name created for login during (re-)installation with administrative privileges. Allowed values for Linux/BSD are `admin` (use sudo to apply administrative privileges like root) or `root`. Allowed values for Windows are `admin` (has administrative privileges like administrator) or `administrator`.
-	DefaultUser *string `json:"defaultUser,omitempty"`
-	// Set attributes in the addons object for the corresponding ones that need to be added to the instance
-	AddOns *CreateInstanceAddons `json:"addOns,omitempty"`
-	// Application ID
-	ApplicationId *string `json:"applicationId,omitempty"`
+// TicketResponse struct for TicketResponse
+type TicketResponse struct {
+	// Your customer tenant id
+	TenantId string `json:"tenantId"`
+	// Your customer number
+	CustomerId string `json:"customerId"`
+	// Ticket email
+	Email string `json:"email"`
+	// Ticket escalated flag
+	IsEscalated bool `json:"isEscalated"`
+	// Ticket priority
+	Priority string `json:"priority"`
+	// Ticket status
+	Status string `json:"status"`
+	// Ticket subject
+	Subject string `json:"subject"`
+	// Ticket description
+	Description string `json:"description"`
+	// Created Date
+	CreatedDate string `json:"createdDate"`
+	// Created Date
+	UpdatedDate string `json:"updatedDate"`
+	// Ticket tags
+	Tags []string `json:"tags"`
+	// Ticket ID
+	TicketId int64 `json:"ticketId"`
+	// Ticket type
+	Type string `json:"type"`
 }
 
-// NewCreateInstanceRequest instantiates a new CreateInstanceRequest object
+// NewTicketResponse instantiates a new TicketResponse object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCreateInstanceRequest(period int64) *CreateInstanceRequest {
-	this := CreateInstanceRequest{}
-	var imageId string = "afecbb85-e2fc-46f0-9684-b46b1faf00bb"
-	this.ImageId = &imageId
-	var productId string = "V45"
-	this.ProductId = &productId
-	var region string = "EU"
-	this.Region = &region
-	this.Period = period
-	var defaultUser string = "admin"
-	this.DefaultUser = &defaultUser
+func NewTicketResponse(tenantId string, customerId string, email string, isEscalated bool, priority string, status string, subject string, description string, createdDate string, updatedDate string, tags []string, ticketId int64, type_ string) *TicketResponse {
+	this := TicketResponse{}
+	this.TenantId = tenantId
+	this.CustomerId = customerId
+	this.Email = email
+	this.IsEscalated = isEscalated
+	this.Priority = priority
+	this.Status = status
+	this.Subject = subject
+	this.Description = description
+	this.CreatedDate = createdDate
+	this.UpdatedDate = updatedDate
+	this.Tags = tags
+	this.TicketId = ticketId
+	this.Type = type_
 	return &this
 }
 
-// NewCreateInstanceRequestWithDefaults instantiates a new CreateInstanceRequest object
+// NewTicketResponseWithDefaults instantiates a new TicketResponse object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewCreateInstanceRequestWithDefaults() *CreateInstanceRequest {
-	this := CreateInstanceRequest{}
-	var imageId string = "afecbb85-e2fc-46f0-9684-b46b1faf00bb"
-	this.ImageId = &imageId
-	var productId string = "V45"
-	this.ProductId = &productId
-	var region string = "EU"
-	this.Region = &region
-	var period int64 = 1
-	this.Period = period
-	var defaultUser string = "admin"
-	this.DefaultUser = &defaultUser
+func NewTicketResponseWithDefaults() *TicketResponse {
+	this := TicketResponse{}
 	return &this
 }
 
-// GetImageId returns the ImageId field value if set, zero value otherwise.
-func (o *CreateInstanceRequest) GetImageId() string {
-	if o == nil || o.ImageId == nil {
+// GetTenantId returns the TenantId field value
+func (o *TicketResponse) GetTenantId() string {
+	if o == nil {
 		var ret string
 		return ret
 	}
-	return *o.ImageId
+
+	return o.TenantId
 }
 
-// GetImageIdOk returns a tuple with the ImageId field value if set, nil otherwise
+// GetTenantIdOk returns a tuple with the TenantId field value
 // and a boolean to check if the value has been set.
-func (o *CreateInstanceRequest) GetImageIdOk() (*string, bool) {
-	if o == nil || o.ImageId == nil {
+func (o *TicketResponse) GetTenantIdOk() (*string, bool) {
+	if o == nil  {
 		return nil, false
 	}
-	return o.ImageId, true
+	return &o.TenantId, true
 }
 
-// HasImageId returns a boolean if a field has been set.
-func (o *CreateInstanceRequest) HasImageId() bool {
-	if o != nil && o.ImageId != nil {
-		return true
-	}
-
-	return false
+// SetTenantId sets field value
+func (o *TicketResponse) SetTenantId(v string) {
+	o.TenantId = v
 }
 
-// SetImageId gets a reference to the given string and assigns it to the ImageId field.
-func (o *CreateInstanceRequest) SetImageId(v string) {
-	o.ImageId = &v
-}
-
-// GetProductId returns the ProductId field value if set, zero value otherwise.
-func (o *CreateInstanceRequest) GetProductId() string {
-	if o == nil || o.ProductId == nil {
+// GetCustomerId returns the CustomerId field value
+func (o *TicketResponse) GetCustomerId() string {
+	if o == nil {
 		var ret string
 		return ret
 	}
-	return *o.ProductId
+
+	return o.CustomerId
 }
 
-// GetProductIdOk returns a tuple with the ProductId field value if set, nil otherwise
+// GetCustomerIdOk returns a tuple with the CustomerId field value
 // and a boolean to check if the value has been set.
-func (o *CreateInstanceRequest) GetProductIdOk() (*string, bool) {
-	if o == nil || o.ProductId == nil {
+func (o *TicketResponse) GetCustomerIdOk() (*string, bool) {
+	if o == nil  {
 		return nil, false
 	}
-	return o.ProductId, true
+	return &o.CustomerId, true
 }
 
-// HasProductId returns a boolean if a field has been set.
-func (o *CreateInstanceRequest) HasProductId() bool {
-	if o != nil && o.ProductId != nil {
-		return true
-	}
-
-	return false
+// SetCustomerId sets field value
+func (o *TicketResponse) SetCustomerId(v string) {
+	o.CustomerId = v
 }
 
-// SetProductId gets a reference to the given string and assigns it to the ProductId field.
-func (o *CreateInstanceRequest) SetProductId(v string) {
-	o.ProductId = &v
-}
-
-// GetRegion returns the Region field value if set, zero value otherwise.
-func (o *CreateInstanceRequest) GetRegion() string {
-	if o == nil || o.Region == nil {
+// GetEmail returns the Email field value
+func (o *TicketResponse) GetEmail() string {
+	if o == nil {
 		var ret string
 		return ret
 	}
-	return *o.Region
+
+	return o.Email
 }
 
-// GetRegionOk returns a tuple with the Region field value if set, nil otherwise
+// GetEmailOk returns a tuple with the Email field value
 // and a boolean to check if the value has been set.
-func (o *CreateInstanceRequest) GetRegionOk() (*string, bool) {
-	if o == nil || o.Region == nil {
+func (o *TicketResponse) GetEmailOk() (*string, bool) {
+	if o == nil  {
 		return nil, false
 	}
-	return o.Region, true
+	return &o.Email, true
 }
 
-// HasRegion returns a boolean if a field has been set.
-func (o *CreateInstanceRequest) HasRegion() bool {
-	if o != nil && o.Region != nil {
-		return true
-	}
-
-	return false
+// SetEmail sets field value
+func (o *TicketResponse) SetEmail(v string) {
+	o.Email = v
 }
 
-// SetRegion gets a reference to the given string and assigns it to the Region field.
-func (o *CreateInstanceRequest) SetRegion(v string) {
-	o.Region = &v
-}
-
-// GetSshKeys returns the SshKeys field value if set, zero value otherwise.
-func (o *CreateInstanceRequest) GetSshKeys() []int64 {
-	if o == nil || o.SshKeys == nil {
-		var ret []int64
+// GetIsEscalated returns the IsEscalated field value
+func (o *TicketResponse) GetIsEscalated() bool {
+	if o == nil {
+		var ret bool
 		return ret
 	}
-	return *o.SshKeys
+
+	return o.IsEscalated
 }
 
-// GetSshKeysOk returns a tuple with the SshKeys field value if set, nil otherwise
+// GetIsEscalatedOk returns a tuple with the IsEscalated field value
 // and a boolean to check if the value has been set.
-func (o *CreateInstanceRequest) GetSshKeysOk() (*[]int64, bool) {
-	if o == nil || o.SshKeys == nil {
+func (o *TicketResponse) GetIsEscalatedOk() (*bool, bool) {
+	if o == nil  {
 		return nil, false
 	}
-	return o.SshKeys, true
+	return &o.IsEscalated, true
 }
 
-// HasSshKeys returns a boolean if a field has been set.
-func (o *CreateInstanceRequest) HasSshKeys() bool {
-	if o != nil && o.SshKeys != nil {
-		return true
-	}
-
-	return false
+// SetIsEscalated sets field value
+func (o *TicketResponse) SetIsEscalated(v bool) {
+	o.IsEscalated = v
 }
 
-// SetSshKeys gets a reference to the given []int64 and assigns it to the SshKeys field.
-func (o *CreateInstanceRequest) SetSshKeys(v []int64) {
-	o.SshKeys = &v
-}
-
-// GetRootPassword returns the RootPassword field value if set, zero value otherwise.
-func (o *CreateInstanceRequest) GetRootPassword() int64 {
-	if o == nil || o.RootPassword == nil {
-		var ret int64
-		return ret
-	}
-	return *o.RootPassword
-}
-
-// GetRootPasswordOk returns a tuple with the RootPassword field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *CreateInstanceRequest) GetRootPasswordOk() (*int64, bool) {
-	if o == nil || o.RootPassword == nil {
-		return nil, false
-	}
-	return o.RootPassword, true
-}
-
-// HasRootPassword returns a boolean if a field has been set.
-func (o *CreateInstanceRequest) HasRootPassword() bool {
-	if o != nil && o.RootPassword != nil {
-		return true
-	}
-
-	return false
-}
-
-// SetRootPassword gets a reference to the given int64 and assigns it to the RootPassword field.
-func (o *CreateInstanceRequest) SetRootPassword(v int64) {
-	o.RootPassword = &v
-}
-
-// GetUserData returns the UserData field value if set, zero value otherwise.
-func (o *CreateInstanceRequest) GetUserData() string {
-	if o == nil || o.UserData == nil {
+// GetPriority returns the Priority field value
+func (o *TicketResponse) GetPriority() string {
+	if o == nil {
 		var ret string
 		return ret
 	}
-	return *o.UserData
+
+	return o.Priority
 }
 
-// GetUserDataOk returns a tuple with the UserData field value if set, nil otherwise
+// GetPriorityOk returns a tuple with the Priority field value
 // and a boolean to check if the value has been set.
-func (o *CreateInstanceRequest) GetUserDataOk() (*string, bool) {
-	if o == nil || o.UserData == nil {
+func (o *TicketResponse) GetPriorityOk() (*string, bool) {
+	if o == nil  {
 		return nil, false
 	}
-	return o.UserData, true
+	return &o.Priority, true
 }
 
-// HasUserData returns a boolean if a field has been set.
-func (o *CreateInstanceRequest) HasUserData() bool {
-	if o != nil && o.UserData != nil {
-		return true
-	}
-
-	return false
+// SetPriority sets field value
+func (o *TicketResponse) SetPriority(v string) {
+	o.Priority = v
 }
 
-// SetUserData gets a reference to the given string and assigns it to the UserData field.
-func (o *CreateInstanceRequest) SetUserData(v string) {
-	o.UserData = &v
-}
-
-// GetLicense returns the License field value if set, zero value otherwise.
-func (o *CreateInstanceRequest) GetLicense() string {
-	if o == nil || o.License == nil {
+// GetStatus returns the Status field value
+func (o *TicketResponse) GetStatus() string {
+	if o == nil {
 		var ret string
 		return ret
 	}
-	return *o.License
+
+	return o.Status
 }
 
-// GetLicenseOk returns a tuple with the License field value if set, nil otherwise
+// GetStatusOk returns a tuple with the Status field value
 // and a boolean to check if the value has been set.
-func (o *CreateInstanceRequest) GetLicenseOk() (*string, bool) {
-	if o == nil || o.License == nil {
+func (o *TicketResponse) GetStatusOk() (*string, bool) {
+	if o == nil  {
 		return nil, false
 	}
-	return o.License, true
+	return &o.Status, true
 }
 
-// HasLicense returns a boolean if a field has been set.
-func (o *CreateInstanceRequest) HasLicense() bool {
-	if o != nil && o.License != nil {
-		return true
+// SetStatus sets field value
+func (o *TicketResponse) SetStatus(v string) {
+	o.Status = v
+}
+
+// GetSubject returns the Subject field value
+func (o *TicketResponse) GetSubject() string {
+	if o == nil {
+		var ret string
+		return ret
 	}
 
-	return false
+	return o.Subject
 }
 
-// SetLicense gets a reference to the given string and assigns it to the License field.
-func (o *CreateInstanceRequest) SetLicense(v string) {
-	o.License = &v
+// GetSubjectOk returns a tuple with the Subject field value
+// and a boolean to check if the value has been set.
+func (o *TicketResponse) GetSubjectOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.Subject, true
 }
 
-// GetPeriod returns the Period field value
-func (o *CreateInstanceRequest) GetPeriod() int64 {
+// SetSubject sets field value
+func (o *TicketResponse) SetSubject(v string) {
+	o.Subject = v
+}
+
+// GetDescription returns the Description field value
+func (o *TicketResponse) GetDescription() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.Description
+}
+
+// GetDescriptionOk returns a tuple with the Description field value
+// and a boolean to check if the value has been set.
+func (o *TicketResponse) GetDescriptionOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.Description, true
+}
+
+// SetDescription sets field value
+func (o *TicketResponse) SetDescription(v string) {
+	o.Description = v
+}
+
+// GetCreatedDate returns the CreatedDate field value
+func (o *TicketResponse) GetCreatedDate() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.CreatedDate
+}
+
+// GetCreatedDateOk returns a tuple with the CreatedDate field value
+// and a boolean to check if the value has been set.
+func (o *TicketResponse) GetCreatedDateOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.CreatedDate, true
+}
+
+// SetCreatedDate sets field value
+func (o *TicketResponse) SetCreatedDate(v string) {
+	o.CreatedDate = v
+}
+
+// GetUpdatedDate returns the UpdatedDate field value
+func (o *TicketResponse) GetUpdatedDate() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.UpdatedDate
+}
+
+// GetUpdatedDateOk returns a tuple with the UpdatedDate field value
+// and a boolean to check if the value has been set.
+func (o *TicketResponse) GetUpdatedDateOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.UpdatedDate, true
+}
+
+// SetUpdatedDate sets field value
+func (o *TicketResponse) SetUpdatedDate(v string) {
+	o.UpdatedDate = v
+}
+
+// GetTags returns the Tags field value
+func (o *TicketResponse) GetTags() []string {
+	if o == nil {
+		var ret []string
+		return ret
+	}
+
+	return o.Tags
+}
+
+// GetTagsOk returns a tuple with the Tags field value
+// and a boolean to check if the value has been set.
+func (o *TicketResponse) GetTagsOk() (*[]string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.Tags, true
+}
+
+// SetTags sets field value
+func (o *TicketResponse) SetTags(v []string) {
+	o.Tags = v
+}
+
+// GetTicketId returns the TicketId field value
+func (o *TicketResponse) GetTicketId() int64 {
 	if o == nil {
 		var ret int64
 		return ret
 	}
 
-	return o.Period
+	return o.TicketId
 }
 
-// GetPeriodOk returns a tuple with the Period field value
+// GetTicketIdOk returns a tuple with the TicketId field value
 // and a boolean to check if the value has been set.
-func (o *CreateInstanceRequest) GetPeriodOk() (*int64, bool) {
+func (o *TicketResponse) GetTicketIdOk() (*int64, bool) {
 	if o == nil  {
 		return nil, false
 	}
-	return &o.Period, true
+	return &o.TicketId, true
 }
 
-// SetPeriod sets field value
-func (o *CreateInstanceRequest) SetPeriod(v int64) {
-	o.Period = v
+// SetTicketId sets field value
+func (o *TicketResponse) SetTicketId(v int64) {
+	o.TicketId = v
 }
 
-// GetDisplayName returns the DisplayName field value if set, zero value otherwise.
-func (o *CreateInstanceRequest) GetDisplayName() string {
-	if o == nil || o.DisplayName == nil {
+// GetType returns the Type field value
+func (o *TicketResponse) GetType() string {
+	if o == nil {
 		var ret string
 		return ret
 	}
-	return *o.DisplayName
+
+	return o.Type
 }
 
-// GetDisplayNameOk returns a tuple with the DisplayName field value if set, nil otherwise
+// GetTypeOk returns a tuple with the Type field value
 // and a boolean to check if the value has been set.
-func (o *CreateInstanceRequest) GetDisplayNameOk() (*string, bool) {
-	if o == nil || o.DisplayName == nil {
+func (o *TicketResponse) GetTypeOk() (*string, bool) {
+	if o == nil  {
 		return nil, false
 	}
-	return o.DisplayName, true
+	return &o.Type, true
 }
 
-// HasDisplayName returns a boolean if a field has been set.
-func (o *CreateInstanceRequest) HasDisplayName() bool {
-	if o != nil && o.DisplayName != nil {
-		return true
-	}
-
-	return false
+// SetType sets field value
+func (o *TicketResponse) SetType(v string) {
+	o.Type = v
 }
 
-// SetDisplayName gets a reference to the given string and assigns it to the DisplayName field.
-func (o *CreateInstanceRequest) SetDisplayName(v string) {
-	o.DisplayName = &v
-}
-
-// GetDefaultUser returns the DefaultUser field value if set, zero value otherwise.
-func (o *CreateInstanceRequest) GetDefaultUser() string {
-	if o == nil || o.DefaultUser == nil {
-		var ret string
-		return ret
-	}
-	return *o.DefaultUser
-}
-
-// GetDefaultUserOk returns a tuple with the DefaultUser field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *CreateInstanceRequest) GetDefaultUserOk() (*string, bool) {
-	if o == nil || o.DefaultUser == nil {
-		return nil, false
-	}
-	return o.DefaultUser, true
-}
-
-// HasDefaultUser returns a boolean if a field has been set.
-func (o *CreateInstanceRequest) HasDefaultUser() bool {
-	if o != nil && o.DefaultUser != nil {
-		return true
-	}
-
-	return false
-}
-
-// SetDefaultUser gets a reference to the given string and assigns it to the DefaultUser field.
-func (o *CreateInstanceRequest) SetDefaultUser(v string) {
-	o.DefaultUser = &v
-}
-
-// GetAddOns returns the AddOns field value if set, zero value otherwise.
-func (o *CreateInstanceRequest) GetAddOns() CreateInstanceAddons {
-	if o == nil || o.AddOns == nil {
-		var ret CreateInstanceAddons
-		return ret
-	}
-	return *o.AddOns
-}
-
-// GetAddOnsOk returns a tuple with the AddOns field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *CreateInstanceRequest) GetAddOnsOk() (*CreateInstanceAddons, bool) {
-	if o == nil || o.AddOns == nil {
-		return nil, false
-	}
-	return o.AddOns, true
-}
-
-// HasAddOns returns a boolean if a field has been set.
-func (o *CreateInstanceRequest) HasAddOns() bool {
-	if o != nil && o.AddOns != nil {
-		return true
-	}
-
-	return false
-}
-
-// SetAddOns gets a reference to the given CreateInstanceAddons and assigns it to the AddOns field.
-func (o *CreateInstanceRequest) SetAddOns(v CreateInstanceAddons) {
-	o.AddOns = &v
-}
-
-// GetApplicationId returns the ApplicationId field value if set, zero value otherwise.
-func (o *CreateInstanceRequest) GetApplicationId() string {
-	if o == nil || o.ApplicationId == nil {
-		var ret string
-		return ret
-	}
-	return *o.ApplicationId
-}
-
-// GetApplicationIdOk returns a tuple with the ApplicationId field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *CreateInstanceRequest) GetApplicationIdOk() (*string, bool) {
-	if o == nil || o.ApplicationId == nil {
-		return nil, false
-	}
-	return o.ApplicationId, true
-}
-
-// HasApplicationId returns a boolean if a field has been set.
-func (o *CreateInstanceRequest) HasApplicationId() bool {
-	if o != nil && o.ApplicationId != nil {
-		return true
-	}
-
-	return false
-}
-
-// SetApplicationId gets a reference to the given string and assigns it to the ApplicationId field.
-func (o *CreateInstanceRequest) SetApplicationId(v string) {
-	o.ApplicationId = &v
-}
-
-func (o CreateInstanceRequest) MarshalJSON() ([]byte, error) {
+func (o TicketResponse) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
-	if o.ImageId != nil {
-		toSerialize["imageId"] = o.ImageId
-	}
-	if o.ProductId != nil {
-		toSerialize["productId"] = o.ProductId
-	}
-	if o.Region != nil {
-		toSerialize["region"] = o.Region
-	}
-	if o.SshKeys != nil {
-		toSerialize["sshKeys"] = o.SshKeys
-	}
-	if o.RootPassword != nil {
-		toSerialize["rootPassword"] = o.RootPassword
-	}
-	if o.UserData != nil {
-		toSerialize["userData"] = o.UserData
-	}
-	if o.License != nil {
-		toSerialize["license"] = o.License
+	if true {
+		toSerialize["tenantId"] = o.TenantId
 	}
 	if true {
-		toSerialize["period"] = o.Period
+		toSerialize["customerId"] = o.CustomerId
 	}
-	if o.DisplayName != nil {
-		toSerialize["displayName"] = o.DisplayName
+	if true {
+		toSerialize["email"] = o.Email
 	}
-	if o.DefaultUser != nil {
-		toSerialize["defaultUser"] = o.DefaultUser
+	if true {
+		toSerialize["isEscalated"] = o.IsEscalated
 	}
-	if o.AddOns != nil {
-		toSerialize["addOns"] = o.AddOns
+	if true {
+		toSerialize["priority"] = o.Priority
 	}
-	if o.ApplicationId != nil {
-		toSerialize["applicationId"] = o.ApplicationId
+	if true {
+		toSerialize["status"] = o.Status
+	}
+	if true {
+		toSerialize["subject"] = o.Subject
+	}
+	if true {
+		toSerialize["description"] = o.Description
+	}
+	if true {
+		toSerialize["createdDate"] = o.CreatedDate
+	}
+	if true {
+		toSerialize["updatedDate"] = o.UpdatedDate
+	}
+	if true {
+		toSerialize["tags"] = o.Tags
+	}
+	if true {
+		toSerialize["ticketId"] = o.TicketId
+	}
+	if true {
+		toSerialize["type"] = o.Type
 	}
 	return json.Marshal(toSerialize)
 }
 
-type NullableCreateInstanceRequest struct {
-	value *CreateInstanceRequest
+type NullableTicketResponse struct {
+	value *TicketResponse
 	isSet bool
 }
 
-func (v NullableCreateInstanceRequest) Get() *CreateInstanceRequest {
+func (v NullableTicketResponse) Get() *TicketResponse {
 	return v.value
 }
 
-func (v *NullableCreateInstanceRequest) Set(val *CreateInstanceRequest) {
+func (v *NullableTicketResponse) Set(val *TicketResponse) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableCreateInstanceRequest) IsSet() bool {
+func (v NullableTicketResponse) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableCreateInstanceRequest) Unset() {
+func (v *NullableTicketResponse) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableCreateInstanceRequest(val *CreateInstanceRequest) *NullableCreateInstanceRequest {
-	return &NullableCreateInstanceRequest{value: val, isSet: true}
+func NewNullableTicketResponse(val *TicketResponse) *NullableTicketResponse {
+	return &NullableTicketResponse{value: val, isSet: true}
 }
 
-func (v NullableCreateInstanceRequest) MarshalJSON() ([]byte, error) {
+func (v NullableTicketResponse) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableCreateInstanceRequest) UnmarshalJSON(src []byte) error {
+func (v *NullableTicketResponse) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

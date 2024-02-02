@@ -110,7 +110,7 @@ import (
 
 func main() {
     xRequestId := "04e0f898-37b4-48bc-a794-1a57abe6aa31" // string | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually.
-    createInstanceRequest := *openapiclient.NewCreateInstanceRequest("V3", int64(6)) // CreateInstanceRequest | 
+    createInstanceRequest := *openapiclient.NewCreateInstanceRequest(int64(6)) // CreateInstanceRequest | 
     xTraceId := "xTraceId_example" // string | Identifier to trace group of requests. (optional)
 
     configuration := openapiclient.NewConfiguration()

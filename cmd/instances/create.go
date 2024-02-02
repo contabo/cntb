@@ -21,7 +21,7 @@ var instanceCreateCmd = &cobra.Command{
 	Short: "Create a new compute instance.",
 	Long:  `Create a new compute instance.`,
 	Example: `create instance -p 12 --imageId "111eebb0-dc70-4bc2-a7d0-c525dbe016a9" ` +
-		`--license "PleskHost" --productId "V1" -r "EU"`,
+		`--license "PleskHost" --productId "V45" -r "EU"`,
 	Run: func(cmd *cobra.Command, args []string) {
 		createInstanceRequest := *instancesClient.NewCreateInstanceRequestWithDefaults()
 		content := contaboCmd.OpenStdinOrFile()
@@ -30,7 +30,7 @@ var instanceCreateCmd = &cobra.Command{
 		case nil:
 			// flags with default values
 			createInstanceRequest.ImageId = &createInstanceImageId
-			createInstanceRequest.ProductId = createInstanceProductId
+			createInstanceRequest.ProductId = &createInstanceProductId
 			createInstanceRequest.Region = &createInstanceRegion
 			createInstanceRequest.Period = createInstancePeriod
 			createInstanceRequest.DisplayName = &createInstanceDisplayName
@@ -127,7 +127,7 @@ func init() {
 	instanceCreateCmd.Flags().StringVar(&createInstanceImageId, "imageId", "db1409d2-ed92-4f2f-978e-7b2fa4a1ec90",
 		`Standard or custom image id. Defaults to 'Ubuntu 20.04'.`)
 
-	instanceCreateCmd.Flags().StringVar(&createInstanceProductId, "productId", "V1",
+	instanceCreateCmd.Flags().StringVar(&createInstanceProductId, "productId", "V45",
 		`Id of product to be used. See https://contabo.com/en/product-list/?show_ids=true`)
 
 	instanceCreateCmd.Flags().StringVarP(&createInstanceRegion, "region", "r", "EU",

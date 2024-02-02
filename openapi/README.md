@@ -357,6 +357,8 @@ Class | Method | HTTP request | Description
 *TagsApi* | [**RetrieveTagList**](docs/TagsApi.md#retrievetaglist) | **Get** /v1/tags | List tags
 *TagsApi* | [**UpdateTag**](docs/TagsApi.md#updatetag) | **Patch** /v1/tags/{tagId} | Update specific tag by id
 *TagsAuditsApi* | [**RetrieveTagAuditsList**](docs/TagsAuditsApi.md#retrievetagauditslist) | **Get** /v1/tags/audits | List history about your assignments (audit)
+*TicketsApi* | [**CreateSupportTicket**](docs/TicketsApi.md#createsupportticket) | **Post** /v1/tickets | Create a new support ticket
+*TicketsApi* | [**RetrieveTicketMetadata**](docs/TicketsApi.md#retrieveticketmetadata) | **Get** /v1/tickets/metadata | Retrieve ticket metadata
 *UsersApi* | [**CreateUser**](docs/UsersApi.md#createuser) | **Post** /v1/users | Create a new user
 *UsersApi* | [**DeleteUser**](docs/UsersApi.md#deleteuser) | **Delete** /v1/users/{userId} | Delete existing user by id
 *UsersApi* | [**GenerateClientSecret**](docs/UsersApi.md#generateclientsecret) | **Put** /v1/users/client/secret | Generate new client secret
@@ -496,8 +498,10 @@ Class | Method | HTTP request | Description
  - [ListSnapshotsAuditResponse](docs/ListSnapshotsAuditResponse.md)
  - [ListTagAuditsResponse](docs/ListTagAuditsResponse.md)
  - [ListTagResponse](docs/ListTagResponse.md)
+ - [ListTicketMetadataResponse](docs/ListTicketMetadataResponse.md)
  - [ListUserAuditResponse](docs/ListUserAuditResponse.md)
  - [ListUserResponse](docs/ListUserResponse.md)
+ - [MetadataType](docs/MetadataType.md)
  - [MinimumRequirements](docs/MinimumRequirements.md)
  - [ObjectStorageAuditResponse](docs/ObjectStorageAuditResponse.md)
  - [ObjectStorageResponse](docs/ObjectStorageResponse.md)
@@ -533,6 +537,9 @@ Class | Method | HTTP request | Description
  - [TagAuditResponse](docs/TagAuditResponse.md)
  - [TagResponse](docs/TagResponse.md)
  - [TagResponse1](docs/TagResponse1.md)
+ - [TicketCreateRequest](docs/TicketCreateRequest.md)
+ - [TicketCreateResponse](docs/TicketCreateResponse.md)
+ - [TicketResponse](docs/TicketResponse.md)
  - [UnassignInstancePrivateNetworkResponse](docs/UnassignInstancePrivateNetworkResponse.md)
  - [UpdateCustomImageRequest](docs/UpdateCustomImageRequest.md)
  - [UpdateCustomImageResponse](docs/UpdateCustomImageResponse.md)

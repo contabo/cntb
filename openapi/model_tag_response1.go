@@ -17,29 +17,20 @@ import (
 
 // TagResponse1 struct for TagResponse1
 type TagResponse1 struct {
-	// Your customer tenant id
-	TenantId string `json:"tenantId"`
-	// Your customer number
-	CustomerId string `json:"customerId"`
 	// Tag's id
 	TagId float32 `json:"tagId"`
 	// Tag's name
-	Name string `json:"name"`
-	// Tag's color
-	Color string `json:"color"`
+	TagName string `json:"tagName"`
 }
 
 // NewTagResponse1 instantiates a new TagResponse1 object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewTagResponse1(tenantId string, customerId string, tagId float32, name string, color string) *TagResponse1 {
+func NewTagResponse1(tagId float32, tagName string) *TagResponse1 {
 	this := TagResponse1{}
-	this.TenantId = tenantId
-	this.CustomerId = customerId
 	this.TagId = tagId
-	this.Name = name
-	this.Color = color
+	this.TagName = tagName
 	return &this
 }
 
@@ -49,54 +40,6 @@ func NewTagResponse1(tenantId string, customerId string, tagId float32, name str
 func NewTagResponse1WithDefaults() *TagResponse1 {
 	this := TagResponse1{}
 	return &this
-}
-
-// GetTenantId returns the TenantId field value
-func (o *TagResponse1) GetTenantId() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.TenantId
-}
-
-// GetTenantIdOk returns a tuple with the TenantId field value
-// and a boolean to check if the value has been set.
-func (o *TagResponse1) GetTenantIdOk() (*string, bool) {
-	if o == nil  {
-		return nil, false
-	}
-	return &o.TenantId, true
-}
-
-// SetTenantId sets field value
-func (o *TagResponse1) SetTenantId(v string) {
-	o.TenantId = v
-}
-
-// GetCustomerId returns the CustomerId field value
-func (o *TagResponse1) GetCustomerId() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.CustomerId
-}
-
-// GetCustomerIdOk returns a tuple with the CustomerId field value
-// and a boolean to check if the value has been set.
-func (o *TagResponse1) GetCustomerIdOk() (*string, bool) {
-	if o == nil  {
-		return nil, false
-	}
-	return &o.CustomerId, true
-}
-
-// SetCustomerId sets field value
-func (o *TagResponse1) SetCustomerId(v string) {
-	o.CustomerId = v
 }
 
 // GetTagId returns the TagId field value
@@ -123,70 +66,37 @@ func (o *TagResponse1) SetTagId(v float32) {
 	o.TagId = v
 }
 
-// GetName returns the Name field value
-func (o *TagResponse1) GetName() string {
+// GetTagName returns the TagName field value
+func (o *TagResponse1) GetTagName() string {
 	if o == nil {
 		var ret string
 		return ret
 	}
 
-	return o.Name
+	return o.TagName
 }
 
-// GetNameOk returns a tuple with the Name field value
+// GetTagNameOk returns a tuple with the TagName field value
 // and a boolean to check if the value has been set.
-func (o *TagResponse1) GetNameOk() (*string, bool) {
+func (o *TagResponse1) GetTagNameOk() (*string, bool) {
 	if o == nil  {
 		return nil, false
 	}
-	return &o.Name, true
+	return &o.TagName, true
 }
 
-// SetName sets field value
-func (o *TagResponse1) SetName(v string) {
-	o.Name = v
-}
-
-// GetColor returns the Color field value
-func (o *TagResponse1) GetColor() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.Color
-}
-
-// GetColorOk returns a tuple with the Color field value
-// and a boolean to check if the value has been set.
-func (o *TagResponse1) GetColorOk() (*string, bool) {
-	if o == nil  {
-		return nil, false
-	}
-	return &o.Color, true
-}
-
-// SetColor sets field value
-func (o *TagResponse1) SetColor(v string) {
-	o.Color = v
+// SetTagName sets field value
+func (o *TagResponse1) SetTagName(v string) {
+	o.TagName = v
 }
 
 func (o TagResponse1) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
 	if true {
-		toSerialize["tenantId"] = o.TenantId
-	}
-	if true {
-		toSerialize["customerId"] = o.CustomerId
-	}
-	if true {
 		toSerialize["tagId"] = o.TagId
 	}
 	if true {
-		toSerialize["name"] = o.Name
-	}
-	if true {
-		toSerialize["color"] = o.Color
+		toSerialize["tagName"] = o.TagName
 	}
 	return json.Marshal(toSerialize)
 }

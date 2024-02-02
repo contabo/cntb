@@ -13,577 +13,124 @@ package openapi
 
 import (
 	"encoding/json"
-	"time"
 )
 
-// ListImageResponseData struct for ListImageResponseData
-type ListImageResponseData struct {
-	// Image's id
-	ImageId string `json:"imageId"`
-	// Your customer tenant id
-	TenantId string `json:"tenantId"`
-	// Customer ID
-	CustomerId string `json:"customerId"`
-	// Image Name
-	Name string `json:"name"`
-	// Image Description
-	Description string `json:"description"`
-	// URL from where the image has been downloaded / provided.
-	Url string `json:"url"`
-	// Image Size in MB
-	SizeMb float32 `json:"sizeMb"`
-	// Image Uploaded Size in MB
-	UploadedSizeMb float32 `json:"uploadedSizeMb"`
-	// Type of operating system (OS)
-	OsType string `json:"osType"`
-	// Version number to distinguish the contents of an image. Could be the version of the operating system for example.
-	Version string `json:"version"`
-	// Image format
-	Format string `json:"format"`
-	// Image status (e.g. if image is still downloading)
-	Status string `json:"status"`
-	// Image download error message
-	ErrorMessage string `json:"errorMessage"`
-	// Flag indicating that image is either a standard (true) or a custom image (false)
-	StandardImage bool `json:"standardImage"`
-	// The creation date time for the image
-	CreationDate time.Time `json:"creationDate"`
-	// The last modified date time for the image
-	LastModifiedDate time.Time `json:"lastModifiedDate"`
-	// The tags assigned to the image
-	Tags []TagResponse1 `json:"tags"`
+// TicketCreateResponse struct for TicketCreateResponse
+type TicketCreateResponse struct {
+	Data []TicketResponse `json:"data"`
+	Links SelfLinks `json:"_links"`
 }
 
-// NewListImageResponseData instantiates a new ListImageResponseData object
+// NewTicketCreateResponse instantiates a new TicketCreateResponse object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewListImageResponseData(imageId string, tenantId string, customerId string, name string, description string, url string, sizeMb float32, uploadedSizeMb float32, osType string, version string, format string, status string, errorMessage string, standardImage bool, creationDate time.Time, lastModifiedDate time.Time, tags []TagResponse1) *ListImageResponseData {
-	this := ListImageResponseData{}
-	this.ImageId = imageId
-	this.TenantId = tenantId
-	this.CustomerId = customerId
-	this.Name = name
-	this.Description = description
-	this.Url = url
-	this.SizeMb = sizeMb
-	this.UploadedSizeMb = uploadedSizeMb
-	this.OsType = osType
-	this.Version = version
-	this.Format = format
-	this.Status = status
-	this.ErrorMessage = errorMessage
-	this.StandardImage = standardImage
-	this.CreationDate = creationDate
-	this.LastModifiedDate = lastModifiedDate
-	this.Tags = tags
+func NewTicketCreateResponse(data []TicketResponse, links SelfLinks) *TicketCreateResponse {
+	this := TicketCreateResponse{}
+	this.Data = data
+	this.Links = links
 	return &this
 }
 
-// NewListImageResponseDataWithDefaults instantiates a new ListImageResponseData object
+// NewTicketCreateResponseWithDefaults instantiates a new TicketCreateResponse object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewListImageResponseDataWithDefaults() *ListImageResponseData {
-	this := ListImageResponseData{}
+func NewTicketCreateResponseWithDefaults() *TicketCreateResponse {
+	this := TicketCreateResponse{}
 	return &this
 }
 
-// GetImageId returns the ImageId field value
-func (o *ListImageResponseData) GetImageId() string {
+// GetData returns the Data field value
+func (o *TicketCreateResponse) GetData() []TicketResponse {
 	if o == nil {
-		var ret string
+		var ret []TicketResponse
 		return ret
 	}
 
-	return o.ImageId
+	return o.Data
 }
 
-// GetImageIdOk returns a tuple with the ImageId field value
+// GetDataOk returns a tuple with the Data field value
 // and a boolean to check if the value has been set.
-func (o *ListImageResponseData) GetImageIdOk() (*string, bool) {
+func (o *TicketCreateResponse) GetDataOk() (*[]TicketResponse, bool) {
 	if o == nil  {
 		return nil, false
 	}
-	return &o.ImageId, true
+	return &o.Data, true
 }
 
-// SetImageId sets field value
-func (o *ListImageResponseData) SetImageId(v string) {
-	o.ImageId = v
+// SetData sets field value
+func (o *TicketCreateResponse) SetData(v []TicketResponse) {
+	o.Data = v
 }
 
-// GetTenantId returns the TenantId field value
-func (o *ListImageResponseData) GetTenantId() string {
+// GetLinks returns the Links field value
+func (o *TicketCreateResponse) GetLinks() SelfLinks {
 	if o == nil {
-		var ret string
+		var ret SelfLinks
 		return ret
 	}
 
-	return o.TenantId
+	return o.Links
 }
 
-// GetTenantIdOk returns a tuple with the TenantId field value
+// GetLinksOk returns a tuple with the Links field value
 // and a boolean to check if the value has been set.
-func (o *ListImageResponseData) GetTenantIdOk() (*string, bool) {
+func (o *TicketCreateResponse) GetLinksOk() (*SelfLinks, bool) {
 	if o == nil  {
 		return nil, false
 	}
-	return &o.TenantId, true
+	return &o.Links, true
 }
 
-// SetTenantId sets field value
-func (o *ListImageResponseData) SetTenantId(v string) {
-	o.TenantId = v
+// SetLinks sets field value
+func (o *TicketCreateResponse) SetLinks(v SelfLinks) {
+	o.Links = v
 }
 
-// GetCustomerId returns the CustomerId field value
-func (o *ListImageResponseData) GetCustomerId() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.CustomerId
-}
-
-// GetCustomerIdOk returns a tuple with the CustomerId field value
-// and a boolean to check if the value has been set.
-func (o *ListImageResponseData) GetCustomerIdOk() (*string, bool) {
-	if o == nil  {
-		return nil, false
-	}
-	return &o.CustomerId, true
-}
-
-// SetCustomerId sets field value
-func (o *ListImageResponseData) SetCustomerId(v string) {
-	o.CustomerId = v
-}
-
-// GetName returns the Name field value
-func (o *ListImageResponseData) GetName() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.Name
-}
-
-// GetNameOk returns a tuple with the Name field value
-// and a boolean to check if the value has been set.
-func (o *ListImageResponseData) GetNameOk() (*string, bool) {
-	if o == nil  {
-		return nil, false
-	}
-	return &o.Name, true
-}
-
-// SetName sets field value
-func (o *ListImageResponseData) SetName(v string) {
-	o.Name = v
-}
-
-// GetDescription returns the Description field value
-func (o *ListImageResponseData) GetDescription() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.Description
-}
-
-// GetDescriptionOk returns a tuple with the Description field value
-// and a boolean to check if the value has been set.
-func (o *ListImageResponseData) GetDescriptionOk() (*string, bool) {
-	if o == nil  {
-		return nil, false
-	}
-	return &o.Description, true
-}
-
-// SetDescription sets field value
-func (o *ListImageResponseData) SetDescription(v string) {
-	o.Description = v
-}
-
-// GetUrl returns the Url field value
-func (o *ListImageResponseData) GetUrl() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.Url
-}
-
-// GetUrlOk returns a tuple with the Url field value
-// and a boolean to check if the value has been set.
-func (o *ListImageResponseData) GetUrlOk() (*string, bool) {
-	if o == nil  {
-		return nil, false
-	}
-	return &o.Url, true
-}
-
-// SetUrl sets field value
-func (o *ListImageResponseData) SetUrl(v string) {
-	o.Url = v
-}
-
-// GetSizeMb returns the SizeMb field value
-func (o *ListImageResponseData) GetSizeMb() float32 {
-	if o == nil {
-		var ret float32
-		return ret
-	}
-
-	return o.SizeMb
-}
-
-// GetSizeMbOk returns a tuple with the SizeMb field value
-// and a boolean to check if the value has been set.
-func (o *ListImageResponseData) GetSizeMbOk() (*float32, bool) {
-	if o == nil  {
-		return nil, false
-	}
-	return &o.SizeMb, true
-}
-
-// SetSizeMb sets field value
-func (o *ListImageResponseData) SetSizeMb(v float32) {
-	o.SizeMb = v
-}
-
-// GetUploadedSizeMb returns the UploadedSizeMb field value
-func (o *ListImageResponseData) GetUploadedSizeMb() float32 {
-	if o == nil {
-		var ret float32
-		return ret
-	}
-
-	return o.UploadedSizeMb
-}
-
-// GetUploadedSizeMbOk returns a tuple with the UploadedSizeMb field value
-// and a boolean to check if the value has been set.
-func (o *ListImageResponseData) GetUploadedSizeMbOk() (*float32, bool) {
-	if o == nil  {
-		return nil, false
-	}
-	return &o.UploadedSizeMb, true
-}
-
-// SetUploadedSizeMb sets field value
-func (o *ListImageResponseData) SetUploadedSizeMb(v float32) {
-	o.UploadedSizeMb = v
-}
-
-// GetOsType returns the OsType field value
-func (o *ListImageResponseData) GetOsType() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.OsType
-}
-
-// GetOsTypeOk returns a tuple with the OsType field value
-// and a boolean to check if the value has been set.
-func (o *ListImageResponseData) GetOsTypeOk() (*string, bool) {
-	if o == nil  {
-		return nil, false
-	}
-	return &o.OsType, true
-}
-
-// SetOsType sets field value
-func (o *ListImageResponseData) SetOsType(v string) {
-	o.OsType = v
-}
-
-// GetVersion returns the Version field value
-func (o *ListImageResponseData) GetVersion() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.Version
-}
-
-// GetVersionOk returns a tuple with the Version field value
-// and a boolean to check if the value has been set.
-func (o *ListImageResponseData) GetVersionOk() (*string, bool) {
-	if o == nil  {
-		return nil, false
-	}
-	return &o.Version, true
-}
-
-// SetVersion sets field value
-func (o *ListImageResponseData) SetVersion(v string) {
-	o.Version = v
-}
-
-// GetFormat returns the Format field value
-func (o *ListImageResponseData) GetFormat() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.Format
-}
-
-// GetFormatOk returns a tuple with the Format field value
-// and a boolean to check if the value has been set.
-func (o *ListImageResponseData) GetFormatOk() (*string, bool) {
-	if o == nil  {
-		return nil, false
-	}
-	return &o.Format, true
-}
-
-// SetFormat sets field value
-func (o *ListImageResponseData) SetFormat(v string) {
-	o.Format = v
-}
-
-// GetStatus returns the Status field value
-func (o *ListImageResponseData) GetStatus() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.Status
-}
-
-// GetStatusOk returns a tuple with the Status field value
-// and a boolean to check if the value has been set.
-func (o *ListImageResponseData) GetStatusOk() (*string, bool) {
-	if o == nil  {
-		return nil, false
-	}
-	return &o.Status, true
-}
-
-// SetStatus sets field value
-func (o *ListImageResponseData) SetStatus(v string) {
-	o.Status = v
-}
-
-// GetErrorMessage returns the ErrorMessage field value
-func (o *ListImageResponseData) GetErrorMessage() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.ErrorMessage
-}
-
-// GetErrorMessageOk returns a tuple with the ErrorMessage field value
-// and a boolean to check if the value has been set.
-func (o *ListImageResponseData) GetErrorMessageOk() (*string, bool) {
-	if o == nil  {
-		return nil, false
-	}
-	return &o.ErrorMessage, true
-}
-
-// SetErrorMessage sets field value
-func (o *ListImageResponseData) SetErrorMessage(v string) {
-	o.ErrorMessage = v
-}
-
-// GetStandardImage returns the StandardImage field value
-func (o *ListImageResponseData) GetStandardImage() bool {
-	if o == nil {
-		var ret bool
-		return ret
-	}
-
-	return o.StandardImage
-}
-
-// GetStandardImageOk returns a tuple with the StandardImage field value
-// and a boolean to check if the value has been set.
-func (o *ListImageResponseData) GetStandardImageOk() (*bool, bool) {
-	if o == nil  {
-		return nil, false
-	}
-	return &o.StandardImage, true
-}
-
-// SetStandardImage sets field value
-func (o *ListImageResponseData) SetStandardImage(v bool) {
-	o.StandardImage = v
-}
-
-// GetCreationDate returns the CreationDate field value
-func (o *ListImageResponseData) GetCreationDate() time.Time {
-	if o == nil {
-		var ret time.Time
-		return ret
-	}
-
-	return o.CreationDate
-}
-
-// GetCreationDateOk returns a tuple with the CreationDate field value
-// and a boolean to check if the value has been set.
-func (o *ListImageResponseData) GetCreationDateOk() (*time.Time, bool) {
-	if o == nil  {
-		return nil, false
-	}
-	return &o.CreationDate, true
-}
-
-// SetCreationDate sets field value
-func (o *ListImageResponseData) SetCreationDate(v time.Time) {
-	o.CreationDate = v
-}
-
-// GetLastModifiedDate returns the LastModifiedDate field value
-func (o *ListImageResponseData) GetLastModifiedDate() time.Time {
-	if o == nil {
-		var ret time.Time
-		return ret
-	}
-
-	return o.LastModifiedDate
-}
-
-// GetLastModifiedDateOk returns a tuple with the LastModifiedDate field value
-// and a boolean to check if the value has been set.
-func (o *ListImageResponseData) GetLastModifiedDateOk() (*time.Time, bool) {
-	if o == nil  {
-		return nil, false
-	}
-	return &o.LastModifiedDate, true
-}
-
-// SetLastModifiedDate sets field value
-func (o *ListImageResponseData) SetLastModifiedDate(v time.Time) {
-	o.LastModifiedDate = v
-}
-
-// GetTags returns the Tags field value
-func (o *ListImageResponseData) GetTags() []TagResponse1 {
-	if o == nil {
-		var ret []TagResponse1
-		return ret
-	}
-
-	return o.Tags
-}
-
-// GetTagsOk returns a tuple with the Tags field value
-// and a boolean to check if the value has been set.
-func (o *ListImageResponseData) GetTagsOk() (*[]TagResponse1, bool) {
-	if o == nil  {
-		return nil, false
-	}
-	return &o.Tags, true
-}
-
-// SetTags sets field value
-func (o *ListImageResponseData) SetTags(v []TagResponse1) {
-	o.Tags = v
-}
-
-func (o ListImageResponseData) MarshalJSON() ([]byte, error) {
+func (o TicketCreateResponse) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
 	if true {
-		toSerialize["imageId"] = o.ImageId
+		toSerialize["data"] = o.Data
 	}
 	if true {
-		toSerialize["tenantId"] = o.TenantId
-	}
-	if true {
-		toSerialize["customerId"] = o.CustomerId
-	}
-	if true {
-		toSerialize["name"] = o.Name
-	}
-	if true {
-		toSerialize["description"] = o.Description
-	}
-	if true {
-		toSerialize["url"] = o.Url
-	}
-	if true {
-		toSerialize["sizeMb"] = o.SizeMb
-	}
-	if true {
-		toSerialize["uploadedSizeMb"] = o.UploadedSizeMb
-	}
-	if true {
-		toSerialize["osType"] = o.OsType
-	}
-	if true {
-		toSerialize["version"] = o.Version
-	}
-	if true {
-		toSerialize["format"] = o.Format
-	}
-	if true {
-		toSerialize["status"] = o.Status
-	}
-	if true {
-		toSerialize["errorMessage"] = o.ErrorMessage
-	}
-	if true {
-		toSerialize["standardImage"] = o.StandardImage
-	}
-	if true {
-		toSerialize["creationDate"] = o.CreationDate
-	}
-	if true {
-		toSerialize["lastModifiedDate"] = o.LastModifiedDate
-	}
-	if true {
-		toSerialize["tags"] = o.Tags
+		toSerialize["_links"] = o.Links
 	}
 	return json.Marshal(toSerialize)
 }
 
-type NullableListImageResponseData struct {
-	value *ListImageResponseData
+type NullableTicketCreateResponse struct {
+	value *TicketCreateResponse
 	isSet bool
 }
 
-func (v NullableListImageResponseData) Get() *ListImageResponseData {
+func (v NullableTicketCreateResponse) Get() *TicketCreateResponse {
 	return v.value
 }
 
-func (v *NullableListImageResponseData) Set(val *ListImageResponseData) {
+func (v *NullableTicketCreateResponse) Set(val *TicketCreateResponse) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableListImageResponseData) IsSet() bool {
+func (v NullableTicketCreateResponse) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableListImageResponseData) Unset() {
+func (v *NullableTicketCreateResponse) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableListImageResponseData(val *ListImageResponseData) *NullableListImageResponseData {
-	return &NullableListImageResponseData{value: val, isSet: true}
+func NewNullableTicketCreateResponse(val *TicketCreateResponse) *NullableTicketCreateResponse {
+	return &NullableTicketCreateResponse{value: val, isSet: true}
 }
 
-func (v NullableListImageResponseData) MarshalJSON() ([]byte, error) {
+func (v NullableTicketCreateResponse) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableListImageResponseData) UnmarshalJSON(src []byte) error {
+func (v *NullableTicketCreateResponse) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

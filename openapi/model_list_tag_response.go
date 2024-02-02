@@ -19,7 +19,7 @@ import (
 type ListTagResponse struct {
 	// Data about pagination like how many results, pages, page size.
 	Pagination PaginationMeta `json:"_pagination"`
-	Data []TagResponse1 `json:"data"`
+	Data []TagResponse `json:"data"`
 	Links Links `json:"_links"`
 }
 
@@ -27,7 +27,7 @@ type ListTagResponse struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewListTagResponse(pagination PaginationMeta, data []TagResponse1, links Links) *ListTagResponse {
+func NewListTagResponse(pagination PaginationMeta, data []TagResponse, links Links) *ListTagResponse {
 	this := ListTagResponse{}
 	this.Pagination = pagination
 	this.Data = data
@@ -68,9 +68,9 @@ func (o *ListTagResponse) SetPagination(v PaginationMeta) {
 }
 
 // GetData returns the Data field value
-func (o *ListTagResponse) GetData() []TagResponse1 {
+func (o *ListTagResponse) GetData() []TagResponse {
 	if o == nil {
-		var ret []TagResponse1
+		var ret []TagResponse
 		return ret
 	}
 
@@ -79,7 +79,7 @@ func (o *ListTagResponse) GetData() []TagResponse1 {
 
 // GetDataOk returns a tuple with the Data field value
 // and a boolean to check if the value has been set.
-func (o *ListTagResponse) GetDataOk() (*[]TagResponse1, bool) {
+func (o *ListTagResponse) GetDataOk() (*[]TagResponse, bool) {
 	if o == nil  {
 		return nil, false
 	}
@@ -87,7 +87,7 @@ func (o *ListTagResponse) GetDataOk() (*[]TagResponse1, bool) {
 }
 
 // SetData sets field value
-func (o *ListTagResponse) SetData(v []TagResponse1) {
+func (o *ListTagResponse) SetData(v []TagResponse) {
 	o.Data = v
 }
 

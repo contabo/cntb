@@ -1,5 +1,4 @@
 .gitignore
-.openapi-generator-ignore
 .travis.yml
 README.md
 api/openapi.yaml
@@ -24,6 +23,7 @@ api_tag_assignments.go
 api_tag_assignments_audits.go
 api_tags.go
 api_tags_audits.go
+api_tickets.go
 api_users.go
 api_users_audits.go
 client.go
@@ -157,8 +157,10 @@ docs/ListSnapshotResponse.md
 docs/ListSnapshotsAuditResponse.md
 docs/ListTagAuditsResponse.md
 docs/ListTagResponse.md
+docs/ListTicketMetadataResponse.md
 docs/ListUserAuditResponse.md
 docs/ListUserResponse.md
+docs/MetadataType.md
 docs/MinimumRequirements.md
 docs/ObjectStorageAuditResponse.md
 docs/ObjectStorageResponse.md
@@ -208,6 +210,10 @@ docs/TagResponse.md
 docs/TagResponse1.md
 docs/TagsApi.md
 docs/TagsAuditsApi.md
+docs/TicketCreateRequest.md
+docs/TicketCreateResponse.md
+docs/TicketResponse.md
+docs/TicketsApi.md
 docs/UnassignInstancePrivateNetworkResponse.md
 docs/UpdateCustomImageRequest.md
 docs/UpdateCustomImageResponse.md
@@ -358,8 +364,10 @@ model_list_snapshot_response.go
 model_list_snapshots_audit_response.go
 model_list_tag_audits_response.go
 model_list_tag_response.go
+model_list_ticket_metadata_response.go
 model_list_user_audit_response.go
 model_list_user_response.go
+model_metadata_type.go
 model_minimum_requirements.go
 model_object_storage_audit_response.go
 model_object_storage_response.go
@@ -395,6 +403,9 @@ model_tag_assignment_self_links.go
 model_tag_audit_response.go
 model_tag_response.go
 model_tag_response1.go
+model_ticket_create_request.go
+model_ticket_create_response.go
+model_ticket_response.go
 model_unassign_instance_private_network_response.go
 model_update_custom_image_request.go
 model_update_custom_image_response.go

@@ -64,6 +64,8 @@ type InstanceResponse struct {
 	ErrorMessage *string `json:"errorMessage,omitempty"`
 	// Instance's category depending on Product Id
 	ProductType string `json:"productType"`
+	// Instance's Product Name
+	ProductName string `json:"productName"`
 	// Default user name created for login during (re-)installation with administrative privileges. Allowed values for Linux/BSD are `admin` (use sudo to apply administrative privileges like root) or `root`. Allowed values for Windows are `admin` (has administrative privileges like administrator) or `administrator`.
 	DefaultUser *string `json:"defaultUser,omitempty"`
 }
@@ -72,7 +74,7 @@ type InstanceResponse struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewInstanceResponse(tenantId string, customerId string, additionalIps []AdditionalIp, name string, displayName string, instanceId int64, dataCenter string, region string, regionName string, productId string, imageId string, ipConfig IpConfig, macAddress string, ramMb float32, cpuCores int64, osType string, diskMb float32, sshKeys []int64, createdDate time.Time, cancelDate string, status InstanceStatus, vHostId int64, addOns []AddOnResponse, productType string) *InstanceResponse {
+func NewInstanceResponse(tenantId string, customerId string, additionalIps []AdditionalIp, name string, displayName string, instanceId int64, dataCenter string, region string, regionName string, productId string, imageId string, ipConfig IpConfig, macAddress string, ramMb float32, cpuCores int64, osType string, diskMb float32, sshKeys []int64, createdDate time.Time, cancelDate string, status InstanceStatus, vHostId int64, addOns []AddOnResponse, productType string, productName string) *InstanceResponse {
 	this := InstanceResponse{}
 	this.TenantId = tenantId
 	this.CustomerId = customerId
@@ -98,6 +100,7 @@ func NewInstanceResponse(tenantId string, customerId string, additionalIps []Add
 	this.VHostId = vHostId
 	this.AddOns = addOns
 	this.ProductType = productType
+	this.ProductName = productName
 	return &this
 }
 
@@ -717,6 +720,30 @@ func (o *InstanceResponse) SetProductType(v string) {
 	o.ProductType = v
 }
 
+// GetProductName returns the ProductName field value
+func (o *InstanceResponse) GetProductName() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.ProductName
+}
+
+// GetProductNameOk returns a tuple with the ProductName field value
+// and a boolean to check if the value has been set.
+func (o *InstanceResponse) GetProductNameOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.ProductName, true
+}
+
+// SetProductName sets field value
+func (o *InstanceResponse) SetProductName(v string) {
+	o.ProductName = v
+}
+
 // GetDefaultUser returns the DefaultUser field value if set, zero value otherwise.
 func (o *InstanceResponse) GetDefaultUser() string {
 	if o == nil || o.DefaultUser == nil {
@@ -825,6 +852,9 @@ func (o InstanceResponse) MarshalJSON() ([]byte, error) {
 	}
 	if true {
 		toSerialize["productType"] = o.ProductType
+	}
+	if true {
+		toSerialize["productName"] = o.ProductName
 	}
 	if o.DefaultUser != nil {
 		toSerialize["defaultUser"] = o.DefaultUser
