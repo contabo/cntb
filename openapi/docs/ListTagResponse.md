@@ -5,14 +5,14 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Pagination** | [**PaginationMeta**](PaginationMeta.md) | Data about pagination like how many results, pages, page size. | 
-**Data** | [**[]TagResponse**](TagResponse.md) |  | 
+**Data** | [**[]TagResponse1**](TagResponse1.md) |  | 
 **Links** | [**Links**](Links.md) |  | 
 
 ## Methods
 
 ### NewListTagResponse
 
-`func NewListTagResponse(pagination PaginationMeta, data []TagResponse, links Links, ) *ListTagResponse`
+`func NewListTagResponse(pagination PaginationMeta, data []TagResponse1, links Links, ) *ListTagResponse`
 
 NewListTagResponse instantiates a new ListTagResponse object
 This constructor will assign default values to properties that have it defined,
@@ -49,20 +49,20 @@ SetPagination sets Pagination field to given value.
 
 ### GetData
 
-`func (o *ListTagResponse) GetData() []TagResponse`
+`func (o *ListTagResponse) GetData() []TagResponse1`
 
 GetData returns the Data field if non-nil, zero value otherwise.
 
 ### GetDataOk
 
-`func (o *ListTagResponse) GetDataOk() (*[]TagResponse, bool)`
+`func (o *ListTagResponse) GetDataOk() (*[]TagResponse1, bool)`
 
 GetDataOk returns a tuple with the Data field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetData
 
-`func (o *ListTagResponse) SetData(v []TagResponse)`
+`func (o *ListTagResponse) SetData(v []TagResponse1)`
 
 SetData sets Data field to given value.
 

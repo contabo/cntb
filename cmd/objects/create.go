@@ -49,16 +49,18 @@ func PutObject(localPath string, isDir bool, s3Prefix string, s3Client *minio.Cl
 		defer object.Close()
 
 		objectStat, err := object.Stat()
+
 		if err != nil {
 			log.Fatal(fmt.Sprintf("Could not read file properties %v. Got error %v", localPath, err))
 		}
 
-		_, err = s3Client.PutObject(context.Background(), createObjectBucketName, s3Path, object, objectStat.Size(), minio.PutObjectOptions{ContentType: "application/octet-stream"})
+		_, err = s3Client.FPutObject(context.Background(), createObjectBucketName, objectStat.Name(), s3Path, minio.PutObjectOptions{ContentType: "application/octet-stream"})
 
 		if err != nil {
 			if s.Contains(err.Error(), "API rate limit exceeded") { // retry in case of rate limit exceeded eror
 				time.Sleep(1000 * time.Millisecond)
-				_, err = s3Client.PutObject(context.Background(), createObjectBucketName, s3Path, object, objectStat.Size(), minio.PutObjectOptions{ContentType: "application/octet-stream"})
+				_, err = s3Client.FPutObject(context.Background(), createObjectBucketName, objectStat.Name(), s3Path, minio.PutObjectOptions{ContentType: "application/octet-stream"})
+
 				if err != nil {
 					log.Fatal(fmt.Sprintf("Could not create object file %v. Got error %v", s3Path, err))
 				}
@@ -80,6 +82,7 @@ func PutObject(localPath string, isDir bool, s3Prefix string, s3Client *minio.Cl
 		}
 
 		_, err := s3Client.PutObject(context.Background(), createObjectBucketName, s3Path, nil, 0, minio.PutObjectOptions{})
+
 		if err != nil {
 			if s.Contains(err.Error(), "API rate limit exceeded") { // retry in case of rate limit exceeded eror
 				time.Sleep(1000 * time.Millisecond)
@@ -138,6 +141,7 @@ var objectCreateCmd = &cobra.Command{
 			),
 			Secure: true,
 		})
+
 		if err != nil {
 			log.Fatal(fmt.Sprintf("Error in connecting to S3 Client . Got error %v", err))
 		}
