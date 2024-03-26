@@ -9,7 +9,7 @@ Name | Type | Description | Notes
 **Id** | **float32** | The identifier of the audit entry. | 
 **ResourceId** | **string** | Resource&#39;s id | 
 **ResourceType** | **string** | Resource type. Resource type is one of &#x60;instance|image|object-storage&#x60;. | 
-**TagId** | **float32** | Tag&#39;s id | 
+**TagId** | **int64** | Tag&#39;s id | 
 **Action** | **string** | Audit Action | 
 **Timestamp** | **time.Time** | Audit creation date | 
 **ChangedBy** | **string** | User ID | 
@@ -22,7 +22,7 @@ Name | Type | Description | Notes
 
 ### NewAssignmentAuditResponse
 
-`func NewAssignmentAuditResponse(tenantId string, customerId string, id float32, resourceId string, resourceType string, tagId float32, action string, timestamp time.Time, changedBy string, username string, requestId string, traceId string, ) *AssignmentAuditResponse`
+`func NewAssignmentAuditResponse(tenantId string, customerId string, id float32, resourceId string, resourceType string, tagId int64, action string, timestamp time.Time, changedBy string, username string, requestId string, traceId string, ) *AssignmentAuditResponse`
 
 NewAssignmentAuditResponse instantiates a new AssignmentAuditResponse object
 This constructor will assign default values to properties that have it defined,
@@ -139,20 +139,20 @@ SetResourceType sets ResourceType field to given value.
 
 ### GetTagId
 
-`func (o *AssignmentAuditResponse) GetTagId() float32`
+`func (o *AssignmentAuditResponse) GetTagId() int64`
 
 GetTagId returns the TagId field if non-nil, zero value otherwise.
 
 ### GetTagIdOk
 
-`func (o *AssignmentAuditResponse) GetTagIdOk() (*float32, bool)`
+`func (o *AssignmentAuditResponse) GetTagIdOk() (*int64, bool)`
 
 GetTagIdOk returns a tuple with the TagId field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetTagId
 
-`func (o *AssignmentAuditResponse) SetTagId(v float32)`
+`func (o *AssignmentAuditResponse) SetTagId(v int64)`
 
 SetTagId sets TagId field to given value.
 

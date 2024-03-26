@@ -613,6 +613,7 @@ type ApiRetrieveObjectStorageListRequest struct {
 	dataCenterName *string
 	s3TenantId *string
 	region *string
+	displayName *string
 }
 
 // [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually.
@@ -653,6 +654,11 @@ func (r ApiRetrieveObjectStorageListRequest) S3TenantId(s3TenantId string) ApiRe
 // Filter for Object Storage by regions. Available regions: EU, US-central, SIN
 func (r ApiRetrieveObjectStorageListRequest) Region(region string) ApiRetrieveObjectStorageListRequest {
 	r.region = &region
+	return r
+}
+// Filter for Object Storage by display name.
+func (r ApiRetrieveObjectStorageListRequest) DisplayName(displayName string) ApiRetrieveObjectStorageListRequest {
+	r.displayName = &displayName
 	return r
 }
 
@@ -726,6 +732,9 @@ func (a *ObjectStoragesApiService) RetrieveObjectStorageListExecute(r ApiRetriev
 	}
 	if r.region != nil {
 		localVarQueryParams.Add("region", parameterToString(*r.region, ""))
+	}
+	if r.displayName != nil {
+		localVarQueryParams.Add("displayName", parameterToString(*r.displayName, ""))
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}

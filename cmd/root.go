@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"contabo.com/cli/cntb/config"
+	"github.com/minio/minio-go/v7"
 	homedir "github.com/mitchellh/go-homedir"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -87,7 +88,7 @@ func Execute() {
 
 func init() {
 	cobra.OnInitialize(initConfig)
-
+	minio.MaxRetry = 50
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.

@@ -317,7 +317,7 @@ Name | Type | Description  | Notes
 
 ## RetrieveObjectStorageList
 
-> ListObjectStorageResponse RetrieveObjectStorageList(ctx).XRequestId(xRequestId).XTraceId(xTraceId).Page(page).Size(size).OrderBy(orderBy).DataCenterName(dataCenterName).S3TenantId(s3TenantId).Region(region).Execute()
+> ListObjectStorageResponse RetrieveObjectStorageList(ctx).XRequestId(xRequestId).XTraceId(xTraceId).Page(page).Size(size).OrderBy(orderBy).DataCenterName(dataCenterName).S3TenantId(s3TenantId).Region(region).DisplayName(displayName).Execute()
 
 List all your object storages
 
@@ -344,10 +344,11 @@ func main() {
     dataCenterName := "European Union (Germany) 2" // string | Filter for Object Storage locations. (optional)
     s3TenantId := "2cd2e5e1444a41b0bed16c6410ecaa84" // string | Filter for Object Storage S3 tenantId. (optional)
     region := "EU" // string | Filter for Object Storage by regions. Available regions: EU, US-central, SIN (optional)
+    displayName := "MyObjectStorage" // string | Filter for Object Storage by display name. (optional)
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.ObjectStoragesApi.RetrieveObjectStorageList(context.Background()).XRequestId(xRequestId).XTraceId(xTraceId).Page(page).Size(size).OrderBy(orderBy).DataCenterName(dataCenterName).S3TenantId(s3TenantId).Region(region).Execute()
+    resp, r, err := api_client.ObjectStoragesApi.RetrieveObjectStorageList(context.Background()).XRequestId(xRequestId).XTraceId(xTraceId).Page(page).Size(size).OrderBy(orderBy).DataCenterName(dataCenterName).S3TenantId(s3TenantId).Region(region).DisplayName(displayName).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `ObjectStoragesApi.RetrieveObjectStorageList``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -376,6 +377,7 @@ Name | Type | Description  | Notes
  **dataCenterName** | **string** | Filter for Object Storage locations. | 
  **s3TenantId** | **string** | Filter for Object Storage S3 tenantId. | 
  **region** | **string** | Filter for Object Storage by regions. Available regions: EU, US-central, SIN | 
+ **displayName** | **string** | Filter for Object Storage by display name. | 
 
 ### Return type
 

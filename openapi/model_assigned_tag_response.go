@@ -15,92 +15,35 @@ import (
 	"encoding/json"
 )
 
-// TagResponse1 struct for TagResponse1
-type TagResponse1 struct {
-	// Your customer tenant id
-	TenantId string `json:"tenantId"`
-	// Your customer number
-	CustomerId string `json:"customerId"`
+// AssignedTagResponse struct for AssignedTagResponse
+type AssignedTagResponse struct {
 	// Tag's id
 	TagId float32 `json:"tagId"`
 	// Tag's name
-	Name string `json:"name"`
-	// Tag's color
-	Color string `json:"color"`
+	TagName string `json:"tagName"`
 }
 
-// NewTagResponse1 instantiates a new TagResponse1 object
+// NewAssignedTagResponse instantiates a new AssignedTagResponse object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewTagResponse1(tenantId string, customerId string, tagId float32, name string, color string) *TagResponse1 {
-	this := TagResponse1{}
-	this.TenantId = tenantId
-	this.CustomerId = customerId
+func NewAssignedTagResponse(tagId float32, tagName string) *AssignedTagResponse {
+	this := AssignedTagResponse{}
 	this.TagId = tagId
-	this.Name = name
-	this.Color = color
+	this.TagName = tagName
 	return &this
 }
 
-// NewTagResponse1WithDefaults instantiates a new TagResponse1 object
+// NewAssignedTagResponseWithDefaults instantiates a new AssignedTagResponse object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewTagResponse1WithDefaults() *TagResponse1 {
-	this := TagResponse1{}
+func NewAssignedTagResponseWithDefaults() *AssignedTagResponse {
+	this := AssignedTagResponse{}
 	return &this
-}
-
-// GetTenantId returns the TenantId field value
-func (o *TagResponse1) GetTenantId() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.TenantId
-}
-
-// GetTenantIdOk returns a tuple with the TenantId field value
-// and a boolean to check if the value has been set.
-func (o *TagResponse1) GetTenantIdOk() (*string, bool) {
-	if o == nil  {
-		return nil, false
-	}
-	return &o.TenantId, true
-}
-
-// SetTenantId sets field value
-func (o *TagResponse1) SetTenantId(v string) {
-	o.TenantId = v
-}
-
-// GetCustomerId returns the CustomerId field value
-func (o *TagResponse1) GetCustomerId() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.CustomerId
-}
-
-// GetCustomerIdOk returns a tuple with the CustomerId field value
-// and a boolean to check if the value has been set.
-func (o *TagResponse1) GetCustomerIdOk() (*string, bool) {
-	if o == nil  {
-		return nil, false
-	}
-	return &o.CustomerId, true
-}
-
-// SetCustomerId sets field value
-func (o *TagResponse1) SetCustomerId(v string) {
-	o.CustomerId = v
 }
 
 // GetTagId returns the TagId field value
-func (o *TagResponse1) GetTagId() float32 {
+func (o *AssignedTagResponse) GetTagId() float32 {
 	if o == nil {
 		var ret float32
 		return ret
@@ -111,7 +54,7 @@ func (o *TagResponse1) GetTagId() float32 {
 
 // GetTagIdOk returns a tuple with the TagId field value
 // and a boolean to check if the value has been set.
-func (o *TagResponse1) GetTagIdOk() (*float32, bool) {
+func (o *AssignedTagResponse) GetTagIdOk() (*float32, bool) {
 	if o == nil  {
 		return nil, false
 	}
@@ -119,110 +62,77 @@ func (o *TagResponse1) GetTagIdOk() (*float32, bool) {
 }
 
 // SetTagId sets field value
-func (o *TagResponse1) SetTagId(v float32) {
+func (o *AssignedTagResponse) SetTagId(v float32) {
 	o.TagId = v
 }
 
-// GetName returns the Name field value
-func (o *TagResponse1) GetName() string {
+// GetTagName returns the TagName field value
+func (o *AssignedTagResponse) GetTagName() string {
 	if o == nil {
 		var ret string
 		return ret
 	}
 
-	return o.Name
+	return o.TagName
 }
 
-// GetNameOk returns a tuple with the Name field value
+// GetTagNameOk returns a tuple with the TagName field value
 // and a boolean to check if the value has been set.
-func (o *TagResponse1) GetNameOk() (*string, bool) {
+func (o *AssignedTagResponse) GetTagNameOk() (*string, bool) {
 	if o == nil  {
 		return nil, false
 	}
-	return &o.Name, true
+	return &o.TagName, true
 }
 
-// SetName sets field value
-func (o *TagResponse1) SetName(v string) {
-	o.Name = v
+// SetTagName sets field value
+func (o *AssignedTagResponse) SetTagName(v string) {
+	o.TagName = v
 }
 
-// GetColor returns the Color field value
-func (o *TagResponse1) GetColor() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.Color
-}
-
-// GetColorOk returns a tuple with the Color field value
-// and a boolean to check if the value has been set.
-func (o *TagResponse1) GetColorOk() (*string, bool) {
-	if o == nil  {
-		return nil, false
-	}
-	return &o.Color, true
-}
-
-// SetColor sets field value
-func (o *TagResponse1) SetColor(v string) {
-	o.Color = v
-}
-
-func (o TagResponse1) MarshalJSON() ([]byte, error) {
+func (o AssignedTagResponse) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["tenantId"] = o.TenantId
-	}
-	if true {
-		toSerialize["customerId"] = o.CustomerId
-	}
 	if true {
 		toSerialize["tagId"] = o.TagId
 	}
 	if true {
-		toSerialize["name"] = o.Name
-	}
-	if true {
-		toSerialize["color"] = o.Color
+		toSerialize["tagName"] = o.TagName
 	}
 	return json.Marshal(toSerialize)
 }
 
-type NullableTagResponse1 struct {
-	value *TagResponse1
+type NullableAssignedTagResponse struct {
+	value *AssignedTagResponse
 	isSet bool
 }
 
-func (v NullableTagResponse1) Get() *TagResponse1 {
+func (v NullableAssignedTagResponse) Get() *AssignedTagResponse {
 	return v.value
 }
 
-func (v *NullableTagResponse1) Set(val *TagResponse1) {
+func (v *NullableAssignedTagResponse) Set(val *AssignedTagResponse) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableTagResponse1) IsSet() bool {
+func (v NullableAssignedTagResponse) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableTagResponse1) Unset() {
+func (v *NullableAssignedTagResponse) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableTagResponse1(val *TagResponse1) *NullableTagResponse1 {
-	return &NullableTagResponse1{value: val, isSet: true}
+func NewNullableAssignedTagResponse(val *AssignedTagResponse) *NullableAssignedTagResponse {
+	return &NullableAssignedTagResponse{value: val, isSet: true}
 }
 
-func (v NullableTagResponse1) MarshalJSON() ([]byte, error) {
+func (v NullableAssignedTagResponse) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableTagResponse1) UnmarshalJSON(src []byte) error {
+func (v *NullableAssignedTagResponse) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

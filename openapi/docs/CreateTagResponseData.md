@@ -6,13 +6,13 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **TenantId** | **string** | Your customer tenant id | 
 **CustomerId** | **string** | Your customer number | 
-**TagId** | **float32** | Tag&#39;s id | 
+**TagId** | **int64** | Tag&#39;s id | 
 
 ## Methods
 
 ### NewCreateTagResponseData
 
-`func NewCreateTagResponseData(tenantId string, customerId string, tagId float32, ) *CreateTagResponseData`
+`func NewCreateTagResponseData(tenantId string, customerId string, tagId int64, ) *CreateTagResponseData`
 
 NewCreateTagResponseData instantiates a new CreateTagResponseData object
 This constructor will assign default values to properties that have it defined,
@@ -69,20 +69,20 @@ SetCustomerId sets CustomerId field to given value.
 
 ### GetTagId
 
-`func (o *CreateTagResponseData) GetTagId() float32`
+`func (o *CreateTagResponseData) GetTagId() int64`
 
 GetTagId returns the TagId field if non-nil, zero value otherwise.
 
 ### GetTagIdOk
 
-`func (o *CreateTagResponseData) GetTagIdOk() (*float32, bool)`
+`func (o *CreateTagResponseData) GetTagIdOk() (*int64, bool)`
 
 GetTagIdOk returns a tuple with the TagId field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetTagId
 
-`func (o *CreateTagResponseData) SetTagId(v float32)`
+`func (o *CreateTagResponseData) SetTagId(v int64)`
 
 SetTagId sets TagId field to given value.
 

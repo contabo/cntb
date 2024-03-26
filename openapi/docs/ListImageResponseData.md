@@ -20,13 +20,13 @@ Name | Type | Description | Notes
 **StandardImage** | **bool** | Flag indicating that image is either a standard (true) or a custom image (false) | 
 **CreationDate** | **time.Time** | The creation date time for the image | 
 **LastModifiedDate** | **time.Time** | The last modified date time for the image | 
-**Tags** | [**[]TagResponse**](TagResponse.md) | The tags assigned to the image | 
+**Tags** | [**[]AssignedTagResponse**](AssignedTagResponse.md) | The tags assigned to the image | 
 
 ## Methods
 
 ### NewListImageResponseData
 
-`func NewListImageResponseData(imageId string, tenantId string, customerId string, name string, description string, url string, sizeMb float32, uploadedSizeMb float32, osType string, version string, format string, status string, errorMessage string, standardImage bool, creationDate time.Time, lastModifiedDate time.Time, tags []TagResponse, ) *ListImageResponseData`
+`func NewListImageResponseData(imageId string, tenantId string, customerId string, name string, description string, url string, sizeMb float32, uploadedSizeMb float32, osType string, version string, format string, status string, errorMessage string, standardImage bool, creationDate time.Time, lastModifiedDate time.Time, tags []AssignedTagResponse, ) *ListImageResponseData`
 
 NewListImageResponseData instantiates a new ListImageResponseData object
 This constructor will assign default values to properties that have it defined,
@@ -363,20 +363,20 @@ SetLastModifiedDate sets LastModifiedDate field to given value.
 
 ### GetTags
 
-`func (o *ListImageResponseData) GetTags() []TagResponse`
+`func (o *ListImageResponseData) GetTags() []AssignedTagResponse`
 
 GetTags returns the Tags field if non-nil, zero value otherwise.
 
 ### GetTagsOk
 
-`func (o *ListImageResponseData) GetTagsOk() (*[]TagResponse, bool)`
+`func (o *ListImageResponseData) GetTagsOk() (*[]AssignedTagResponse, bool)`
 
 GetTagsOk returns a tuple with the Tags field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetTags
 
-`func (o *ListImageResponseData) SetTags(v []TagResponse)`
+`func (o *ListImageResponseData) SetTags(v []AssignedTagResponse)`
 
 SetTags sets Tags field to given value.
 

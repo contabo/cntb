@@ -51,14 +51,14 @@ type ListImageResponseData struct {
 	// The last modified date time for the image
 	LastModifiedDate time.Time `json:"lastModifiedDate"`
 	// The tags assigned to the image
-	Tags []TagResponse `json:"tags"`
+	Tags []AssignedTagResponse `json:"tags"`
 }
 
 // NewListImageResponseData instantiates a new ListImageResponseData object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewListImageResponseData(imageId string, tenantId string, customerId string, name string, description string, url string, sizeMb float32, uploadedSizeMb float32, osType string, version string, format string, status string, errorMessage string, standardImage bool, creationDate time.Time, lastModifiedDate time.Time, tags []TagResponse) *ListImageResponseData {
+func NewListImageResponseData(imageId string, tenantId string, customerId string, name string, description string, url string, sizeMb float32, uploadedSizeMb float32, osType string, version string, format string, status string, errorMessage string, standardImage bool, creationDate time.Time, lastModifiedDate time.Time, tags []AssignedTagResponse) *ListImageResponseData {
 	this := ListImageResponseData{}
 	this.ImageId = imageId
 	this.TenantId = tenantId
@@ -473,9 +473,9 @@ func (o *ListImageResponseData) SetLastModifiedDate(v time.Time) {
 }
 
 // GetTags returns the Tags field value
-func (o *ListImageResponseData) GetTags() []TagResponse {
+func (o *ListImageResponseData) GetTags() []AssignedTagResponse {
 	if o == nil {
-		var ret []TagResponse
+		var ret []AssignedTagResponse
 		return ret
 	}
 
@@ -484,7 +484,7 @@ func (o *ListImageResponseData) GetTags() []TagResponse {
 
 // GetTagsOk returns a tuple with the Tags field value
 // and a boolean to check if the value has been set.
-func (o *ListImageResponseData) GetTagsOk() (*[]TagResponse, bool) {
+func (o *ListImageResponseData) GetTagsOk() (*[]AssignedTagResponse, bool) {
 	if o == nil  {
 		return nil, false
 	}
@@ -492,7 +492,7 @@ func (o *ListImageResponseData) GetTagsOk() (*[]TagResponse, bool) {
 }
 
 // SetTags sets field value
-func (o *ListImageResponseData) SetTags(v []TagResponse) {
+func (o *ListImageResponseData) SetTags(v []AssignedTagResponse) {
 	o.Tags = v
 }
 

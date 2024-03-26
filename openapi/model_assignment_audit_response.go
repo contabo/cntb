@@ -29,7 +29,7 @@ type AssignmentAuditResponse struct {
 	// Resource type. Resource type is one of `instance|image|object-storage`.
 	ResourceType string `json:"resourceType"`
 	// Tag's id
-	TagId float32 `json:"tagId"`
+	TagId int64 `json:"tagId"`
 	// Audit Action
 	Action string `json:"action"`
 	// Audit creation date
@@ -50,7 +50,7 @@ type AssignmentAuditResponse struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewAssignmentAuditResponse(tenantId string, customerId string, id float32, resourceId string, resourceType string, tagId float32, action string, timestamp time.Time, changedBy string, username string, requestId string, traceId string) *AssignmentAuditResponse {
+func NewAssignmentAuditResponse(tenantId string, customerId string, id float32, resourceId string, resourceType string, tagId int64, action string, timestamp time.Time, changedBy string, username string, requestId string, traceId string) *AssignmentAuditResponse {
 	this := AssignmentAuditResponse{}
 	this.TenantId = tenantId
 	this.CustomerId = customerId
@@ -196,9 +196,9 @@ func (o *AssignmentAuditResponse) SetResourceType(v string) {
 }
 
 // GetTagId returns the TagId field value
-func (o *AssignmentAuditResponse) GetTagId() float32 {
+func (o *AssignmentAuditResponse) GetTagId() int64 {
 	if o == nil {
-		var ret float32
+		var ret int64
 		return ret
 	}
 
@@ -207,7 +207,7 @@ func (o *AssignmentAuditResponse) GetTagId() float32 {
 
 // GetTagIdOk returns a tuple with the TagId field value
 // and a boolean to check if the value has been set.
-func (o *AssignmentAuditResponse) GetTagIdOk() (*float32, bool) {
+func (o *AssignmentAuditResponse) GetTagIdOk() (*int64, bool) {
 	if o == nil  {
 		return nil, false
 	}
@@ -215,7 +215,7 @@ func (o *AssignmentAuditResponse) GetTagIdOk() (*float32, bool) {
 }
 
 // SetTagId sets field value
-func (o *AssignmentAuditResponse) SetTagId(v float32) {
+func (o *AssignmentAuditResponse) SetTagId(v int64) {
 	o.TagId = v
 }
 

@@ -25,7 +25,7 @@ type TagAuditResponse struct {
 	// The identifier of the audit entry.
 	Id float32 `json:"id"`
 	// The identifier of the audit entry.
-	TagId float32 `json:"tagId"`
+	TagId int64 `json:"tagId"`
 	// Type of the action.
 	Action string `json:"action"`
 	// When the change took place.
@@ -46,7 +46,7 @@ type TagAuditResponse struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewTagAuditResponse(tenantId string, customerId string, id float32, tagId float32, action string, timestamp time.Time, changedBy string, username string, requestId string, traceId string) *TagAuditResponse {
+func NewTagAuditResponse(tenantId string, customerId string, id float32, tagId int64, action string, timestamp time.Time, changedBy string, username string, requestId string, traceId string) *TagAuditResponse {
 	this := TagAuditResponse{}
 	this.TenantId = tenantId
 	this.CustomerId = customerId
@@ -142,9 +142,9 @@ func (o *TagAuditResponse) SetId(v float32) {
 }
 
 // GetTagId returns the TagId field value
-func (o *TagAuditResponse) GetTagId() float32 {
+func (o *TagAuditResponse) GetTagId() int64 {
 	if o == nil {
-		var ret float32
+		var ret int64
 		return ret
 	}
 
@@ -153,7 +153,7 @@ func (o *TagAuditResponse) GetTagId() float32 {
 
 // GetTagIdOk returns a tuple with the TagId field value
 // and a boolean to check if the value has been set.
-func (o *TagAuditResponse) GetTagIdOk() (*float32, bool) {
+func (o *TagAuditResponse) GetTagIdOk() (*int64, bool) {
 	if o == nil  {
 		return nil, false
 	}
@@ -161,7 +161,7 @@ func (o *TagAuditResponse) GetTagIdOk() (*float32, bool) {
 }
 
 // SetTagId sets field value
-func (o *TagAuditResponse) SetTagId(v float32) {
+func (o *TagAuditResponse) SetTagId(v int64) {
 	o.TagId = v
 }
 

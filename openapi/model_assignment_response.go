@@ -21,8 +21,8 @@ type AssignmentResponse struct {
 	TenantId string `json:"tenantId"`
 	// Your customer number
 	CustomerId string `json:"customerId"`
-	// Tag's id
-	TagId float32 `json:"tagId"`
+	// The identifier of the tag.
+	TagId int64 `json:"tagId"`
 	// Tag's name
 	TagName string `json:"tagName"`
 	// Resource type. Resource type is one of `instance|image|object-storage`.
@@ -37,7 +37,7 @@ type AssignmentResponse struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewAssignmentResponse(tenantId string, customerId string, tagId float32, tagName string, resourceType string, resourceId string, resourceName string) *AssignmentResponse {
+func NewAssignmentResponse(tenantId string, customerId string, tagId int64, tagName string, resourceType string, resourceId string, resourceName string) *AssignmentResponse {
 	this := AssignmentResponse{}
 	this.TenantId = tenantId
 	this.CustomerId = customerId
@@ -106,9 +106,9 @@ func (o *AssignmentResponse) SetCustomerId(v string) {
 }
 
 // GetTagId returns the TagId field value
-func (o *AssignmentResponse) GetTagId() float32 {
+func (o *AssignmentResponse) GetTagId() int64 {
 	if o == nil {
-		var ret float32
+		var ret int64
 		return ret
 	}
 
@@ -117,7 +117,7 @@ func (o *AssignmentResponse) GetTagId() float32 {
 
 // GetTagIdOk returns a tuple with the TagId field value
 // and a boolean to check if the value has been set.
-func (o *AssignmentResponse) GetTagIdOk() (*float32, bool) {
+func (o *AssignmentResponse) GetTagIdOk() (*int64, bool) {
 	if o == nil  {
 		return nil, false
 	}
@@ -125,7 +125,7 @@ func (o *AssignmentResponse) GetTagIdOk() (*float32, bool) {
 }
 
 // SetTagId sets field value
-func (o *AssignmentResponse) SetTagId(v float32) {
+func (o *AssignmentResponse) SetTagId(v int64) {
 	o.TagId = v
 }
 

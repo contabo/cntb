@@ -22,14 +22,14 @@ type CreateTagResponseData struct {
 	// Your customer number
 	CustomerId string `json:"customerId"`
 	// Tag's id
-	TagId float32 `json:"tagId"`
+	TagId int64 `json:"tagId"`
 }
 
 // NewCreateTagResponseData instantiates a new CreateTagResponseData object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCreateTagResponseData(tenantId string, customerId string, tagId float32) *CreateTagResponseData {
+func NewCreateTagResponseData(tenantId string, customerId string, tagId int64) *CreateTagResponseData {
 	this := CreateTagResponseData{}
 	this.TenantId = tenantId
 	this.CustomerId = customerId
@@ -94,9 +94,9 @@ func (o *CreateTagResponseData) SetCustomerId(v string) {
 }
 
 // GetTagId returns the TagId field value
-func (o *CreateTagResponseData) GetTagId() float32 {
+func (o *CreateTagResponseData) GetTagId() int64 {
 	if o == nil {
-		var ret float32
+		var ret int64
 		return ret
 	}
 
@@ -105,7 +105,7 @@ func (o *CreateTagResponseData) GetTagId() float32 {
 
 // GetTagIdOk returns a tuple with the TagId field value
 // and a boolean to check if the value has been set.
-func (o *CreateTagResponseData) GetTagIdOk() (*float32, bool) {
+func (o *CreateTagResponseData) GetTagIdOk() (*int64, bool) {
 	if o == nil  {
 		return nil, false
 	}
@@ -113,7 +113,7 @@ func (o *CreateTagResponseData) GetTagIdOk() (*float32, bool) {
 }
 
 // SetTagId sets field value
-func (o *CreateTagResponseData) SetTagId(v float32) {
+func (o *CreateTagResponseData) SetTagId(v int64) {
 	o.TagId = v
 }
 

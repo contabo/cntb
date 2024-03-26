@@ -7,7 +7,7 @@ Name | Type | Description | Notes
 **TenantId** | **string** | Your customer tenant id | 
 **CustomerId** | **string** | Your customer number | 
 **Id** | **float32** | The identifier of the audit entry. | 
-**TagId** | **float32** | The identifier of the audit entry. | 
+**TagId** | **int64** | The identifier of the audit entry. | 
 **Action** | **string** | Type of the action. | 
 **Timestamp** | **time.Time** | When the change took place. | 
 **ChangedBy** | **string** | User ID | 
@@ -20,7 +20,7 @@ Name | Type | Description | Notes
 
 ### NewTagAuditResponse
 
-`func NewTagAuditResponse(tenantId string, customerId string, id float32, tagId float32, action string, timestamp time.Time, changedBy string, username string, requestId string, traceId string, ) *TagAuditResponse`
+`func NewTagAuditResponse(tenantId string, customerId string, id float32, tagId int64, action string, timestamp time.Time, changedBy string, username string, requestId string, traceId string, ) *TagAuditResponse`
 
 NewTagAuditResponse instantiates a new TagAuditResponse object
 This constructor will assign default values to properties that have it defined,
@@ -97,20 +97,20 @@ SetId sets Id field to given value.
 
 ### GetTagId
 
-`func (o *TagAuditResponse) GetTagId() float32`
+`func (o *TagAuditResponse) GetTagId() int64`
 
 GetTagId returns the TagId field if non-nil, zero value otherwise.
 
 ### GetTagIdOk
 
-`func (o *TagAuditResponse) GetTagIdOk() (*float32, bool)`
+`func (o *TagAuditResponse) GetTagIdOk() (*int64, bool)`
 
 GetTagIdOk returns a tuple with the TagId field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetTagId
 
-`func (o *TagAuditResponse) SetTagId(v float32)`
+`func (o *TagAuditResponse) SetTagId(v int64)`
 
 SetTagId sets TagId field to given value.
 

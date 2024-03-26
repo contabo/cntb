@@ -17,20 +17,29 @@ import (
 
 // TagResponse struct for TagResponse
 type TagResponse struct {
+	// Your customer tenant id
+	TenantId string `json:"tenantId"`
+	// Your customer number
+	CustomerId string `json:"customerId"`
 	// Tag's id
-	TagId float32 `json:"tagId"`
+	TagId int64 `json:"tagId"`
 	// Tag's name
-	TagName string `json:"tagName"`
+	Name string `json:"name"`
+	// Tag's color
+	Color string `json:"color"`
 }
 
 // NewTagResponse instantiates a new TagResponse object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewTagResponse(tagId float32, tagName string) *TagResponse {
+func NewTagResponse(tenantId string, customerId string, tagId int64, name string, color string) *TagResponse {
 	this := TagResponse{}
+	this.TenantId = tenantId
+	this.CustomerId = customerId
 	this.TagId = tagId
-	this.TagName = tagName
+	this.Name = name
+	this.Color = color
 	return &this
 }
 
@@ -42,10 +51,58 @@ func NewTagResponseWithDefaults() *TagResponse {
 	return &this
 }
 
-// GetTagId returns the TagId field value
-func (o *TagResponse) GetTagId() float32 {
+// GetTenantId returns the TenantId field value
+func (o *TagResponse) GetTenantId() string {
 	if o == nil {
-		var ret float32
+		var ret string
+		return ret
+	}
+
+	return o.TenantId
+}
+
+// GetTenantIdOk returns a tuple with the TenantId field value
+// and a boolean to check if the value has been set.
+func (o *TagResponse) GetTenantIdOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.TenantId, true
+}
+
+// SetTenantId sets field value
+func (o *TagResponse) SetTenantId(v string) {
+	o.TenantId = v
+}
+
+// GetCustomerId returns the CustomerId field value
+func (o *TagResponse) GetCustomerId() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.CustomerId
+}
+
+// GetCustomerIdOk returns a tuple with the CustomerId field value
+// and a boolean to check if the value has been set.
+func (o *TagResponse) GetCustomerIdOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.CustomerId, true
+}
+
+// SetCustomerId sets field value
+func (o *TagResponse) SetCustomerId(v string) {
+	o.CustomerId = v
+}
+
+// GetTagId returns the TagId field value
+func (o *TagResponse) GetTagId() int64 {
+	if o == nil {
+		var ret int64
 		return ret
 	}
 
@@ -54,7 +111,7 @@ func (o *TagResponse) GetTagId() float32 {
 
 // GetTagIdOk returns a tuple with the TagId field value
 // and a boolean to check if the value has been set.
-func (o *TagResponse) GetTagIdOk() (*float32, bool) {
+func (o *TagResponse) GetTagIdOk() (*int64, bool) {
 	if o == nil  {
 		return nil, false
 	}
@@ -62,41 +119,74 @@ func (o *TagResponse) GetTagIdOk() (*float32, bool) {
 }
 
 // SetTagId sets field value
-func (o *TagResponse) SetTagId(v float32) {
+func (o *TagResponse) SetTagId(v int64) {
 	o.TagId = v
 }
 
-// GetTagName returns the TagName field value
-func (o *TagResponse) GetTagName() string {
+// GetName returns the Name field value
+func (o *TagResponse) GetName() string {
 	if o == nil {
 		var ret string
 		return ret
 	}
 
-	return o.TagName
+	return o.Name
 }
 
-// GetTagNameOk returns a tuple with the TagName field value
+// GetNameOk returns a tuple with the Name field value
 // and a boolean to check if the value has been set.
-func (o *TagResponse) GetTagNameOk() (*string, bool) {
+func (o *TagResponse) GetNameOk() (*string, bool) {
 	if o == nil  {
 		return nil, false
 	}
-	return &o.TagName, true
+	return &o.Name, true
 }
 
-// SetTagName sets field value
-func (o *TagResponse) SetTagName(v string) {
-	o.TagName = v
+// SetName sets field value
+func (o *TagResponse) SetName(v string) {
+	o.Name = v
+}
+
+// GetColor returns the Color field value
+func (o *TagResponse) GetColor() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.Color
+}
+
+// GetColorOk returns a tuple with the Color field value
+// and a boolean to check if the value has been set.
+func (o *TagResponse) GetColorOk() (*string, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.Color, true
+}
+
+// SetColor sets field value
+func (o *TagResponse) SetColor(v string) {
+	o.Color = v
 }
 
 func (o TagResponse) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
 	if true {
+		toSerialize["tenantId"] = o.TenantId
+	}
+	if true {
+		toSerialize["customerId"] = o.CustomerId
+	}
+	if true {
 		toSerialize["tagId"] = o.TagId
 	}
 	if true {
-		toSerialize["tagName"] = o.TagName
+		toSerialize["name"] = o.Name
+	}
+	if true {
+		toSerialize["color"] = o.Color
 	}
 	return json.Marshal(toSerialize)
 }

@@ -6,7 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **TenantId** | **string** | Your customer tenant id | 
 **CustomerId** | **string** | Your customer number | 
-**TagId** | **float32** | Tag&#39;s id | 
+**TagId** | **int64** | The identifier of the tag. | 
 **TagName** | **string** | Tag&#39;s name | 
 **ResourceType** | **string** | Resource type. Resource type is one of &#x60;instance|image|object-storage&#x60;. | 
 **ResourceId** | **string** | Resource id | 
@@ -16,7 +16,7 @@ Name | Type | Description | Notes
 
 ### NewAssignmentResponse
 
-`func NewAssignmentResponse(tenantId string, customerId string, tagId float32, tagName string, resourceType string, resourceId string, resourceName string, ) *AssignmentResponse`
+`func NewAssignmentResponse(tenantId string, customerId string, tagId int64, tagName string, resourceType string, resourceId string, resourceName string, ) *AssignmentResponse`
 
 NewAssignmentResponse instantiates a new AssignmentResponse object
 This constructor will assign default values to properties that have it defined,
@@ -73,20 +73,20 @@ SetCustomerId sets CustomerId field to given value.
 
 ### GetTagId
 
-`func (o *AssignmentResponse) GetTagId() float32`
+`func (o *AssignmentResponse) GetTagId() int64`
 
 GetTagId returns the TagId field if non-nil, zero value otherwise.
 
 ### GetTagIdOk
 
-`func (o *AssignmentResponse) GetTagIdOk() (*float32, bool)`
+`func (o *AssignmentResponse) GetTagIdOk() (*int64, bool)`
 
 GetTagIdOk returns a tuple with the TagId field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetTagId
 
-`func (o *AssignmentResponse) SetTagId(v float32)`
+`func (o *AssignmentResponse) SetTagId(v int64)`
 
 SetTagId sets TagId field to given value.
 

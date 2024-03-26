@@ -17,7 +17,7 @@ import (
 
 // FindTagResponse struct for FindTagResponse
 type FindTagResponse struct {
-	Data []TagResponse1 `json:"data"`
+	Data []TagResponse `json:"data"`
 	Links SelfLinks `json:"_links"`
 }
 
@@ -25,7 +25,7 @@ type FindTagResponse struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewFindTagResponse(data []TagResponse1, links SelfLinks) *FindTagResponse {
+func NewFindTagResponse(data []TagResponse, links SelfLinks) *FindTagResponse {
 	this := FindTagResponse{}
 	this.Data = data
 	this.Links = links
@@ -41,9 +41,9 @@ func NewFindTagResponseWithDefaults() *FindTagResponse {
 }
 
 // GetData returns the Data field value
-func (o *FindTagResponse) GetData() []TagResponse1 {
+func (o *FindTagResponse) GetData() []TagResponse {
 	if o == nil {
-		var ret []TagResponse1
+		var ret []TagResponse
 		return ret
 	}
 
@@ -52,7 +52,7 @@ func (o *FindTagResponse) GetData() []TagResponse1 {
 
 // GetDataOk returns a tuple with the Data field value
 // and a boolean to check if the value has been set.
-func (o *FindTagResponse) GetDataOk() (*[]TagResponse1, bool) {
+func (o *FindTagResponse) GetDataOk() (*[]TagResponse, bool) {
 	if o == nil  {
 		return nil, false
 	}
@@ -60,7 +60,7 @@ func (o *FindTagResponse) GetDataOk() (*[]TagResponse1, bool) {
 }
 
 // SetData sets field value
-func (o *FindTagResponse) SetData(v []TagResponse1) {
+func (o *FindTagResponse) SetData(v []TagResponse) {
 	o.Data = v
 }
 

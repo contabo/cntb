@@ -4,14 +4,14 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Data** | [**[]TagResponse1**](TagResponse1.md) |  | 
+**Data** | [**[]TagResponse**](TagResponse.md) |  | 
 **Links** | [**SelfLinks**](SelfLinks.md) |  | 
 
 ## Methods
 
 ### NewFindTagResponse
 
-`func NewFindTagResponse(data []TagResponse1, links SelfLinks, ) *FindTagResponse`
+`func NewFindTagResponse(data []TagResponse, links SelfLinks, ) *FindTagResponse`
 
 NewFindTagResponse instantiates a new FindTagResponse object
 This constructor will assign default values to properties that have it defined,
@@ -28,20 +28,20 @@ but it doesn't guarantee that properties required by API are set
 
 ### GetData
 
-`func (o *FindTagResponse) GetData() []TagResponse1`
+`func (o *FindTagResponse) GetData() []TagResponse`
 
 GetData returns the Data field if non-nil, zero value otherwise.
 
 ### GetDataOk
 
-`func (o *FindTagResponse) GetDataOk() (*[]TagResponse1, bool)`
+`func (o *FindTagResponse) GetDataOk() (*[]TagResponse, bool)`
 
 GetDataOk returns a tuple with the Data field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetData
 
-`func (o *FindTagResponse) SetData(v []TagResponse1)`
+`func (o *FindTagResponse) SetData(v []TagResponse)`
 
 SetData sets Data field to given value.
 
