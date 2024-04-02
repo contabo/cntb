@@ -92,8 +92,6 @@ type APIClient struct {
 
 	TagsAuditsApi *TagsAuditsApiService
 
-	TicketsApi *TicketsApiService
-
 	UsersApi *UsersApiService
 
 	UsersAuditsApi *UsersAuditsApiService
@@ -136,7 +134,6 @@ func NewAPIClient(cfg *Configuration) *APIClient {
 	c.TagAssignmentsAuditsApi = (*TagAssignmentsAuditsApiService)(&c.common)
 	c.TagsApi = (*TagsApiService)(&c.common)
 	c.TagsAuditsApi = (*TagsAuditsApiService)(&c.common)
-	c.TicketsApi = (*TicketsApiService)(&c.common)
 	c.UsersApi = (*UsersApiService)(&c.common)
 	c.UsersAuditsApi = (*UsersAuditsApiService)(&c.common)
 

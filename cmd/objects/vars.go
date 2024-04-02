@@ -6,6 +6,7 @@ var (
 	createObjectBucketName      string
 	createObjectPrefix          string
 	createObjectPath            string
+	createObjectVerbose         bool
 )
 
 // list

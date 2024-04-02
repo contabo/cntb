@@ -54,12 +54,19 @@ func PutObject(localPath string, isDir bool, s3Prefix string, s3Client *minio.Cl
 			log.Fatal(fmt.Sprintf("Could not read file properties %v. Got error %v", localPath, err))
 		}
 
-		_, err = s3Client.FPutObject(context.Background(), createObjectBucketName, objectStat.Name(), s3Path, minio.PutObjectOptions{ContentType: "application/octet-stream"})
+		var minioOptions minio.PutObjectOptions
+		minioOptions.ContentType = "application/octet-stream"
+
+		if(createObjectVerbose) {
+			minioOptions.Progress = util.ShowUploadDetails(objectStat.Size())
+		}
+
+		_, err = s3Client.FPutObject(context.Background(), createObjectBucketName, objectStat.Name(), s3Path, minioOptions)
 
 		if err != nil {
 			if s.Contains(err.Error(), "API rate limit exceeded") { // retry in case of rate limit exceeded eror
 				time.Sleep(1000 * time.Millisecond)
-				_, err = s3Client.FPutObject(context.Background(), createObjectBucketName, objectStat.Name(), s3Path, minio.PutObjectOptions{ContentType: "application/octet-stream"})
+				_, err = s3Client.FPutObject(context.Background(), createObjectBucketName, objectStat.Name(), s3Path, minioOptions)
 
 				if err != nil {
 					log.Fatal(fmt.Sprintf("Could not create object file %v. Got error %v", s3Path, err))
@@ -103,7 +110,7 @@ var objectCreateCmd = &cobra.Command{
 	Use:     "object",
 	Short:   "Creates a S3 object.",
 	Long:    `Creates a S3 object in the given bucket.`,
-	Example: `cntb create object --storageId f2db70cc-68ce-42fa-a27c-cec87b363619 --bucket bucket123 --prefix prefix1/ --path  path1 `,
+	Example: `cntb create object --storageId f2db70cc-68ce-42fa-a27c-cec87b363619 --bucket bucket123 --prefix prefix1/ --path  path1 --verbose`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// get object storage
 		ApiRetrieveObjectStorageRequest := client.ApiClient().
@@ -186,6 +193,9 @@ var objectCreateCmd = &cobra.Command{
 		viper.BindPFlag("path", cmd.Flags().Lookup("path"))
 		createObjectPath = viper.GetString("path")
 
+		viper.BindPFlag("verbose", cmd.Flags().Lookup("verbose"))
+		createObjectVerbose = viper.GetBool("verbose")
+
 		if contaboCmd.InputFile == "" {
 			// arguments required
 			if createObjectObjectStorageId == "" {
@@ -214,4 +224,6 @@ func init() {
 	objectCreateCmd.Flags().StringVarP(&createObjectBucketName, "bucket", "b", "", `Bucket where the object will be created.`)
 	objectCreateCmd.Flags().StringVar(&createObjectPrefix, "prefix", "", `Prefix to be added to the stored object.`)
 	objectCreateCmd.Flags().StringVar(&createObjectPath, "path", "", `file or folder where the object will be stored.`)
+	objectCreateCmd.Flags().BoolVar(&createObjectVerbose, "verbose", false, `verbose mode to show uploading details.`)
+
 }

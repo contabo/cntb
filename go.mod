@@ -7,6 +7,7 @@ toolchain go1.22.0
 require (
 	contabo.com/cli/cntb/openapi v0.0.0-00010101000000-000000000000
 	github.com/PaesslerAG/jsonpath v0.1.1
+	github.com/cheggaaa/pb v1.0.29
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/hprose/hprose-go v0.0.0-20161031134501-83de97da5004
 	github.com/minio/minio-go/v7 v7.0.68
