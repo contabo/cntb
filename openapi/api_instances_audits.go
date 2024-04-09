@@ -99,9 +99,9 @@ func (r ApiRetrieveInstancesAuditsListRequest) Execute() (ListInstancesAuditResp
 }
 
 /*
-RetrieveInstancesAuditsList List history about your custom images (audit)
+RetrieveInstancesAuditsList List history about your instances (audit)
 
-List and filters the history about your custom images.
+List and filters the history about your instances.
 
  @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiRetrieveInstancesAuditsListRequest

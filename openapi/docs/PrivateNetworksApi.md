@@ -412,7 +412,7 @@ func main() {
     name := "myPrivateNetwork" // string | The name of the Private Network (optional)
     instanceIds := "100, 101, 102" // string | Comma separated instances identifiers (optional)
     region := "EU" // string | The slug of the region where your Private Network is located (optional)
-    dataCenter := "European Union (Germany) 1" // string | The data center where your Private Network is located (optional)
+    dataCenter := "European Union 1" // string | The data center where your Private Network is located (optional)
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)

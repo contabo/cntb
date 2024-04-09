@@ -407,7 +407,8 @@ paths:
         source: cntb start instance 1234
   /v1/compute/instances/{instanceId}/actions/restart:
     post:
-      description: List of your custom images history, with the ability to apply filters.
+      description: To restart a compute instance that has been identified by its id,
+        you should perform a restart action on it.
       operationId: restart
       parameters:
       - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
@@ -450,7 +451,7 @@ paths:
           description: Information of restarted instance
       security:
       - bearer: []
-      summary: Retrieve a list of your custom images history.
+      summary: Restart a compute instance / resource identified by its id.
       tags:
       - Instance Actions
       x-codeSamples:
@@ -808,7 +809,7 @@ paths:
           type: string
         style: form
       - description: The data center of the instance
-        example: European Union (Germany) 1
+        example: European Union 1
         explode: true
         in: query
         name: dataCenter
@@ -1413,7 +1414,7 @@ paths:
         source: cntb history instancesActions
   /v1/compute/instances/audits:
     get:
-      description: List and filters the history about your custom images.
+      description: List and filters the history about your instances.
       operationId: retrieveInstancesAuditsList
       parameters:
       - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
@@ -1526,7 +1527,7 @@ paths:
             list of instances audits triggered via the API.
       security:
       - bearer: []
-      summary: List history about your custom images (audit)
+      summary: List history about your instances (audit)
       tags:
       - Instances Audits
       x-codeSamples:
@@ -2660,7 +2661,7 @@ paths:
           type: array
         style: form
       - description: Filter for Object Storage locations.
-        example: European Union (Germany) 2
+        example: European Union 2
         explode: true
         in: query
         name: dataCenterName
@@ -2841,7 +2842,7 @@ paths:
           type: string
         style: form
       - description: Filter for Object Storages regions.
-        example: European Union (Germany) 1
+        example: European Union 1
         explode: true
         in: query
         name: name
@@ -2851,7 +2852,7 @@ paths:
           type: string
         style: form
       - description: Filter for Object Storage region names.
-        example: European Union (Germany)
+        example: European Union
         explode: true
         in: query
         name: regionName
@@ -3440,7 +3441,7 @@ paths:
           type: string
         style: form
       - description: The data center where your Private Network is located
-        example: European Union (Germany) 1
+        example: European Union 1
         explode: true
         in: query
         name: dataCenter
@@ -6348,7 +6349,7 @@ paths:
           type: string
         style: form
       - description: 'Filter for Object Storage by regions. Available regions: Asia
-          (Singapore), European Union (Germany), United States (Central)'
+          (Singapore), European Union, United States (Central)'
         example: Asia (Singapore)
         explode: true
         in: query
@@ -7354,7 +7355,7 @@ components:
       example:
         cancelDate: 2021-06-03T00:00:00.000+0000
         displayName: VPS
-        regionName: European Union (Germany)
+        regionName: European Union
         productName: VPS M
         vHostNumber: 1001
         vHostName: m1000
@@ -7368,7 +7369,7 @@ components:
         productType: ssd
         imageId: 9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d
         productId: V5
-        dataCenter: European Union (Germany) 1
+        dataCenter: European Union 1
         addOns:
         - quantity: 4
           id: 1431
@@ -7435,7 +7436,7 @@ components:
           type: integer
         dataCenter:
           description: The data center where your Private Network is located
-          example: European Union (Germany) 1
+          example: European Union 1
           type: string
         region:
           description: Instance region where the compute instance should be located.
@@ -7443,7 +7444,7 @@ components:
           type: string
         regionName:
           description: The name of the region where the instance is located.
-          example: European Union (Germany)
+          example: European Union
           type: string
         productId:
           description: Product ID
@@ -7604,7 +7605,7 @@ components:
         data:
         - cancelDate: 2021-06-03T00:00:00.000+0000
           displayName: VPS
-          regionName: European Union (Germany)
+          regionName: European Union
           productName: VPS M
           vHostNumber: 1001
           vHostName: m1000
@@ -7618,7 +7619,7 @@ components:
           productType: ssd
           imageId: 9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d
           productId: V5
-          dataCenter: European Union (Germany) 1
+          dataCenter: European Union 1
           addOns:
           - quantity: 4
             id: 1431
@@ -7654,7 +7655,7 @@ components:
           region: EU
         - cancelDate: 2021-06-03T00:00:00.000+0000
           displayName: VPS
-          regionName: European Union (Germany)
+          regionName: European Union
           productName: VPS M
           vHostNumber: 1001
           vHostName: m1000
@@ -7668,7 +7669,7 @@ components:
           productType: ssd
           imageId: 9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d
           productId: V5
-          dataCenter: European Union (Germany) 1
+          dataCenter: European Union 1
           addOns:
           - quantity: 4
             id: 1431
@@ -7736,7 +7737,7 @@ components:
       example:
         cancelDate: 2021-06-03T00:00:00.000+0000
         displayName: VPS
-        regionName: European Union (Germany)
+        regionName: European Union
         productName: VPS M
         vHostNumber: 1001
         vHostName: m1000
@@ -7750,7 +7751,7 @@ components:
         productType: ssd
         imageId: 9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d
         productId: V5
-        dataCenter: European Union (Germany) 1
+        dataCenter: European Union 1
         addOns:
         - quantity: 4
           id: 1431
@@ -7817,7 +7818,7 @@ components:
           type: integer
         dataCenter:
           description: The data center where your Private Network is located
-          example: European Union (Germany) 1
+          example: European Union 1
           type: string
         region:
           description: Instance region where the compute instance should be located.
@@ -7825,7 +7826,7 @@ components:
           type: string
         regionName:
           description: The name of the region where the instance is located.
-          example: European Union (Germany)
+          example: European Union
           type: string
         productId:
           description: Product ID
@@ -7964,7 +7965,7 @@ components:
         data:
         - cancelDate: 2021-06-03T00:00:00.000+0000
           displayName: VPS
-          regionName: European Union (Germany)
+          regionName: European Union
           productName: VPS M
           vHostNumber: 1001
           vHostName: m1000
@@ -7978,7 +7979,7 @@ components:
           productType: ssd
           imageId: 9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d
           productId: V5
-          dataCenter: European Union (Germany) 1
+          dataCenter: European Union 1
           addOns:
           - quantity: 4
             id: 1431
@@ -8014,7 +8015,7 @@ components:
           region: EU
         - cancelDate: 2021-06-03T00:00:00.000+0000
           displayName: VPS
-          regionName: European Union (Germany)
+          regionName: European Union
           productName: VPS M
           vHostNumber: 1001
           vHostName: m1000
@@ -8028,7 +8029,7 @@ components:
           productType: ssd
           imageId: 9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d
           productId: V5
-          dataCenter: European Union (Germany) 1
+          dataCenter: European Union 1
           addOns:
           - quantity: 4
             id: 1431
@@ -10501,7 +10502,7 @@ components:
         createdDate: 2021-06-02T12:32:03.363Z
         tenantId: DE
         customerId: "54321"
-        region: European Union (Germany)
+        region: European Union
         status: READY
       properties:
         tenantId:
@@ -10573,7 +10574,7 @@ components:
           type: string
         region:
           description: The region where your object storage is located
-          example: European Union (Germany)
+          example: European Union
           type: string
         displayName:
           description: Display name for object storage.
@@ -10610,7 +10611,7 @@ components:
           createdDate: 2021-06-02T12:32:03.363Z
           tenantId: DE
           customerId: "54321"
-          region: European Union (Germany)
+          region: European Union
           status: READY
         - objectStorageId: b943b25a-c8b5-4570-9135-4bbaa7615b81
           cancelDate: 2021-06-02T00:00:00.000+0000
@@ -10623,7 +10624,7 @@ components:
           createdDate: 2021-06-02T12:32:03.363Z
           tenantId: DE
           customerId: "54321"
-          region: European Union (Germany)
+          region: European Union
           status: READY
         _links:
           first: /v1/object-storages?size=10
@@ -10662,15 +10663,15 @@ components:
         - VPS
         - Object-Storage
         regionSlug: EU
-        regionName: European Union (Germany)
-        name: European Union (Germany) 1
+        regionName: European Union
+        name: European Union 1
         tenantId: DE
         customerId: "54321"
         slug: EU1
       properties:
         name:
           description: Name of the data center
-          example: European Union (Germany) 1
+          example: European Union 1
           minLength: 1
           type: string
         slug:
@@ -10697,7 +10698,7 @@ components:
           type: string
         regionName:
           description: Name of the region
-          example: European Union (Germany)
+          example: European Union
           minLength: 1
           type: string
         regionSlug:
@@ -10733,8 +10734,8 @@ components:
           - VPS
           - Object-Storage
           regionSlug: EU
-          regionName: European Union (Germany)
-          name: European Union (Germany) 1
+          regionName: European Union
+          name: European Union 1
           tenantId: DE
           customerId: "54321"
           slug: EU1
@@ -10743,8 +10744,8 @@ components:
           - VPS
           - Object-Storage
           regionSlug: EU
-          regionName: European Union (Germany)
-          name: European Union (Germany) 1
+          regionName: European Union
+          name: European Union 1
           tenantId: DE
           customerId: "54321"
           slug: EU1
@@ -10846,7 +10847,7 @@ components:
         usedSpaceTB: 4
         tenantId: DE
         customerId: "54321"
-        region: European Union (Germany)
+        region: European Union
         status: READY
       properties:
         tenantId:
@@ -10931,7 +10932,7 @@ components:
           type: string
         region:
           description: The region where your object storage is located
-          example: European Union (Germany)
+          example: European Union
           type: string
         displayName:
           description: Display name for object storage.
@@ -10972,7 +10973,7 @@ components:
           usedSpaceTB: 4
           tenantId: DE
           customerId: "54321"
-          region: European Union (Germany)
+          region: European Union
           status: READY
         - objectStorageId: b943b25a-c8b5-4570-9135-4bbaa7615b81
           cancelDate: 2021-06-02T00:00:00.000+0000
@@ -10987,7 +10988,7 @@ components:
           usedSpaceTB: 4
           tenantId: DE
           customerId: "54321"
-          region: European Union (Germany)
+          region: European Union
           status: READY
         _links:
           self: /v1/object-storages/8cd3f2ba-65a7-4279-bb54-0fea88dc8860
@@ -11019,7 +11020,7 @@ components:
           createdDate: 2021-06-02T12:32:03.363Z
           tenantId: DE
           customerId: "54321"
-          region: European Union (Germany)
+          region: European Union
           status: READY
         - objectStorageId: b943b25a-c8b5-4570-9135-4bbaa7615b81
           cancelDate: 2021-06-02T00:00:00.000+0000
@@ -11032,7 +11033,7 @@ components:
           createdDate: 2021-06-02T12:32:03.363Z
           tenantId: DE
           customerId: "54321"
-          region: European Union (Germany)
+          region: European Union
           status: READY
         _links:
           self: /v1/object-storages/8cd3f2ba-65a7-4279-bb54-0fea88dc8860
@@ -11092,7 +11093,7 @@ components:
         displayName: Object storage 1
         tenantId: DE
         customerId: "54321"
-        region: European Union (Germany)
+        region: European Union
         totalPurchasedSpaceTB: 6
         status: READY
       properties:
@@ -11154,7 +11155,7 @@ components:
           type: number
         region:
           description: The region where your object storage is located
-          example: European Union (Germany)
+          example: European Union
           type: string
         displayName:
           description: Display name for object storage.
@@ -11186,7 +11187,7 @@ components:
           displayName: Object storage 1
           tenantId: DE
           customerId: "54321"
-          region: European Union (Germany)
+          region: European Union
           totalPurchasedSpaceTB: 6
           status: READY
         - objectStorageId: 9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d
@@ -11197,7 +11198,7 @@ components:
           displayName: Object storage 1
           tenantId: DE
           customerId: "54321"
-          region: European Union (Germany)
+          region: European Union
           totalPurchasedSpaceTB: 6
           status: READY
         _links:
@@ -11677,7 +11678,7 @@ components:
       example:
         createdDate: 2021-06-03T06:27:12Z
         privateNetworkId: 12345
-        dataCenter: European Union (Germany) 1
+        dataCenter: European Union 1
         availableIps: 1022
         instances:
         - ipConfig:
@@ -11726,7 +11727,7 @@ components:
               ip: 192.168.0.1
               gateway: 1.1.1.1
           status: ok
-        regionName: European Union (Germany)
+        regionName: European Union
         tenantId: DE
         customerId: "54321"
         name: myPrivateNetwork
@@ -11751,7 +11752,7 @@ components:
           type: integer
         dataCenter:
           description: The data center where your Private Network is located
-          example: European Union (Germany) 1
+          example: European Union 1
           type: string
         region:
           description: The slug of the region where your Private Network is located
@@ -11759,7 +11760,7 @@ components:
           type: string
         regionName:
           description: The region where your Private Network is located
-          example: European Union (Germany)
+          example: European Union
           type: string
         name:
           description: The name of the Private Network
@@ -11806,7 +11807,7 @@ components:
         data:
         - createdDate: 2021-06-03T06:27:12Z
           privateNetworkId: 12345
-          dataCenter: European Union (Germany) 1
+          dataCenter: European Union 1
           availableIps: 1022
           instances:
           - ipConfig:
@@ -11855,7 +11856,7 @@ components:
                 ip: 192.168.0.1
                 gateway: 1.1.1.1
             status: ok
-          regionName: European Union (Germany)
+          regionName: European Union
           tenantId: DE
           customerId: "54321"
           name: myPrivateNetwork
@@ -11864,7 +11865,7 @@ components:
           region: EU
         - createdDate: 2021-06-03T06:27:12Z
           privateNetworkId: 12345
-          dataCenter: European Union (Germany) 1
+          dataCenter: European Union 1
           availableIps: 1022
           instances:
           - ipConfig:
@@ -11913,7 +11914,7 @@ components:
                 ip: 192.168.0.1
                 gateway: 1.1.1.1
             status: ok
-          regionName: European Union (Germany)
+          regionName: European Union
           tenantId: DE
           customerId: "54321"
           name: myPrivateNetwork
@@ -11984,7 +11985,7 @@ components:
       example:
         createdDate: 2021-06-03T06:27:12Z
         privateNetworkId: 12345
-        dataCenter: European Union (Germany) 1
+        dataCenter: European Union 1
         availableIps: 1022
         instances:
         - ipConfig:
@@ -12033,7 +12034,7 @@ components:
               ip: 192.168.0.1
               gateway: 1.1.1.1
           status: ok
-        regionName: European Union (Germany)
+        regionName: European Union
         tenantId: DE
         customerId: "54321"
         name: myPrivateNetwork
@@ -12058,7 +12059,7 @@ components:
           type: integer
         dataCenter:
           description: The data center where your Private Network is located
-          example: European Union (Germany) 1
+          example: European Union 1
           type: string
         region:
           description: The slug of the region where your Private Network is located
@@ -12066,7 +12067,7 @@ components:
           type: string
         regionName:
           description: The region where your Private Network is located
-          example: European Union (Germany)
+          example: European Union
           type: string
         name:
           description: The name of the Private Network
@@ -12113,7 +12114,7 @@ components:
         data:
         - createdDate: 2021-06-03T06:27:12Z
           privateNetworkId: 12345
-          dataCenter: European Union (Germany) 1
+          dataCenter: European Union 1
           availableIps: 1022
           instances:
           - ipConfig:
@@ -12162,7 +12163,7 @@ components:
                 ip: 192.168.0.1
                 gateway: 1.1.1.1
             status: ok
-          regionName: European Union (Germany)
+          regionName: European Union
           tenantId: DE
           customerId: "54321"
           name: myPrivateNetwork
@@ -12171,7 +12172,7 @@ components:
           region: EU
         - createdDate: 2021-06-03T06:27:12Z
           privateNetworkId: 12345
-          dataCenter: European Union (Germany) 1
+          dataCenter: European Union 1
           availableIps: 1022
           instances:
           - ipConfig:
@@ -12220,7 +12221,7 @@ components:
                 ip: 192.168.0.1
                 gateway: 1.1.1.1
             status: ok
-          regionName: European Union (Germany)
+          regionName: European Union
           tenantId: DE
           customerId: "54321"
           name: myPrivateNetwork
@@ -12268,7 +12269,7 @@ components:
         data:
         - createdDate: 2021-06-03T06:27:12Z
           privateNetworkId: 12345
-          dataCenter: European Union (Germany) 1
+          dataCenter: European Union 1
           availableIps: 1022
           instances:
           - ipConfig:
@@ -12317,7 +12318,7 @@ components:
                 ip: 192.168.0.1
                 gateway: 1.1.1.1
             status: ok
-          regionName: European Union (Germany)
+          regionName: European Union
           tenantId: DE
           customerId: "54321"
           name: myPrivateNetwork
@@ -12326,7 +12327,7 @@ components:
           region: EU
         - createdDate: 2021-06-03T06:27:12Z
           privateNetworkId: 12345
-          dataCenter: European Union (Germany) 1
+          dataCenter: European Union 1
           availableIps: 1022
           instances:
           - ipConfig:
@@ -12375,7 +12376,7 @@ components:
                 ip: 192.168.0.1
                 gateway: 1.1.1.1
             status: ok
-          regionName: European Union (Germany)
+          regionName: European Union
           tenantId: DE
           customerId: "54321"
           name: myPrivateNetwork
@@ -12403,7 +12404,7 @@ components:
         data:
         - createdDate: 2021-06-03T06:27:12Z
           privateNetworkId: 12345
-          dataCenter: European Union (Germany) 1
+          dataCenter: European Union 1
           availableIps: 1022
           instances:
           - ipConfig:
@@ -12452,7 +12453,7 @@ components:
                 ip: 192.168.0.1
                 gateway: 1.1.1.1
             status: ok
-          regionName: European Union (Germany)
+          regionName: European Union
           tenantId: DE
           customerId: "54321"
           name: myPrivateNetwork
@@ -12461,7 +12462,7 @@ components:
           region: EU
         - createdDate: 2021-06-03T06:27:12Z
           privateNetworkId: 12345
-          dataCenter: European Union (Germany) 1
+          dataCenter: European Union 1
           availableIps: 1022
           instances:
           - ipConfig:
@@ -12510,7 +12511,7 @@ components:
                 ip: 192.168.0.1
                 gateway: 1.1.1.1
             status: ok
-          regionName: European Union (Germany)
+          regionName: European Union
           tenantId: DE
           customerId: "54321"
           name: myPrivateNetwork
@@ -15236,7 +15237,7 @@ components:
         tenantId: DE
         customerId: "54321"
         credentialId: 12345
-        region: European Union (Germany)
+        region: European Union
       properties:
         tenantId:
           description: Your customer tenant id
@@ -15266,7 +15267,7 @@ components:
           type: string
         region:
           description: Object Storage Region.
-          example: European Union (Germany)
+          example: European Union
           type: string
         credentialId:
           description: Object Storage Credential ID
@@ -15292,7 +15293,7 @@ components:
           tenantId: DE
           customerId: "54321"
           credentialId: 12345
-          region: European Union (Germany)
+          region: European Union
         - objectStorageId: 9a4c7e20-c326-4a8c-900c-687ad83ba170Y
           secretKey: wJalrXK7MDENGbPxRfiCYEXAMPLEKEY
           accessKey: AKIAIOSFODNN7EXAMPLE
@@ -15300,7 +15301,7 @@ components:
           tenantId: DE
           customerId: "54321"
           credentialId: 12345
-          region: European Union (Germany)
+          region: European Union
         _links:
           first: v1/users/08a92037-01e8-4dff-8565-47cad7be701a/object-storages/credentials?page=1
           next: v1/users/08a92037-01e8-4dff-8565-47cad7be701a/object-storages/credentials?page=19
@@ -15341,7 +15342,7 @@ components:
           tenantId: DE
           customerId: "54321"
           credentialId: 12345
-          region: European Union (Germany)
+          region: European Union
         - objectStorageId: 9a4c7e20-c326-4a8c-900c-687ad83ba170Y
           secretKey: wJalrXK7MDENGbPxRfiCYEXAMPLEKEY
           accessKey: AKIAIOSFODNN7EXAMPLE
@@ -15349,7 +15350,7 @@ components:
           tenantId: DE
           customerId: "54321"
           credentialId: 12345
-          region: European Union (Germany)
+          region: European Union
         _links:
           self: v1/users/08a92037-01e8-4dff-8565-47cad7be701a/object-storages/e3f0207c-f7fe-433a-92ab-39a9e976642d/credentials
       properties:

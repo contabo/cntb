@@ -337,7 +337,7 @@ func main() {
     size := int64(10) // int64 | Number of elements per page. (optional)
     orderBy := []string{"Inner_example"} // []string | Specify fields and ordering (ASC for ascending, DESC for descending) in following format `field:ASC|DESC`. (optional)
     objectStorageId := "d8417276-d2d9-43a9-a0a8-9a6fa6060246" // string | The identifier of the S3 object storage (optional)
-    regionName := "Asia (Singapore)" // string | Filter for Object Storage by regions. Available regions: Asia (Singapore), European Union (Germany), United States (Central) (optional)
+    regionName := "Asia (Singapore)" // string | Filter for Object Storage by regions. Available regions: Asia (Singapore), European Union, United States (Central) (optional)
     displayName := "Object Storage EU 420" // string | Filter for Object Storage by his displayName. (optional)
 
     configuration := openapiclient.NewConfiguration()
@@ -374,7 +374,7 @@ Name | Type | Description  | Notes
  **size** | **int64** | Number of elements per page. | 
  **orderBy** | **[]string** | Specify fields and ordering (ASC for ascending, DESC for descending) in following format &#x60;field:ASC|DESC&#x60;. | 
  **objectStorageId** | **string** | The identifier of the S3 object storage | 
- **regionName** | **string** | Filter for Object Storage by regions. Available regions: Asia (Singapore), European Union (Germany), United States (Central) | 
+ **regionName** | **string** | Filter for Object Storage by regions. Available regions: Asia (Singapore), European Union, United States (Central) | 
  **displayName** | **string** | Filter for Object Storage by his displayName. | 
 
 ### Return type

@@ -1,6 +1,6 @@
 # \OrdersApi
 
-All URIs are relative to *https://api-ext.arcus-test.contabo.intra*
+All URIs are relative to *https://api-staging-ext.contabo.intra*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------

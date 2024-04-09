@@ -21,7 +21,7 @@ var rollbackGetCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		ApiRollbackSnapshotRequest := client.ApiClient().
 			SnapshotsApi.RollbackSnapshot(context.Background(), rollbackInstanceId, rollbackSnapshotId).
-			XRequestId(uuid.NewV4().String())
+			XRequestId(uuid.NewV4().String()).Body(nil)
 
 		resp, httpResp, err := ApiRollbackSnapshotRequest.Execute()
 

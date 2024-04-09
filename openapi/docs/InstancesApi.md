@@ -412,7 +412,7 @@ func main() {
     orderBy := []string{"Inner_example"} // []string | Specify fields and ordering (ASC for ascending, DESC for descending) in following format `field:ASC|DESC`. (optional)
     name := "vmd12345" // string | The name of the instance (optional)
     displayName := "myTestInstance" // string | The display name of the instance (optional)
-    dataCenter := "European Union (Germany) 1" // string | The data center of the instance (optional)
+    dataCenter := "European Union 1" // string | The data center of the instance (optional)
     region := "EU" // string | The Region of the instance (optional)
     instanceId := int64(100) // int64 | The identifier of the instance (deprecated) (optional)
     instanceIds := "100, 101, 102" // string | Comma separated instances identifiers (optional)

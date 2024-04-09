@@ -572,7 +572,7 @@ func (r ApiListObjectStorageCredentialsRequest) ObjectStorageId(objectStorageId 
 	r.objectStorageId = &objectStorageId
 	return r
 }
-// Filter for Object Storage by regions. Available regions: Asia (Singapore), European Union (Germany), United States (Central)
+// Filter for Object Storage by regions. Available regions: Asia (Singapore), European Union, United States (Central)
 func (r ApiListObjectStorageCredentialsRequest) RegionName(regionName string) ApiListObjectStorageCredentialsRequest {
 	r.regionName = &regionName
 	return r

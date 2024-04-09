@@ -6,7 +6,7 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**Rescue**](InstanceActionsApi.md#Rescue) | **Post** /v1/compute/instances/{instanceId}/actions/rescue | Rescue a compute instance / resource identified by its id
 [**ResetPasswordAction**](InstanceActionsApi.md#ResetPasswordAction) | **Post** /v1/compute/instances/{instanceId}/actions/resetPassword | Reset password for a compute instance / resource referenced by an id
-[**Restart**](InstanceActionsApi.md#Restart) | **Post** /v1/compute/instances/{instanceId}/actions/restart | Retrieve a list of your custom images history.
+[**Restart**](InstanceActionsApi.md#Restart) | **Post** /v1/compute/instances/{instanceId}/actions/restart | Restart a compute instance / resource identified by its id.
 [**Shutdown**](InstanceActionsApi.md#Shutdown) | **Post** /v1/compute/instances/{instanceId}/actions/shutdown | Shutdown compute instance / resource by its id
 [**Start**](InstanceActionsApi.md#Start) | **Post** /v1/compute/instances/{instanceId}/actions/start | Start a compute instance / resource identified by its id
 [**Stop**](InstanceActionsApi.md#Stop) | **Post** /v1/compute/instances/{instanceId}/actions/stop | Stop compute instance / resource by its id
@@ -169,7 +169,7 @@ Name | Type | Description  | Notes
 
 > InstanceRestartActionResponse Restart(ctx, instanceId).XRequestId(xRequestId).XTraceId(xTraceId).Execute()
 
-Retrieve a list of your custom images history.
+Restart a compute instance / resource identified by its id.
 
 
 

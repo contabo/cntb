@@ -322,9 +322,9 @@ func (r ApiRestartRequest) Execute() (InstanceRestartActionResponse, *_nethttp.R
 }
 
 /*
-Restart Retrieve a list of your custom images history.
+Restart Restart a compute instance / resource identified by its id.
 
-List of your custom images history, with the ability to apply filters.
+To restart a compute instance that has been identified by its id, you should perform a restart action on it.
 
  @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param instanceId The identifier of the compute instance / resource to be started in rescue mode.
