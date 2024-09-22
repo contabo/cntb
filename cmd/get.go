@@ -69,7 +69,7 @@ func ValidateOutputFormat() {
 	}
 	if OutputFormat == "jsonpath" {
 		if len(outputFormatCheck) == 1 {
-			log.Fatal(fmt.Sprintf("output format '%v' requires as jsonpath like `$..id`. Please refer to [http://goessner.net/articles/JsonPath/]", OutputFormat))
+			log.Fatal(fmt.Sprintf("output format '%v' requires as jsonpath like `$..id`. Please refer to [https://goessner.net/articles/JsonPath/]", OutputFormat))
 		}
 	}
 }
