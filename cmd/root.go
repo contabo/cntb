@@ -127,7 +127,7 @@ func init() {
 
 	rootCmd.PersistentFlags().StringVarP(&OutputFormat, "output", "o", "normal",
 		`output format could be json|yaml|normal(=delimiter)|wide(=delimiter)|jsonpath=...|
-	See jsonpath [http://goessner.net/articles/JsonPath/]. `+
+	See jsonpath [https://goessner.net/articles/JsonPath/]. `+
 			`Delimiter defaults to horizontally aligned spaces, you could also use ',' `+
 			`for csv format.`)
 	viper.BindPFlag("output", rootCmd.PersistentFlags().Lookup("output"))
