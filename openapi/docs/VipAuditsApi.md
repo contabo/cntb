@@ -1,6 +1,6 @@
 # \VipAuditsApi
 
-All URIs are relative to *https://api-staging-ext.contabo.intra*
+All URIs are relative to *https://api.contabo.com*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------

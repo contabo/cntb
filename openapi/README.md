@@ -79,11 +79,25 @@ Invoke-WebRequest -Uri 'https://api.contabo.com/v1/compute/instances' -Method 'G
 
 
 
+
+
+
+
+
+
+
    ```sh
    cntb config set-credentials --oauth2-clientid=<ClientId from Customer Control Panel> --oauth2-client-secret=<ClientSecret from Customer Control Panel> --oauth2-user=<API User from Customer Control Panel> --oauth2-password='<API Password from Customer Control Panel>'
    ```
 
 5. Use the CLI
+
+
+
+
+
+
+
 
 
 
@@ -150,8 +164,22 @@ If you need to allow other persons or automation scripts to access specific API 
 
 
 
+
+
+
+
+
+
+
    This allows you to specify a restriction to certain functions of an API by allowing control over POST (=Create), GET (=Read), PUT/PATCH (=Update) and DELETE (=Delete) methods for each API endpoint (URL) individually.
 * `resourcePermission`
+
+
+
+
+
+
+
 
 
 
@@ -374,6 +402,11 @@ Class | Method | HTTP request | Description
 *UsersApi* | [**RetrieveUserList**](docs/UsersApi.md#retrieveuserlist) | **Get** /v1/users | List users
 *UsersApi* | [**UpdateUser**](docs/UsersApi.md#updateuser) | **Patch** /v1/users/{userId} | Update specific user by id
 *UsersAuditsApi* | [**RetrieveUserAuditsList**](docs/UsersAuditsApi.md#retrieveuserauditslist) | **Get** /v1/users/audits | List history about your users (audit)
+*VIPApi* | [**AssignIp**](docs/VIPApi.md#assignip) | **Post** /v1/vips/{ip}/{resourceType}/{resourceId} | Assign a VIP to an VPS/VDS/Bare Metal
+*VIPApi* | [**RetrieveVip**](docs/VIPApi.md#retrievevip) | **Get** /v1/vips/{ip} | Get specific VIP by ip
+*VIPApi* | [**RetrieveVipList**](docs/VIPApi.md#retrieveviplist) | **Get** /v1/vips | List VIPs
+*VIPApi* | [**UnassignIp**](docs/VIPApi.md#unassignip) | **Delete** /v1/vips/{ip}/{resourceType}/{resourceId} | Unassign a VIP to a VPS/VDS/Bare Metal
+*VipAuditsApi* | [**RetrieveVipAuditsList**](docs/VipAuditsApi.md#retrievevipauditslist) | **Get** /v1/vips/audits | List history about your VIPs (audit)
 
 
 ## Documentation For Models
@@ -387,13 +420,16 @@ Class | Method | HTTP request | Description
  - [ApplicationRequirements](docs/ApplicationRequirements.md)
  - [ApplicationResponse](docs/ApplicationResponse.md)
  - [AssignInstancePrivateNetworkResponse](docs/AssignInstancePrivateNetworkResponse.md)
+ - [AssignVipResponse](docs/AssignVipResponse.md)
  - [AssignedTagResponse](docs/AssignedTagResponse.md)
  - [AssignmentAuditResponse](docs/AssignmentAuditResponse.md)
  - [AssignmentResponse](docs/AssignmentResponse.md)
  - [AutoScalingTypeRequest](docs/AutoScalingTypeRequest.md)
  - [AutoScalingTypeResponse](docs/AutoScalingTypeResponse.md)
+ - [CancelInstanceRequest](docs/CancelInstanceRequest.md)
  - [CancelInstanceResponse](docs/CancelInstanceResponse.md)
  - [CancelInstanceResponseData](docs/CancelInstanceResponseData.md)
+ - [CancelObjectStorageRequest](docs/CancelObjectStorageRequest.md)
  - [CancelObjectStorageResponse](docs/CancelObjectStorageResponse.md)
  - [CancelObjectStorageResponseData](docs/CancelObjectStorageResponseData.md)
  - [ClientResponse](docs/ClientResponse.md)
@@ -446,6 +482,7 @@ Class | Method | HTTP request | Description
  - [FindTagResponse](docs/FindTagResponse.md)
  - [FindUserIsPasswordSetResponse](docs/FindUserIsPasswordSetResponse.md)
  - [FindUserResponse](docs/FindUserResponse.md)
+ - [FindVipResponse](docs/FindVipResponse.md)
  - [FindVncResponse](docs/FindVncResponse.md)
  - [FirewallingUpgradeRequest](docs/FirewallingUpgradeRequest.md)
  - [GenerateClientSecretResponse](docs/GenerateClientSecretResponse.md)
@@ -474,6 +511,7 @@ Class | Method | HTTP request | Description
  - [InstancesResetPasswordActionsRequest](docs/InstancesResetPasswordActionsRequest.md)
  - [IpConfig](docs/IpConfig.md)
  - [IpV4](docs/IpV4.md)
+ - [IpV41](docs/IpV41.md)
  - [IpV6](docs/IpV6.md)
  - [Links](docs/Links.md)
  - [ListApiPermissionResponse](docs/ListApiPermissionResponse.md)
@@ -503,6 +541,9 @@ Class | Method | HTTP request | Description
  - [ListTagResponse](docs/ListTagResponse.md)
  - [ListUserAuditResponse](docs/ListUserAuditResponse.md)
  - [ListUserResponse](docs/ListUserResponse.md)
+ - [ListVipAuditResponse](docs/ListVipAuditResponse.md)
+ - [ListVipResponse](docs/ListVipResponse.md)
+ - [ListVipResponseData](docs/ListVipResponseData.md)
  - [MinimumRequirements](docs/MinimumRequirements.md)
  - [ObjectStorageAuditResponse](docs/ObjectStorageAuditResponse.md)
  - [ObjectStorageResponse](docs/ObjectStorageResponse.md)
@@ -559,6 +600,8 @@ Class | Method | HTTP request | Description
  - [UserAuditResponse](docs/UserAuditResponse.md)
  - [UserIsPasswordSetResponse](docs/UserIsPasswordSetResponse.md)
  - [UserResponse](docs/UserResponse.md)
+ - [VipAuditResponse](docs/VipAuditResponse.md)
+ - [VipResponse](docs/VipResponse.md)
  - [VncResponse](docs/VncResponse.md)
 
 

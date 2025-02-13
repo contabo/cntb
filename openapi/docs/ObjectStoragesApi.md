@@ -17,7 +17,7 @@ Method | HTTP request | Description
 
 ## CancelObjectStorage
 
-> CancelObjectStorageResponse CancelObjectStorage(ctx, objectStorageId).XRequestId(xRequestId).XTraceId(xTraceId).Execute()
+> CancelObjectStorageResponse CancelObjectStorage(ctx, objectStorageId).XRequestId(xRequestId).CancelObjectStorageRequest(cancelObjectStorageRequest).XTraceId(xTraceId).Execute()
 
 Cancels the specified object storage at the next possible date
 
@@ -38,11 +38,12 @@ import (
 func main() {
     xRequestId := "04e0f898-37b4-48bc-a794-1a57abe6aa31" // string | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually.
     objectStorageId := "4a6f95be-2ac0-4e3c-8eed-0dc67afed640" // string | The identifier of the object storage.
+    cancelObjectStorageRequest := *openapiclient.NewCancelObjectStorageRequest() // CancelObjectStorageRequest | 
     xTraceId := "xTraceId_example" // string | Identifier to trace group of requests. (optional)
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.ObjectStoragesApi.CancelObjectStorage(context.Background(), objectStorageId).XRequestId(xRequestId).XTraceId(xTraceId).Execute()
+    resp, r, err := api_client.ObjectStoragesApi.CancelObjectStorage(context.Background(), objectStorageId).XRequestId(xRequestId).CancelObjectStorageRequest(cancelObjectStorageRequest).XTraceId(xTraceId).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `ObjectStoragesApi.CancelObjectStorage``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -69,6 +70,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **xRequestId** | **string** | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually. | 
 
+ **cancelObjectStorageRequest** | [**CancelObjectStorageRequest**](CancelObjectStorageRequest.md) |  | 
  **xTraceId** | **string** | Identifier to trace group of requests. | 
 
 ### Return type
@@ -81,7 +83,7 @@ Name | Type | Description  | Notes
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
+- **Content-Type**: application/json
 - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)

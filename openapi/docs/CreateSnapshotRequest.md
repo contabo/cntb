@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Name** | **string** | The name of the snapshot. It may contain letters, numbers, colons, dashes, and underscores. There is a limit of 255 characters per snapshot. | 
+**Name** | **string** | The name of the snapshot. It may contain letters, numbers, spaces, dashes. There is a limit of 30 characters per snapshot. | 
 **Description** | Pointer to **string** | The description of the snapshot. There is a limit of 255 characters per snapshot. | [optional] 
 
 ## Methods

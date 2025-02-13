@@ -13,154 +13,104 @@ package openapi
 
 import (
 	"encoding/json"
+	"time"
 )
 
-// ListPrivateNetworkResponse struct for ListPrivateNetworkResponse
-type ListPrivateNetworkResponse struct {
-	// Data about pagination like how many results, pages, page size.
-	Pagination PaginationMeta `json:"_pagination"`
-	Data []ListPrivateNetworkResponseData `json:"data"`
-	Links Links `json:"_links"`
+// CancelInstanceRequest struct for CancelInstanceRequest
+type CancelInstanceRequest struct {
+	// Date of cancellation
+	CancelDate *time.Time `json:"cancelDate,omitempty"`
 }
 
-// NewListPrivateNetworkResponse instantiates a new ListPrivateNetworkResponse object
+// NewCancelInstanceRequest instantiates a new CancelInstanceRequest object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewListPrivateNetworkResponse(pagination PaginationMeta, data []ListPrivateNetworkResponseData, links Links) *ListPrivateNetworkResponse {
-	this := ListPrivateNetworkResponse{}
-	this.Pagination = pagination
-	this.Data = data
-	this.Links = links
+func NewCancelInstanceRequest() *CancelInstanceRequest {
+	this := CancelInstanceRequest{}
 	return &this
 }
 
-// NewListPrivateNetworkResponseWithDefaults instantiates a new ListPrivateNetworkResponse object
+// NewCancelInstanceRequestWithDefaults instantiates a new CancelInstanceRequest object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewListPrivateNetworkResponseWithDefaults() *ListPrivateNetworkResponse {
-	this := ListPrivateNetworkResponse{}
+func NewCancelInstanceRequestWithDefaults() *CancelInstanceRequest {
+	this := CancelInstanceRequest{}
 	return &this
 }
 
-// GetPagination returns the Pagination field value
-func (o *ListPrivateNetworkResponse) GetPagination() PaginationMeta {
-	if o == nil {
-		var ret PaginationMeta
+// GetCancelDate returns the CancelDate field value if set, zero value otherwise.
+func (o *CancelInstanceRequest) GetCancelDate() time.Time {
+	if o == nil || o.CancelDate == nil {
+		var ret time.Time
 		return ret
 	}
-
-	return o.Pagination
+	return *o.CancelDate
 }
 
-// GetPaginationOk returns a tuple with the Pagination field value
+// GetCancelDateOk returns a tuple with the CancelDate field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ListPrivateNetworkResponse) GetPaginationOk() (*PaginationMeta, bool) {
-	if o == nil  {
+func (o *CancelInstanceRequest) GetCancelDateOk() (*time.Time, bool) {
+	if o == nil || o.CancelDate == nil {
 		return nil, false
 	}
-	return &o.Pagination, true
+	return o.CancelDate, true
 }
 
-// SetPagination sets field value
-func (o *ListPrivateNetworkResponse) SetPagination(v PaginationMeta) {
-	o.Pagination = v
-}
-
-// GetData returns the Data field value
-func (o *ListPrivateNetworkResponse) GetData() []ListPrivateNetworkResponseData {
-	if o == nil {
-		var ret []ListPrivateNetworkResponseData
-		return ret
+// HasCancelDate returns a boolean if a field has been set.
+func (o *CancelInstanceRequest) HasCancelDate() bool {
+	if o != nil && o.CancelDate != nil {
+		return true
 	}
 
-	return o.Data
+	return false
 }
 
-// GetDataOk returns a tuple with the Data field value
-// and a boolean to check if the value has been set.
-func (o *ListPrivateNetworkResponse) GetDataOk() (*[]ListPrivateNetworkResponseData, bool) {
-	if o == nil  {
-		return nil, false
-	}
-	return &o.Data, true
+// SetCancelDate gets a reference to the given time.Time and assigns it to the CancelDate field.
+func (o *CancelInstanceRequest) SetCancelDate(v time.Time) {
+	o.CancelDate = &v
 }
 
-// SetData sets field value
-func (o *ListPrivateNetworkResponse) SetData(v []ListPrivateNetworkResponseData) {
-	o.Data = v
-}
-
-// GetLinks returns the Links field value
-func (o *ListPrivateNetworkResponse) GetLinks() Links {
-	if o == nil {
-		var ret Links
-		return ret
-	}
-
-	return o.Links
-}
-
-// GetLinksOk returns a tuple with the Links field value
-// and a boolean to check if the value has been set.
-func (o *ListPrivateNetworkResponse) GetLinksOk() (*Links, bool) {
-	if o == nil  {
-		return nil, false
-	}
-	return &o.Links, true
-}
-
-// SetLinks sets field value
-func (o *ListPrivateNetworkResponse) SetLinks(v Links) {
-	o.Links = v
-}
-
-func (o ListPrivateNetworkResponse) MarshalJSON() ([]byte, error) {
+func (o CancelInstanceRequest) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
-	if true {
-		toSerialize["_pagination"] = o.Pagination
-	}
-	if true {
-		toSerialize["data"] = o.Data
-	}
-	if true {
-		toSerialize["_links"] = o.Links
+	if o.CancelDate != nil {
+		toSerialize["cancelDate"] = o.CancelDate
 	}
 	return json.Marshal(toSerialize)
 }
 
-type NullableListPrivateNetworkResponse struct {
-	value *ListPrivateNetworkResponse
+type NullableCancelInstanceRequest struct {
+	value *CancelInstanceRequest
 	isSet bool
 }
 
-func (v NullableListPrivateNetworkResponse) Get() *ListPrivateNetworkResponse {
+func (v NullableCancelInstanceRequest) Get() *CancelInstanceRequest {
 	return v.value
 }
 
-func (v *NullableListPrivateNetworkResponse) Set(val *ListPrivateNetworkResponse) {
+func (v *NullableCancelInstanceRequest) Set(val *CancelInstanceRequest) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableListPrivateNetworkResponse) IsSet() bool {
+func (v NullableCancelInstanceRequest) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableListPrivateNetworkResponse) Unset() {
+func (v *NullableCancelInstanceRequest) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableListPrivateNetworkResponse(val *ListPrivateNetworkResponse) *NullableListPrivateNetworkResponse {
-	return &NullableListPrivateNetworkResponse{value: val, isSet: true}
+func NewNullableCancelInstanceRequest(val *CancelInstanceRequest) *NullableCancelInstanceRequest {
+	return &NullableCancelInstanceRequest{value: val, isSet: true}
 }
 
-func (v NullableListPrivateNetworkResponse) MarshalJSON() ([]byte, error) {
+func (v NullableCancelInstanceRequest) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableListPrivateNetworkResponse) UnmarshalJSON(src []byte) error {
+func (v *NullableCancelInstanceRequest) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

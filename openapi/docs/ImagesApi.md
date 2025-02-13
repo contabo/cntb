@@ -299,7 +299,7 @@ Name | Type | Description  | Notes
 
 ## RetrieveImageList
 
-> ListImageResponse RetrieveImageList(ctx).XRequestId(xRequestId).XTraceId(xTraceId).Page(page).Size(size).OrderBy(orderBy).Name(name).StandardImage(standardImage).Execute()
+> ListImageResponse RetrieveImageList(ctx).XRequestId(xRequestId).XTraceId(xTraceId).Page(page).Size(size).OrderBy(orderBy).Name(name).StandardImage(standardImage).Search(search).Execute()
 
 List available standard and custom images
 
@@ -325,10 +325,11 @@ func main() {
     orderBy := []string{"Inner_example"} // []string | Specify fields and ordering (ASC for ascending, DESC for descending) in following format `field:ASC|DESC`. (optional)
     name := "Ubuntu" // string | The name of the image (optional)
     standardImage := true // bool | Flag indicating that image is either a standard (true) or a custom image (false) (optional)
+    search := "windows or Debian" // string | full text search on image name or image os type (optional)
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.ImagesApi.RetrieveImageList(context.Background()).XRequestId(xRequestId).XTraceId(xTraceId).Page(page).Size(size).OrderBy(orderBy).Name(name).StandardImage(standardImage).Execute()
+    resp, r, err := api_client.ImagesApi.RetrieveImageList(context.Background()).XRequestId(xRequestId).XTraceId(xTraceId).Page(page).Size(size).OrderBy(orderBy).Name(name).StandardImage(standardImage).Search(search).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `ImagesApi.RetrieveImageList``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -356,6 +357,7 @@ Name | Type | Description  | Notes
  **orderBy** | **[]string** | Specify fields and ordering (ASC for ascending, DESC for descending) in following format &#x60;field:ASC|DESC&#x60;. | 
  **name** | **string** | The name of the image | 
  **standardImage** | **bool** | Flag indicating that image is either a standard (true) or a custom image (false) | 
+ **search** | **string** | full text search on image name or image os type | 
 
 ### Return type
 

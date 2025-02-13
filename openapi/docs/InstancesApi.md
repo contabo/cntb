@@ -16,7 +16,7 @@ Method | HTTP request | Description
 
 ## CancelInstance
 
-> CancelInstanceResponse CancelInstance(ctx, instanceId).XRequestId(xRequestId).XTraceId(xTraceId).Execute()
+> CancelInstanceResponse CancelInstance(ctx, instanceId).XRequestId(xRequestId).CancelInstanceRequest(cancelInstanceRequest).XTraceId(xTraceId).Execute()
 
 Cancel specific instance by id
 
@@ -37,11 +37,12 @@ import (
 func main() {
     xRequestId := "04e0f898-37b4-48bc-a794-1a57abe6aa31" // string | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually.
     instanceId := int64(12345) // int64 | The identifier of the instance
+    cancelInstanceRequest := *openapiclient.NewCancelInstanceRequest() // CancelInstanceRequest | 
     xTraceId := "xTraceId_example" // string | Identifier to trace group of requests. (optional)
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.InstancesApi.CancelInstance(context.Background(), instanceId).XRequestId(xRequestId).XTraceId(xTraceId).Execute()
+    resp, r, err := api_client.InstancesApi.CancelInstance(context.Background(), instanceId).XRequestId(xRequestId).CancelInstanceRequest(cancelInstanceRequest).XTraceId(xTraceId).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `InstancesApi.CancelInstance``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -68,6 +69,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **xRequestId** | **string** | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually. | 
 
+ **cancelInstanceRequest** | [**CancelInstanceRequest**](CancelInstanceRequest.md) |  | 
  **xTraceId** | **string** | Identifier to trace group of requests. | 
 
 ### Return type
@@ -80,7 +82,7 @@ Name | Type | Description  | Notes
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
+- **Content-Type**: application/json
 - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
@@ -386,7 +388,7 @@ Name | Type | Description  | Notes
 
 ## RetrieveInstancesList
 
-> ListInstancesResponse RetrieveInstancesList(ctx).XRequestId(xRequestId).XTraceId(xTraceId).Page(page).Size(size).OrderBy(orderBy).Name(name).DisplayName(displayName).DataCenter(dataCenter).Region(region).InstanceId(instanceId).InstanceIds(instanceIds).Status(status).AddOnIds(addOnIds).ProductTypes(productTypes).IpConfig(ipConfig).Execute()
+> ListInstancesResponse RetrieveInstancesList(ctx).XRequestId(xRequestId).XTraceId(xTraceId).Page(page).Size(size).OrderBy(orderBy).Name(name).DisplayName(displayName).DataCenter(dataCenter).Region(region).InstanceId(instanceId).InstanceIds(instanceIds).Status(status).AddOnIds(addOnIds).ProductTypes(productTypes).IpConfig(ipConfig).Search(search).Execute()
 
 List instances
 
@@ -420,10 +422,11 @@ func main() {
     addOnIds := "1044,827" // string | Identifiers of Addons the instances have (optional)
     productTypes := "ssd, hdd, nvme" // string | Comma separated instance's category depending on Product Id (optional)
     ipConfig := true // bool | Filter instances that have an ip config (optional)
+    search := "vmd12345" // string | Full text search when listing the instances. Can be searched by `name`, `displayName`, `ipAddress` (optional)
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.InstancesApi.RetrieveInstancesList(context.Background()).XRequestId(xRequestId).XTraceId(xTraceId).Page(page).Size(size).OrderBy(orderBy).Name(name).DisplayName(displayName).DataCenter(dataCenter).Region(region).InstanceId(instanceId).InstanceIds(instanceIds).Status(status).AddOnIds(addOnIds).ProductTypes(productTypes).IpConfig(ipConfig).Execute()
+    resp, r, err := api_client.InstancesApi.RetrieveInstancesList(context.Background()).XRequestId(xRequestId).XTraceId(xTraceId).Page(page).Size(size).OrderBy(orderBy).Name(name).DisplayName(displayName).DataCenter(dataCenter).Region(region).InstanceId(instanceId).InstanceIds(instanceIds).Status(status).AddOnIds(addOnIds).ProductTypes(productTypes).IpConfig(ipConfig).Search(search).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `InstancesApi.RetrieveInstancesList``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -459,6 +462,7 @@ Name | Type | Description  | Notes
  **addOnIds** | **string** | Identifiers of Addons the instances have | 
  **productTypes** | **string** | Comma separated instance&#39;s category depending on Product Id | 
  **ipConfig** | **bool** | Filter instances that have an ip config | 
+ **search** | **string** | Full text search when listing the instances. Can be searched by &#x60;name&#x60;, &#x60;displayName&#x60;, &#x60;ipAddress&#x60; | 
 
 ### Return type
 

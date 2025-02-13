@@ -23,6 +23,7 @@ generate-api-clients:
 	docker run --rm -v openapivolume:/local --env JAVA_OPTS=$(JAVAOPT) $(OPENAPIIMAGE) generate \
 	--skip-validate-spec \
 	--input-spec $(OPENAPIURL) \
+	--additional-properties=enumClassPrefix=true \
 	--generator-name  go \
 	--output $(OUTPUTLOCATION)
 	docker container create --name dummy -v openapivolume:/openapi alpine bash
@@ -31,6 +32,7 @@ generate-api-clients:
 
 .PHONY: build-only
 build-only:
+	go version
 	go mod tidy
 	go mod download
 	export VERSION=$$(git rev-list --tags --max-count=1 | xargs -I {} git describe --tags {}); export COMMIT=$$(git rev-parse HEAD); export TIMESTAMP=$$(date -u +"%Y-%m-%dT%H:%M:%SZ"); go build -ldflags="-w -s -X \"contabo.com/cli/cntb/cmd.version=$$VERSION\" -X \"contabo.com/cli/cntb/cmd.commit=$$COMMIT\" -X \"contabo.com/cli/cntb/cmd.date=$$TIMESTAMP\""

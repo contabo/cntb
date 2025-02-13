@@ -83,11 +83,25 @@ info:
 
 
 
+
+
+
+
+
+
+
        ```sh
        cntb config set-credentials --oauth2-clientid=<ClientId from Customer Control Panel> --oauth2-client-secret=<ClientSecret from Customer Control Panel> --oauth2-user=<API User from Customer Control Panel> --oauth2-password='<API Password from Customer Control Panel>'
        ```
 
     5. Use the CLI
+
+
+
+
+
+
+
 
 
 
@@ -154,8 +168,22 @@ info:
 
 
 
+
+
+
+
+
+
+
        This allows you to specify a restriction to certain functions of an API by allowing control over POST (=Create), GET (=Read), PUT/PATCH (=Update) and DELETE (=Delete) methods for each API endpoint (URL) individually.
     * `resourcePermission`
+
+
+
+
+
+
+
 
 
 
@@ -347,6 +375,12 @@ tags:
     and ssh-keys. Usage of the Secret Management API is purely optional. As a convenience
     feature e.g. it allows you to reuse SSH-keys easily.
   name: Secrets Audits
+- description: VIP (Virtual IPs) API manages virtual IP adresses including ´additional´
+    and ´floating´ IPv4 Adresses. Virtual IPs are payed add-ons (Additional IP) which
+    can be freely assigned to Cloud VPS/VDS or Bare Metal. Please note, that assgnments
+    of virtual IPs to servers is only for documentation purposes. Technical Assignemts
+    must be configured on operation system level, see [docs](https://docs.contabo.com/docs/products/intro).
+  name: VIP
 paths:
   /v1/compute/instances/{instanceId}/actions/start:
     post:
@@ -660,6 +694,13 @@ paths:
 
 
 
+
+
+
+
+
+
+
               user: root
               ssh_pwauth: true
               disable_root: false
@@ -867,6 +908,7 @@ paths:
           - rescue
           - pending_payment
           - other
+          - reset_password
           type: string
         style: form
       - description: Identifiers of Addons the instances have
@@ -895,6 +937,16 @@ paths:
         required: false
         schema:
           type: boolean
+        style: form
+      - description: Full text search when listing the instances. Can be searched
+          by `name`, `displayName`, `ipAddress`
+        example: vmd12345
+        explode: true
+        in: query
+        name: search
+        required: false
+        schema:
+          type: string
         style: form
       responses:
         "200":
@@ -930,11 +982,29 @@ paths:
         5 SSD</td><td>2000 GB SSD</td></tr>           <tr><td>V59</td><td>VPS 5 Storage</td><td>4000
         GB SSD</td></tr>           <tr><td>V58</td><td>VPS 5 NVMe</td><td>500 GB NVMe</td></tr>           <tr><td>V60</td><td>VPS
         6 SSD</td><td>2400 GB SSD</td></tr>           <tr><td>V62</td><td>VPS 6 Storage</td><td>4800
-        GB SSD</td></tr>           <tr><td>V61</td><td>VPS 6 NVMe</td><td>600 GB NVMe</td></tr>           <tr><td>V8</td><td>VDS
-        S</td><td>180 GB NVMe</td></tr>           <tr><td>V9</td><td>VDS M</td><td>240
-        GB NVMe</td></tr>           <tr><td>V10</td><td>VDS L</td><td>360 GB NVMe</td></tr>           <tr><td>V11</td><td>VDS
-        XL</td><td>480 GB NVMe</td></tr>           <tr><td>V16</td><td>VDS XXL</td><td>720
-        GB NVMe</td></tr>           </table>
+        GB SSD</td></tr>           <tr><td>V61</td><td>VPS 6 NVMe</td><td>600 GB NVMe</td></tr>           <tr><td>V67</td><td>VPS
+        2C NVMe</td><td>60 GB NVMe</td></tr>           <tr><td>V75</td><td>VPS 2C
+        SSD</td><td>100 GB SSD</td></tr>           <tr><td>V84</td><td>VPS 2C Storage</td><td>600
+        GB NVMe</td></tr>           <tr><td>V68</td><td>VPS 4C NVMe</td><td>100 GB
+        NVMe</td></tr>           <tr><td>V76</td><td>VPS 4C SSD</td><td>200 GB SSD</td></tr>          <tr><td>V85</td><td>VPS
+        4C Storage</td><td>600 GB NVMe</td></tr>           <tr><td>V69</td><td>VPS
+        6C NVMe</td><td>150 GB NVMe</td></tr>           <tr><td>V77</td><td>VPS 6C
+        SSD</td><td>300 GB SSD</td></tr>          <tr><td>V86</td><td>VPS 6C Storage</td><td>1800
+        GB NVMe</td></tr>           <tr><td>V70</td><td>VPS 8C NVMe</td><td>200 GB
+        NVMe</td></tr>           <tr><td>V78</td><td>VPS 8C SSD</td><td>400 GB SSD</td></tr>          <tr><td>V87</td><td>VPS
+        8C Storage</td><td>2400 GB NVMe</td></tr>           <tr><td>V71</td><td>VPS
+        10C NVMe</td><td>250 GB NVMe</td></tr>           <tr><td>V79</td><td>VPS 10C
+        SSD</td><td>500 GB SSD</td></tr>           <tr><td>V88</td><td>VPS 10C Storage</td><td>3200
+        GB NVMe</td></tr>           <tr><td>V72</td><td>VPS 14C NVMe</td><td>300 GB
+        NVMe</td></tr>           <tr><td>V80</td><td>VPS 14C SSD</td><td>600 GB SSD</td></tr>           <tr><td>V89</td><td>VPS
+        16C Storage</td><td>3600 GB SSD</td></tr>           <tr><td>V73</td><td>VPS
+        20C NVMe</td><td>400 GB NVMe</td></tr>           <tr><td>V81</td><td>VPS 20C
+        SSD</td><td>800 GB SSD</td></tr>           <tr><td>V74</td><td>VPS 24C NVMe</td><td>600
+        GB NVMe</td></tr>           <tr><td>V83</td><td>VPS 24C SSD</td><td>1200 GB
+        SSD</td></tr>           <tr><td>V8</td><td>VDS S</td><td>180 GB NVMe</td></tr>           <tr><td>V9</td><td>VDS
+        M</td><td>240 GB NVMe</td></tr>           <tr><td>V10</td><td>VDS L</td><td>360
+        GB NVMe</td></tr>           <tr><td>V11</td><td>VDS XL</td><td>480 GB NVMe</td></tr>           <tr><td>V16</td><td>VDS
+        XXL</td><td>720 GB NVMe</td></tr>           </table>
       operationId: createInstance
       parameters:
       - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
@@ -1202,6 +1272,12 @@ paths:
           format: int64
           type: integer
         style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CancelInstanceRequest'
+        required: true
       responses:
         "201":
           content:
@@ -1613,6 +1689,15 @@ paths:
         required: false
         schema:
           type: boolean
+        style: form
+      - description: full text search on image name or image os type
+        example: windows or Debian
+        explode: true
+        in: query
+        name: search
+        required: false
+        schema:
+          type: string
         style: form
       responses:
         "200":
@@ -2274,9 +2359,9 @@ paths:
         source: cntb update snapshot 12345 snap1628603855 --name 'Snapshot'
   /v1/compute/instances/{instanceId}/snapshots/{snapshotId}/rollback:
     post:
-      description: Rollback instance to a specific snapshot. The snapshot must be
-        the latest one in order to be able to restore it, otherwise you will receive
-        an error informing you that the snapshot is not the latest
+      description: Rollback the instance to a specific snapshot. In case the snapshot
+        is not the latest one, it will automatically delete all the newer snapshots
+        of the instance
       operationId: rollbackSnapshot
       parameters:
       - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
@@ -2629,73 +2714,73 @@ paths:
           type: string
         style: simple
       - description: Number of page to be fetched.
-        example: 1
         explode: true
         in: query
         name: page
         required: false
         schema:
+          example: 1
           format: int64
           type: integer
         style: form
       - description: Number of elements per page.
-        example: 10
         explode: true
         in: query
         name: size
         required: false
         schema:
+          example: 10
           format: int64
           type: integer
         style: form
       - description: Specify fields and ordering (ASC for ascending, DESC for descending)
           in following format `field:ASC|DESC`.
-        example: name:asc
         explode: true
         in: query
         name: orderBy
         required: false
         schema:
+          example: name:asc
           items:
             type: string
           type: array
         style: form
       - description: Filter for Object Storage locations.
-        example: European Union 2
         explode: true
         in: query
         name: dataCenterName
         required: false
         schema:
+          example: European Union 2
           minLength: 1
           type: string
         style: form
       - description: Filter for Object Storage S3 tenantId.
-        example: 2cd2e5e1444a41b0bed16c6410ecaa84
         explode: true
         in: query
         name: s3TenantId
         required: false
         schema:
+          example: 2cd2e5e1444a41b0bed16c6410ecaa84
           type: string
         style: form
       - description: 'Filter for Object Storage by regions. Available regions: EU,
           US-central, SIN'
-        example: EU
         explode: true
         in: query
         name: region
         required: false
         schema:
+          example: EU
           type: string
         style: form
       - description: Filter for Object Storage by display name.
-        example: MyObjectStorage
         explode: true
         in: query
         name: displayName
         required: false
         schema:
+          example: MyObjectStorage
           type: string
         style: form
       responses:
@@ -2800,74 +2885,74 @@ paths:
           type: string
         style: simple
       - description: Number of page to be fetched.
-        example: 1
         explode: true
         in: query
         name: page
         required: false
         schema:
+          example: 1
           format: int64
           type: integer
         style: form
       - description: Number of elements per page.
-        example: 10
         explode: true
         in: query
         name: size
         required: false
         schema:
+          example: 10
           format: int64
           type: integer
         style: form
       - description: Specify fields and ordering (ASC for ascending, DESC for descending)
           in following format `field:ASC|DESC`.
-        example: name:asc
         explode: true
         in: query
         name: orderBy
         required: false
         schema:
+          example: name:asc
           items:
             type: string
           type: array
         style: form
       - description: Filter as match for data centers.
-        example: EU1
         explode: true
         in: query
         name: slug
         required: false
         schema:
+          example: EU1
           minLength: 1
           type: string
         style: form
       - description: Filter for Object Storages regions.
-        example: European Union 1
         explode: true
         in: query
         name: name
         required: false
         schema:
+          example: European Union 1
           minLength: 1
           type: string
         style: form
       - description: Filter for Object Storage region names.
-        example: European Union
         explode: true
         in: query
         name: regionName
         required: false
         schema:
+          example: European Union
           minLength: 1
           type: string
         style: form
       - description: Filter for Object Storage region slugs.
-        example: EU
         explode: true
         in: query
         name: regionSlug
         required: false
         schema:
+          example: EU
           minLength: 1
           type: string
         style: form
@@ -2916,12 +3001,12 @@ paths:
           type: string
         style: simple
       - description: The identifier of the object storage.
-        example: 4a6f95be-2ac0-4e3c-8eed-0dc67afed640
         explode: false
         in: path
         name: objectStorageId
         required: true
         schema:
+          example: 4a6f95be-2ac0-4e3c-8eed-0dc67afed640
           type: string
         style: simple
       responses:
@@ -2970,12 +3055,12 @@ paths:
           type: string
         style: simple
       - description: The identifier of the object storage.
-        example: 4a6f95be-2ac0-4e3c-8eed-0dc67afed640
         explode: false
         in: path
         name: objectStorageId
         required: true
         schema:
+          example: 4a6f95be-2ac0-4e3c-8eed-0dc67afed640
           type: string
         style: simple
       requestBody:
@@ -3034,12 +3119,12 @@ paths:
           type: string
         style: simple
       - description: The identifier of the object storage.
-        example: 4a6f95be-2ac0-4e3c-8eed-0dc67afed640
         explode: false
         in: path
         name: objectStorageId
         required: true
         schema:
+          example: 4a6f95be-2ac0-4e3c-8eed-0dc67afed640
           type: string
         style: simple
       requestBody:
@@ -3099,12 +3184,12 @@ paths:
           type: string
         style: simple
       - description: The identifier of the object storage.
-        example: 4a6f95be-2ac0-4e3c-8eed-0dc67afed640
         explode: false
         in: path
         name: objectStorageId
         required: true
         schema:
+          example: 4a6f95be-2ac0-4e3c-8eed-0dc67afed640
           type: string
         style: simple
       responses:
@@ -3155,14 +3240,20 @@ paths:
           type: string
         style: simple
       - description: The identifier of the object storage.
-        example: 4a6f95be-2ac0-4e3c-8eed-0dc67afed640
         explode: false
         in: path
         name: objectStorageId
         required: true
         schema:
+          example: 4a6f95be-2ac0-4e3c-8eed-0dc67afed640
           type: string
         style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CancelObjectStorageRequest'
+        required: true
       responses:
         "200":
           content:
@@ -3258,81 +3349,81 @@ paths:
           type: string
         style: simple
       - description: Number of page to be fetched.
-        example: 1
         explode: true
         in: query
         name: page
         required: false
         schema:
+          example: 1
           format: int64
           type: integer
         style: form
       - description: Number of elements per page.
-        example: 10
         explode: true
         in: query
         name: size
         required: false
         schema:
+          example: 10
           format: int64
           type: integer
         style: form
       - description: Specify fields and ordering (ASC for ascending, DESC for descending)
           in following format `field:ASC|DESC`.
-        example: name:asc
         explode: true
         in: query
         name: orderBy
         required: false
         schema:
+          example: name:asc
           items:
             type: string
           type: array
         style: form
       - description: The identifier of the object storage.
-        example: 6cdf5968-f9fe-4192-97c2-f349e813c5e8
         explode: true
         in: query
         name: objectStorageId
         required: false
         schema:
+          example: 6cdf5968-f9fe-4192-97c2-f349e813c5e8
           type: string
         style: form
       - description: The requestId of the API call which led to the change.
-        example: D5FD9FAF-58C0-4406-8F46-F449B8E4FEC3
         explode: true
         in: query
         name: requestId
         required: false
         schema:
+          example: D5FD9FAF-58C0-4406-8F46-F449B8E4FEC3
           type: string
         style: form
       - description: changedBy of the user which led to the change.
-        example: 23cbb6d6-cb11-4330-bdff-7bb791df2e23
         explode: true
         in: query
         name: changedBy
         required: false
         schema:
+          example: 23cbb6d6-cb11-4330-bdff-7bb791df2e23
           type: string
         style: form
       - description: Start of search time range.
-        example: 2021-01-01
         explode: true
         in: query
         name: startDate
         required: false
         schema:
+          example: 2021-01-01
           format: date
           type: string
         style: form
       - description: End of search time range.
-        example: 2021-01-01
         explode: true
         in: query
         name: endDate
         required: false
         schema:
+          example: 2021-01-01
           format: date
           type: string
         style: form
@@ -3382,71 +3473,71 @@ paths:
           type: string
         style: simple
       - description: Number of page to be fetched.
-        example: 1
         explode: true
         in: query
         name: page
         required: false
         schema:
+          example: 1
           format: int64
           type: integer
         style: form
       - description: Number of elements per page.
-        example: 10
         explode: true
         in: query
         name: size
         required: false
         schema:
+          example: 10
           format: int64
           type: integer
         style: form
       - description: Specify fields and ordering (ASC for ascending, DESC for descending)
           in following format `field:ASC|DESC`.
-        example: name:asc
         explode: true
         in: query
         name: orderBy
         required: false
         schema:
+          example: name:asc
           items:
             type: string
           type: array
         style: form
       - description: The name of the Private Network
-        example: myPrivateNetwork
         explode: true
         in: query
         name: name
         required: false
         schema:
+          example: myPrivateNetwork
           type: string
         style: form
       - description: Comma separated instances identifiers
-        example: 100, 101, 102
         explode: true
         in: query
         name: instanceIds
         required: false
         schema:
+          example: 100, 101, 102
           type: string
         style: form
       - description: The slug of the region where your Private Network is located
-        example: EU
         explode: true
         in: query
         name: region
         required: false
         schema:
+          example: EU
           type: string
         style: form
       - description: The data center where your Private Network is located
-        example: European Union 1
         explode: true
         in: query
         name: dataCenter
         required: false
         schema:
+          example: European Union 1
           type: string
         style: form
       responses:
@@ -3548,12 +3639,12 @@ paths:
           type: string
         style: simple
       - description: The identifier of the Private Network
-        example: 12345
         explode: false
         in: path
         name: privateNetworkId
         required: true
         schema:
+          example: 12345
           format: int64
           type: integer
         style: simple
@@ -3597,12 +3688,12 @@ paths:
           type: string
         style: simple
       - description: The identifier of the Private Network
-        example: 12345
         explode: false
         in: path
         name: privateNetworkId
         required: true
         schema:
+          example: 12345
           format: int64
           type: integer
         style: simple
@@ -3651,12 +3742,12 @@ paths:
           type: string
         style: simple
       - description: The identifier of the Private Network
-        example: 12345
         explode: false
         in: path
         name: privateNetworkId
         required: true
         schema:
+          example: 12345
           format: int64
           type: integer
         style: simple
@@ -3714,22 +3805,22 @@ paths:
           type: string
         style: simple
       - description: The identifier of the Private Network
-        example: 100
         explode: false
         in: path
         name: privateNetworkId
         required: true
         schema:
+          example: 100
           format: int64
           type: integer
         style: simple
       - description: The identifier of the instance
-        example: 100
         explode: false
         in: path
         name: instanceId
         required: true
         schema:
+          example: 100
           format: int64
           type: integer
         style: simple
@@ -3777,22 +3868,22 @@ paths:
           type: string
         style: simple
       - description: The identifier of the Private Network
-        example: 12345
         explode: false
         in: path
         name: privateNetworkId
         required: true
         schema:
+          example: 12345
           format: int64
           type: integer
         style: simple
       - description: The identifier of the instance
-        example: 100
         explode: false
         in: path
         name: instanceId
         required: true
         schema:
+          example: 100
           format: int64
           type: integer
         style: simple
@@ -3841,82 +3932,82 @@ paths:
           type: string
         style: simple
       - description: Number of page to be fetched.
-        example: 1
         explode: true
         in: query
         name: page
         required: false
         schema:
+          example: 1
           format: int64
           type: integer
         style: form
       - description: Number of elements per page.
-        example: 10
         explode: true
         in: query
         name: size
         required: false
         schema:
+          example: 10
           format: int64
           type: integer
         style: form
       - description: Specify fields and ordering (ASC for ascending, DESC for descending)
           in following format `field:ASC|DESC`.
-        example: name:asc
         explode: true
         in: query
         name: orderBy
         required: false
         schema:
+          example: name:asc
           items:
             type: string
           type: array
         style: form
       - description: The identifier of the Private Network
-        example: "12345"
         explode: true
         in: query
         name: privateNetworkId
         required: false
         schema:
+          example: 12345
           format: int64
           type: integer
         style: form
       - description: The requestId of the API call which led to the change.
-        example: D5FD9FAF-58C0-4406-8F46-F449B8E4FEC3
         explode: true
         in: query
         name: requestId
         required: false
         schema:
+          example: D5FD9FAF-58C0-4406-8F46-F449B8E4FEC3
           type: string
         style: form
       - description: User name which did the change.
-        example: 23cbb6d6-cb11-4330-bdff-7bb791df2e23
         explode: true
         in: query
         name: changedBy
         required: false
         schema:
+          example: 23cbb6d6-cb11-4330-bdff-7bb791df2e23
           type: string
         style: form
       - description: Start of search time range.
-        example: 2021-01-01
         explode: true
         in: query
         name: startDate
         required: false
         schema:
+          example: 2021-01-01
           format: date
           type: string
         style: form
       - description: End of search time range.
-        example: 2023-05-31
         explode: true
         in: query
         name: endDate
         required: false
         schema:
+          example: 2023-05-31
           format: date
           type: string
         style: form
@@ -3966,44 +4057,44 @@ paths:
           type: string
         style: simple
       - description: Number of page to be fetched.
-        example: 1
         explode: true
         in: query
         name: page
         required: false
         schema:
+          example: 1
           format: int64
           type: integer
         style: form
       - description: Number of elements per page.
-        example: 10
         explode: true
         in: query
         name: size
         required: false
         schema:
+          example: 10
           format: int64
           type: integer
         style: form
       - description: Specify fields and ordering (ASC for ascending, DESC for descending)
           in following format `field:ASC|DESC`.
-        example: name:asc
         explode: true
         in: query
         name: orderBy
         required: false
         schema:
+          example: name:asc
           items:
             type: string
           type: array
         style: form
       - description: Filter secrets by name
-        example: mysecret
         explode: true
         in: query
         name: name
         required: false
         schema:
+          example: mysecret
           type: string
         style: form
       - description: Filter secrets by type
@@ -4115,12 +4206,12 @@ paths:
           type: string
         style: simple
       - description: The id of the secret
-        example: 123
         explode: false
         in: path
         name: secretId
         required: true
         schema:
+          example: 123
           format: int64
           type: integer
         style: simple
@@ -4164,12 +4255,12 @@ paths:
           type: string
         style: simple
       - description: The id of the secret
-        example: 123
         explode: false
         in: path
         name: secretId
         required: true
         schema:
+          example: 123
           format: int64
           type: integer
         style: simple
@@ -4220,12 +4311,12 @@ paths:
           type: string
         style: simple
       - description: The id of the secret
-        example: 123
         explode: false
         in: path
         name: secretId
         required: true
         schema:
+          example: 123
           format: int64
           type: integer
         style: simple
@@ -4282,82 +4373,82 @@ paths:
           type: string
         style: simple
       - description: Number of page to be fetched.
-        example: 1
         explode: true
         in: query
         name: page
         required: false
         schema:
+          example: 1
           format: int64
           type: integer
         style: form
       - description: Number of elements per page.
-        example: 10
         explode: true
         in: query
         name: size
         required: false
         schema:
+          example: 10
           format: int64
           type: integer
         style: form
       - description: Specify fields and ordering (ASC for ascending, DESC for descending)
           in following format `field:ASC|DESC`.
-        example: name:asc
         explode: true
         in: query
         name: orderBy
         required: false
         schema:
+          example: name:asc
           items:
             type: string
           type: array
         style: form
       - description: The id of the secret.
-        example: 123
         explode: true
         in: query
         name: secretId
         required: false
         schema:
+          example: 123
           format: int64
           type: integer
         style: form
       - description: The requestId of the API call which led to the change.
-        example: D5FD9FAF-58C0-4406-8F46-F449B8E4FEC3
         explode: true
         in: query
         name: requestId
         required: false
         schema:
+          example: D5FD9FAF-58C0-4406-8F46-F449B8E4FEC3
           type: string
         style: form
       - description: changedBy of the user which led to the change.
-        example: 23cbb6d6-cb11-4330-bdff-7bb791df2e23
         explode: true
         in: query
         name: changedBy
         required: false
         schema:
+          example: 23cbb6d6-cb11-4330-bdff-7bb791df2e23
           type: string
         style: form
       - description: Start of search time range.
-        example: 2021-01-01
         explode: true
         in: query
         name: startDate
         required: false
         schema:
+          example: 2021-01-01
           format: date
           type: string
         style: form
       - description: End of search time range.
-        example: 2021-01-01
         explode: true
         in: query
         name: endDate
         required: false
         schema:
+          example: 2021-01-01
           format: date
           type: string
         style: form
@@ -4381,6 +4472,506 @@ paths:
           -H  "x-trace-id: 123213" "https://api.contabo.com/v1/secrets/audits"'
       - lang: cntb CLI
         source: cntb history secrets
+  /v1/vips:
+    get:
+      description: List and filter all vips in your account
+      operationId: retrieveVipList
+      parameters:
+      - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
+          to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4)
+          to generate them manually.'
+        explode: false
+        in: header
+        name: x-request-id
+        required: true
+        schema:
+          example: 04e0f898-37b4-48bc-a794-1a57abe6aa31
+          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-5][0-9A-Fa-f]{3}-[089abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+          type: string
+        style: simple
+      - description: Identifier to trace group of requests.
+        explode: false
+        in: header
+        name: x-trace-id
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: Number of page to be fetched.
+        explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          example: 1
+          format: int64
+          type: integer
+        style: form
+      - description: Number of elements per page.
+        explode: true
+        in: query
+        name: size
+        required: false
+        schema:
+          example: 10
+          format: int64
+          type: integer
+        style: form
+      - description: Specify fields and ordering (ASC for ascending, DESC for descending)
+          in following format `field:ASC|DESC`.
+        explode: true
+        in: query
+        name: orderBy
+        required: false
+        schema:
+          example: name:asc
+          items:
+            type: string
+          type: array
+        style: form
+      - description: The resourceId using the VIP.
+        explode: true
+        in: query
+        name: resourceId
+        required: false
+        schema:
+          example: "10001"
+          type: string
+        style: form
+      - description: The resourceType using the VIP.
+        explode: true
+        in: query
+        name: resourceType
+        required: false
+        schema:
+          enum:
+          - instances
+          - bare-metal
+          - "null"
+          example: instances
+          type: string
+        style: form
+      - description: The name of the resource.
+        explode: true
+        in: query
+        name: resourceName
+        required: false
+        schema:
+          example: vmi100101
+          type: string
+        style: form
+      - description: The display name of the resource.
+        explode: true
+        in: query
+        name: resourceDisplayName
+        required: false
+        schema:
+          example: my instance
+          type: string
+        style: form
+      - description: The VIP version.
+        explode: true
+        in: query
+        name: ipVersion
+        required: false
+        schema:
+          enum:
+          - v4
+          example: v4
+          type: string
+        style: form
+      - description: Comma separated IPs
+        explode: true
+        in: query
+        name: ips
+        required: false
+        schema:
+          example: 10.214.121.145, 10.214.121.1, 10.214.121.11
+          type: string
+        style: form
+      - description: The ip of the VIP
+        explode: true
+        in: query
+        name: ip
+        required: false
+        schema:
+          example: 10.214.121.145
+          type: string
+        style: form
+      - description: The VIP type.
+        explode: true
+        in: query
+        name: type
+        required: false
+        schema:
+          enum:
+          - additional
+          - floating
+          example: additional
+          type: string
+        style: form
+      - description: The dataCenter of the VIP.
+        explode: true
+        in: query
+        name: dataCenter
+        required: false
+        schema:
+          example: European Union (Germany) 3
+          type: string
+        style: form
+      - description: The region of the VIP.
+        explode: true
+        in: query
+        name: region
+        required: false
+        schema:
+          example: EU
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListVipResponse'
+          description: The response will be a JSON object and contains a paginated
+            list of Vips.
+      security:
+      - bearer: []
+      summary: List VIPs
+      tags:
+      - VIP
+      x-codeSamples:
+      - lang: cURL
+        source: 'curl -X GET -H "Content-Type: application/json" -H "Authorization:
+          Bearer ${ACCESS_TOKEN}" -H "x-request-id: 51A87ECD-754E-4104-9C54-D01AD0F83406"
+          -H "x-trace-id: 123213" "https://api.contabo.com/v1/vips"'
+      - lang: cntb CLI
+        source: cntb get vips
+  /v1/vips/{ip}:
+    get:
+      description: Get attributes values to a specific VIP on your account.
+      operationId: retrieveVip
+      parameters:
+      - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
+          to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4)
+          to generate them manually.'
+        explode: false
+        in: header
+        name: x-request-id
+        required: true
+        schema:
+          example: 04e0f898-37b4-48bc-a794-1a57abe6aa31
+          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-5][0-9A-Fa-f]{3}-[089abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+          type: string
+        style: simple
+      - description: Identifier to trace group of requests.
+        explode: false
+        in: header
+        name: x-trace-id
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: The ip of the VIP
+        explode: false
+        in: path
+        name: ip
+        required: true
+        schema:
+          example: 10.214.121.145
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FindVipResponse'
+          description: The response will be a JSON object and contains standard VIP
+            attributes.
+      security:
+      - bearer: []
+      summary: Get specific VIP by ip
+      tags:
+      - VIP
+      x-codeSamples:
+      - lang: cURL
+        source: 'curl -X GET -H "Content-Type: application/json" -H "Authorization:
+          Bearer ${ACCESS_TOKEN}" -H "x-request-id: 51A87ECD-754E-4104-9C54-D01AD0F83406"
+          -H  "x-trace-id: foo" "https://api.contabo.com/v1/vips/12345"'
+      - lang: cntb CLI
+        source: cntb get vip 12345
+  /v1/vips/{ip}/{resourceType}/{resourceId}:
+    delete:
+      description: Unassign a VIP from an VPS/VDS/Bare Metal using the machine id.
+      operationId: unassignIp
+      parameters:
+      - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
+          to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4)
+          to generate them manually.'
+        explode: false
+        in: header
+        name: x-request-id
+        required: true
+        schema:
+          example: 04e0f898-37b4-48bc-a794-1a57abe6aa31
+          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-5][0-9A-Fa-f]{3}-[089abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+          type: string
+        style: simple
+      - description: Identifier to trace group of requests.
+        explode: false
+        in: header
+        name: x-trace-id
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: The identifier of the resource
+        explode: false
+        in: path
+        name: resourceId
+        required: true
+        schema:
+          example: 12345
+          format: int64
+          type: integer
+        style: simple
+      - description: The ip you want to add the instance to
+        explode: false
+        in: path
+        name: ip
+        required: true
+        schema:
+          example: 127.0.0.1
+          type: string
+        style: simple
+      - description: The resourceType using the VIP.
+        explode: false
+        in: path
+        name: resourceType
+        required: true
+        schema:
+          enum:
+          - instances
+          - bare-metal
+          example: instances
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: No Content
+      security:
+      - bearer: []
+      summary: Unassign a VIP to a VPS/VDS/Bare Metal
+      tags:
+      - VIP
+      x-codeSamples:
+      - lang: cURL
+        source: 'curl -X DELETE -H "Content-Type: application/json" -H "Authorization:
+          Bearer ${ACCESS_TOKEN}" -H "x-request-id: 51A87ECD-754E-4104-9C54-D01AD0F83406"
+          -H  "x-trace-id: foo" "https://api.contabo.com/v1/vips/127.0.0.1/instances/1001001"'
+      - lang: cntb CLI
+        source: cntb unassign vip 127.0.0.1 1001001
+    post:
+      description: Assign a VIP to a VPS/VDS/Bare Metal using the machine id.
+      operationId: assignIp
+      parameters:
+      - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
+          to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4)
+          to generate them manually.'
+        explode: false
+        in: header
+        name: x-request-id
+        required: true
+        schema:
+          example: 04e0f898-37b4-48bc-a794-1a57abe6aa31
+          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-5][0-9A-Fa-f]{3}-[089abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+          type: string
+        style: simple
+      - description: Identifier to trace group of requests.
+        explode: false
+        in: header
+        name: x-trace-id
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: The identifier of the resource
+        explode: false
+        in: path
+        name: resourceId
+        required: true
+        schema:
+          example: 12345
+          format: int64
+          type: integer
+        style: simple
+      - description: The ip you want to add the instance to
+        explode: false
+        in: path
+        name: ip
+        required: true
+        schema:
+          example: 127.0.0.1
+          type: string
+        style: simple
+      - description: The resourceType using the VIP.
+        explode: false
+        in: path
+        name: resourceType
+        required: true
+        schema:
+          enum:
+          - instances
+          - bare-metal
+          example: instances
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssignVipResponse'
+          description: The response will be a JSON object and contains standard VIP
+            attributes.
+      security:
+      - bearer: []
+      summary: Assign a VIP to an VPS/VDS/Bare Metal
+      tags:
+      - VIP
+      x-codeSamples:
+      - lang: cURL
+        source: 'curl -X POST -H "Content-Type: application/json" -H "Authorization:
+          Bearer ${ACCESS_TOKEN}" -H "x-request-id: 51A87ECD-754E-4104-9C54-D01AD0F83406"
+          -H  "x-trace-id: foo" "https://api.contabo.com/v1/vips/127.0.0.1/instances/1001001"'
+      - lang: cntb CLI
+        source: cntb assign vip 127.0.0.1 1001001
+  /v1/vips/audits:
+    get:
+      description: List and filters the history about your VIPs.
+      operationId: retrieveVipAuditsList
+      parameters:
+      - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
+          to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4)
+          to generate them manually.'
+        explode: false
+        in: header
+        name: x-request-id
+        required: true
+        schema:
+          example: 04e0f898-37b4-48bc-a794-1a57abe6aa31
+          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-5][0-9A-Fa-f]{3}-[089abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+          type: string
+        style: simple
+      - description: Identifier to trace group of requests.
+        explode: false
+        in: header
+        name: x-trace-id
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: Number of page to be fetched.
+        explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          example: 1
+          format: int64
+          type: integer
+        style: form
+      - description: Number of elements per page.
+        explode: true
+        in: query
+        name: size
+        required: false
+        schema:
+          example: 10
+          format: int64
+          type: integer
+        style: form
+      - description: Specify fields and ordering (ASC for ascending, DESC for descending)
+          in following format `field:ASC|DESC`.
+        explode: true
+        in: query
+        name: orderBy
+        required: false
+        schema:
+          example: name:asc
+          items:
+            type: string
+          type: array
+        style: form
+      - description: The identifier of the VIP.
+        explode: true
+        in: query
+        name: vipId
+        required: false
+        schema:
+          example: 1b943b25a-c8b5-4570-9135-4bbaa7615b812345
+          type: string
+        style: form
+      - description: The requestId of the API call which led to the change.
+        explode: true
+        in: query
+        name: requestId
+        required: false
+        schema:
+          example: D5FD9FAF-58C0-4406-8F46-F449B8E4FEC3
+          type: string
+        style: form
+      - description: User name which did the change.
+        explode: true
+        in: query
+        name: changedBy
+        required: false
+        schema:
+          example: 23cbb6d6-cb11-4330-bdff-7bb791df2e23
+          type: string
+        style: form
+      - description: Start of search time range.
+        explode: true
+        in: query
+        name: startDate
+        required: false
+        schema:
+          example: 2021-01-01
+          format: date
+          type: string
+        style: form
+      - description: End of search time range.
+        explode: true
+        in: query
+        name: endDate
+        required: false
+        schema:
+          example: 2021-12-31
+          format: date
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListVipAuditResponse'
+          description: The response will be a JSON object and contains a paginated
+            list of VIPs audits.
+      security:
+      - bearer: []
+      summary: List history about your VIPs (audit)
+      tags:
+      - Vip Audits
+      x-codeSamples:
+      - lang: cURL
+        source: 'curl -X GET -H "Content-Type: application/json" -H "Authorization:
+          Bearer ${ACCESS_TOKEN}" -H "x-request-id: 51A87ECD-754E-4104-9C54-D01AD0F83406"
+          -H  "x-trace-id: 123213" "https://api.contabo.com/v1/vips/audits"'
+      - lang: cntb CLI
+        source: cntb history vips
   /v1/tags:
     get:
       description: List and filter all tags in your account
@@ -5289,62 +5880,62 @@ paths:
           type: string
         style: simple
       - description: Number of page to be fetched.
-        example: 1
         explode: true
         in: query
         name: page
         required: false
         schema:
+          example: 1
           format: int64
           type: integer
         style: form
       - description: Number of elements per page.
-        example: 10
         explode: true
         in: query
         name: size
         required: false
         schema:
+          example: 10
           format: int64
           type: integer
         style: form
       - description: Specify fields and ordering (ASC for ascending, DESC for descending)
           in following format `field:ASC|DESC`.
-        example: name:asc
         explode: true
         in: query
         name: orderBy
         required: false
         schema:
+          example: name:asc
           items:
             type: string
           type: array
         style: form
       - description: Filter as substring match for user emails.
-        example: john.doe@example.com
         explode: true
         in: query
         name: email
         required: false
         schema:
+          example: john.doe@example.com
           type: string
         style: form
       - description: Filter if user is enabled or not.
-        example: "true"
         explode: true
         in: query
         name: enabled
         required: false
         schema:
+          example: true
           type: boolean
         style: form
       - description: Filter if user is owner or not.
-        example: "true"
         explode: true
         in: query
         name: owner
         required: false
         schema:
+          example: true
           type: boolean
         style: form
       responses:
@@ -5452,12 +6043,12 @@ paths:
           type: string
         style: simple
       - description: The identifier of the user.
-        example: 6cdf5968-f9fe-4192-97c2-f349e813c5e8
         explode: false
         in: path
         name: userId
         required: true
         schema:
+          example: 6cdf5968-f9fe-4192-97c2-f349e813c5e8
           type: string
         style: simple
       responses:
@@ -5501,12 +6092,12 @@ paths:
           type: string
         style: simple
       - description: The identifier of the user.
-        example: 6cdf5968-f9fe-4192-97c2-f349e813c5e8
         explode: false
         in: path
         name: userId
         required: true
         schema:
+          example: 6cdf5968-f9fe-4192-97c2-f349e813c5e8
           type: string
         style: simple
       responses:
@@ -5557,12 +6148,12 @@ paths:
           type: string
         style: simple
       - description: The identifier of the user.
-        example: 6cdf5968-f9fe-4192-97c2-f349e813c5e8
         explode: false
         in: path
         name: userId
         required: true
         schema:
+          example: 6cdf5968-f9fe-4192-97c2-f349e813c5e8
           type: string
         style: simple
       requestBody:
@@ -5619,21 +6210,21 @@ paths:
           type: string
         style: simple
       - description: The identifier of the user.
-        example: 6cdf5968-f9fe-4192-97c2-f349e813c5e8
         explode: false
         in: path
         name: userId
         required: true
         schema:
+          example: 6cdf5968-f9fe-4192-97c2-f349e813c5e8
           type: string
         style: simple
       - description: The redirect url used for resetting password
-        example: https://test.contabo.de
         explode: true
         in: query
         name: redirectUrl
         required: false
         schema:
+          example: https://test.contabo.de
           type: string
         style: form
       responses:
@@ -5677,21 +6268,21 @@ paths:
           type: string
         style: simple
       - description: The identifier of the user.
-        example: 6cdf5968-f9fe-4192-97c2-f349e813c5e8
         explode: false
         in: path
         name: userId
         required: true
         schema:
+          example: 6cdf5968-f9fe-4192-97c2-f349e813c5e8
           type: string
         style: simple
       - description: The redirect url used for email verification
-        example: https://test.contabo.de
         explode: true
         in: query
         name: redirectUrl
         required: false
         schema:
+          example: https://test.contabo.de
           type: string
         style: form
       responses:
@@ -5823,12 +6414,12 @@ paths:
           type: string
         style: simple
       - description: The user ID for checking if password is set for him
-        example: 6cdf5968-f9fe-4192-97c2-f349e813c5e8
         explode: true
         in: query
         name: userId
         required: false
         schema:
+          example: 6cdf5968-f9fe-4192-97c2-f349e813c5e8
           type: string
         style: form
       responses:
@@ -5871,71 +6462,71 @@ paths:
           type: string
         style: simple
       - description: Number of page to be fetched.
-        example: 1
         explode: true
         in: query
         name: page
         required: false
         schema:
+          example: 1
           format: int64
           type: integer
         style: form
       - description: Number of elements per page.
-        example: 10
         explode: true
         in: query
         name: size
         required: false
         schema:
+          example: 10
           format: int64
           type: integer
         style: form
       - description: Specify fields and ordering (ASC for ascending, DESC for descending)
           in following format `field:ASC|DESC`.
-        example: name:asc
         explode: true
         in: query
         name: orderBy
         required: false
         schema:
+          example: name:asc
           items:
             type: string
           type: array
         style: form
       - description: The name of the role
-        example: Web
         explode: true
         in: query
         name: name
         required: false
         schema:
+          example: Web
           type: string
         style: form
       - description: The name of api
-        example: /v1/compute/instances
         explode: true
         in: query
         name: apiName
         required: false
         schema:
+          example: /v1/compute/instances
           type: string
         style: form
       - description: The name of the tag
-        example: Web
         explode: true
         in: query
         name: tagName
         required: false
         schema:
+          example: Web
           type: string
         style: form
       - description: The type of the tag. Can be either `default` or `custom`
-        example: custom
         explode: true
         in: query
         name: type
         required: false
         schema:
+          example: custom
           type: string
         style: form
       responses:
@@ -6042,12 +6633,12 @@ paths:
           type: string
         style: simple
       - description: The identifier of the role
-        example: 12345
         explode: false
         in: path
         name: roleId
         required: true
         schema:
+          example: 12345
           format: int64
           type: integer
         style: simple
@@ -6091,12 +6682,12 @@ paths:
           type: string
         style: simple
       - description: The identifier of the role
-        example: 12345
         explode: false
         in: path
         name: roleId
         required: true
         schema:
+          example: 12345
           format: int64
           type: integer
         style: simple
@@ -6146,12 +6737,12 @@ paths:
           type: string
         style: simple
       - description: The identifier of the role
-        example: 12345
         explode: false
         in: path
         name: roleId
         required: true
         schema:
+          example: 12345
           format: int64
           type: integer
         style: simple
@@ -6212,44 +6803,44 @@ paths:
           type: string
         style: simple
       - description: Number of page to be fetched.
-        example: 1
         explode: true
         in: query
         name: page
         required: false
         schema:
+          example: 1
           format: int64
           type: integer
         style: form
       - description: Number of elements per page.
-        example: 10
         explode: true
         in: query
         name: size
         required: false
         schema:
+          example: 10
           format: int64
           type: integer
         style: form
       - description: Specify fields and ordering (ASC for ascending, DESC for descending)
           in following format `field:ASC|DESC`.
-        example: name:asc
         explode: true
         in: query
         name: orderBy
         required: false
         schema:
+          example: name:asc
           items:
             type: string
           type: array
         style: form
       - description: The name of api
-        example: /v1/compute/instances
         explode: true
         in: query
         name: apiName
         required: false
         schema:
+          example: /v1/compute/instances
           type: string
         style: form
       responses:
@@ -6299,72 +6890,72 @@ paths:
           type: string
         style: simple
       - description: The identifier of the user.
-        example: 6cdf5968-f9fe-4192-97c2-f349e813c5e8
         explode: false
         in: path
         name: userId
         required: true
         schema:
+          example: 6cdf5968-f9fe-4192-97c2-f349e813c5e8
           type: string
         style: simple
       - description: Number of page to be fetched.
-        example: 1
         explode: true
         in: query
         name: page
         required: false
         schema:
+          example: 1
           format: int64
           type: integer
         style: form
       - description: Number of elements per page.
-        example: 10
         explode: true
         in: query
         name: size
         required: false
         schema:
+          example: 10
           format: int64
           type: integer
         style: form
       - description: Specify fields and ordering (ASC for ascending, DESC for descending)
           in following format `field:ASC|DESC`.
-        example: name:asc
         explode: true
         in: query
         name: orderBy
         required: false
         schema:
+          example: name:asc
           items:
             type: string
           type: array
         style: form
       - description: The identifier of the S3 object storage
-        example: d8417276-d2d9-43a9-a0a8-9a6fa6060246
         explode: true
         in: query
         name: objectStorageId
         required: false
         schema:
+          example: d8417276-d2d9-43a9-a0a8-9a6fa6060246
           type: string
         style: form
       - description: 'Filter for Object Storage by regions. Available regions: Asia
           (Singapore), European Union, United States (Central)'
-        example: Asia (Singapore)
         explode: true
         in: query
         name: regionName
         required: false
         schema:
+          example: Asia (Singapore)
           type: string
         style: form
       - description: Filter for Object Storage by his displayName.
-        example: Object Storage EU 420
         explode: true
         in: query
         name: displayName
         required: false
         schema:
+          example: Object Storage EU 420
           type: string
         style: form
       responses:
@@ -6415,30 +7006,30 @@ paths:
           type: string
         style: simple
       - description: The identifier of the user.
-        example: 6cdf5968-f9fe-4192-97c2-f349e813c5e8
         explode: false
         in: path
         name: userId
         required: true
         schema:
+          example: 6cdf5968-f9fe-4192-97c2-f349e813c5e8
           type: string
         style: simple
       - description: The identifier of the S3 object storage
-        example: d8417276-d2d9-43a9-a0a8-9a6fa6060246
         explode: false
         in: path
         name: objectStorageId
         required: true
         schema:
+          example: d8417276-d2d9-43a9-a0a8-9a6fa6060246
           type: string
         style: simple
       - description: The ID of the object storage credential
-        example: 12345
         explode: false
         in: path
         name: credentialId
         required: true
         schema:
+          example: 12345
           format: int64
           type: integer
         style: simple
@@ -6489,30 +7080,30 @@ paths:
           type: string
         style: simple
       - description: The identifier of the user.
-        example: 6cdf5968-f9fe-4192-97c2-f349e813c5e8
         explode: false
         in: path
         name: userId
         required: true
         schema:
+          example: 6cdf5968-f9fe-4192-97c2-f349e813c5e8
           type: string
         style: simple
       - description: The identifier of the S3 object storage
-        example: d8417276-d2d9-43a9-a0a8-9a6fa6060246
         explode: false
         in: path
         name: objectStorageId
         required: true
         schema:
+          example: d8417276-d2d9-43a9-a0a8-9a6fa6060246
           type: string
         style: simple
       - description: The ID of the object storage credential
-        example: 12345
         explode: false
         in: path
         name: credentialId
         required: true
         schema:
+          example: 12345
           format: int64
           type: integer
         style: simple
@@ -6564,81 +7155,81 @@ paths:
           type: string
         style: simple
       - description: Number of page to be fetched.
-        example: 1
         explode: true
         in: query
         name: page
         required: false
         schema:
+          example: 1
           format: int64
           type: integer
         style: form
       - description: Number of elements per page.
-        example: 10
         explode: true
         in: query
         name: size
         required: false
         schema:
+          example: 10
           format: int64
           type: integer
         style: form
       - description: Specify fields and ordering (ASC for ascending, DESC for descending)
           in following format `field:ASC|DESC`.
-        example: name:asc
         explode: true
         in: query
         name: orderBy
         required: false
         schema:
+          example: name:asc
           items:
             type: string
           type: array
         style: form
       - description: The identifier of the user.
-        example: 6cdf5968-f9fe-4192-97c2-f349e813c5e8
         explode: true
         in: query
         name: userId
         required: false
         schema:
+          example: 6cdf5968-f9fe-4192-97c2-f349e813c5e8
           type: string
         style: form
       - description: The requestId of the API call which led to the change.
-        example: D5FD9FAF-58C0-4406-8F46-F449B8E4FEC3
         explode: true
         in: query
         name: requestId
         required: false
         schema:
+          example: D5FD9FAF-58C0-4406-8F46-F449B8E4FEC3
           type: string
         style: form
       - description: changedBy of the user which led to the change.
-        example: 23cbb6d6-cb11-4330-bdff-7bb791df2e23
         explode: true
         in: query
         name: changedBy
         required: false
         schema:
+          example: 23cbb6d6-cb11-4330-bdff-7bb791df2e23
           type: string
         style: form
       - description: Start of search time range.
-        example: 2021-01-01
         explode: true
         in: query
         name: startDate
         required: false
         schema:
+          example: 2021-01-01
           format: date
           type: string
         style: form
       - description: End of search time range.
-        example: 2021-01-01
         explode: true
         in: query
         name: endDate
         required: false
         schema:
+          example: 2021-01-01
           format: date
           type: string
         style: form
@@ -6688,82 +7279,82 @@ paths:
           type: string
         style: simple
       - description: Number of page to be fetched.
-        example: 1
         explode: true
         in: query
         name: page
         required: false
         schema:
+          example: 1
           format: int64
           type: integer
         style: form
       - description: Number of elements per page.
-        example: 10
         explode: true
         in: query
         name: size
         required: false
         schema:
+          example: 10
           format: int64
           type: integer
         style: form
       - description: Specify fields and ordering (ASC for ascending, DESC for descending)
           in following format `field:ASC|DESC`.
-        example: name:asc
         explode: true
         in: query
         name: orderBy
         required: false
         schema:
+          example: name:asc
           items:
             type: string
           type: array
         style: form
       - description: The identifier of the role.
-        example: "12345"
         explode: true
         in: query
         name: roleId
         required: false
         schema:
+          example: 12345
           format: int64
           type: integer
         style: form
       - description: The requestId of the API call which led to the change.
-        example: D5FD9FAF-58C0-4406-8F46-F449B8E4FEC3
         explode: true
         in: query
         name: requestId
         required: false
         schema:
+          example: D5FD9FAF-58C0-4406-8F46-F449B8E4FEC3
           type: string
         style: form
       - description: changedBy of the user which led to the change.
-        example: 23cbb6d6-cb11-4330-bdff-7bb791df2e23
         explode: true
         in: query
         name: changedBy
         required: false
         schema:
+          example: 23cbb6d6-cb11-4330-bdff-7bb791df2e23
           type: string
         style: form
       - description: Start of search time range.
-        example: 2021-01-01
         explode: true
         in: query
         name: startDate
         required: false
         schema:
+          example: 2021-01-01
           format: date
           type: string
         style: form
       - description: End of search time range.
-        example: 2021-01-01
         explode: true
         in: query
         name: endDate
         required: false
         schema:
+          example: 2021-01-01
           format: date
           type: string
         style: form
@@ -7331,6 +7922,7 @@ components:
       - rescue
       - pending_payment
       - other
+      - reset_password
       type: string
     AddOnResponse:
       example:
@@ -8345,7 +8937,7 @@ components:
           timezone: Europe/Berlin
           chpasswd:
            expire: False
-        productId: V45
+        productId: V75
         displayName: VPS
         addOns:
           privateNetworking: {}
@@ -8365,9 +8957,9 @@ components:
           example: 3f184ab8-a600-4e7c-8c9b-3413e21a3752
           type: string
         productId:
-          default: V45
-          description: Default is V45
-          example: V45
+          default: V75
+          description: Default is V75
+          example: V75
           minLength: 1
           type: string
         region:
@@ -8383,6 +8975,8 @@ components:
           - UK
           - AUS
           - JPN
+          - SIN
+          - IND
           example: EU
           minLength: 1
           type: string
@@ -8490,7 +9084,7 @@ components:
         instanceId: 12345
         createdDate: 2021-06-02T12:32:03.363Z
         imageId: 9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d
-        productId: V45
+        productId: V75
         addOns:
         - quantity: 4
           id: 1431
@@ -8530,7 +9124,7 @@ components:
           type: string
         productId:
           description: Product ID
-          example: V45
+          example: V75
           type: string
         region:
           description: Instance Region where the compute instance should be located.
@@ -8576,7 +9170,7 @@ components:
         - instanceId: 12345
           createdDate: 2021-06-02T12:32:03.363Z
           imageId: 9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d
-          productId: V45
+          productId: V75
           addOns:
           - quantity: 4
             id: 1431
@@ -8592,7 +9186,7 @@ components:
         - instanceId: 12345
           createdDate: 2021-06-02T12:32:03.363Z
           imageId: 9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d
-          productId: V45
+          productId: V75
           addOns:
           - quantity: 4
             id: 1431
@@ -8620,6 +9214,15 @@ components:
       required:
       - _links
       - data
+      type: object
+    CancelInstanceRequest:
+      example:
+        cancelDate: 2000-01-23T04:56:07.000+00:00
+      properties:
+        cancelDate:
+          description: Date of cancellation
+          format: date-time
+          type: string
       type: object
     CancelInstanceResponseData:
       example:
@@ -8692,6 +9295,9 @@ components:
           type: array
       type: object
     PrivateNetworkingUpgradeRequest:
+      properties: {}
+      type: object
+    Backup:
       properties: {}
       type: object
     AddOnQuantityRequest:
@@ -9779,10 +10385,9 @@ components:
       properties:
         name:
           description: The name of the snapshot. It may contain letters, numbers,
-            colons, dashes, and underscores. There is a limit of 255 characters per
-            snapshot.
+            spaces, dashes. There is a limit of 30 characters per snapshot.
           example: Snapshot-Server
-          maxLength: 255
+          maxLength: 30
           minLength: 1
           type: string
         description:
@@ -9879,11 +10484,10 @@ components:
         description: Snapshot-Description
       properties:
         name:
-          description: The name of the snapshot. Tags may contain letters, numbers,
-            colons, dashes, and underscores. There is a limit of 255 characters per
-            snapshot.
+          description: The name of the snapshot. Tags may contain only letters, numbers,
+            spaces, dashes. There is a limit of 30 characters per snapshot.
           example: Snapshot-Server
-          maxLength: 255
+          maxLength: 30
           minLength: 1
           type: string
         description:
@@ -9989,6 +10593,14 @@ components:
           description: Storage Requirement in MB
           example: 500
           type: number
+        validProductIds:
+          description: Valid Product IDs for this application
+          example:
+          - V13
+          - V15
+          items:
+            type: string
+          type: array
       type: object
     OptimalRequirements:
       properties:
@@ -10004,6 +10616,14 @@ components:
           description: Storage Requirement in MB
           example: 500
           type: number
+        validProductIds:
+          description: Valid Product IDs for this application
+          example:
+          - V13
+          - V15
+          items:
+            type: string
+          type: array
       type: object
     ApplicationRequirements:
       properties:
@@ -11287,6 +11907,15 @@ components:
       required:
       - _links
       - data
+      type: object
+    CancelObjectStorageRequest:
+      example:
+        cancelDate: 2000-01-23T04:56:07.000+00:00
+      properties:
+        cancelDate:
+          description: Date of cancellation
+          format: date-time
+          type: string
       type: object
     CancelObjectStorageResponseData:
       example:
@@ -13130,6 +13759,539 @@ components:
             self: /v1/secrets/audits?page=20
             next: /v1/secrets/audits?page=21
             last: /v1/secrets/audits?page=101
+      required:
+      - _links
+      - _pagination
+      - data
+      type: object
+    IpV41:
+      example:
+        broadcast: 195.123.123.255
+        netmaskCidr: 24
+        ip: 195.123.123.1
+        net: 195.123.123.0/24
+        gateway: 255.255.255.1
+      properties:
+        ip:
+          description: IP address
+          example: 195.123.123.1
+          type: string
+        gateway:
+          description: Gateway
+          example: 255.255.255.1
+          type: string
+        netmaskCidr:
+          description: Netmask CIDR
+          example: 24
+          format: int64
+          type: integer
+        broadcast:
+          description: Broadcast address
+          example: 195.123.123.255
+          type: string
+        net:
+          description: Net address
+          example: 195.123.123.0/24
+          type: string
+      required:
+      - broadcast
+      - gateway
+      - ip
+      - net
+      - netmaskCidr
+      type: object
+    ListVipResponseData:
+      example:
+        resourceDisplayName: My Instance 12
+        resourceId: "101234"
+        ipVersion: v4
+        dataCenter: European Union (Germany) 3
+        tenantId: DE
+        customerId: "1234"
+        vipId: a846c6cc-731c-45dc-b653-bc8232e88d9c
+        resourceName: vmi100101
+        region: European Union (Germany)
+        type: additional
+        v4:
+          broadcast: 195.123.123.255
+          netmaskCidr: 24
+          ip: 195.123.123.1
+          net: 195.123.123.0/24
+          gateway: 255.255.255.1
+        resourceType: instances
+      properties:
+        tenantId:
+          description: Tenant Id.
+          example: DE
+          minLength: 1
+          type: string
+        customerId:
+          description: Customer's Id.
+          example: "1234"
+          minLength: 1
+          type: string
+        vipId:
+          description: Vip uuid.
+          example: a846c6cc-731c-45dc-b653-bc8232e88d9c
+          type: string
+        dataCenter:
+          description: data center.
+          example: European Union (Germany) 3
+          type: string
+        region:
+          description: Region
+          example: European Union (Germany)
+          type: string
+        resourceId:
+          description: Resource Id.
+          example: "101234"
+          type: string
+        resourceType:
+          description: The resourceType using the VIP.
+          enum:
+          - instances
+          - bare-metal
+          - "null"
+          example: instances
+          type: string
+        resourceName:
+          description: Resource name.
+          example: vmi100101
+          type: string
+        resourceDisplayName:
+          description: Resource display name.
+          example: My Instance 12
+          type: string
+        ipVersion:
+          description: Version of Ip.
+          enum:
+          - v4
+          type: string
+        type:
+          description: The VIP type.
+          enum:
+          - additional
+          - floating
+          example: additional
+          type: string
+        v4:
+          $ref: '#/components/schemas/IpV41'
+      required:
+      - customerId
+      - dataCenter
+      - ipVersion
+      - region
+      - resourceDisplayName
+      - resourceId
+      - resourceName
+      - tenantId
+      - vipId
+      type: object
+    ListVipResponse:
+      example:
+        data:
+        - resourceDisplayName: My Instance 12
+          resourceId: "101234"
+          ipVersion: v4
+          dataCenter: European Union (Germany) 3
+          tenantId: DE
+          customerId: "1234"
+          vipId: a846c6cc-731c-45dc-b653-bc8232e88d9c
+          resourceName: vmi100101
+          region: European Union (Germany)
+          type: additional
+          v4:
+            broadcast: 195.123.123.255
+            netmaskCidr: 24
+            ip: 195.123.123.1
+            net: 195.123.123.0/24
+            gateway: 255.255.255.1
+          resourceType: instances
+        - resourceDisplayName: My Instance 12
+          resourceId: "101234"
+          ipVersion: v4
+          dataCenter: European Union (Germany) 3
+          tenantId: DE
+          customerId: "1234"
+          vipId: a846c6cc-731c-45dc-b653-bc8232e88d9c
+          resourceName: vmi100101
+          region: European Union (Germany)
+          type: additional
+          v4:
+            broadcast: 195.123.123.255
+            netmaskCidr: 24
+            ip: 195.123.123.1
+            net: 195.123.123.0/24
+            gateway: 255.255.255.1
+          resourceType: instances
+        _links:
+          first: /v1/vips?page=1
+          previous: /v1/vips?page=19
+          self: /v1/vips?page=20
+          next: /v1/vips?page=21
+          last: /v1/vips?page=101
+        _pagination: ""
+      properties:
+        _pagination:
+          allOf:
+          - $ref: '#/components/schemas/PaginationMeta'
+          description: Data about pagination like how many results, pages, page size.
+        data:
+          items:
+            $ref: '#/components/schemas/ListVipResponseData'
+          type: array
+        _links:
+          allOf:
+          - $ref: '#/components/schemas/Links'
+          example:
+            first: /v1/vips?page=1
+            previous: /v1/vips?page=19
+            self: /v1/vips?page=20
+            next: /v1/vips?page=21
+            last: /v1/vips?page=101
+      required:
+      - _links
+      - _pagination
+      - data
+      type: object
+    VipResponse:
+      example:
+        resourceDisplayName: My Instance 12
+        resourceId: "101234"
+        ipVersion: v4
+        dataCenter: European Union (Germany) 3
+        tenantId: DE
+        customerId: "1234"
+        vipId: a846c6cc-731c-45dc-b653-bc8232e88d9c
+        resourceName: vmi100101
+        region: European Union (Germany)
+        type: additional
+        v4:
+          broadcast: 195.123.123.255
+          netmaskCidr: 24
+          ip: 195.123.123.1
+          net: 195.123.123.0/24
+          gateway: 255.255.255.1
+        resourceType: instances
+      properties:
+        tenantId:
+          description: Tenant Id.
+          example: DE
+          minLength: 1
+          type: string
+        customerId:
+          description: Customer's Id.
+          example: "1234"
+          minLength: 1
+          type: string
+        vipId:
+          description: Vip uuid.
+          example: a846c6cc-731c-45dc-b653-bc8232e88d9c
+          type: string
+        dataCenter:
+          description: data center.
+          example: European Union (Germany) 3
+          type: string
+        region:
+          description: Region
+          example: European Union (Germany)
+          type: string
+        resourceId:
+          description: Resource Id.
+          example: "101234"
+          type: string
+        resourceType:
+          description: The resourceType using the VIP.
+          enum:
+          - instances
+          - bare-metal
+          - "null"
+          example: instances
+          type: string
+        resourceName:
+          description: Resource name.
+          example: vmi100101
+          type: string
+        resourceDisplayName:
+          description: Resource display name.
+          example: My Instance 12
+          type: string
+        ipVersion:
+          description: Version of Ip.
+          enum:
+          - v4
+          type: string
+        type:
+          description: The VIP type.
+          enum:
+          - additional
+          - floating
+          example: additional
+          type: string
+        v4:
+          $ref: '#/components/schemas/IpV41'
+      required:
+      - customerId
+      - dataCenter
+      - ipVersion
+      - region
+      - resourceDisplayName
+      - resourceId
+      - resourceName
+      - tenantId
+      - vipId
+      type: object
+    FindVipResponse:
+      example:
+        data:
+        - resourceDisplayName: My Instance 12
+          resourceId: "101234"
+          ipVersion: v4
+          dataCenter: European Union (Germany) 3
+          tenantId: DE
+          customerId: "1234"
+          vipId: a846c6cc-731c-45dc-b653-bc8232e88d9c
+          resourceName: vmi100101
+          region: European Union (Germany)
+          type: additional
+          v4:
+            broadcast: 195.123.123.255
+            netmaskCidr: 24
+            ip: 195.123.123.1
+            net: 195.123.123.0/24
+            gateway: 255.255.255.1
+          resourceType: instances
+        - resourceDisplayName: My Instance 12
+          resourceId: "101234"
+          ipVersion: v4
+          dataCenter: European Union (Germany) 3
+          tenantId: DE
+          customerId: "1234"
+          vipId: a846c6cc-731c-45dc-b653-bc8232e88d9c
+          resourceName: vmi100101
+          region: European Union (Germany)
+          type: additional
+          v4:
+            broadcast: 195.123.123.255
+            netmaskCidr: 24
+            ip: 195.123.123.1
+            net: 195.123.123.0/24
+            gateway: 255.255.255.1
+          resourceType: instances
+        _links:
+          self: /v1/vips/12345
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/VipResponse'
+          type: array
+        _links:
+          allOf:
+          - $ref: '#/components/schemas/SelfLinks'
+          example:
+            self: /v1/vips/12345
+      required:
+      - _links
+      - data
+      type: object
+    AssignVipResponse:
+      example:
+        data:
+        - resourceDisplayName: My Instance 12
+          resourceId: "101234"
+          ipVersion: v4
+          dataCenter: European Union (Germany) 3
+          tenantId: DE
+          customerId: "1234"
+          vipId: a846c6cc-731c-45dc-b653-bc8232e88d9c
+          resourceName: vmi100101
+          region: European Union (Germany)
+          type: additional
+          v4:
+            broadcast: 195.123.123.255
+            netmaskCidr: 24
+            ip: 195.123.123.1
+            net: 195.123.123.0/24
+            gateway: 255.255.255.1
+          resourceType: instances
+        - resourceDisplayName: My Instance 12
+          resourceId: "101234"
+          ipVersion: v4
+          dataCenter: European Union (Germany) 3
+          tenantId: DE
+          customerId: "1234"
+          vipId: a846c6cc-731c-45dc-b653-bc8232e88d9c
+          resourceName: vmi100101
+          region: European Union (Germany)
+          type: additional
+          v4:
+            broadcast: 195.123.123.255
+            netmaskCidr: 24
+            ip: 195.123.123.1
+            net: 195.123.123.0/24
+            gateway: 255.255.255.1
+          resourceType: instances
+        _links:
+          self: /v1/vips/1.2.2.4/instances/12345
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/VipResponse'
+          type: array
+        _links:
+          allOf:
+          - $ref: '#/components/schemas/SelfLinks'
+          example:
+            self: /v1/vips/1.2.2.4/instances/12345
+      required:
+      - _links
+      - data
+      type: object
+    VipAuditResponse:
+      example:
+        traceId: 78E9A428-94E9-4A2A-92F5-26038C6884F
+        changedBy: "54321"
+        requestId: A2F56FAF-18N0-4893-11HG-R312M1E4FEC5
+        vipId: b943b25a-c8b5-4570-9135-4bbaa7615b81
+        tenantId: DE
+        customerId: "54321"
+        changes:
+          prev:
+            name: test
+          new:
+            name: test1
+        action: CREATED
+        id: 12345
+        timestamp: 2021-03-30T11:35:06.177Z
+        username: John Doe
+      properties:
+        id:
+          description: The identifier of the audit entry.
+          example: 12345
+          format: int64
+          type: integer
+        vipId:
+          description: The identifier of the VIP
+          example: b943b25a-c8b5-4570-9135-4bbaa7615b81
+          type: string
+        action:
+          description: Type of the action.
+          enum:
+          - CREATED
+          - DELETED
+          - UPDATED
+          example: CREATED
+          type: string
+        timestamp:
+          description: When the change took place.
+          example: 2021-03-30T11:35:06.177Z
+          format: date-time
+          type: string
+        tenantId:
+          description: Customer tenant id
+          example: DE
+          minLength: 1
+          type: string
+        customerId:
+          description: Customer number
+          example: "54321"
+          minLength: 1
+          type: string
+        changedBy:
+          description: User id
+          example: "54321"
+          minLength: 1
+          type: string
+        username:
+          description: User name which did the change.
+          example: John Doe
+          type: string
+        requestId:
+          description: The requestId of the API call which led to the change.
+          example: A2F56FAF-18N0-4893-11HG-R312M1E4FEC5
+          type: string
+        traceId:
+          description: The traceId of the API call which led to the change.
+          example: 78E9A428-94E9-4A2A-92F5-26038C6884F
+          type: string
+        changes:
+          description: List of actual changes.
+          example:
+            prev:
+              name: test
+            new:
+              name: test1
+          type: object
+      required:
+      - action
+      - changedBy
+      - customerId
+      - id
+      - requestId
+      - tenantId
+      - timestamp
+      - traceId
+      - username
+      - vipId
+      type: object
+    ListVipAuditResponse:
+      example:
+        data:
+        - traceId: 78E9A428-94E9-4A2A-92F5-26038C6884F
+          changedBy: "54321"
+          requestId: A2F56FAF-18N0-4893-11HG-R312M1E4FEC5
+          vipId: b943b25a-c8b5-4570-9135-4bbaa7615b81
+          tenantId: DE
+          customerId: "54321"
+          changes:
+            prev:
+              name: test
+            new:
+              name: test1
+          action: CREATED
+          id: 12345
+          timestamp: 2021-03-30T11:35:06.177Z
+          username: John Doe
+        - traceId: 78E9A428-94E9-4A2A-92F5-26038C6884F
+          changedBy: "54321"
+          requestId: A2F56FAF-18N0-4893-11HG-R312M1E4FEC5
+          vipId: b943b25a-c8b5-4570-9135-4bbaa7615b81
+          tenantId: DE
+          customerId: "54321"
+          changes:
+            prev:
+              name: test
+            new:
+              name: test1
+          action: CREATED
+          id: 12345
+          timestamp: 2021-03-30T11:35:06.177Z
+          username: John Doe
+        _links:
+          first: /v1/vips/audits?page=2
+          previous: /v1/vips/audits?page=2
+          next: /v1/vips/audits?page=3
+          last: /v1/vips/audits?page=10
+          self: /v1/vips/audits
+        _pagination: ""
+      properties:
+        _pagination:
+          allOf:
+          - $ref: '#/components/schemas/PaginationMeta'
+          description: Data about pagination like how many results, pages, page size.
+        data:
+          items:
+            $ref: '#/components/schemas/VipAuditResponse'
+          type: array
+        _links:
+          allOf:
+          - $ref: '#/components/schemas/Links'
+          example:
+            first: /v1/vips/audits?page=2
+            previous: /v1/vips/audits?page=2
+            next: /v1/vips/audits?page=3
+            last: /v1/vips/audits?page=10
+            self: /v1/vips/audits
       required:
       - _links
       - _pagination
@@ -15726,3 +16888,6 @@ x-tagGroups:
   tags:
   - Secrets
   - Secrets Audits
+- name: Network Management
+  tags:
+  - VIP

@@ -1,21 +1,21 @@
 # \VIPApi
 
-All URIs are relative to *https://api-staging-ext.contabo.intra*
+All URIs are relative to *https://api.contabo.com*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**AssignIp**](VIPApi.md#AssignIp) | **Post** /v1/vips/{ip}/instances/{instanceId} | Assign a VIP to a VPS/VDS
+[**AssignIp**](VIPApi.md#AssignIp) | **Post** /v1/vips/{ip}/{resourceType}/{resourceId} | Assign a VIP to an VPS/VDS/Bare Metal
 [**RetrieveVip**](VIPApi.md#RetrieveVip) | **Get** /v1/vips/{ip} | Get specific VIP by ip
 [**RetrieveVipList**](VIPApi.md#RetrieveVipList) | **Get** /v1/vips | List VIPs
-[**UnassignIp**](VIPApi.md#UnassignIp) | **Delete** /v1/vips/{ip}/instances/{instanceId} | Unassign a VIP to a VPS/VDS
+[**UnassignIp**](VIPApi.md#UnassignIp) | **Delete** /v1/vips/{ip}/{resourceType}/{resourceId} | Unassign a VIP to a VPS/VDS/Bare Metal
 
 
 
 ## AssignIp
 
-> AssignVipResponse AssignIp(ctx, instanceId, ip).XRequestId(xRequestId).XTraceId(xTraceId).Execute()
+> AssignVipResponse AssignIp(ctx, resourceId, ip, resourceType).XRequestId(xRequestId).XTraceId(xTraceId).Execute()
 
-Assign a VIP to a VPS/VDS
+Assign a VIP to an VPS/VDS/Bare Metal
 
 
 
@@ -33,13 +33,14 @@ import (
 
 func main() {
     xRequestId := "04e0f898-37b4-48bc-a794-1a57abe6aa31" // string | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually.
-    instanceId := int64(12345) // int64 | The identifier of the instance
+    resourceId := int64(12345) // int64 | The identifier of the resource
     ip := "127.0.0.1" // string | The ip you want to add the instance to
+    resourceType := "instances" // string | The resourceType using the VIP.
     xTraceId := "xTraceId_example" // string | Identifier to trace group of requests. (optional)
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.VIPApi.AssignIp(context.Background(), instanceId, ip).XRequestId(xRequestId).XTraceId(xTraceId).Execute()
+    resp, r, err := api_client.VIPApi.AssignIp(context.Background(), resourceId, ip, resourceType).XRequestId(xRequestId).XTraceId(xTraceId).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `VIPApi.AssignIp``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -55,8 +56,9 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**instanceId** | **int64** | The identifier of the instance | 
+**resourceId** | **int64** | The identifier of the resource | 
 **ip** | **string** | The ip you want to add the instance to | 
+**resourceType** | **string** | The resourceType using the VIP. | 
 
 ### Other Parameters
 
@@ -66,6 +68,7 @@ Other parameters are passed through a pointer to a apiAssignIpRequest struct via
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **xRequestId** | **string** | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually. | 
+
 
 
  **xTraceId** | **string** | Identifier to trace group of requests. | 
@@ -189,7 +192,7 @@ func main() {
     size := int64(10) // int64 | Number of elements per page. (optional)
     orderBy := []string{"Inner_example"} // []string | Specify fields and ordering (ASC for ascending, DESC for descending) in following format `field:ASC|DESC`. (optional)
     resourceId := "10001" // string | The resourceId using the VIP. (optional)
-    resourceType := "instance" // string | The resourceType using the VIP. (optional)
+    resourceType := "instances" // string | The resourceType using the VIP. (optional)
     resourceName := "vmi100101" // string | The name of the resource. (optional)
     resourceDisplayName := "my instance" // string | The display name of the resource. (optional)
     ipVersion := "v4" // string | The VIP version. (optional)
@@ -258,9 +261,9 @@ Name | Type | Description  | Notes
 
 ## UnassignIp
 
-> UnassignIp(ctx, instanceId, ip).XRequestId(xRequestId).XTraceId(xTraceId).Execute()
+> UnassignIp(ctx, resourceId, ip, resourceType).XRequestId(xRequestId).XTraceId(xTraceId).Execute()
 
-Unassign a VIP to a VPS/VDS
+Unassign a VIP to a VPS/VDS/Bare Metal
 
 
 
@@ -278,13 +281,14 @@ import (
 
 func main() {
     xRequestId := "04e0f898-37b4-48bc-a794-1a57abe6aa31" // string | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually.
-    instanceId := int64(12345) // int64 | The identifier of the instance
+    resourceId := int64(12345) // int64 | The identifier of the resource
     ip := "127.0.0.1" // string | The ip you want to add the instance to
+    resourceType := "instances" // string | The resourceType using the VIP.
     xTraceId := "xTraceId_example" // string | Identifier to trace group of requests. (optional)
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.VIPApi.UnassignIp(context.Background(), instanceId, ip).XRequestId(xRequestId).XTraceId(xTraceId).Execute()
+    resp, r, err := api_client.VIPApi.UnassignIp(context.Background(), resourceId, ip, resourceType).XRequestId(xRequestId).XTraceId(xTraceId).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `VIPApi.UnassignIp``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -298,8 +302,9 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**instanceId** | **int64** | The identifier of the instance | 
+**resourceId** | **int64** | The identifier of the resource | 
 **ip** | **string** | The ip you want to add the instance to | 
+**resourceType** | **string** | The resourceType using the VIP. | 
 
 ### Other Parameters
 
@@ -309,6 +314,7 @@ Other parameters are passed through a pointer to a apiUnassignIpRequest struct v
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **xRequestId** | **string** | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually. | 
+
 
 
  **xTraceId** | **string** | Identifier to trace group of requests. | 

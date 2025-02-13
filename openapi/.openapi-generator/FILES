@@ -1,4 +1,5 @@
 .gitignore
+.openapi-generator-ignore
 .travis.yml
 README.md
 api/openapi.yaml
@@ -25,6 +26,8 @@ api_tags.go
 api_tags_audits.go
 api_users.go
 api_users_audits.go
+api_vip.go
+api_vip_audits.go
 client.go
 configuration.go
 docs/AddOnQuantityRequest.md
@@ -36,13 +39,16 @@ docs/ApplicationConfig.md
 docs/ApplicationRequirements.md
 docs/ApplicationResponse.md
 docs/AssignInstancePrivateNetworkResponse.md
+docs/AssignVipResponse.md
 docs/AssignedTagResponse.md
 docs/AssignmentAuditResponse.md
 docs/AssignmentResponse.md
 docs/AutoScalingTypeRequest.md
 docs/AutoScalingTypeResponse.md
+docs/CancelInstanceRequest.md
 docs/CancelInstanceResponse.md
 docs/CancelInstanceResponseData.md
+docs/CancelObjectStorageRequest.md
 docs/CancelObjectStorageResponse.md
 docs/CancelObjectStorageResponseData.md
 docs/ClientResponse.md
@@ -95,6 +101,7 @@ docs/FindSnapshotResponse.md
 docs/FindTagResponse.md
 docs/FindUserIsPasswordSetResponse.md
 docs/FindUserResponse.md
+docs/FindVipResponse.md
 docs/FindVncResponse.md
 docs/FirewallingUpgradeRequest.md
 docs/GenerateClientSecretResponse.md
@@ -130,6 +137,7 @@ docs/InstancesResetPasswordActionsRequest.md
 docs/InternalApi.md
 docs/IpConfig.md
 docs/IpV4.md
+docs/IpV41.md
 docs/IpV6.md
 docs/Links.md
 docs/ListApiPermissionResponse.md
@@ -159,6 +167,9 @@ docs/ListTagAuditsResponse.md
 docs/ListTagResponse.md
 docs/ListUserAuditResponse.md
 docs/ListUserResponse.md
+docs/ListVipAuditResponse.md
+docs/ListVipResponse.md
+docs/ListVipResponseData.md
 docs/MinimumRequirements.md
 docs/ObjectStorageAuditResponse.md
 docs/ObjectStorageResponse.md
@@ -231,6 +242,10 @@ docs/UserIsPasswordSetResponse.md
 docs/UserResponse.md
 docs/UsersApi.md
 docs/UsersAuditsApi.md
+docs/VIPApi.md
+docs/VipAuditResponse.md
+docs/VipAuditsApi.md
+docs/VipResponse.md
 docs/VncResponse.md
 git_push.sh
 go.mod
@@ -244,13 +259,16 @@ model_application_config.go
 model_application_requirements.go
 model_application_response.go
 model_assign_instance_private_network_response.go
+model_assign_vip_response.go
 model_assigned_tag_response.go
 model_assignment_audit_response.go
 model_assignment_response.go
 model_auto_scaling_type_request.go
 model_auto_scaling_type_response.go
+model_cancel_instance_request.go
 model_cancel_instance_response.go
 model_cancel_instance_response_data.go
+model_cancel_object_storage_request.go
 model_cancel_object_storage_response.go
 model_cancel_object_storage_response_data.go
 model_client_response.go
@@ -303,6 +321,7 @@ model_find_snapshot_response.go
 model_find_tag_response.go
 model_find_user_is_password_set_response.go
 model_find_user_response.go
+model_find_vip_response.go
 model_find_vnc_response.go
 model_firewalling_upgrade_request.go
 model_generate_client_secret_response.go
@@ -331,6 +350,7 @@ model_instances_audit_response.go
 model_instances_reset_password_actions_request.go
 model_ip_config.go
 model_ip_v4.go
+model_ip_v41.go
 model_ip_v6.go
 model_links.go
 model_list_api_permission_response.go
@@ -360,6 +380,9 @@ model_list_tag_audits_response.go
 model_list_tag_response.go
 model_list_user_audit_response.go
 model_list_user_response.go
+model_list_vip_audit_response.go
+model_list_vip_response.go
+model_list_vip_response_data.go
 model_minimum_requirements.go
 model_object_storage_audit_response.go
 model_object_storage_response.go
@@ -416,6 +439,8 @@ model_upgrade_object_storage_response_data.go
 model_user_audit_response.go
 model_user_is_password_set_response.go
 model_user_response.go
+model_vip_audit_response.go
+model_vip_response.go
 model_vnc_response.go
 response.go
 utils.go

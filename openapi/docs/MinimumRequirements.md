@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 **CpuCores** | Pointer to **float32** | CPU Cores Requirement | [optional] 
 **RamMb** | Pointer to **float32** | Memory Requirement in MB | [optional] 
 **DiskMb** | Pointer to **float32** | Storage Requirement in MB | [optional] 
+**ValidProductIds** | Pointer to **[]string** | Valid Product IDs for this application | [optional] 
 
 ## Methods
 
@@ -101,6 +102,31 @@ SetDiskMb sets DiskMb field to given value.
 `func (o *MinimumRequirements) HasDiskMb() bool`
 
 HasDiskMb returns a boolean if a field has been set.
+
+### GetValidProductIds
+
+`func (o *MinimumRequirements) GetValidProductIds() []string`
+
+GetValidProductIds returns the ValidProductIds field if non-nil, zero value otherwise.
+
+### GetValidProductIdsOk
+
+`func (o *MinimumRequirements) GetValidProductIdsOk() (*[]string, bool)`
+
+GetValidProductIdsOk returns a tuple with the ValidProductIds field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetValidProductIds
+
+`func (o *MinimumRequirements) SetValidProductIds(v []string)`
+
+SetValidProductIds sets ValidProductIds field to given value.
+
+### HasValidProductIds
+
+`func (o *MinimumRequirements) HasValidProductIds() bool`
+
+HasValidProductIds returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
