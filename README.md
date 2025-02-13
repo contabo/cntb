@@ -13,6 +13,7 @@
 
 ## Getting Started
 
+
 1. Configure `cntb` once to use your credentials. You can obtain them from [Customer Control Panel](https://my.contabo.com/api/details).
 
   ```sh
