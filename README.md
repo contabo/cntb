@@ -45,7 +45,7 @@ cntb create image --name 'CentOS Cloud Image' --description 'CentOS 7 Cloud Imag
 Using Cloud-Init to set ssh public key
 
 ```sh
-cntb create instance --imageId "ae423751-50fa-4bf6-9978-015673bf51c4" --productId "V75" --region "EU" --userData 'ssh_authorized_keys:
+cntb create instance --imageId "ae423751-50fa-4bf6-9978-015673bf51c4" --productId "V76" --region "EU" --userData 'ssh_authorized_keys:
   - ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAGEA3FSyQwBI6Z+nCSjUUk8EEAnnkhXlukKoUPND/RRClWz2s5TCzIkd3Ou5+Cyz71X0XmazM3l5WgeErvtIwQMyT1KjNoMhoJMrJnWqQPOt5Q8zWd9qG7PBl9+eiH5qV7NZ'
 # once finished please login via ssh
 # in case of the previously uploaded CentOS 7 Cloud Image please use `centos` as user
@@ -55,7 +55,7 @@ cntb create instance --imageId "ae423751-50fa-4bf6-9978-015673bf51c4" --productI
 Using Cloud-Init to install apache2 with an already stored SSH public key
 
 ```sh
-cntb create instance --imageId "ae423751-50fa-4bf6-9978-015673bf51c4" --productId "V75" --region "EU" --sshKeys '1,2' --userData 'package_update: true
+cntb create instance --imageId "ae423751-50fa-4bf6-9978-015673bf51c4" --productId "V76" --region "EU" --sshKeys '1,2' --userData 'package_update: true
 package_upgrade: true
 packages:
   - httpd'
