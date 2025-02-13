@@ -15,8 +15,8 @@ import (
 	"encoding/json"
 )
 
-// IpV41 struct for IpV41
-type IpV41 struct {
+// IpV42 struct for IpV42
+type IpV42 struct {
 	// IP Address
 	Ip string `json:"ip"`
 	// Netmask CIDR
@@ -25,28 +25,28 @@ type IpV41 struct {
 	Gateway string `json:"gateway"`
 }
 
-// NewIpV41 instantiates a new IpV41 object
+// NewIpV42 instantiates a new IpV42 object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewIpV41(ip string, netmaskCidr int32, gateway string) *IpV41 {
-	this := IpV41{}
+func NewIpV42(ip string, netmaskCidr int32, gateway string) *IpV42 {
+	this := IpV42{}
 	this.Ip = ip
 	this.NetmaskCidr = netmaskCidr
 	this.Gateway = gateway
 	return &this
 }
 
-// NewIpV41WithDefaults instantiates a new IpV41 object
+// NewIpV42WithDefaults instantiates a new IpV42 object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewIpV41WithDefaults() *IpV41 {
-	this := IpV41{}
+func NewIpV42WithDefaults() *IpV42 {
+	this := IpV42{}
 	return &this
 }
 
 // GetIp returns the Ip field value
-func (o *IpV41) GetIp() string {
+func (o *IpV42) GetIp() string {
 	if o == nil {
 		var ret string
 		return ret
@@ -57,7 +57,7 @@ func (o *IpV41) GetIp() string {
 
 // GetIpOk returns a tuple with the Ip field value
 // and a boolean to check if the value has been set.
-func (o *IpV41) GetIpOk() (*string, bool) {
+func (o *IpV42) GetIpOk() (*string, bool) {
 	if o == nil  {
 		return nil, false
 	}
@@ -65,12 +65,12 @@ func (o *IpV41) GetIpOk() (*string, bool) {
 }
 
 // SetIp sets field value
-func (o *IpV41) SetIp(v string) {
+func (o *IpV42) SetIp(v string) {
 	o.Ip = v
 }
 
 // GetNetmaskCidr returns the NetmaskCidr field value
-func (o *IpV41) GetNetmaskCidr() int32 {
+func (o *IpV42) GetNetmaskCidr() int32 {
 	if o == nil {
 		var ret int32
 		return ret
@@ -81,7 +81,7 @@ func (o *IpV41) GetNetmaskCidr() int32 {
 
 // GetNetmaskCidrOk returns a tuple with the NetmaskCidr field value
 // and a boolean to check if the value has been set.
-func (o *IpV41) GetNetmaskCidrOk() (*int32, bool) {
+func (o *IpV42) GetNetmaskCidrOk() (*int32, bool) {
 	if o == nil  {
 		return nil, false
 	}
@@ -89,12 +89,12 @@ func (o *IpV41) GetNetmaskCidrOk() (*int32, bool) {
 }
 
 // SetNetmaskCidr sets field value
-func (o *IpV41) SetNetmaskCidr(v int32) {
+func (o *IpV42) SetNetmaskCidr(v int32) {
 	o.NetmaskCidr = v
 }
 
 // GetGateway returns the Gateway field value
-func (o *IpV41) GetGateway() string {
+func (o *IpV42) GetGateway() string {
 	if o == nil {
 		var ret string
 		return ret
@@ -105,7 +105,7 @@ func (o *IpV41) GetGateway() string {
 
 // GetGatewayOk returns a tuple with the Gateway field value
 // and a boolean to check if the value has been set.
-func (o *IpV41) GetGatewayOk() (*string, bool) {
+func (o *IpV42) GetGatewayOk() (*string, bool) {
 	if o == nil  {
 		return nil, false
 	}
@@ -113,11 +113,11 @@ func (o *IpV41) GetGatewayOk() (*string, bool) {
 }
 
 // SetGateway sets field value
-func (o *IpV41) SetGateway(v string) {
+func (o *IpV42) SetGateway(v string) {
 	o.Gateway = v
 }
 
-func (o IpV41) MarshalJSON() ([]byte, error) {
+func (o IpV42) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
 	if true {
 		toSerialize["ip"] = o.Ip
@@ -131,38 +131,38 @@ func (o IpV41) MarshalJSON() ([]byte, error) {
 	return json.Marshal(toSerialize)
 }
 
-type NullableIpV41 struct {
-	value *IpV41
+type NullableIpV42 struct {
+	value *IpV42
 	isSet bool
 }
 
-func (v NullableIpV41) Get() *IpV41 {
+func (v NullableIpV42) Get() *IpV42 {
 	return v.value
 }
 
-func (v *NullableIpV41) Set(val *IpV41) {
+func (v *NullableIpV42) Set(val *IpV42) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableIpV41) IsSet() bool {
+func (v NullableIpV42) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableIpV41) Unset() {
+func (v *NullableIpV42) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableIpV41(val *IpV41) *NullableIpV41 {
-	return &NullableIpV41{value: val, isSet: true}
+func NewNullableIpV42(val *IpV42) *NullableIpV42 {
+	return &NullableIpV42{value: val, isSet: true}
 }
 
-func (v NullableIpV41) MarshalJSON() ([]byte, error) {
+func (v NullableIpV42) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableIpV41) UnmarshalJSON(src []byte) error {
+func (v *NullableIpV42) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

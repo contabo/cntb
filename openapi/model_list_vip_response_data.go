@@ -39,7 +39,7 @@ type ListVipResponseData struct {
 	IpVersion string `json:"ipVersion"`
 	// The VIP type.
 	Type *string `json:"type,omitempty"`
-	V4 *IpV41 `json:"v4,omitempty"`
+	V4 *IpV4 `json:"v4,omitempty"`
 }
 
 // NewListVipResponseData instantiates a new ListVipResponseData object
@@ -349,9 +349,9 @@ func (o *ListVipResponseData) SetType(v string) {
 }
 
 // GetV4 returns the V4 field value if set, zero value otherwise.
-func (o *ListVipResponseData) GetV4() IpV41 {
+func (o *ListVipResponseData) GetV4() IpV4 {
 	if o == nil || o.V4 == nil {
-		var ret IpV41
+		var ret IpV4
 		return ret
 	}
 	return *o.V4
@@ -359,7 +359,7 @@ func (o *ListVipResponseData) GetV4() IpV41 {
 
 // GetV4Ok returns a tuple with the V4 field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ListVipResponseData) GetV4Ok() (*IpV41, bool) {
+func (o *ListVipResponseData) GetV4Ok() (*IpV4, bool) {
 	if o == nil || o.V4 == nil {
 		return nil, false
 	}
@@ -375,8 +375,8 @@ func (o *ListVipResponseData) HasV4() bool {
 	return false
 }
 
-// SetV4 gets a reference to the given IpV41 and assigns it to the V4 field.
-func (o *ListVipResponseData) SetV4(v IpV41) {
+// SetV4 gets a reference to the given IpV4 and assigns it to the V4 field.
+func (o *ListVipResponseData) SetV4(v IpV4) {
 	o.V4 = &v
 }
 
