@@ -21,7 +21,7 @@ var instanceUpgradeCmd = &cobra.Command{
 	Use:     "instance [instanceId]",
 	Short:   "Update a specific instance.",
 	Long:    `Updates a specific instance based on json / yaml input or arguments.`,
-	Example: `cntb upgrade instance 123 --privateNetworking=true`,
+	Example: `cntb upgrade instance 123 --privateNetworking=true --backup=true`,
 	Run: func(cmd *cobra.Command, args []string) {
 		upgradeInstanceRequest := *instancesClient.NewUpgradeInstanceRequestWithDefaults()
 		content := contaboCmd.OpenStdinOrFile()
@@ -30,6 +30,9 @@ var instanceUpgradeCmd = &cobra.Command{
 		case nil:
 			if privateNetworking == "true" {
 				upgradeInstanceRequest.PrivateNetworking = &map[string]interface{}{}
+			}
+			if backup == "true" {
+				upgradeInstanceRequest.Backup = &map[string]interface{}{}
 			}
 		default:
 			// from file / stdin
@@ -68,14 +71,23 @@ var instanceUpgradeCmd = &cobra.Command{
 		viper.BindPFlag("privateNetworking", cmd.Flags().Lookup("privateNetworking"))
 		privateNetworking = viper.GetString("privateNetworking")
 
+		viper.BindPFlag("backup", cmd.Flags().Lookup("backup"))
+		backup = viper.GetString("backup")
+
 		isPrivateNetworking, err := strconv.ParseBool(privateNetworking)
 		if err != nil {
 			cmd.Help()
 			log.Fatal("Please only provide 'true' or 'false' for --privateNetworking")
 		}
 
-		if !isPrivateNetworking {
-			log.Fatal("Please provide --privateNetworking=true as it is the only update currently available.")
+		isBackup, err := strconv.ParseBool(backup)
+		if err != nil {
+			cmd.Help()
+			log.Fatal("Please only provide 'true' or 'false' for --backup")
+		}
+
+		if !isPrivateNetworking && !isBackup {
+			log.Fatal("Please provide at least one of --privateNetworking=true or --backup=true")
 		}
 
 		viper.BindPFlag("privateNetworking", cmd.Flags().Lookup("privateNetworking"))
@@ -96,4 +108,7 @@ func init() {
 
 	instanceUpgradeCmd.Flags().StringVar(&privateNetworking, "privateNetworking", "false",
 		`upgrade the instance to have privateNetworking capability. ('true' or 'false')`)
+
+	instanceUpgradeCmd.Flags().StringVar(&backup, "backup", "false",
+		`upgrade the instance to have automated backup capability. ('true' or 'false')`)
 }

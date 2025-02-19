@@ -5,7 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **ImageId** | Pointer to **string** | ImageId to be used to setup the compute instance. Default is Ubuntu 22.04 | [optional] [default to "afecbb85-e2fc-46f0-9684-b46b1faf00bb"]
-**ProductId** | Pointer to **string** | Default is V75 | [optional] [default to "V75"]
+**ProductId** | Pointer to **string** | Default is V76 | [optional] [default to "V76"]
 **Region** | Pointer to **string** | Instance Region where the compute instance should be located. Default is EU | [optional] [default to "EU"]
 **SshKeys** | Pointer to **[]int64** | Array of &#x60;secretId&#x60;s of public SSH keys for logging into as &#x60;defaultUser&#x60; with administrator/root privileges. Applies to Linux/BSD systems. Please refer to Secrets Management API. | [optional] 
 **RootPassword** | Pointer to **int64** | &#x60;secretId&#x60; of the password for the &#x60;defaultUser&#x60; with administrator/root privileges. For Linux/BSD please use SSH, for Windows RDP. Please refer to Secrets Management API. | [optional] 

@@ -84,15 +84,11 @@ Invoke-WebRequest -Uri 'https://api.contabo.com/v1/compute/instances' -Method 'G
 
 
 
-
-
    ```sh
    cntb config set-credentials --oauth2-clientid=<ClientId from Customer Control Panel> --oauth2-client-secret=<ClientSecret from Customer Control Panel> --oauth2-user=<API User from Customer Control Panel> --oauth2-password='<API Password from Customer Control Panel>'
    ```
 
 5. Use the CLI
-
-
 
 
 
@@ -169,12 +165,8 @@ If you need to allow other persons or automation scripts to access specific API 
 
 
 
-
-
    This allows you to specify a restriction to certain functions of an API by allowing control over POST (=Create), GET (=Read), PUT/PATCH (=Update) and DELETE (=Delete) methods for each API endpoint (URL) individually.
 * `resourcePermission`
-
-
 
 
 
@@ -510,10 +502,8 @@ Class | Method | HTTP request | Description
  - [InstancesAuditResponse](docs/InstancesAuditResponse.md)
  - [InstancesResetPasswordActionsRequest](docs/InstancesResetPasswordActionsRequest.md)
  - [IpConfig](docs/IpConfig.md)
- - [IpConfig1](docs/IpConfig1.md)
  - [IpV4](docs/IpV4.md)
  - [IpV41](docs/IpV41.md)
- - [IpV42](docs/IpV42.md)
  - [IpV6](docs/IpV6.md)
  - [Links](docs/Links.md)
  - [ListApiPermissionResponse](docs/ListApiPermissionResponse.md)

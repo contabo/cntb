@@ -5,6 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **PrivateNetworking** | Pointer to **map[string]interface{}** | Set this attribute if you want to upgrade your instance with the Private Networking addon. Please provide an empty object for the time being as value. There will be more configuration possible in the future. | [optional] 
+**Backup** | Pointer to **map[string]interface{}** | Set this attribute if you want to upgrade your instance with the Automated Backup addon.   Please provide an empty object for the time being as value. There will be more configuration possible   in the future. | [optional] 
 
 ## Methods
 
@@ -49,6 +50,31 @@ SetPrivateNetworking sets PrivateNetworking field to given value.
 `func (o *UpgradeInstanceRequest) HasPrivateNetworking() bool`
 
 HasPrivateNetworking returns a boolean if a field has been set.
+
+### GetBackup
+
+`func (o *UpgradeInstanceRequest) GetBackup() map[string]interface{}`
+
+GetBackup returns the Backup field if non-nil, zero value otherwise.
+
+### GetBackupOk
+
+`func (o *UpgradeInstanceRequest) GetBackupOk() (*map[string]interface{}, bool)`
+
+GetBackupOk returns a tuple with the Backup field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetBackup
+
+`func (o *UpgradeInstanceRequest) SetBackup(v map[string]interface{})`
+
+SetBackup sets Backup field to given value.
+
+### HasBackup
+
+`func (o *UpgradeInstanceRequest) HasBackup() bool`
+
+HasBackup returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

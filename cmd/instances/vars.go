@@ -17,6 +17,7 @@ var (
 	createInstanceLicense      string
 	createInstanceDisplayName  string
 	createInstanceDefaultUser  string
+	createInstanceAddBackup    bool
 )
 
 // get
@@ -54,6 +55,7 @@ var (
 var (
 	upgradeInstanceId int64
 	privateNetworking string
+	backup            string
 )
 
 // reset password

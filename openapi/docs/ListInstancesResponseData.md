@@ -15,7 +15,7 @@ Name | Type | Description | Notes
 **RegionName** | **string** | The name of the region where the instance is located. | 
 **ProductId** | **string** | Product ID | 
 **ImageId** | **string** | Image&#39;s id | 
-**IpConfig** | [**IpConfig1**](IpConfig1.md) |  | 
+**IpConfig** | [**IpConfig**](IpConfig.md) |  | 
 **MacAddress** | **string** | MAC Address | 
 **RamMb** | **float32** | Image RAM size in MB | 
 **CpuCores** | **int64** | CPU core count | 
@@ -38,7 +38,7 @@ Name | Type | Description | Notes
 
 ### NewListInstancesResponseData
 
-`func NewListInstancesResponseData(tenantId string, customerId string, additionalIps []AdditionalIp, name string, displayName string, instanceId int64, dataCenter string, region string, regionName string, productId string, imageId string, ipConfig IpConfig1, macAddress string, ramMb float32, cpuCores int64, osType string, diskMb float32, sshKeys []int64, createdDate time.Time, cancelDate string, status InstanceStatus, vHostId int64, vHostNumber int64, vHostName string, addOns []AddOnResponse, productType string, productName string, ) *ListInstancesResponseData`
+`func NewListInstancesResponseData(tenantId string, customerId string, additionalIps []AdditionalIp, name string, displayName string, instanceId int64, dataCenter string, region string, regionName string, productId string, imageId string, ipConfig IpConfig, macAddress string, ramMb float32, cpuCores int64, osType string, diskMb float32, sshKeys []int64, createdDate time.Time, cancelDate string, status InstanceStatus, vHostId int64, vHostNumber int64, vHostName string, addOns []AddOnResponse, productType string, productName string, ) *ListInstancesResponseData`
 
 NewListInstancesResponseData instantiates a new ListInstancesResponseData object
 This constructor will assign default values to properties that have it defined,
@@ -275,20 +275,20 @@ SetImageId sets ImageId field to given value.
 
 ### GetIpConfig
 
-`func (o *ListInstancesResponseData) GetIpConfig() IpConfig1`
+`func (o *ListInstancesResponseData) GetIpConfig() IpConfig`
 
 GetIpConfig returns the IpConfig field if non-nil, zero value otherwise.
 
 ### GetIpConfigOk
 
-`func (o *ListInstancesResponseData) GetIpConfigOk() (*IpConfig1, bool)`
+`func (o *ListInstancesResponseData) GetIpConfigOk() (*IpConfig, bool)`
 
 GetIpConfigOk returns a tuple with the IpConfig field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetIpConfig
 
-`func (o *ListInstancesResponseData) SetIpConfig(v IpConfig1)`
+`func (o *ListInstancesResponseData) SetIpConfig(v IpConfig)`
 
 SetIpConfig sets IpConfig field to given value.
 

@@ -56,6 +56,18 @@ var instanceCreateCmd = &cobra.Command{
 				createInstanceRequest.DefaultUser = &createInstanceDefaultUser
 			}
 
+			// add backup flag
+			if createInstanceAddBackup {
+				if createInstanceRequest.AddOns == nil {
+					createInstanceRequest.AddOns = &instancesClient.CreateInstanceAddons{
+						Backup: &map[string]interface{}{},
+					}
+				} else {
+					createInstanceRequest.AddOns.Backup =  &map[string]interface{}{}
+				}
+			}
+
+
 		default:
 			// from file / stdin
 			var requestFromFile instancesClient.CreateInstanceRequest
@@ -116,6 +128,9 @@ var instanceCreateCmd = &cobra.Command{
 		viper.BindPFlag("license", cmd.Flags().Lookup("license"))
 		createInstanceLicense = viper.GetString("license")
 
+		viper.BindPFlag("addBackup", cmd.Flags().Lookup("addBackup"))
+		createInstanceAddBackup = viper.GetBool("addBackup")
+
 		return nil
 	},
 }
@@ -157,4 +172,7 @@ func init() {
 		Valid licenses: "PleskHost" "PleskPro" "PleskAdmin" "cPanel5" "cPanel30" "cPanel50" "cPanel100" "cPanel150"
 		"cPanel200" "cPanel250" "cPanel300" "cPanel350" "cPanel400" "cPanel450" "cPanel500" "cPanel550" "cPanel600"
 		"cPanel650" "cPanel700" "cPanel750" "cPanel800" "cPanel850" "cPanel900" "cPanel950" "cPanel1000"`)
+
+	instanceCreateCmd.Flags().BoolVar(&createInstanceAddBackup, "addBackup", false,
+		`Enable backup for the instance`)
 }

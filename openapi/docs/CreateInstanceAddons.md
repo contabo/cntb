@@ -6,6 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **PrivateNetworking** | Pointer to **map[string]interface{}** | Set this attribute if you want to upgrade your instance with the Private Networking addon.   Please provide an empty object for the time being as value. There will be more configuration possible   in the future. | [optional] 
 **AdditionalIps** | Pointer to **map[string]interface{}** | Set this attribute if you want to upgrade your instance with the Additional IPs addon. Please provide an empty object for the time being as value. There will be more configuration possible in the future. | [optional] 
+**Backup** | Pointer to **map[string]interface{}** | Set this attribute if you want to upgrade your instance with the Automated backup addon.     Please provide an empty object for the time being as value. There will be more configuration possible     in the future. | [optional] 
 **ExtraStorage** | Pointer to [**ExtraStorageRequest**](ExtraStorageRequest.md) | Set this attribute if you want to upgrade your instance with the Extra Storage addon. | [optional] 
 **CustomImage** | Pointer to **map[string]interface{}** | Set this attribute if you want to upgrade your instance with the Custom Images addon.   Please provide an empty object for the time being as value. There will be more configuration possible   in the future. | [optional] 
 **AddonsIds** | Pointer to [**[]AddOnRequest**](AddOnRequest.md) |  | [optional] 
@@ -78,6 +79,31 @@ SetAdditionalIps sets AdditionalIps field to given value.
 `func (o *CreateInstanceAddons) HasAdditionalIps() bool`
 
 HasAdditionalIps returns a boolean if a field has been set.
+
+### GetBackup
+
+`func (o *CreateInstanceAddons) GetBackup() map[string]interface{}`
+
+GetBackup returns the Backup field if non-nil, zero value otherwise.
+
+### GetBackupOk
+
+`func (o *CreateInstanceAddons) GetBackupOk() (*map[string]interface{}, bool)`
+
+GetBackupOk returns a tuple with the Backup field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetBackup
+
+`func (o *CreateInstanceAddons) SetBackup(v map[string]interface{})`
+
+SetBackup sets Backup field to given value.
+
+### HasBackup
+
+`func (o *CreateInstanceAddons) HasBackup() bool`
+
+HasBackup returns a boolean if a field has been set.
 
 ### GetExtraStorage
 

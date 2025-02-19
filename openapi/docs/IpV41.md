@@ -4,15 +4,17 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Ip** | **string** | IP Address | 
-**NetmaskCidr** | **int32** | Netmask CIDR | 
+**Ip** | **string** | IP address | 
 **Gateway** | **string** | Gateway | 
+**NetmaskCidr** | **int64** | Netmask CIDR | 
+**Broadcast** | **string** | Broadcast address | 
+**Net** | **string** | Net address | 
 
 ## Methods
 
 ### NewIpV41
 
-`func NewIpV41(ip string, netmaskCidr int32, gateway string, ) *IpV41`
+`func NewIpV41(ip string, gateway string, netmaskCidr int64, broadcast string, net string, ) *IpV41`
 
 NewIpV41 instantiates a new IpV41 object
 This constructor will assign default values to properties that have it defined,
@@ -47,26 +49,6 @@ and a boolean to check if the value has been set.
 SetIp sets Ip field to given value.
 
 
-### GetNetmaskCidr
-
-`func (o *IpV41) GetNetmaskCidr() int32`
-
-GetNetmaskCidr returns the NetmaskCidr field if non-nil, zero value otherwise.
-
-### GetNetmaskCidrOk
-
-`func (o *IpV41) GetNetmaskCidrOk() (*int32, bool)`
-
-GetNetmaskCidrOk returns a tuple with the NetmaskCidr field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetNetmaskCidr
-
-`func (o *IpV41) SetNetmaskCidr(v int32)`
-
-SetNetmaskCidr sets NetmaskCidr field to given value.
-
-
 ### GetGateway
 
 `func (o *IpV41) GetGateway() string`
@@ -85,6 +67,66 @@ and a boolean to check if the value has been set.
 `func (o *IpV41) SetGateway(v string)`
 
 SetGateway sets Gateway field to given value.
+
+
+### GetNetmaskCidr
+
+`func (o *IpV41) GetNetmaskCidr() int64`
+
+GetNetmaskCidr returns the NetmaskCidr field if non-nil, zero value otherwise.
+
+### GetNetmaskCidrOk
+
+`func (o *IpV41) GetNetmaskCidrOk() (*int64, bool)`
+
+GetNetmaskCidrOk returns a tuple with the NetmaskCidr field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetNetmaskCidr
+
+`func (o *IpV41) SetNetmaskCidr(v int64)`
+
+SetNetmaskCidr sets NetmaskCidr field to given value.
+
+
+### GetBroadcast
+
+`func (o *IpV41) GetBroadcast() string`
+
+GetBroadcast returns the Broadcast field if non-nil, zero value otherwise.
+
+### GetBroadcastOk
+
+`func (o *IpV41) GetBroadcastOk() (*string, bool)`
+
+GetBroadcastOk returns a tuple with the Broadcast field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetBroadcast
+
+`func (o *IpV41) SetBroadcast(v string)`
+
+SetBroadcast sets Broadcast field to given value.
+
+
+### GetNet
+
+`func (o *IpV41) GetNet() string`
+
+GetNet returns the Net field if non-nil, zero value otherwise.
+
+### GetNetOk
+
+`func (o *IpV41) GetNetOk() (*string, bool)`
+
+GetNetOk returns a tuple with the Net field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetNet
+
+`func (o *IpV41) SetNet(v string)`
+
+SetNet sets Net field to given value.
 
 
 
