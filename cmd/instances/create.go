@@ -60,10 +60,10 @@ var instanceCreateCmd = &cobra.Command{
 			if createInstanceAddBackup {
 				if createInstanceRequest.AddOns == nil {
 					createInstanceRequest.AddOns = &instancesClient.CreateInstanceAddons{
-						Backup: &map[string]interface{}{},
+						Backup: &map[string]map[string]interface{}{},
 					}
 				} else {
-					createInstanceRequest.AddOns.Backup =  &map[string]interface{}{}
+					createInstanceRequest.AddOns.Backup = &map[string]map[string]interface{}{}
 				}
 			}
 

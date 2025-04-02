@@ -388,7 +388,7 @@ Name | Type | Description  | Notes
 
 ## RetrieveInstancesList
 
-> ListInstancesResponse RetrieveInstancesList(ctx).XRequestId(xRequestId).XTraceId(xTraceId).Page(page).Size(size).OrderBy(orderBy).Name(name).DisplayName(displayName).DataCenter(dataCenter).Region(region).InstanceId(instanceId).InstanceIds(instanceIds).Status(status).AddOnIds(addOnIds).ProductTypes(productTypes).IpConfig(ipConfig).Search(search).Execute()
+> ListInstancesResponse RetrieveInstancesList(ctx).XRequestId(xRequestId).XTraceId(xTraceId).Page(page).Size(size).OrderBy(orderBy).Name(name).DisplayName(displayName).DataCenter(dataCenter).Region(region).InstanceId(instanceId).InstanceIds(instanceIds).Status(status).ProductIds(productIds).AddOnIds(addOnIds).ProductTypes(productTypes).IpConfig(ipConfig).Search(search).Execute()
 
 List instances
 
@@ -419,6 +419,7 @@ func main() {
     instanceId := int64(100) // int64 | The identifier of the instance (deprecated) (optional)
     instanceIds := "100, 101, 102" // string | Comma separated instances identifiers (optional)
     status := "provisioning,installing" // string | The status of the instance (optional)
+    productIds := "V68,V77" // string | Identifiers of the instance products (optional)
     addOnIds := "1044,827" // string | Identifiers of Addons the instances have (optional)
     productTypes := "ssd, hdd, nvme" // string | Comma separated instance's category depending on Product Id (optional)
     ipConfig := true // bool | Filter instances that have an ip config (optional)
@@ -426,7 +427,7 @@ func main() {
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.InstancesApi.RetrieveInstancesList(context.Background()).XRequestId(xRequestId).XTraceId(xTraceId).Page(page).Size(size).OrderBy(orderBy).Name(name).DisplayName(displayName).DataCenter(dataCenter).Region(region).InstanceId(instanceId).InstanceIds(instanceIds).Status(status).AddOnIds(addOnIds).ProductTypes(productTypes).IpConfig(ipConfig).Search(search).Execute()
+    resp, r, err := api_client.InstancesApi.RetrieveInstancesList(context.Background()).XRequestId(xRequestId).XTraceId(xTraceId).Page(page).Size(size).OrderBy(orderBy).Name(name).DisplayName(displayName).DataCenter(dataCenter).Region(region).InstanceId(instanceId).InstanceIds(instanceIds).Status(status).ProductIds(productIds).AddOnIds(addOnIds).ProductTypes(productTypes).IpConfig(ipConfig).Search(search).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `InstancesApi.RetrieveInstancesList``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -459,6 +460,7 @@ Name | Type | Description  | Notes
  **instanceId** | **int64** | The identifier of the instance (deprecated) | 
  **instanceIds** | **string** | Comma separated instances identifiers | 
  **status** | **string** | The status of the instance | 
+ **productIds** | **string** | Identifiers of the instance products | 
  **addOnIds** | **string** | Identifiers of Addons the instances have | 
  **productTypes** | **string** | Comma separated instance&#39;s category depending on Product Id | 
  **ipConfig** | **bool** | Filter instances that have an ip config | 

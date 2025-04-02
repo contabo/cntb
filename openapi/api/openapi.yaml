@@ -346,6 +346,12 @@ tags:
     in roles. Users can have roles assigned. Roles can grant and restrict access to
     different API's or to specific resources. Permissions for resources are declared
     by using tags which have been assigned to resources.
+  name: Users Object Storage Credentials
+- description: Give access to all api endpoints and resources or manage to which endpoints
+    and resources individual users might have access to. Permissions are organized
+    in roles. Users can have roles assigned. Roles can grant and restrict access to
+    different API's or to specific resources. Permissions for resources are declared
+    by using tags which have been assigned to resources.
   name: Users Audits
 - description: Give access to all api endpoints and resources or manage to which endpoints
     and resources individual users might have access to. Permissions are organized
@@ -404,12 +410,12 @@ paths:
         style: simple
       - description: The identifier of the compute instance / resource to be started
           in rescue mode.
-        example: 12345
         explode: false
         in: path
         name: instanceId
         required: true
         schema:
+          example: 12345
           format: int64
           type: integer
         style: simple
@@ -459,12 +465,12 @@ paths:
         style: simple
       - description: The identifier of the compute instance / resource to be started
           in rescue mode.
-        example: 12345
         explode: false
         in: path
         name: instanceId
         required: true
         schema:
+          example: 12345
           format: int64
           type: integer
         style: simple
@@ -518,12 +524,12 @@ paths:
         style: simple
       - description: The identifier of the compute instance / resource to be started
           in rescue mode.
-        example: 12345
         explode: false
         in: path
         name: instanceId
         required: true
         schema:
+          example: 12345
           format: int64
           type: integer
         style: simple
@@ -574,12 +580,12 @@ paths:
         style: simple
       - description: The identifier of the compute instance / resource to be started
           in rescue mode.
-        example: 12345
         explode: false
         in: path
         name: instanceId
         required: true
         schema:
+          example: 12345
           format: int64
           type: integer
         style: simple
@@ -633,12 +639,12 @@ paths:
         style: simple
       - description: The identifier of the compute instance / resource to be started
           in rescue mode.
-        example: 12345
         explode: false
         in: path
         name: instanceId
         required: true
         schema:
+          example: 12345
           format: int64
           type: integer
         style: simple
@@ -725,12 +731,12 @@ paths:
         style: simple
       - description: The identifier of the compute instance / resource to be started
           in rescue mode.
-        example: 12345
         explode: false
         in: path
         name: instanceId
         required: true
         schema:
+          example: 12345
           format: int64
           type: integer
         style: simple
@@ -790,95 +796,94 @@ paths:
           type: string
         style: simple
       - description: Number of page to be fetched.
-        example: 1
         explode: true
         in: query
         name: page
         required: false
         schema:
+          example: 1
           format: int64
           type: integer
         style: form
       - description: Number of elements per page.
-        example: 10
         explode: true
         in: query
         name: size
         required: false
         schema:
+          example: 10
           format: int64
           type: integer
         style: form
       - description: Specify fields and ordering (ASC for ascending, DESC for descending)
           in following format `field:ASC|DESC`.
-        example: name:asc
         explode: true
         in: query
         name: orderBy
         required: false
         schema:
+          example: name:asc
           items:
             type: string
           type: array
         style: form
       - description: The name of the instance
-        example: vmd12345
         explode: true
         in: query
         name: name
         required: false
         schema:
+          example: vmd12345
           type: string
         style: form
       - description: The display name of the instance
-        example: myTestInstance
         explode: true
         in: query
         name: displayName
         required: false
         schema:
+          example: myTestInstance
           type: string
         style: form
       - description: The data center of the instance
-        example: European Union 1
         explode: true
         in: query
         name: dataCenter
         required: false
         schema:
+          example: European Union 1
           type: string
         style: form
       - description: The Region of the instance
-        example: EU
         explode: true
         in: query
         name: region
         required: false
         schema:
+          example: EU
           type: string
         style: form
       - deprecated: true
         description: The identifier of the instance (deprecated)
-        example: 100
         explode: true
         in: query
         name: instanceId
         required: false
         schema:
+          example: 100
           format: int64
           type: integer
         style: form
       - description: Comma separated instances identifiers
-        example: 100, 101, 102
         explode: true
         in: query
         name: instanceIds
         required: false
         schema:
+          example: 100, 101, 102
           type: string
         style: form
       - description: The status of the instance
-        example: provisioning,installing
         explode: true
         in: query
         name: status
@@ -899,43 +904,53 @@ paths:
           - pending_payment
           - other
           - reset_password
+          example: provisioning,installing
+          type: string
+        style: form
+      - description: Identifiers of the instance products
+        explode: true
+        in: query
+        name: productIds
+        required: false
+        schema:
+          example: V68,V77
           type: string
         style: form
       - description: Identifiers of Addons the instances have
-        example: 1044,827
         explode: true
         in: query
         name: addOnIds
         required: false
         schema:
+          example: 1044,827
           type: string
         style: form
       - description: Comma separated instance's category depending on Product Id
-        example: ssd, hdd, nvme
         explode: true
         in: query
         name: productTypes
         required: false
         schema:
+          example: ssd, hdd, nvme
           type: string
         style: form
       - description: Filter instances that have an ip config
-        example: true
         explode: true
         in: query
         name: ipConfig
         required: false
         schema:
+          example: true
           type: boolean
         style: form
       - description: Full text search when listing the instances. Can be searched
           by `name`, `displayName`, `ipAddress`
-        example: vmd12345
         explode: true
         in: query
         name: search
         required: false
         schema:
+          example: vmd12345
           type: string
         style: form
       responses:
@@ -960,44 +975,25 @@ paths:
         source: cntb get instances
     post:
       description: Create a new instance for your account with the provided parameters.         <table>           <tr><th>ProductId</th><th>Product</th><th>Disk
-        Size</th></tr>           <tr><td>V45(deprecated)</td><td>VPS 1 SSD</td><td>400
-        GB SSD</td></tr>           <tr><td>V47(deprecated)</td><td>VPS 1 Storage</td><td>800
-        GB SSD</td></tr>           <tr><td>V46(deprecated)</td><td>VPS 1 NVMe</td><td>100
-        GB NVMe</td></tr>           <tr><td>V48(deprecated)</td><td>VPS 2 SSD</td><td>400
-        GB SSD</td></tr>           <tr><td>V50(deprecated)</td><td>VPS 2 Storage</td><td>800
-        GB SSD</td></tr>          <tr><td>V49(deprecated)</td><td>VPS 2 NVMe</td><td>200
-        GB NVMe</td></tr>           <tr><td>V51(deprecated)</td><td>VPS 3 SSD</td><td>1200
-        GB SSD</td></tr>           <tr><td>V53(deprecated)</td><td>VPS 3 Storage</td><td>2400
-        GB SSD</td></tr>          <tr><td>V52(deprecated)</td><td>VPS 3 NVMe</td><td>300
-        GB NVMe</td></tr>           <tr><td>V54(deprecated)</td><td>VPS 4 SSD</td><td>1600
-        GB SSD</td></tr>           <tr><td>V56(deprecated)</td><td>VPS 4 Storage</td><td>3200
-        GB SSD</td></tr>          <tr><td>V55(deprecated)</td><td>VPS 4 NVMe</td><td>400
-        GB NVMe</td></tr>           <tr><td>V57(deprecated)</td><td>VPS 5 SSD</td><td>2000
-        GB SSD</td></tr>           <tr><td>V59(deprecated)</td><td>VPS 5 Storage</td><td>4000
-        GB SSD</td></tr>           <tr><td>V58(deprecated)</td><td>VPS 5 NVMe</td><td>500
-        GB NVMe</td></tr>           <tr><td>V60(deprecated)</td><td>VPS 6 SSD</td><td>2400
-        GB SSD</td></tr>           <tr><td>V62(deprecated)</td><td>VPS 6 Storage</td><td>4800
-        GB SSD</td></tr>           <tr><td>V61(deprecated)</td><td>VPS 6 NVMe</td><td>600
-        GB NVMe</td></tr>           <tr><td>V68</td><td>VPS 4C NVMe</td><td>100 GB
-        NVMe</td></tr>           <tr><td>V76</td><td>VPS 4C SSD</td><td>200 GB SSD</td></tr>          <tr><td>V85</td><td>VPS
-        4C Storage</td><td>600 GB NVMe</td></tr>           <tr><td>V69</td><td>VPS
-        6C NVMe</td><td>150 GB NVMe</td></tr>           <tr><td>V77</td><td>VPS 6C
-        SSD</td><td>300 GB SSD</td></tr>          <tr><td>V86</td><td>VPS 6C Storage</td><td>1800
-        GB NVMe</td></tr>           <tr><td>V70</td><td>VPS 8C NVMe</td><td>200 GB
-        NVMe</td></tr>           <tr><td>V78</td><td>VPS 8C SSD</td><td>400 GB SSD</td></tr>          <tr><td>V87</td><td>VPS
-        8C Storage</td><td>2400 GB NVMe</td></tr>           <tr><td>V71</td><td>VPS
-        10C NVMe</td><td>250 GB NVMe</td></tr>           <tr><td>V79</td><td>VPS 10C
-        SSD</td><td>500 GB SSD</td></tr>           <tr><td>V88</td><td>VPS 10C Storage</td><td>3200
-        GB NVMe</td></tr>           <tr><td>V72</td><td>VPS 14C NVMe</td><td>300 GB
-        NVMe</td></tr>           <tr><td>V80</td><td>VPS 14C SSD</td><td>600 GB SSD</td></tr>           <tr><td>V89</td><td>VPS
-        16C Storage</td><td>3600 GB SSD</td></tr>           <tr><td>V73</td><td>VPS
-        20C NVMe</td><td>400 GB NVMe</td></tr>           <tr><td>V81</td><td>VPS 20C
-        SSD</td><td>800 GB SSD</td></tr>           <tr><td>V74</td><td>VPS 24C NVMe</td><td>600
-        GB NVMe</td></tr>           <tr><td>V83</td><td>VPS 24C SSD</td><td>1200 GB
-        SSD</td></tr>           <tr><td>V8</td><td>VDS S</td><td>180 GB NVMe</td></tr>           <tr><td>V9</td><td>VDS
-        M</td><td>240 GB NVMe</td></tr>           <tr><td>V10</td><td>VDS L</td><td>360
-        GB NVMe</td></tr>           <tr><td>V11</td><td>VDS XL</td><td>480 GB NVMe</td></tr>           <tr><td>V16</td><td>VDS
-        XXL</td><td>720 GB NVMe</td></tr>           </table>
+        Size</th></tr>           <tr><td>V68</td><td>VPS 4C NVMe</td><td>100 GB NVMe</td></tr>           <tr><td>V76</td><td>VPS
+        4C SSD</td><td>200 GB SSD</td></tr>          <tr><td>V85</td><td>VPS 4C Storage</td><td>600
+        GB NVMe</td></tr>           <tr><td>V69</td><td>VPS 6C NVMe</td><td>150 GB
+        NVMe</td></tr>           <tr><td>V77</td><td>VPS 6C SSD</td><td>300 GB SSD</td></tr>          <tr><td>V86</td><td>VPS
+        6C Storage</td><td>1800 GB NVMe</td></tr>           <tr><td>V70</td><td>VPS
+        8C NVMe</td><td>200 GB NVMe</td></tr>           <tr><td>V78</td><td>VPS 8C
+        SSD</td><td>400 GB SSD</td></tr>          <tr><td>V87</td><td>VPS 8C Storage</td><td>2400
+        GB NVMe</td></tr>           <tr><td>V71</td><td>VPS 10C NVMe</td><td>250 GB
+        NVMe</td></tr>           <tr><td>V79</td><td>VPS 10C SSD</td><td>500 GB SSD</td></tr>           <tr><td>V88</td><td>VPS
+        10C Storage</td><td>3200 GB NVMe</td></tr>           <tr><td>V72</td><td>VPS
+        14C NVMe</td><td>300 GB NVMe</td></tr>           <tr><td>V80</td><td>VPS 14C
+        SSD</td><td>600 GB SSD</td></tr>           <tr><td>V89</td><td>VPS 16C Storage</td><td>3600
+        GB SSD</td></tr>           <tr><td>V73</td><td>VPS 20C NVMe</td><td>400 GB
+        NVMe</td></tr>           <tr><td>V81</td><td>VPS 20C SSD</td><td>800 GB SSD</td></tr>           <tr><td>V74</td><td>VPS
+        24C NVMe</td><td>600 GB NVMe</td></tr>           <tr><td>V83</td><td>VPS 24C
+        SSD</td><td>1200 GB SSD</td></tr>           <tr><td>V8</td><td>VDS S</td><td>180
+        GB NVMe</td></tr>           <tr><td>V9</td><td>VDS M</td><td>240 GB NVMe</td></tr>           <tr><td>V10</td><td>VDS
+        L</td><td>360 GB NVMe</td></tr>           <tr><td>V11</td><td>VDS XL</td><td>480
+        GB NVMe</td></tr>           <tr><td>V16</td><td>VDS XXL</td><td>720 GB NVMe</td></tr>           </table>
       operationId: createInstance
       parameters:
       - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
@@ -1075,12 +1071,12 @@ paths:
           type: string
         style: simple
       - description: The identifier of the instance
-        example: 12345
         explode: false
         in: path
         name: instanceId
         required: true
         schema:
+          example: 12345
           format: int64
           type: integer
         style: simple
@@ -1130,12 +1126,12 @@ paths:
           type: string
         style: simple
       - description: The identifier of the instance
-        example: 12345
         explode: false
         in: path
         name: instanceId
         required: true
         schema:
+          example: 12345
           format: int64
           type: integer
         style: simple
@@ -1192,12 +1188,12 @@ paths:
           type: string
         style: simple
       - description: The identifier of the instance
-        example: 12345
         explode: false
         in: path
         name: instanceId
         required: true
         schema:
+          example: 12345
           format: int64
           type: integer
         style: simple
@@ -1256,12 +1252,12 @@ paths:
           type: string
         style: simple
       - description: The identifier of the instance
-        example: 12345
         explode: false
         in: path
         name: instanceId
         required: true
         schema:
+          example: 12345
           format: int64
           type: integer
         style: simple
@@ -1319,12 +1315,12 @@ paths:
           type: string
         style: simple
       - description: The identifier of the instance
-        example: 12345
         explode: false
         in: path
         name: instanceId
         required: true
         schema:
+          example: 12345
           format: int64
           type: integer
         style: simple
@@ -1382,82 +1378,82 @@ paths:
           type: string
         style: simple
       - description: Number of page to be fetched.
-        example: 1
         explode: true
         in: query
         name: page
         required: false
         schema:
+          example: 1
           format: int64
           type: integer
         style: form
       - description: Number of elements per page.
-        example: 10
         explode: true
         in: query
         name: size
         required: false
         schema:
+          example: 10
           format: int64
           type: integer
         style: form
       - description: Specify fields and ordering (ASC for ascending, DESC for descending)
           in following format `field:ASC|DESC`.
-        example: name:asc
         explode: true
         in: query
         name: orderBy
         required: false
         schema:
+          example: name:asc
           items:
             type: string
           type: array
         style: form
       - description: The identifier of the instancesActions.
-        example: 12345
         explode: true
         in: query
         name: instanceId
         required: false
         schema:
+          example: 12345
           format: int64
           type: integer
         style: form
       - description: The requestId of the API call which led to the change.
-        example: D5FD9FAF-58C0-4406-8F46-F449B8E4FEC3
         explode: true
         in: query
         name: requestId
         required: false
         schema:
+          example: D5FD9FAF-58C0-4406-8F46-F449B8E4FEC3
           type: string
         style: form
       - description: changedBy of the user which led to the change.
-        example: 23cbb6d6-cb11-4330-bdff-7bb791df2e23
         explode: true
         in: query
         name: changedBy
         required: false
         schema:
+          example: 23cbb6d6-cb11-4330-bdff-7bb791df2e23
           type: string
         style: form
       - description: Start of search time range.
-        example: 2021-06-02
         explode: true
         in: query
         name: startDate
         required: false
         schema:
+          example: 2021-06-02
           format: date
           type: string
         style: form
       - description: End of search time range.
-        example: 2021-06-02
         explode: true
         in: query
         name: endDate
         required: false
         schema:
+          example: 2021-06-02
           format: date
           type: string
         style: form
@@ -1507,82 +1503,82 @@ paths:
           type: string
         style: simple
       - description: Number of page to be fetched.
-        example: 1
         explode: true
         in: query
         name: page
         required: false
         schema:
+          example: 1
           format: int64
           type: integer
         style: form
       - description: Number of elements per page.
-        example: 10
         explode: true
         in: query
         name: size
         required: false
         schema:
+          example: 10
           format: int64
           type: integer
         style: form
       - description: Specify fields and ordering (ASC for ascending, DESC for descending)
           in following format `field:ASC|DESC`.
-        example: name:asc
         explode: true
         in: query
         name: orderBy
         required: false
         schema:
+          example: name:asc
           items:
             type: string
           type: array
         style: form
       - description: The identifier of the instances.
-        example: 12345
         explode: true
         in: query
         name: instanceId
         required: false
         schema:
+          example: 12345
           format: int64
           type: integer
         style: form
       - description: The requestId of the API call which led to the change.
-        example: D5FD9FAF-58C0-4406-8F46-F449B8E4FEC3
         explode: true
         in: query
         name: requestId
         required: false
         schema:
+          example: D5FD9FAF-58C0-4406-8F46-F449B8E4FEC3
           type: string
         style: form
       - description: changedBy of the user which led to the change.
-        example: 23cbb6d6-cb11-4330-bdff-7bb791df2e23
         explode: true
         in: query
         name: changedBy
         required: false
         schema:
+          example: 23cbb6d6-cb11-4330-bdff-7bb791df2e23
           type: string
         style: form
       - description: Start of search time range.
-        example: 2021-06-02
         explode: true
         in: query
         name: startDate
         required: false
         schema:
+          example: 2021-06-02
           format: date
           type: string
         style: form
       - description: End of search time range.
-        example: 2021-06-02
         explode: true
         in: query
         name: endDate
         required: false
         schema:
+          example: 2021-06-02
           format: date
           type: string
         style: form
@@ -1633,63 +1629,63 @@ paths:
           type: string
         style: simple
       - description: Number of page to be fetched.
-        example: 1
         explode: true
         in: query
         name: page
         required: false
         schema:
+          example: 1
           format: int64
           type: integer
         style: form
       - description: Number of elements per page.
-        example: 10
         explode: true
         in: query
         name: size
         required: false
         schema:
+          example: 10
           format: int64
           type: integer
         style: form
       - description: Specify fields and ordering (ASC for ascending, DESC for descending)
           in following format `field:ASC|DESC`.
-        example: name:asc
         explode: true
         in: query
         name: orderBy
         required: false
         schema:
+          example: name:asc
           items:
             type: string
           type: array
         style: form
       - description: The name of the image
-        example: Ubuntu
         explode: true
         in: query
         name: name
         required: false
         schema:
+          example: Ubuntu
           type: string
         style: form
       - description: Flag indicating that image is either a standard (true) or a custom
           image (false)
-        example: true
         explode: true
         in: query
         name: standardImage
         required: false
         schema:
+          example: true
           type: boolean
         style: form
       - description: full text search on image name or image os type
-        example: windows or Debian
         explode: true
         in: query
         name: search
         required: false
         schema:
+          example: windows or Debian
           type: string
         style: form
       responses:
@@ -1805,12 +1801,12 @@ paths:
           type: string
         style: simple
       - description: The identifier of the image
-        example: 9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d
         explode: false
         in: path
         name: imageId
         required: true
         schema:
+          example: 9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d
           type: string
         style: simple
       responses:
@@ -1856,12 +1852,12 @@ paths:
           type: string
         style: simple
       - description: The identifier of the image
-        example: 9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d
         explode: false
         in: path
         name: imageId
         required: true
         schema:
+          example: 9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d
           type: string
         style: simple
       responses:
@@ -1910,12 +1906,12 @@ paths:
           type: string
         style: simple
       - description: The identifier of the image
-        example: 9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d
         explode: false
         in: path
         name: imageId
         required: true
         schema:
+          example: 9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d
           type: string
         style: simple
       requestBody:
@@ -2021,54 +2017,54 @@ paths:
           type: string
         style: simple
       - description: The identifier of the instance
-        example: 12345
         explode: false
         in: path
         name: instanceId
         required: true
         schema:
+          example: 12345
           format: int64
           type: integer
         style: simple
       - description: Number of page to be fetched.
-        example: 1
         explode: true
         in: query
         name: page
         required: false
         schema:
+          example: 1
           format: int64
           type: integer
         style: form
       - description: Number of elements per page.
-        example: 10
         explode: true
         in: query
         name: size
         required: false
         schema:
+          example: 10
           format: int64
           type: integer
         style: form
       - description: Specify fields and ordering (ASC for ascending, DESC for descending)
           in following format `field:ASC|DESC`.
-        example: name:asc
         explode: true
         in: query
         name: orderBy
         required: false
         schema:
+          example: name:asc
           items:
             type: string
           type: array
         style: form
       - description: Filter as substring match for snapshots names.
-        example: Snapshot.Server
         explode: true
         in: query
         name: name
         required: false
         schema:
+          example: Snapshot.Server
           type: string
         style: form
       responses:
@@ -2117,12 +2113,12 @@ paths:
           type: string
         style: simple
       - description: The identifier of the instance
-        example: 12345
         explode: false
         in: path
         name: instanceId
         required: true
         schema:
+          example: 12345
           format: int64
           type: integer
         style: simple
@@ -2180,22 +2176,22 @@ paths:
           type: string
         style: simple
       - description: The identifier of the instance
-        example: 12345
         explode: false
         in: path
         name: instanceId
         required: true
         schema:
+          example: 12345
           format: int64
           type: integer
         style: simple
       - description: The identifier of the snapshot
-        example: snap1628603855
         explode: false
         in: path
         name: snapshotId
         required: true
         schema:
+          example: snap1628603855
           type: string
         style: simple
       responses:
@@ -2239,22 +2235,22 @@ paths:
           type: string
         style: simple
       - description: The identifier of the instance
-        example: 12345
         explode: false
         in: path
         name: instanceId
         required: true
         schema:
+          example: 12345
           format: int64
           type: integer
         style: simple
       - description: The identifier of the snapshot
-        example: snap1628603855
         explode: false
         in: path
         name: snapshotId
         required: true
         schema:
+          example: snap1628603855
           type: string
         style: simple
       responses:
@@ -2305,22 +2301,22 @@ paths:
           type: string
         style: simple
       - description: The identifier of the instance
-        example: 12345
         explode: false
         in: path
         name: instanceId
         required: true
         schema:
+          example: 12345
           format: int64
           type: integer
         style: simple
       - description: The identifier of the snapshot
-        example: snap1628603855
         explode: false
         in: path
         name: snapshotId
         required: true
         schema:
+          example: snap1628603855
           type: string
         style: simple
       requestBody:
@@ -2378,22 +2374,22 @@ paths:
           type: string
         style: simple
       - description: The identifier of the instance
-        example: 12345
         explode: false
         in: path
         name: instanceId
         required: true
         schema:
+          example: 12345
           format: int64
           type: integer
         style: simple
       - description: The identifier of the snapshot
-        example: snap1628603855
         explode: false
         in: path
         name: snapshotId
         required: true
         schema:
+          example: snap1628603855
           type: string
         style: simple
       requestBody:
@@ -2448,81 +2444,81 @@ paths:
           type: string
         style: simple
       - description: Number of page to be fetched.
-        example: 1
         explode: true
         in: query
         name: page
         required: false
         schema:
+          example: 1
           format: int64
           type: integer
         style: form
       - description: Number of elements per page.
-        example: 10
         explode: true
         in: query
         name: size
         required: false
         schema:
+          example: 10
           format: int64
           type: integer
         style: form
       - description: Specify fields and ordering (ASC for ascending, DESC for descending)
           in following format `field:ASC|DESC`.
-        example: name:asc
         explode: true
         in: query
         name: orderBy
         required: false
         schema:
+          example: name:asc
           items:
             type: string
           type: array
         style: form
       - description: The identifier of the image.
-        example: e443eab5-647a-4bc3-b4f9-16f5a281224d
         explode: true
         in: query
         name: imageId
         required: false
         schema:
+          example: e443eab5-647a-4bc3-b4f9-16f5a281224d
           type: string
         style: form
       - description: The requestId of the API call which led to the change.
-        example: D5FD9FAF-58C0-4406-8F46-F449B8E4FEC3
         explode: true
         in: query
         name: requestId
         required: false
         schema:
+          example: D5FD9FAF-58C0-4406-8F46-F449B8E4FEC3
           type: string
         style: form
       - description: UserId of the user which led to the change.
-        example: 23cbb6d6-cb11-4330-bdff-7bb791df2e23
         explode: true
         in: query
         name: changedBy
         required: false
         schema:
+          example: 23cbb6d6-cb11-4330-bdff-7bb791df2e23
           type: string
         style: form
       - description: Start of search time range.
-        example: 2021-06-02
         explode: true
         in: query
         name: startDate
         required: false
         schema:
+          example: 2021-06-02
           format: date
           type: string
         style: form
       - description: End of search time range.
-        example: 2021-06-02
         explode: true
         in: query
         name: endDate
         required: false
         schema:
+          example: 2021-06-02
           format: date
           type: string
         style: form
@@ -2573,91 +2569,91 @@ paths:
           type: string
         style: simple
       - description: Number of page to be fetched.
-        example: 1
         explode: true
         in: query
         name: page
         required: false
         schema:
+          example: 1
           format: int64
           type: integer
         style: form
       - description: Number of elements per page.
-        example: 10
         explode: true
         in: query
         name: size
         required: false
         schema:
+          example: 10
           format: int64
           type: integer
         style: form
       - description: Specify fields and ordering (ASC for ascending, DESC for descending)
           in following format `field:ASC|DESC`.
-        example: name:asc
         explode: true
         in: query
         name: orderBy
         required: false
         schema:
+          example: name:asc
           items:
             type: string
           type: array
         style: form
       - description: The identifier of the instance
-        example: 12345
         explode: true
         in: query
         name: instanceId
         required: false
         schema:
+          example: 12345
           format: int64
           type: integer
         style: form
       - description: The identifier of the snapshot
-        example: snap1628603855
         explode: true
         in: query
         name: snapshotId
         required: false
         schema:
+          example: snap1628603855
           type: string
         style: form
       - description: The requestId of the API call which led to the change
-        example: D5FD9FAF-58C0-4406-8F46-F449B8E4FEC3
         explode: true
         in: query
         name: requestId
         required: false
         schema:
+          example: D5FD9FAF-58C0-4406-8F46-F449B8E4FEC3
           type: string
         style: form
       - description: changedBy of the user which led to the change
-        example: 23cbb6d6-cb11-4330-bdff-7bb791df2e23
         explode: true
         in: query
         name: changedBy
         required: false
         schema:
+          example: 23cbb6d6-cb11-4330-bdff-7bb791df2e23
           type: string
         style: form
       - description: Start of search time range.
-        example: 2021-06-02
         explode: true
         in: query
         name: startDate
         required: false
         schema:
+          example: 2021-06-02
           format: date
           type: string
         style: form
       - description: End of search time range.
-        example: 2021-06-02
         explode: true
         in: query
         name: endDate
         required: false
         schema:
+          example: 2021-06-02
           format: date
           type: string
         style: form
@@ -4991,33 +4987,33 @@ paths:
           type: string
         style: simple
       - description: Number of page to be fetched.
-        example: 1
         explode: true
         in: query
         name: page
         required: false
         schema:
+          example: 1
           format: int64
           type: integer
         style: form
       - description: Number of elements per page.
-        example: 10
         explode: true
         in: query
         name: size
         required: false
         schema:
+          example: 10
           format: int64
           type: integer
         style: form
       - description: Specify fields and ordering (ASC for ascending, DESC for descending)
           in following format `field:ASC|DESC`.
-        example: name:asc
         explode: true
         in: query
         name: orderBy
         required: false
         schema:
+          example: name:asc
           items:
             type: string
           type: array
@@ -5025,12 +5021,12 @@ paths:
       - description: Filter as substring match for tag names. Tags may contain letters,
           numbers, colons, dashes, and underscores. There is a limit of 255 characters
           per tag.
-        example: web
         explode: true
         in: query
         name: name
         required: false
         schema:
+          example: web
           type: string
         style: form
       responses:
@@ -5131,12 +5127,12 @@ paths:
           type: string
         style: simple
       - description: The identifier of the tag
-        example: 12345
         explode: false
         in: path
         name: tagId
         required: true
         schema:
+          example: 12345
           format: int64
           type: integer
         style: simple
@@ -5180,12 +5176,12 @@ paths:
           type: string
         style: simple
       - description: The identifier of the tag
-        example: 12345
         explode: false
         in: path
         name: tagId
         required: true
         schema:
+          example: 12345
           format: int64
           type: integer
         style: simple
@@ -5235,12 +5231,12 @@ paths:
           type: string
         style: simple
       - description: The identifier of the tag
-        example: 12345
         explode: false
         in: path
         name: tagId
         required: true
         schema:
+          example: 12345
           format: int64
           type: integer
         style: simple
@@ -5296,55 +5292,55 @@ paths:
           type: string
         style: simple
       - description: The identifier of the tag.
-        example: "12345"
         explode: false
         in: path
         name: tagId
         required: true
         schema:
+          example: 12345
           format: int64
           type: integer
         style: simple
       - description: Number of page to be fetched.
-        example: 1
         explode: true
         in: query
         name: page
         required: false
         schema:
+          example: 1
           format: int64
           type: integer
         style: form
       - description: Number of elements per page.
-        example: 10
         explode: true
         in: query
         name: size
         required: false
         schema:
+          example: 10
           format: int64
           type: integer
         style: form
       - description: Specify fields and ordering (ASC for ascending, DESC for descending)
           in following format `field:ASC|DESC`.
-        example: name:asc
         explode: true
         in: query
         name: orderBy
         required: false
         schema:
+          example: name:asc
           items:
             type: string
           type: array
         style: form
       - description: Filter as substring match for assignment resource type. Resource
           type is one of `instance|image|object-storage`.
-        example: instance
         explode: true
         in: query
         name: resourceType
         required: false
         schema:
+          example: instance
           type: string
         style: form
       responses:
@@ -5395,32 +5391,32 @@ paths:
           type: string
         style: simple
       - description: The identifier of the tag.
-        example: "12345"
         explode: false
         in: path
         name: tagId
         required: true
         schema:
+          example: 12345
           format: int64
           type: integer
         style: simple
       - description: The identifier of the resource type. Resource type is one of
           `instance|image|object-storage`.
-        example: instance
         explode: false
         in: path
         name: resourceType
         required: true
         schema:
+          example: instance
           type: string
         style: simple
       - description: The identifier of the resource id
-        example: d65ecf3b-30db-4dc2-9e88-dfc21a14a6bc
         explode: false
         in: path
         name: resourceId
         required: true
         schema:
+          example: d65ecf3b-30db-4dc2-9e88-dfc21a14a6bc
           type: string
         style: simple
       responses:
@@ -5464,32 +5460,32 @@ paths:
           type: string
         style: simple
       - description: The identifier of the tag.
-        example: "12345"
         explode: false
         in: path
         name: tagId
         required: true
         schema:
+          example: 12345
           format: int64
           type: integer
         style: simple
       - description: The identifier of the resource type. Resource type is one of
           `instance|image|object-storage`.
-        example: instance
         explode: false
         in: path
         name: resourceType
         required: true
         schema:
+          example: instance
           type: string
         style: simple
       - description: The identifier of the resource id
-        example: d65ecf3b-30db-4dc2-9e88-dfc21a14a6bc
         explode: false
         in: path
         name: resourceId
         required: true
         schema:
+          example: d65ecf3b-30db-4dc2-9e88-dfc21a14a6bc
           type: string
         style: simple
       responses:
@@ -5539,32 +5535,32 @@ paths:
           type: string
         style: simple
       - description: The identifier of the tag.
-        example: "12345"
         explode: false
         in: path
         name: tagId
         required: true
         schema:
+          example: 12345
           format: int64
           type: integer
         style: simple
       - description: The identifier of the resource type. Resource type is one of
           `instance|image|object-storage`.
-        example: instance
         explode: false
         in: path
         name: resourceType
         required: true
         schema:
+          example: instance
           type: string
         style: simple
       - description: The identifier of the resource id
-        example: d65ecf3b-30db-4dc2-9e88-dfc21a14a6bc
         explode: false
         in: path
         name: resourceId
         required: true
         schema:
+          example: d65ecf3b-30db-4dc2-9e88-dfc21a14a6bc
           type: string
         style: simple
       responses:
@@ -5614,82 +5610,82 @@ paths:
           type: string
         style: simple
       - description: Number of page to be fetched.
-        example: 1
         explode: true
         in: query
         name: page
         required: false
         schema:
+          example: 1
           format: int64
           type: integer
         style: form
       - description: Number of elements per page.
-        example: 10
         explode: true
         in: query
         name: size
         required: false
         schema:
+          example: 10
           format: int64
           type: integer
         style: form
       - description: Specify fields and ordering (ASC for ascending, DESC for descending)
           in following format `field:ASC|DESC`.
-        example: name:asc
         explode: true
         in: query
         name: orderBy
         required: false
         schema:
+          example: name:asc
           items:
             type: string
           type: array
         style: form
       - description: The identifier of the tag.
-        example: "12345"
         explode: true
         in: query
         name: tagId
         required: false
         schema:
+          example: 12345
           format: int64
           type: integer
         style: form
       - description: The requestId of the API call which led to the change.
-        example: D5FD9FAF-58C0-4406-8F46-F449B8E4FEC3
         explode: true
         in: query
         name: requestId
         required: false
         schema:
+          example: D5FD9FAF-58C0-4406-8F46-F449B8E4FEC3
           type: string
         style: form
       - description: UserId of the user which led to the change.
-        example: 23cbb6d6-cb11-4330-bdff-7bb791df2e23
         explode: true
         in: query
         name: changedBy
         required: false
         schema:
+          example: 23cbb6d6-cb11-4330-bdff-7bb791df2e23
           type: string
         style: form
       - description: Start of search time range.
-        example: 2021-01-01
         explode: true
         in: query
         name: startDate
         required: false
         schema:
+          example: 2021-01-01
           format: date
           type: string
         style: form
       - description: End of search time range.
-        example: 2021-01-01
         explode: true
         in: query
         name: endDate
         required: false
         schema:
+          example: 2021-01-01
           format: date
           type: string
         style: form
@@ -5739,91 +5735,91 @@ paths:
           type: string
         style: simple
       - description: Number of page to be fetched.
-        example: 1
         explode: true
         in: query
         name: page
         required: false
         schema:
+          example: 1
           format: int64
           type: integer
         style: form
       - description: Number of elements per page.
-        example: 10
         explode: true
         in: query
         name: size
         required: false
         schema:
+          example: 10
           format: int64
           type: integer
         style: form
       - description: Specify fields and ordering (ASC for ascending, DESC for descending)
           in following format `field:ASC|DESC`.
-        example: name:asc
         explode: true
         in: query
         name: orderBy
         required: false
         schema:
+          example: name:asc
           items:
             type: string
           type: array
         style: form
       - description: The identifier of the tag.
-        example: "12345"
         explode: true
         in: query
         name: tagId
         required: false
         schema:
+          example: 12345
           format: int64
           type: integer
         style: form
       - description: The identifier of the resource.
-        example: a1b2c3
         explode: true
         in: query
         name: resourceId
         required: false
         schema:
+          example: a1b2c3
           type: string
         style: form
       - description: The requestId of the API call which led to the change.
-        example: D5FD9FAF-58C0-4406-8F46-F449B8E4FEC3
         explode: true
         in: query
         name: requestId
         required: false
         schema:
+          example: D5FD9FAF-58C0-4406-8F46-F449B8E4FEC3
           type: string
         style: form
       - description: UserId of the user which led to the change.
-        example: 23cbb6d6-cb11-4330-bdff-7bb791df2e23
         explode: true
         in: query
         name: changedBy
         required: false
         schema:
+          example: 23cbb6d6-cb11-4330-bdff-7bb791df2e23
           type: string
         style: form
       - description: Start of search time range.
-        example: 2021-01-01
         explode: true
         in: query
         name: startDate
         required: false
         schema:
+          example: 2021-01-01
           format: date
           type: string
         style: form
       - description: End of search time range.
-        example: 2021-01-01
         explode: true
         in: query
         name: endDate
         required: false
         schema:
+          example: 2021-01-01
           format: date
           type: string
         style: form
@@ -6427,7 +6423,7 @@ paths:
       - bearer: []
       summary: Get user is password set status
       tags:
-      - Internal
+      - Users
   /v1/roles:
     get:
       description: List and filter all your roles. A role allows you to specify permission
@@ -6963,7 +6959,7 @@ paths:
       - bearer: []
       summary: Get list of S3 compatible object storage credentials for user.
       tags:
-      - Users
+      - Users Object Storage Credentials
       x-codeSamples:
       - lang: cURL
         source: 'curl -X GET ''https://api.contabo.com/v1/users/6cdf5968-f9fe-4192-97c2-f349e813c5e8/object-storages/credentials''
@@ -7037,7 +7033,7 @@ paths:
       - bearer: []
       summary: Get S3 compatible object storage credentials.
       tags:
-      - Users
+      - Users Object Storage Credentials
       x-codeSamples:
       - lang: cURL
         source: 'curl -X GET ''https://api.contabo.com/v1/users/6cdf5968-f9fe-4192-97c2-f349e813c5e8/object-storages/6641ae21-e45d-4e03-8e70-661067152d1d/credentials/12345''
@@ -7113,7 +7109,7 @@ paths:
       summary: Regenerates secret key of specified user for the S3 compatible object
         storages.
       tags:
-      - Users
+      - Users Object Storage Credentials
       x-codeSamples:
       - lang: cURL
         source: 'curl -X PATCH ''https://api.contabo.com/v1/users/6cdf5968-f9fe-4192-97c2-f349e813c5e8/object-storages/6641ae21-e45d-4e03-8e70-661067152d1d/credentials/12345''
@@ -7901,6 +7897,7 @@ components:
       - v6
       type: object
     instanceStatus:
+      description: Instance's status
       enum:
       - provisioning
       - uninstalled
@@ -7988,6 +7985,7 @@ components:
         tenantId: DE
         name: vmd12345
         region: EU
+        status: running
       properties:
         tenantId:
           description: Your customer tenant id
@@ -8087,7 +8085,10 @@ components:
           pattern: yyyy-mm-dd
           type: string
         status:
-          $ref: '#/components/schemas/instanceStatus'
+          allOf:
+          - $ref: '#/components/schemas/instanceStatus'
+          description: Instance's status
+          example: running
         vHostId:
           description: ID of host system
           example: 73395
@@ -8238,6 +8239,7 @@ components:
           tenantId: DE
           name: vmd12345
           region: EU
+          status: running
         - cancelDate: 2021-06-03T00:00:00.000+0000
           displayName: VPS
           regionName: European Union
@@ -8288,6 +8290,7 @@ components:
           tenantId: DE
           name: vmd12345
           region: EU
+          status: running
         _links:
           first: /v1/compute/instances?page=1
           previous: /v1/compute/instances?page=19
@@ -8370,6 +8373,7 @@ components:
         tenantId: DE
         name: vmd12345
         region: EU
+        status: running
       properties:
         tenantId:
           description: Your customer tenant id
@@ -8469,7 +8473,10 @@ components:
           pattern: yyyy-mm-dd
           type: string
         status:
-          $ref: '#/components/schemas/instanceStatus'
+          allOf:
+          - $ref: '#/components/schemas/instanceStatus'
+          description: Instance's status
+          example: running
         vHostId:
           description: ID of host system
           example: 73395
@@ -8598,6 +8605,7 @@ components:
           tenantId: DE
           name: vmd12345
           region: EU
+          status: running
         - cancelDate: 2021-06-03T00:00:00.000+0000
           displayName: VPS
           regionName: European Union
@@ -8648,6 +8656,7 @@ components:
           tenantId: DE
           name: vmd12345
           region: EU
+          status: running
         _links:
           self: /v1/compute/instances/100
       properties:
@@ -8779,7 +8788,6 @@ components:
              expire: False
           type: string
         defaultUser:
-          default: admin
           description: Default user name created for login during (re-)installation
             with administrative privileges. Allowed values for Linux/BSD are `admin`
             (use sudo to apply administrative privileges like root) or `root`. Allowed
@@ -8890,6 +8898,7 @@ components:
     CreateInstanceAddons:
       properties:
         privateNetworking:
+          additionalProperties: true
           description: Set this attribute if you want to upgrade your instance with
             the Private Networking addon.   Please provide an empty object for the
             time being as value. There will be more configuration possible   in the
@@ -8897,12 +8906,14 @@ components:
           example: {}
           type: object
         additionalIps:
+          additionalProperties: true
           description: Set this attribute if you want to upgrade your instance with
             the Additional IPs addon. Please provide an empty object for the time
             being as value. There will be more configuration possible in the future.
           example: {}
           type: object
         backup:
+          additionalProperties: true
           description: Set this attribute if you want to upgrade your instance with
             the Automated backup addon.     Please provide an empty object for the
             time being as value. There will be more configuration possible     in
@@ -8916,6 +8927,7 @@ components:
             the Extra Storage addon.
           example: {}
         customImage:
+          additionalProperties: true
           description: Set this attribute if you want to upgrade your instance with
             the Custom Images addon.   Please provide an empty object for the time
             being as value. There will be more configuration possible   in the future.
@@ -8975,7 +8987,6 @@ components:
           - UK
           - AUS
           - JPN
-          - SIN
           - IND
           example: EU
           minLength: 1
@@ -9097,6 +9108,7 @@ components:
         - 123
         - 125
         region: EU
+        status: running
       properties:
         tenantId:
           description: Your customer tenant id
@@ -9139,7 +9151,10 @@ components:
           example: Linux
           type: string
         status:
-          $ref: '#/components/schemas/instanceStatus'
+          allOf:
+          - $ref: '#/components/schemas/instanceStatus'
+          description: Instance's status
+          example: running
         sshKeys:
           description: Array of `secretId`s of public SSH keys for logging into as
             `defaultUser` with administrator/root privileges. Applies to Linux/BSD
@@ -9183,6 +9198,7 @@ components:
           - 123
           - 125
           region: EU
+          status: running
         - instanceId: 12345
           createdDate: 2021-06-02T12:32:03.363Z
           imageId: 9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d
@@ -9199,6 +9215,7 @@ components:
           - 123
           - 125
           region: EU
+          status: running
         _links:
           self: /v1/compute/instances/12345
       properties:
@@ -11188,13 +11205,11 @@ components:
           - UPGRADING
           - CANCELLED
           - ERROR
-          - ENABLED
           - DISABLED
           - MANUAL_PROVISIONING
           - PRODUCT_NOT_AVAILABLE
           - LIMIT_EXCEEDED
           - VERIFICATION_REQUIRED
-          - COMPLETED
           - ORDER_PROCESSING
           - PENDING_PAYMENT
           - UNKNOWN
@@ -11545,13 +11560,11 @@ components:
           - UPGRADING
           - CANCELLED
           - ERROR
-          - ENABLED
           - DISABLED
           - MANUAL_PROVISIONING
           - PRODUCT_NOT_AVAILABLE
           - LIMIT_EXCEEDED
           - VERIFICATION_REQUIRED
-          - COMPLETED
           - ORDER_PROCESSING
           - PENDING_PAYMENT
           - UNKNOWN
@@ -11764,13 +11777,11 @@ components:
           - UPGRADING
           - CANCELLED
           - ERROR
-          - ENABLED
           - DISABLED
           - MANUAL_PROVISIONING
           - PRODUCT_NOT_AVAILABLE
           - LIMIT_EXCEEDED
           - VERIFICATION_REQUIRED
-          - COMPLETED
           - ORDER_PROCESSING
           - PENDING_PAYMENT
           - UNKNOWN
@@ -16889,6 +16900,7 @@ x-tagGroups:
 - name: Users
   tags:
   - Users
+  - Users Object Storage Credentials
   - Roles
   - Users Audits
   - Roles Audits

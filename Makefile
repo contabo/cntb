@@ -19,12 +19,13 @@ build: generate-api-clients build-only
 .PHONY: generate-api-clients
 generate-api-clients:
 	rm -rf openapi
+	-docker volume rm -f openapivolume
 	docker volume create openapivolume
 	docker run --rm -v openapivolume:/local --env JAVA_OPTS=$(JAVAOPT) $(OPENAPIIMAGE) generate \
 	--skip-validate-spec \
 	--input-spec $(OPENAPIURL) \
 	--additional-properties=enumClassPrefix=true \
-	--generator-name  go \
+	--generator-name go \
 	--output $(OUTPUTLOCATION)
 	docker container create --name dummy -v openapivolume:/openapi alpine bash
 	docker cp dummy:/openapi/ .

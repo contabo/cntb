@@ -395,459 +395,6 @@ func (a *UsersApiService) GenerateClientSecretExecute(r ApiGenerateClientSecretR
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiGetObjectStorageCredentialsRequest struct {
-	ctx _context.Context
-	ApiService *UsersApiService
-	xRequestId *string
-	userId string
-	objectStorageId string
-	credentialId int64
-	xTraceId *string
-}
-
-// [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually.
-func (r ApiGetObjectStorageCredentialsRequest) XRequestId(xRequestId string) ApiGetObjectStorageCredentialsRequest {
-	r.xRequestId = &xRequestId
-	return r
-}
-// Identifier to trace group of requests.
-func (r ApiGetObjectStorageCredentialsRequest) XTraceId(xTraceId string) ApiGetObjectStorageCredentialsRequest {
-	r.xTraceId = &xTraceId
-	return r
-}
-
-func (r ApiGetObjectStorageCredentialsRequest) Execute() (FindCredentialResponse, *_nethttp.Response, error) {
-	return r.ApiService.GetObjectStorageCredentialsExecute(r)
-}
-
-/*
-GetObjectStorageCredentials Get S3 compatible object storage credentials.
-
-Get S3 compatible object storage credentials for accessing it via S3 compatible tools like `aws` cli.
-
- @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param userId The identifier of the user.
- @param objectStorageId The identifier of the S3 object storage
- @param credentialId The ID of the object storage credential
- @return ApiGetObjectStorageCredentialsRequest
-*/
-func (a *UsersApiService) GetObjectStorageCredentials(ctx _context.Context, userId string, objectStorageId string, credentialId int64) ApiGetObjectStorageCredentialsRequest {
-	return ApiGetObjectStorageCredentialsRequest{
-		ApiService: a,
-		ctx: ctx,
-		userId: userId,
-		objectStorageId: objectStorageId,
-		credentialId: credentialId,
-	}
-}
-
-// Execute executes the request
-//  @return FindCredentialResponse
-func (a *UsersApiService) GetObjectStorageCredentialsExecute(r ApiGetObjectStorageCredentialsRequest) (FindCredentialResponse, *_nethttp.Response, error) {
-	var (
-		localVarHTTPMethod   = _nethttp.MethodGet
-		localVarPostBody     interface{}
-		localVarFormFileName string
-		localVarFileName     string
-		localVarFileBytes    []byte
-		localVarReturnValue  FindCredentialResponse
-	)
-
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UsersApiService.GetObjectStorageCredentials")
-	if err != nil {
-		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
-	}
-
-	localVarPath := localBasePath + "/v1/users/{userId}/object-storages/{objectStorageId}/credentials/{credentialId}"
-	localVarPath = strings.Replace(localVarPath, "{"+"userId"+"}", _neturl.PathEscape(parameterToString(r.userId, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"objectStorageId"+"}", _neturl.PathEscape(parameterToString(r.objectStorageId, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"credentialId"+"}", _neturl.PathEscape(parameterToString(r.credentialId, "")), -1)
-
-	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := _neturl.Values{}
-	localVarFormParams := _neturl.Values{}
-	if r.xRequestId == nil {
-		return localVarReturnValue, nil, reportError("xRequestId is required and must be specified")
-	}
-
-	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{}
-
-	// set Content-Type header
-	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
-	if localVarHTTPContentType != "" {
-		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
-	}
-
-	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
-
-	// set Accept header
-	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
-	if localVarHTTPHeaderAccept != "" {
-		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
-	}
-	localVarHeaderParams["x-request-id"] = parameterToString(*r.xRequestId, "")
-	if r.xTraceId != nil {
-		localVarHeaderParams["x-trace-id"] = parameterToString(*r.xTraceId, "")
-	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
-	if err != nil {
-		return localVarReturnValue, nil, err
-	}
-
-	localVarHTTPResponse, err := a.client.callAPI(req)
-	if err != nil || localVarHTTPResponse == nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
-	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
-	if err != nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-	if err != nil {
-		newErr := GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	return localVarReturnValue, localVarHTTPResponse, nil
-}
-
-type ApiListObjectStorageCredentialsRequest struct {
-	ctx _context.Context
-	ApiService *UsersApiService
-	xRequestId *string
-	userId string
-	xTraceId *string
-	page *int64
-	size *int64
-	orderBy *[]string
-	objectStorageId *string
-	regionName *string
-	displayName *string
-}
-
-// [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually.
-func (r ApiListObjectStorageCredentialsRequest) XRequestId(xRequestId string) ApiListObjectStorageCredentialsRequest {
-	r.xRequestId = &xRequestId
-	return r
-}
-// Identifier to trace group of requests.
-func (r ApiListObjectStorageCredentialsRequest) XTraceId(xTraceId string) ApiListObjectStorageCredentialsRequest {
-	r.xTraceId = &xTraceId
-	return r
-}
-// Number of page to be fetched.
-func (r ApiListObjectStorageCredentialsRequest) Page(page int64) ApiListObjectStorageCredentialsRequest {
-	r.page = &page
-	return r
-}
-// Number of elements per page.
-func (r ApiListObjectStorageCredentialsRequest) Size(size int64) ApiListObjectStorageCredentialsRequest {
-	r.size = &size
-	return r
-}
-// Specify fields and ordering (ASC for ascending, DESC for descending) in following format &#x60;field:ASC|DESC&#x60;.
-func (r ApiListObjectStorageCredentialsRequest) OrderBy(orderBy []string) ApiListObjectStorageCredentialsRequest {
-	r.orderBy = &orderBy
-	return r
-}
-// The identifier of the S3 object storage
-func (r ApiListObjectStorageCredentialsRequest) ObjectStorageId(objectStorageId string) ApiListObjectStorageCredentialsRequest {
-	r.objectStorageId = &objectStorageId
-	return r
-}
-// Filter for Object Storage by regions. Available regions: Asia (Singapore), European Union, United States (Central)
-func (r ApiListObjectStorageCredentialsRequest) RegionName(regionName string) ApiListObjectStorageCredentialsRequest {
-	r.regionName = &regionName
-	return r
-}
-// Filter for Object Storage by his displayName.
-func (r ApiListObjectStorageCredentialsRequest) DisplayName(displayName string) ApiListObjectStorageCredentialsRequest {
-	r.displayName = &displayName
-	return r
-}
-
-func (r ApiListObjectStorageCredentialsRequest) Execute() (ListCredentialResponse, *_nethttp.Response, error) {
-	return r.ApiService.ListObjectStorageCredentialsExecute(r)
-}
-
-/*
-ListObjectStorageCredentials Get list of S3 compatible object storage credentials for user.
-
-Get list of S3 compatible object storage credentials for accessing it via S3 compatible tools like `aws` cli.
-
- @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param userId The identifier of the user.
- @return ApiListObjectStorageCredentialsRequest
-*/
-func (a *UsersApiService) ListObjectStorageCredentials(ctx _context.Context, userId string) ApiListObjectStorageCredentialsRequest {
-	return ApiListObjectStorageCredentialsRequest{
-		ApiService: a,
-		ctx: ctx,
-		userId: userId,
-	}
-}
-
-// Execute executes the request
-//  @return ListCredentialResponse
-func (a *UsersApiService) ListObjectStorageCredentialsExecute(r ApiListObjectStorageCredentialsRequest) (ListCredentialResponse, *_nethttp.Response, error) {
-	var (
-		localVarHTTPMethod   = _nethttp.MethodGet
-		localVarPostBody     interface{}
-		localVarFormFileName string
-		localVarFileName     string
-		localVarFileBytes    []byte
-		localVarReturnValue  ListCredentialResponse
-	)
-
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UsersApiService.ListObjectStorageCredentials")
-	if err != nil {
-		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
-	}
-
-	localVarPath := localBasePath + "/v1/users/{userId}/object-storages/credentials"
-	localVarPath = strings.Replace(localVarPath, "{"+"userId"+"}", _neturl.PathEscape(parameterToString(r.userId, "")), -1)
-
-	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := _neturl.Values{}
-	localVarFormParams := _neturl.Values{}
-	if r.xRequestId == nil {
-		return localVarReturnValue, nil, reportError("xRequestId is required and must be specified")
-	}
-
-	if r.page != nil {
-		localVarQueryParams.Add("page", parameterToString(*r.page, ""))
-	}
-	if r.size != nil {
-		localVarQueryParams.Add("size", parameterToString(*r.size, ""))
-	}
-	if r.orderBy != nil {
-		t := *r.orderBy
-		if reflect.TypeOf(t).Kind() == reflect.Slice {
-			s := reflect.ValueOf(t)
-			for i := 0; i < s.Len(); i++ {
-				localVarQueryParams.Add("orderBy", parameterToString(s.Index(i), "multi"))
-			}
-		} else {
-			localVarQueryParams.Add("orderBy", parameterToString(t, "multi"))
-		}
-	}
-	if r.objectStorageId != nil {
-		localVarQueryParams.Add("objectStorageId", parameterToString(*r.objectStorageId, ""))
-	}
-	if r.regionName != nil {
-		localVarQueryParams.Add("regionName", parameterToString(*r.regionName, ""))
-	}
-	if r.displayName != nil {
-		localVarQueryParams.Add("displayName", parameterToString(*r.displayName, ""))
-	}
-	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{}
-
-	// set Content-Type header
-	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
-	if localVarHTTPContentType != "" {
-		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
-	}
-
-	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
-
-	// set Accept header
-	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
-	if localVarHTTPHeaderAccept != "" {
-		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
-	}
-	localVarHeaderParams["x-request-id"] = parameterToString(*r.xRequestId, "")
-	if r.xTraceId != nil {
-		localVarHeaderParams["x-trace-id"] = parameterToString(*r.xTraceId, "")
-	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
-	if err != nil {
-		return localVarReturnValue, nil, err
-	}
-
-	localVarHTTPResponse, err := a.client.callAPI(req)
-	if err != nil || localVarHTTPResponse == nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
-	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
-	if err != nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-	if err != nil {
-		newErr := GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	return localVarReturnValue, localVarHTTPResponse, nil
-}
-
-type ApiRegenerateObjectStorageCredentialsRequest struct {
-	ctx _context.Context
-	ApiService *UsersApiService
-	xRequestId *string
-	userId string
-	objectStorageId string
-	credentialId int64
-	xTraceId *string
-}
-
-// [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually.
-func (r ApiRegenerateObjectStorageCredentialsRequest) XRequestId(xRequestId string) ApiRegenerateObjectStorageCredentialsRequest {
-	r.xRequestId = &xRequestId
-	return r
-}
-// Identifier to trace group of requests.
-func (r ApiRegenerateObjectStorageCredentialsRequest) XTraceId(xTraceId string) ApiRegenerateObjectStorageCredentialsRequest {
-	r.xTraceId = &xTraceId
-	return r
-}
-
-func (r ApiRegenerateObjectStorageCredentialsRequest) Execute() (FindCredentialResponse, *_nethttp.Response, error) {
-	return r.ApiService.RegenerateObjectStorageCredentialsExecute(r)
-}
-
-/*
-RegenerateObjectStorageCredentials Regenerates secret key of specified user for the S3 compatible object storages.
-
-Regenerates secret key of specified user for the a specific S3 compatible object storages.
-
- @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param userId The identifier of the user.
- @param objectStorageId The identifier of the S3 object storage
- @param credentialId The ID of the object storage credential
- @return ApiRegenerateObjectStorageCredentialsRequest
-*/
-func (a *UsersApiService) RegenerateObjectStorageCredentials(ctx _context.Context, userId string, objectStorageId string, credentialId int64) ApiRegenerateObjectStorageCredentialsRequest {
-	return ApiRegenerateObjectStorageCredentialsRequest{
-		ApiService: a,
-		ctx: ctx,
-		userId: userId,
-		objectStorageId: objectStorageId,
-		credentialId: credentialId,
-	}
-}
-
-// Execute executes the request
-//  @return FindCredentialResponse
-func (a *UsersApiService) RegenerateObjectStorageCredentialsExecute(r ApiRegenerateObjectStorageCredentialsRequest) (FindCredentialResponse, *_nethttp.Response, error) {
-	var (
-		localVarHTTPMethod   = _nethttp.MethodPatch
-		localVarPostBody     interface{}
-		localVarFormFileName string
-		localVarFileName     string
-		localVarFileBytes    []byte
-		localVarReturnValue  FindCredentialResponse
-	)
-
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UsersApiService.RegenerateObjectStorageCredentials")
-	if err != nil {
-		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
-	}
-
-	localVarPath := localBasePath + "/v1/users/{userId}/object-storages/{objectStorageId}/credentials/{credentialId}"
-	localVarPath = strings.Replace(localVarPath, "{"+"userId"+"}", _neturl.PathEscape(parameterToString(r.userId, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"objectStorageId"+"}", _neturl.PathEscape(parameterToString(r.objectStorageId, "")), -1)
-	localVarPath = strings.Replace(localVarPath, "{"+"credentialId"+"}", _neturl.PathEscape(parameterToString(r.credentialId, "")), -1)
-
-	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := _neturl.Values{}
-	localVarFormParams := _neturl.Values{}
-	if r.xRequestId == nil {
-		return localVarReturnValue, nil, reportError("xRequestId is required and must be specified")
-	}
-
-	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{}
-
-	// set Content-Type header
-	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
-	if localVarHTTPContentType != "" {
-		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
-	}
-
-	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
-
-	// set Accept header
-	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
-	if localVarHTTPHeaderAccept != "" {
-		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
-	}
-	localVarHeaderParams["x-request-id"] = parameterToString(*r.xRequestId, "")
-	if r.xTraceId != nil {
-		localVarHeaderParams["x-trace-id"] = parameterToString(*r.xTraceId, "")
-	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
-	if err != nil {
-		return localVarReturnValue, nil, err
-	}
-
-	localVarHTTPResponse, err := a.client.callAPI(req)
-	if err != nil || localVarHTTPResponse == nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
-	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
-	if err != nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-	if err != nil {
-		newErr := GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	return localVarReturnValue, localVarHTTPResponse, nil
-}
-
 type ApiResendEmailVerificationRequest struct {
 	ctx _context.Context
 	ApiService *UsersApiService
@@ -1282,6 +829,136 @@ func (a *UsersApiService) RetrieveUserClientExecute(r ApiRetrieveUserClientReque
 		return localVarReturnValue, nil, reportError("xRequestId is required and must be specified")
 	}
 
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	localVarHeaderParams["x-request-id"] = parameterToString(*r.xRequestId, "")
+	if r.xTraceId != nil {
+		localVarHeaderParams["x-trace-id"] = parameterToString(*r.xTraceId, "")
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiRetrieveUserIsPasswordSetRequest struct {
+	ctx _context.Context
+	ApiService *UsersApiService
+	xRequestId *string
+	xTraceId *string
+	userId *string
+}
+
+// [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually.
+func (r ApiRetrieveUserIsPasswordSetRequest) XRequestId(xRequestId string) ApiRetrieveUserIsPasswordSetRequest {
+	r.xRequestId = &xRequestId
+	return r
+}
+// Identifier to trace group of requests.
+func (r ApiRetrieveUserIsPasswordSetRequest) XTraceId(xTraceId string) ApiRetrieveUserIsPasswordSetRequest {
+	r.xTraceId = &xTraceId
+	return r
+}
+// The user ID for checking if password is set for him
+func (r ApiRetrieveUserIsPasswordSetRequest) UserId(userId string) ApiRetrieveUserIsPasswordSetRequest {
+	r.userId = &userId
+	return r
+}
+
+func (r ApiRetrieveUserIsPasswordSetRequest) Execute() (FindUserIsPasswordSetResponse, *_nethttp.Response, error) {
+	return r.ApiService.RetrieveUserIsPasswordSetExecute(r)
+}
+
+/*
+RetrieveUserIsPasswordSet Get user is password set status
+
+Get info about idm user if the password is set.
+
+ @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiRetrieveUserIsPasswordSetRequest
+*/
+func (a *UsersApiService) RetrieveUserIsPasswordSet(ctx _context.Context) ApiRetrieveUserIsPasswordSetRequest {
+	return ApiRetrieveUserIsPasswordSetRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return FindUserIsPasswordSetResponse
+func (a *UsersApiService) RetrieveUserIsPasswordSetExecute(r ApiRetrieveUserIsPasswordSetRequest) (FindUserIsPasswordSetResponse, *_nethttp.Response, error) {
+	var (
+		localVarHTTPMethod   = _nethttp.MethodGet
+		localVarPostBody     interface{}
+		localVarFormFileName string
+		localVarFileName     string
+		localVarFileBytes    []byte
+		localVarReturnValue  FindUserIsPasswordSetResponse
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "UsersApiService.RetrieveUserIsPasswordSet")
+	if err != nil {
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/users/is-password-set"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := _neturl.Values{}
+	localVarFormParams := _neturl.Values{}
+	if r.xRequestId == nil {
+		return localVarReturnValue, nil, reportError("xRequestId is required and must be specified")
+	}
+
+	if r.userId != nil {
+		localVarQueryParams.Add("userId", parameterToString(*r.userId, ""))
+	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
 

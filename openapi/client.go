@@ -96,6 +96,8 @@ type APIClient struct {
 
 	UsersAuditsApi *UsersAuditsApiService
 
+	UsersObjectStorageCredentialsApi *UsersObjectStorageCredentialsApiService
+
 	VIPApi *VIPApiService
 
 	VipAuditsApi *VipAuditsApiService
@@ -140,6 +142,7 @@ func NewAPIClient(cfg *Configuration) *APIClient {
 	c.TagsAuditsApi = (*TagsAuditsApiService)(&c.common)
 	c.UsersApi = (*UsersApiService)(&c.common)
 	c.UsersAuditsApi = (*UsersAuditsApiService)(&c.common)
+	c.UsersObjectStorageCredentialsApi = (*UsersObjectStorageCredentialsApiService)(&c.common)
 	c.VIPApi = (*VIPApiService)(&c.common)
 	c.VipAuditsApi = (*VipAuditsApiService)(&c.common)
 

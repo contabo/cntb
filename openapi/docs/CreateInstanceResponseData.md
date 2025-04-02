@@ -13,7 +13,7 @@ Name | Type | Description | Notes
 **Region** | **string** | Instance Region where the compute instance should be located. | 
 **AddOns** | [**[]AddOnResponse**](AddOnResponse.md) |  | 
 **OsType** | **string** | Type of operating system (OS) | 
-**Status** | [**InstanceStatus**](InstanceStatus.md) |  | 
+**Status** | [**InstanceStatus**](instanceStatus.md) | Instance&#39;s status | 
 **SshKeys** | **[]int64** | Array of &#x60;secretId&#x60;s of public SSH keys for logging into as &#x60;defaultUser&#x60; with administrator/root privileges. Applies to Linux/BSD systems. Please refer to Secrets Management API. | 
 
 ## Methods

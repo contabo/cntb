@@ -56,6 +56,7 @@ type InstanceResponse struct {
 	CreatedDate time.Time `json:"createdDate"`
 	// The date on which the instance will be cancelled
 	CancelDate string `json:"cancelDate"`
+	// Instance's status
 	Status InstanceStatus `json:"status"`
 	// ID of host system
 	VHostId int64 `json:"vHostId"`

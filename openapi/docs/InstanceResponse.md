@@ -24,7 +24,7 @@ Name | Type | Description | Notes
 **SshKeys** | **[]int64** | Array of &#x60;secretId&#x60;s of public SSH keys for logging into as &#x60;defaultUser&#x60; with administrator/root privileges. Applies to Linux/BSD systems. Please refer to Secrets Management API. | 
 **CreatedDate** | **time.Time** | The creation date for the instance | 
 **CancelDate** | **string** | The date on which the instance will be cancelled | 
-**Status** | [**InstanceStatus**](InstanceStatus.md) |  | 
+**Status** | [**InstanceStatus**](instanceStatus.md) | Instance&#39;s status | 
 **VHostId** | **int64** | ID of host system | 
 **VHostNumber** | **int64** | Number of host system | 
 **VHostName** | **string** | Name of host system | 

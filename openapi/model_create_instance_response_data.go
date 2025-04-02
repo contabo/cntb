@@ -35,6 +35,7 @@ type CreateInstanceResponseData struct {
 	AddOns []AddOnResponse `json:"addOns"`
 	// Type of operating system (OS)
 	OsType string `json:"osType"`
+	// Instance's status
 	Status InstanceStatus `json:"status"`
 	// Array of `secretId`s of public SSH keys for logging into as `defaultUser` with administrator/root privileges. Applies to Linux/BSD systems. Please refer to Secrets Management API.
 	SshKeys []int64 `json:"sshKeys"`

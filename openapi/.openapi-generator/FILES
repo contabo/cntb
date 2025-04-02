@@ -1,4 +1,5 @@
 .gitignore
+.openapi-generator-ignore
 .travis.yml
 README.md
 api/openapi.yaml
@@ -25,6 +26,7 @@ api_tags.go
 api_tags_audits.go
 api_users.go
 api_users_audits.go
+api_users_object_storage_credentials.go
 api_vip.go
 api_vip_audits.go
 client.go
@@ -241,6 +243,7 @@ docs/UserIsPasswordSetResponse.md
 docs/UserResponse.md
 docs/UsersApi.md
 docs/UsersAuditsApi.md
+docs/UsersObjectStorageCredentialsApi.md
 docs/VIPApi.md
 docs/VipAuditResponse.md
 docs/VipAuditsApi.md

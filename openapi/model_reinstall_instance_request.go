@@ -38,8 +38,6 @@ type ReinstallInstanceRequest struct {
 func NewReinstallInstanceRequest(imageId string) *ReinstallInstanceRequest {
 	this := ReinstallInstanceRequest{}
 	this.ImageId = imageId
-	var defaultUser string = "admin"
-	this.DefaultUser = &defaultUser
 	return &this
 }
 
@@ -48,8 +46,6 @@ func NewReinstallInstanceRequest(imageId string) *ReinstallInstanceRequest {
 // but it doesn't guarantee that properties required by API are set
 func NewReinstallInstanceRequestWithDefaults() *ReinstallInstanceRequest {
 	this := ReinstallInstanceRequest{}
-	var defaultUser string = "admin"
-	this.DefaultUser = &defaultUser
 	return &this
 }
 

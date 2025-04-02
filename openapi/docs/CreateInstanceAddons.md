@@ -4,11 +4,11 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**PrivateNetworking** | Pointer to **map[string]interface{}** | Set this attribute if you want to upgrade your instance with the Private Networking addon.   Please provide an empty object for the time being as value. There will be more configuration possible   in the future. | [optional] 
-**AdditionalIps** | Pointer to **map[string]interface{}** | Set this attribute if you want to upgrade your instance with the Additional IPs addon. Please provide an empty object for the time being as value. There will be more configuration possible in the future. | [optional] 
-**Backup** | Pointer to **map[string]interface{}** | Set this attribute if you want to upgrade your instance with the Automated backup addon.     Please provide an empty object for the time being as value. There will be more configuration possible     in the future. | [optional] 
+**PrivateNetworking** | Pointer to **map[string]map[string]interface{}** | Set this attribute if you want to upgrade your instance with the Private Networking addon.   Please provide an empty object for the time being as value. There will be more configuration possible   in the future. | [optional] 
+**AdditionalIps** | Pointer to **map[string]map[string]interface{}** | Set this attribute if you want to upgrade your instance with the Additional IPs addon. Please provide an empty object for the time being as value. There will be more configuration possible in the future. | [optional] 
+**Backup** | Pointer to **map[string]map[string]interface{}** | Set this attribute if you want to upgrade your instance with the Automated backup addon.     Please provide an empty object for the time being as value. There will be more configuration possible     in the future. | [optional] 
 **ExtraStorage** | Pointer to [**ExtraStorageRequest**](ExtraStorageRequest.md) | Set this attribute if you want to upgrade your instance with the Extra Storage addon. | [optional] 
-**CustomImage** | Pointer to **map[string]interface{}** | Set this attribute if you want to upgrade your instance with the Custom Images addon.   Please provide an empty object for the time being as value. There will be more configuration possible   in the future. | [optional] 
+**CustomImage** | Pointer to **map[string]map[string]interface{}** | Set this attribute if you want to upgrade your instance with the Custom Images addon.   Please provide an empty object for the time being as value. There will be more configuration possible   in the future. | [optional] 
 **AddonsIds** | Pointer to [**[]AddOnRequest**](AddOnRequest.md) |  | [optional] 
 
 ## Methods
@@ -32,20 +32,20 @@ but it doesn't guarantee that properties required by API are set
 
 ### GetPrivateNetworking
 
-`func (o *CreateInstanceAddons) GetPrivateNetworking() map[string]interface{}`
+`func (o *CreateInstanceAddons) GetPrivateNetworking() map[string]map[string]interface{}`
 
 GetPrivateNetworking returns the PrivateNetworking field if non-nil, zero value otherwise.
 
 ### GetPrivateNetworkingOk
 
-`func (o *CreateInstanceAddons) GetPrivateNetworkingOk() (*map[string]interface{}, bool)`
+`func (o *CreateInstanceAddons) GetPrivateNetworkingOk() (*map[string]map[string]interface{}, bool)`
 
 GetPrivateNetworkingOk returns a tuple with the PrivateNetworking field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetPrivateNetworking
 
-`func (o *CreateInstanceAddons) SetPrivateNetworking(v map[string]interface{})`
+`func (o *CreateInstanceAddons) SetPrivateNetworking(v map[string]map[string]interface{})`
 
 SetPrivateNetworking sets PrivateNetworking field to given value.
 
@@ -57,20 +57,20 @@ HasPrivateNetworking returns a boolean if a field has been set.
 
 ### GetAdditionalIps
 
-`func (o *CreateInstanceAddons) GetAdditionalIps() map[string]interface{}`
+`func (o *CreateInstanceAddons) GetAdditionalIps() map[string]map[string]interface{}`
 
 GetAdditionalIps returns the AdditionalIps field if non-nil, zero value otherwise.
 
 ### GetAdditionalIpsOk
 
-`func (o *CreateInstanceAddons) GetAdditionalIpsOk() (*map[string]interface{}, bool)`
+`func (o *CreateInstanceAddons) GetAdditionalIpsOk() (*map[string]map[string]interface{}, bool)`
 
 GetAdditionalIpsOk returns a tuple with the AdditionalIps field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetAdditionalIps
 
-`func (o *CreateInstanceAddons) SetAdditionalIps(v map[string]interface{})`
+`func (o *CreateInstanceAddons) SetAdditionalIps(v map[string]map[string]interface{})`
 
 SetAdditionalIps sets AdditionalIps field to given value.
 
@@ -82,20 +82,20 @@ HasAdditionalIps returns a boolean if a field has been set.
 
 ### GetBackup
 
-`func (o *CreateInstanceAddons) GetBackup() map[string]interface{}`
+`func (o *CreateInstanceAddons) GetBackup() map[string]map[string]interface{}`
 
 GetBackup returns the Backup field if non-nil, zero value otherwise.
 
 ### GetBackupOk
 
-`func (o *CreateInstanceAddons) GetBackupOk() (*map[string]interface{}, bool)`
+`func (o *CreateInstanceAddons) GetBackupOk() (*map[string]map[string]interface{}, bool)`
 
 GetBackupOk returns a tuple with the Backup field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetBackup
 
-`func (o *CreateInstanceAddons) SetBackup(v map[string]interface{})`
+`func (o *CreateInstanceAddons) SetBackup(v map[string]map[string]interface{})`
 
 SetBackup sets Backup field to given value.
 
@@ -132,20 +132,20 @@ HasExtraStorage returns a boolean if a field has been set.
 
 ### GetCustomImage
 
-`func (o *CreateInstanceAddons) GetCustomImage() map[string]interface{}`
+`func (o *CreateInstanceAddons) GetCustomImage() map[string]map[string]interface{}`
 
 GetCustomImage returns the CustomImage field if non-nil, zero value otherwise.
 
 ### GetCustomImageOk
 
-`func (o *CreateInstanceAddons) GetCustomImageOk() (*map[string]interface{}, bool)`
+`func (o *CreateInstanceAddons) GetCustomImageOk() (*map[string]map[string]interface{}, bool)`
 
 GetCustomImageOk returns a tuple with the CustomImage field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetCustomImage
 
-`func (o *CreateInstanceAddons) SetCustomImage(v map[string]interface{})`
+`func (o *CreateInstanceAddons) SetCustomImage(v map[string]map[string]interface{})`
 
 SetCustomImage sets CustomImage field to given value.
 

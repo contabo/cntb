@@ -13,7 +13,7 @@ func GetObjectStorageCredentials(
 	userId string,
 	objectStorageId string,
 ) (openapi.ListCredentialResponse, *_nethttp.Response, error) {
-	ApiGetObjectStorageCredentialsRequest := client.ApiClient().UsersApi.ListObjectStorageCredentials(context.Background(), userId).
+	ApiGetObjectStorageCredentialsRequest := client.ApiClient().UsersObjectStorageCredentialsApi.ListObjectStorageCredentials(context.Background(), userId).
 		XRequestId(uuid.NewV4().String())
 	if objectStorageId != "" {
 		ApiGetObjectStorageCredentialsRequest = ApiGetObjectStorageCredentialsRequest.ObjectStorageId(objectStorageId)

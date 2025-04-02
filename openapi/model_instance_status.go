@@ -16,7 +16,7 @@ import (
 	"fmt"
 )
 
-// InstanceStatus the model 'InstanceStatus'
+// InstanceStatus Instance's status
 type InstanceStatus string
 
 // List of instanceStatus

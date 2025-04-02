@@ -28,7 +28,7 @@ var regenerateStorageCredentialsCmd = &cobra.Command{
 			log.Fatal(fmt.Sprintf("Error in parsing credentialId %v", regenerateCredentialsCredentialId))
 		}
 
-		resp, httpResp, err := client.ApiClient().UsersApi.
+		resp, httpResp, err := client.ApiClient().UsersObjectStorageCredentialsApi.
 			RegenerateObjectStorageCredentials(context.Background(), regenerateCredentialsUserId, regenerateCredentialsObjectStorageId, credentialId).
 			XRequestId(uuid.NewV4().String()).
 			Execute()

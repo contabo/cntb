@@ -18,15 +18,15 @@ import (
 // CreateInstanceAddons struct for CreateInstanceAddons
 type CreateInstanceAddons struct {
 	// Set this attribute if you want to upgrade your instance with the Private Networking addon.   Please provide an empty object for the time being as value. There will be more configuration possible   in the future.
-	PrivateNetworking *map[string]interface{} `json:"privateNetworking,omitempty"`
+	PrivateNetworking *map[string]map[string]interface{} `json:"privateNetworking,omitempty"`
 	// Set this attribute if you want to upgrade your instance with the Additional IPs addon. Please provide an empty object for the time being as value. There will be more configuration possible in the future.
-	AdditionalIps *map[string]interface{} `json:"additionalIps,omitempty"`
+	AdditionalIps *map[string]map[string]interface{} `json:"additionalIps,omitempty"`
 	// Set this attribute if you want to upgrade your instance with the Automated backup addon.     Please provide an empty object for the time being as value. There will be more configuration possible     in the future.
-	Backup *map[string]interface{} `json:"backup,omitempty"`
+	Backup *map[string]map[string]interface{} `json:"backup,omitempty"`
 	// Set this attribute if you want to upgrade your instance with the Extra Storage addon.
 	ExtraStorage *ExtraStorageRequest `json:"extraStorage,omitempty"`
 	// Set this attribute if you want to upgrade your instance with the Custom Images addon.   Please provide an empty object for the time being as value. There will be more configuration possible   in the future.
-	CustomImage *map[string]interface{} `json:"customImage,omitempty"`
+	CustomImage *map[string]map[string]interface{} `json:"customImage,omitempty"`
 	AddonsIds *[]AddOnRequest `json:"addonsIds,omitempty"`
 }
 
@@ -48,9 +48,9 @@ func NewCreateInstanceAddonsWithDefaults() *CreateInstanceAddons {
 }
 
 // GetPrivateNetworking returns the PrivateNetworking field value if set, zero value otherwise.
-func (o *CreateInstanceAddons) GetPrivateNetworking() map[string]interface{} {
+func (o *CreateInstanceAddons) GetPrivateNetworking() map[string]map[string]interface{} {
 	if o == nil || o.PrivateNetworking == nil {
-		var ret map[string]interface{}
+		var ret map[string]map[string]interface{}
 		return ret
 	}
 	return *o.PrivateNetworking
@@ -58,7 +58,7 @@ func (o *CreateInstanceAddons) GetPrivateNetworking() map[string]interface{} {
 
 // GetPrivateNetworkingOk returns a tuple with the PrivateNetworking field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *CreateInstanceAddons) GetPrivateNetworkingOk() (*map[string]interface{}, bool) {
+func (o *CreateInstanceAddons) GetPrivateNetworkingOk() (*map[string]map[string]interface{}, bool) {
 	if o == nil || o.PrivateNetworking == nil {
 		return nil, false
 	}
@@ -74,15 +74,15 @@ func (o *CreateInstanceAddons) HasPrivateNetworking() bool {
 	return false
 }
 
-// SetPrivateNetworking gets a reference to the given map[string]interface{} and assigns it to the PrivateNetworking field.
-func (o *CreateInstanceAddons) SetPrivateNetworking(v map[string]interface{}) {
+// SetPrivateNetworking gets a reference to the given map[string]map[string]interface{} and assigns it to the PrivateNetworking field.
+func (o *CreateInstanceAddons) SetPrivateNetworking(v map[string]map[string]interface{}) {
 	o.PrivateNetworking = &v
 }
 
 // GetAdditionalIps returns the AdditionalIps field value if set, zero value otherwise.
-func (o *CreateInstanceAddons) GetAdditionalIps() map[string]interface{} {
+func (o *CreateInstanceAddons) GetAdditionalIps() map[string]map[string]interface{} {
 	if o == nil || o.AdditionalIps == nil {
-		var ret map[string]interface{}
+		var ret map[string]map[string]interface{}
 		return ret
 	}
 	return *o.AdditionalIps
@@ -90,7 +90,7 @@ func (o *CreateInstanceAddons) GetAdditionalIps() map[string]interface{} {
 
 // GetAdditionalIpsOk returns a tuple with the AdditionalIps field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *CreateInstanceAddons) GetAdditionalIpsOk() (*map[string]interface{}, bool) {
+func (o *CreateInstanceAddons) GetAdditionalIpsOk() (*map[string]map[string]interface{}, bool) {
 	if o == nil || o.AdditionalIps == nil {
 		return nil, false
 	}
@@ -106,15 +106,15 @@ func (o *CreateInstanceAddons) HasAdditionalIps() bool {
 	return false
 }
 
-// SetAdditionalIps gets a reference to the given map[string]interface{} and assigns it to the AdditionalIps field.
-func (o *CreateInstanceAddons) SetAdditionalIps(v map[string]interface{}) {
+// SetAdditionalIps gets a reference to the given map[string]map[string]interface{} and assigns it to the AdditionalIps field.
+func (o *CreateInstanceAddons) SetAdditionalIps(v map[string]map[string]interface{}) {
 	o.AdditionalIps = &v
 }
 
 // GetBackup returns the Backup field value if set, zero value otherwise.
-func (o *CreateInstanceAddons) GetBackup() map[string]interface{} {
+func (o *CreateInstanceAddons) GetBackup() map[string]map[string]interface{} {
 	if o == nil || o.Backup == nil {
-		var ret map[string]interface{}
+		var ret map[string]map[string]interface{}
 		return ret
 	}
 	return *o.Backup
@@ -122,7 +122,7 @@ func (o *CreateInstanceAddons) GetBackup() map[string]interface{} {
 
 // GetBackupOk returns a tuple with the Backup field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *CreateInstanceAddons) GetBackupOk() (*map[string]interface{}, bool) {
+func (o *CreateInstanceAddons) GetBackupOk() (*map[string]map[string]interface{}, bool) {
 	if o == nil || o.Backup == nil {
 		return nil, false
 	}
@@ -138,8 +138,8 @@ func (o *CreateInstanceAddons) HasBackup() bool {
 	return false
 }
 
-// SetBackup gets a reference to the given map[string]interface{} and assigns it to the Backup field.
-func (o *CreateInstanceAddons) SetBackup(v map[string]interface{}) {
+// SetBackup gets a reference to the given map[string]map[string]interface{} and assigns it to the Backup field.
+func (o *CreateInstanceAddons) SetBackup(v map[string]map[string]interface{}) {
 	o.Backup = &v
 }
 
@@ -176,9 +176,9 @@ func (o *CreateInstanceAddons) SetExtraStorage(v ExtraStorageRequest) {
 }
 
 // GetCustomImage returns the CustomImage field value if set, zero value otherwise.
-func (o *CreateInstanceAddons) GetCustomImage() map[string]interface{} {
+func (o *CreateInstanceAddons) GetCustomImage() map[string]map[string]interface{} {
 	if o == nil || o.CustomImage == nil {
-		var ret map[string]interface{}
+		var ret map[string]map[string]interface{}
 		return ret
 	}
 	return *o.CustomImage
@@ -186,7 +186,7 @@ func (o *CreateInstanceAddons) GetCustomImage() map[string]interface{} {
 
 // GetCustomImageOk returns a tuple with the CustomImage field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *CreateInstanceAddons) GetCustomImageOk() (*map[string]interface{}, bool) {
+func (o *CreateInstanceAddons) GetCustomImageOk() (*map[string]map[string]interface{}, bool) {
 	if o == nil || o.CustomImage == nil {
 		return nil, false
 	}
@@ -202,8 +202,8 @@ func (o *CreateInstanceAddons) HasCustomImage() bool {
 	return false
 }
 
-// SetCustomImage gets a reference to the given map[string]interface{} and assigns it to the CustomImage field.
-func (o *CreateInstanceAddons) SetCustomImage(v map[string]interface{}) {
+// SetCustomImage gets a reference to the given map[string]map[string]interface{} and assigns it to the CustomImage field.
+func (o *CreateInstanceAddons) SetCustomImage(v map[string]map[string]interface{}) {
 	o.CustomImage = &v
 }
 
