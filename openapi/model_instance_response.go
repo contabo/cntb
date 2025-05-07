@@ -39,7 +39,7 @@ type InstanceResponse struct {
 	ProductId string `json:"productId"`
 	// Image's id
 	ImageId string `json:"imageId"`
-	IpConfig IpConfig `json:"ipConfig"`
+	IpConfig IpConfig1 `json:"ipConfig"`
 	// MAC Address
 	MacAddress string `json:"macAddress"`
 	// Image RAM size in MB
@@ -79,7 +79,7 @@ type InstanceResponse struct {
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewInstanceResponse(tenantId string, customerId string, additionalIps []AdditionalIp, name string, displayName string, instanceId int64, dataCenter string, region string, regionName string, productId string, imageId string, ipConfig IpConfig, macAddress string, ramMb float32, cpuCores int64, osType string, diskMb float32, sshKeys []int64, createdDate time.Time, cancelDate string, status InstanceStatus, vHostId int64, vHostNumber int64, vHostName string, addOns []AddOnResponse, productType string, productName string) *InstanceResponse {
+func NewInstanceResponse(tenantId string, customerId string, additionalIps []AdditionalIp, name string, displayName string, instanceId int64, dataCenter string, region string, regionName string, productId string, imageId string, ipConfig IpConfig1, macAddress string, ramMb float32, cpuCores int64, osType string, diskMb float32, sshKeys []int64, createdDate time.Time, cancelDate string, status InstanceStatus, vHostId int64, vHostNumber int64, vHostName string, addOns []AddOnResponse, productType string, productName string) *InstanceResponse {
 	this := InstanceResponse{}
 	this.TenantId = tenantId
 	this.CustomerId = customerId
@@ -384,9 +384,9 @@ func (o *InstanceResponse) SetImageId(v string) {
 }
 
 // GetIpConfig returns the IpConfig field value
-func (o *InstanceResponse) GetIpConfig() IpConfig {
+func (o *InstanceResponse) GetIpConfig() IpConfig1 {
 	if o == nil {
-		var ret IpConfig
+		var ret IpConfig1
 		return ret
 	}
 
@@ -395,7 +395,7 @@ func (o *InstanceResponse) GetIpConfig() IpConfig {
 
 // GetIpConfigOk returns a tuple with the IpConfig field value
 // and a boolean to check if the value has been set.
-func (o *InstanceResponse) GetIpConfigOk() (*IpConfig, bool) {
+func (o *InstanceResponse) GetIpConfigOk() (*IpConfig1, bool) {
 	if o == nil  {
 		return nil, false
 	}
@@ -403,7 +403,7 @@ func (o *InstanceResponse) GetIpConfigOk() (*IpConfig, bool) {
 }
 
 // SetIpConfig sets field value
-func (o *InstanceResponse) SetIpConfig(v IpConfig) {
+func (o *InstanceResponse) SetIpConfig(v IpConfig1) {
 	o.IpConfig = v
 }
 

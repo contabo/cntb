@@ -17,29 +17,23 @@ import (
 
 // IpV41 struct for IpV41
 type IpV41 struct {
-	// IP address
+	// IP Address
 	Ip string `json:"ip"`
+	// Netmask CIDR
+	NetmaskCidr int32 `json:"netmaskCidr"`
 	// Gateway
 	Gateway string `json:"gateway"`
-	// Netmask CIDR
-	NetmaskCidr int64 `json:"netmaskCidr"`
-	// Broadcast address
-	Broadcast string `json:"broadcast"`
-	// Net address
-	Net string `json:"net"`
 }
 
 // NewIpV41 instantiates a new IpV41 object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewIpV41(ip string, gateway string, netmaskCidr int64, broadcast string, net string) *IpV41 {
+func NewIpV41(ip string, netmaskCidr int32, gateway string) *IpV41 {
 	this := IpV41{}
 	this.Ip = ip
-	this.Gateway = gateway
 	this.NetmaskCidr = netmaskCidr
-	this.Broadcast = broadcast
-	this.Net = net
+	this.Gateway = gateway
 	return &this
 }
 
@@ -75,6 +69,30 @@ func (o *IpV41) SetIp(v string) {
 	o.Ip = v
 }
 
+// GetNetmaskCidr returns the NetmaskCidr field value
+func (o *IpV41) GetNetmaskCidr() int32 {
+	if o == nil {
+		var ret int32
+		return ret
+	}
+
+	return o.NetmaskCidr
+}
+
+// GetNetmaskCidrOk returns a tuple with the NetmaskCidr field value
+// and a boolean to check if the value has been set.
+func (o *IpV41) GetNetmaskCidrOk() (*int32, bool) {
+	if o == nil  {
+		return nil, false
+	}
+	return &o.NetmaskCidr, true
+}
+
+// SetNetmaskCidr sets field value
+func (o *IpV41) SetNetmaskCidr(v int32) {
+	o.NetmaskCidr = v
+}
+
 // GetGateway returns the Gateway field value
 func (o *IpV41) GetGateway() string {
 	if o == nil {
@@ -99,94 +117,16 @@ func (o *IpV41) SetGateway(v string) {
 	o.Gateway = v
 }
 
-// GetNetmaskCidr returns the NetmaskCidr field value
-func (o *IpV41) GetNetmaskCidr() int64 {
-	if o == nil {
-		var ret int64
-		return ret
-	}
-
-	return o.NetmaskCidr
-}
-
-// GetNetmaskCidrOk returns a tuple with the NetmaskCidr field value
-// and a boolean to check if the value has been set.
-func (o *IpV41) GetNetmaskCidrOk() (*int64, bool) {
-	if o == nil  {
-		return nil, false
-	}
-	return &o.NetmaskCidr, true
-}
-
-// SetNetmaskCidr sets field value
-func (o *IpV41) SetNetmaskCidr(v int64) {
-	o.NetmaskCidr = v
-}
-
-// GetBroadcast returns the Broadcast field value
-func (o *IpV41) GetBroadcast() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.Broadcast
-}
-
-// GetBroadcastOk returns a tuple with the Broadcast field value
-// and a boolean to check if the value has been set.
-func (o *IpV41) GetBroadcastOk() (*string, bool) {
-	if o == nil  {
-		return nil, false
-	}
-	return &o.Broadcast, true
-}
-
-// SetBroadcast sets field value
-func (o *IpV41) SetBroadcast(v string) {
-	o.Broadcast = v
-}
-
-// GetNet returns the Net field value
-func (o *IpV41) GetNet() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.Net
-}
-
-// GetNetOk returns a tuple with the Net field value
-// and a boolean to check if the value has been set.
-func (o *IpV41) GetNetOk() (*string, bool) {
-	if o == nil  {
-		return nil, false
-	}
-	return &o.Net, true
-}
-
-// SetNet sets field value
-func (o *IpV41) SetNet(v string) {
-	o.Net = v
-}
-
 func (o IpV41) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
 	if true {
 		toSerialize["ip"] = o.Ip
 	}
 	if true {
-		toSerialize["gateway"] = o.Gateway
-	}
-	if true {
 		toSerialize["netmaskCidr"] = o.NetmaskCidr
 	}
 	if true {
-		toSerialize["broadcast"] = o.Broadcast
-	}
-	if true {
-		toSerialize["net"] = o.Net
+		toSerialize["gateway"] = o.Gateway
 	}
 	return json.Marshal(toSerialize)
 }

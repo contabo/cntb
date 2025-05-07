@@ -137,8 +137,10 @@ docs/InstancesAuditsApi.md
 docs/InstancesResetPasswordActionsRequest.md
 docs/InternalApi.md
 docs/IpConfig.md
+docs/IpConfig1.md
 docs/IpV4.md
 docs/IpV41.md
+docs/IpV42.md
 docs/IpV6.md
 docs/Links.md
 docs/ListApiPermissionResponse.md
@@ -351,8 +353,10 @@ model_instances_actions_rescue_request.go
 model_instances_audit_response.go
 model_instances_reset_password_actions_request.go
 model_ip_config.go
+model_ip_config1.go
 model_ip_v4.go
 model_ip_v41.go
+model_ip_v42.go
 model_ip_v6.go
 model_links.go
 model_list_api_permission_response.go

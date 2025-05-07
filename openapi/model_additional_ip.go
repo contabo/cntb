@@ -17,14 +17,14 @@ import (
 
 // AdditionalIp struct for AdditionalIp
 type AdditionalIp struct {
-	V4 IpV4 `json:"v4"`
+	V4 IpV42 `json:"v4"`
 }
 
 // NewAdditionalIp instantiates a new AdditionalIp object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewAdditionalIp(v4 IpV4) *AdditionalIp {
+func NewAdditionalIp(v4 IpV42) *AdditionalIp {
 	this := AdditionalIp{}
 	this.V4 = v4
 	return &this
@@ -39,9 +39,9 @@ func NewAdditionalIpWithDefaults() *AdditionalIp {
 }
 
 // GetV4 returns the V4 field value
-func (o *AdditionalIp) GetV4() IpV4 {
+func (o *AdditionalIp) GetV4() IpV42 {
 	if o == nil {
-		var ret IpV4
+		var ret IpV42
 		return ret
 	}
 
@@ -50,7 +50,7 @@ func (o *AdditionalIp) GetV4() IpV4 {
 
 // GetV4Ok returns a tuple with the V4 field value
 // and a boolean to check if the value has been set.
-func (o *AdditionalIp) GetV4Ok() (*IpV4, bool) {
+func (o *AdditionalIp) GetV4Ok() (*IpV42, bool) {
 	if o == nil  {
 		return nil, false
 	}
@@ -58,7 +58,7 @@ func (o *AdditionalIp) GetV4Ok() (*IpV4, bool) {
 }
 
 // SetV4 sets field value
-func (o *AdditionalIp) SetV4(v IpV4) {
+func (o *AdditionalIp) SetV4(v IpV42) {
 	o.V4 = v
 }
 

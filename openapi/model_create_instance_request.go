@@ -19,7 +19,7 @@ import (
 type CreateInstanceRequest struct {
 	// ImageId to be used to setup the compute instance. Default is Ubuntu 22.04
 	ImageId *string `json:"imageId,omitempty"`
-	// Default is V76
+	// Default is V92
 	ProductId *string `json:"productId,omitempty"`
 	// Instance Region where the compute instance should be located. Default is EU
 	Region *string `json:"region,omitempty"`
@@ -51,7 +51,7 @@ func NewCreateInstanceRequest(period int64) *CreateInstanceRequest {
 	this := CreateInstanceRequest{}
 	var imageId string = "afecbb85-e2fc-46f0-9684-b46b1faf00bb"
 	this.ImageId = &imageId
-	var productId string = "V76"
+	var productId string = "V92"
 	this.ProductId = &productId
 	var region string = "EU"
 	this.Region = &region
@@ -68,7 +68,7 @@ func NewCreateInstanceRequestWithDefaults() *CreateInstanceRequest {
 	this := CreateInstanceRequest{}
 	var imageId string = "afecbb85-e2fc-46f0-9684-b46b1faf00bb"
 	this.ImageId = &imageId
-	var productId string = "V76"
+	var productId string = "V92"
 	this.ProductId = &productId
 	var region string = "EU"
 	this.Region = &region

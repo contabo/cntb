@@ -17,14 +17,14 @@ import (
 
 // PrivateIpConfig struct for PrivateIpConfig
 type PrivateIpConfig struct {
-	V4 []IpV4 `json:"v4"`
+	V4 []IpV41 `json:"v4"`
 }
 
 // NewPrivateIpConfig instantiates a new PrivateIpConfig object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewPrivateIpConfig(v4 []IpV4) *PrivateIpConfig {
+func NewPrivateIpConfig(v4 []IpV41) *PrivateIpConfig {
 	this := PrivateIpConfig{}
 	this.V4 = v4
 	return &this
@@ -39,9 +39,9 @@ func NewPrivateIpConfigWithDefaults() *PrivateIpConfig {
 }
 
 // GetV4 returns the V4 field value
-func (o *PrivateIpConfig) GetV4() []IpV4 {
+func (o *PrivateIpConfig) GetV4() []IpV41 {
 	if o == nil {
-		var ret []IpV4
+		var ret []IpV41
 		return ret
 	}
 
@@ -50,7 +50,7 @@ func (o *PrivateIpConfig) GetV4() []IpV4 {
 
 // GetV4Ok returns a tuple with the V4 field value
 // and a boolean to check if the value has been set.
-func (o *PrivateIpConfig) GetV4Ok() (*[]IpV4, bool) {
+func (o *PrivateIpConfig) GetV4Ok() (*[]IpV41, bool) {
 	if o == nil  {
 		return nil, false
 	}
@@ -58,7 +58,7 @@ func (o *PrivateIpConfig) GetV4Ok() (*[]IpV4, bool) {
 }
 
 // SetV4 sets field value
-func (o *PrivateIpConfig) SetV4(v []IpV4) {
+func (o *PrivateIpConfig) SetV4(v []IpV41) {
 	o.V4 = v
 }
 
