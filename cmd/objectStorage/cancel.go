@@ -7,6 +7,7 @@ import (
 	"contabo.com/cli/cntb/client"
 	contaboCmd "contabo.com/cli/cntb/cmd"
 	"contabo.com/cli/cntb/cmd/util"
+	"contabo.com/cli/cntb/openapi"
 	"contabo.com/cli/cntb/outputFormatter"
 	uuid "github.com/satori/go.uuid"
 	log "github.com/sirupsen/logrus"
@@ -19,9 +20,14 @@ var objectStorageCancelCmd = &cobra.Command{
 	Long:    "Your are free to cancel a previously created object storage at any time.",
 	Example: "cntb cancel objectStorage 1f771979-1c0f-44ab-ab5b-2c3752731b45",
 	Run: func(cmd *cobra.Command, args []string) {
+		// Create the cancel request body
+		cancelRequest := openapi.NewCancelObjectStorageRequest()
+
 		resp, httpResp, err := client.ApiClient().ObjectStoragesApi.
-		CancelObjectStorage(context.Background(), cancelbjectStorageId).
-		XRequestId(uuid.NewV4().String()).Execute()
+			CancelObjectStorage(context.Background(), cancelObjectStorageId).
+			XRequestId(uuid.NewV4().String()).
+			CancelObjectStorageRequest(*cancelRequest).
+			Execute()
 
 		util.HandleErrors(err, httpResp, "while canceling the object storage")
 
@@ -53,7 +59,7 @@ var objectStorageCancelCmd = &cobra.Command{
 			log.Fatal("Too many positional arguments.")
 		}
 
-		cancelbjectStorageId = args[0]
+		cancelObjectStorageId = args[0]
 
 		return nil
 	},

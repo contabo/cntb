@@ -9,6 +9,7 @@ import (
 	"contabo.com/cli/cntb/client"
 	contaboCmd "contabo.com/cli/cntb/cmd"
 	"contabo.com/cli/cntb/cmd/util"
+	"contabo.com/cli/cntb/openapi"
 	"contabo.com/cli/cntb/outputFormatter"
 	uuid "github.com/satori/go.uuid"
 	log "github.com/sirupsen/logrus"
@@ -21,9 +22,14 @@ var instanceCancelCmd = &cobra.Command{
 	Long:    `Your are free to cancel a previously created instances at any time.`,
 	Example: `cntb cancel instance 12345`,
 	Run: func(cmd *cobra.Command, args []string) {
+		// Create the cancel request body
+		cancelRequest := openapi.NewCancelInstanceRequest()
+
 		resp, httpResp, err := client.ApiClient().InstancesApi.
 			CancelInstance(context.Background(), cancelInstanceId).
-			XRequestId(uuid.NewV4().String()).Execute()
+			XRequestId(uuid.NewV4().String()).
+			CancelInstanceRequest(*cancelRequest).
+			Execute()
 
 		util.HandleErrors(err, httpResp, "while canceling the instance")
 

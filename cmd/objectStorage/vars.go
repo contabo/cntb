@@ -44,7 +44,7 @@ var (
 
 // cancel
 var (
-	cancelbjectStorageId string
+	cancelObjectStorageId string
 )
 
 // stats
