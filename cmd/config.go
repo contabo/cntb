@@ -22,7 +22,7 @@ var configCmd = &cobra.Command{
 	4. arguments passed to command line
 
 	This means that the arguments have the highest priority. You are free to edit the contents of configuration files with your favorite editor.
-	For the most convenient usage specify the oauht2 credentials (oauth2-client-secret, oauth2-clientid, oauth2-password, oauth2-user).`,
+	For the most convenient usage specify the oauth2 credentials (oauth2-client-secret, oauth2-clientid, oauth2-password, oauth2-user).`,
 	Run: func(cmd *cobra.Command, args []string) {
 		cmd.Help()
 		os.Exit(0)
