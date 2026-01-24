@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/url"
 	"os"
+	"strings"
 
 	"contabo.com/cli/cntb/config"
 	"github.com/minio/minio-go/v7"
@@ -80,6 +81,9 @@ Examples:
 	},
 }
 
+// Used to replace dashes in key names with underscores
+var dashToUnderscoreReplacer = strings.NewReplacer("-", "_")
+
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
@@ -137,6 +141,8 @@ func init() {
 func initConfig() {
 	viper.SetConfigType("yaml")
 	viper.SetEnvPrefix("cntb")
+	// Replace dashes in key names with underscores when determining environment variable names
+	viper.SetEnvKeyReplacer(dashToUnderscoreReplacer)
 	if cfgFile != "" {
 		// Use config file from the flag.
 		viper.SetConfigFile(cfgFile)
