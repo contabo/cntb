@@ -15,20 +15,25 @@ import (
 	"github.com/spf13/viper"
 )
 
+const envPrefix = "cntb"
+
 var (
 	cfgFile                       string
 	DebugLevel                    string
 	ApiBaseUrl                    string
 	oauth2ClientId                string
 	oauth2ClientIdDesignation     = "oauth2-clientid"
+	oauth2ClientIdEnvKeys         = fmtEnvKeys(envPrefix, "oauth2_client_id")
 	oauth2ClientSecret            string
 	oauth2ClientSecretDesignation = "oauth2-client-secret"
 	oauth2TokenUrl                string
 	oauth2TokenUrlDesignation     = "oauth2-tokenurl"
+	oauth2TokenUrlEnvKeys         = fmtEnvKeys(envPrefix, "oauth2_token_url")
 	oauth2User                    string
 	oauth2UserDesignation         = "oauth2-user"
 	oauth2Password                string
 	oauth2PasswordDesignation     = "oauth2-password"
+	oauth2PasswordEnvKeys         = fmtEnvKeys(envPrefix, "oauth2_pass")
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -110,6 +115,7 @@ func init() {
 
 	rootCmd.PersistentFlags().StringVar(&oauth2ClientId, oauth2ClientIdDesignation, "",
 		"OAuth2 ClientId. Please refer to you customer panel to retrieve this information")
+	viper.BindEnv(append([]string{oauth2ClientIdDesignation}, oauth2ClientIdEnvKeys...)...)
 	viper.BindPFlag(oauth2ClientIdDesignation, rootCmd.PersistentFlags().Lookup(oauth2ClientIdDesignation))
 
 	rootCmd.PersistentFlags().StringVar(&oauth2ClientSecret, oauth2ClientSecretDesignation, "",
@@ -119,6 +125,7 @@ func init() {
 	rootCmd.PersistentFlags().StringVar(&oauth2TokenUrl, oauth2TokenUrlDesignation,
 		"https://auth.contabo.com/auth/realms/contabo/protocol/openid-connect/token",
 		"OAuth2 Token URL. Please refer to you customer panel to retrieve this information")
+	viper.BindEnv(append([]string{oauth2TokenUrlDesignation}, oauth2TokenUrlEnvKeys...)...)
 	viper.BindPFlag(oauth2TokenUrlDesignation, rootCmd.PersistentFlags().Lookup(oauth2TokenUrlDesignation))
 
 	rootCmd.PersistentFlags().StringVar(&oauth2User, oauth2UserDesignation, "",
@@ -127,6 +134,7 @@ func init() {
 
 	rootCmd.PersistentFlags().StringVar(&oauth2Password, oauth2PasswordDesignation, "",
 		"OAuth2 User Password. Please refer to you customer panel to retrieve this information")
+	viper.BindEnv(append([]string{oauth2PasswordDesignation}, oauth2PasswordEnvKeys...)...)
 	viper.BindPFlag(oauth2PasswordDesignation, rootCmd.PersistentFlags().Lookup(oauth2PasswordDesignation))
 
 	rootCmd.PersistentFlags().StringVarP(&OutputFormat, "output", "o", "normal",
@@ -140,7 +148,7 @@ func init() {
 // initConfig reads in config file and ENV variables if set.
 func initConfig() {
 	viper.SetConfigType("yaml")
-	viper.SetEnvPrefix("cntb")
+	viper.SetEnvPrefix(envPrefix)
 	// Replace dashes in key names with underscores when determining environment variable names
 	viper.SetEnvKeyReplacer(dashToUnderscoreReplacer)
 	if cfgFile != "" {
@@ -211,4 +219,14 @@ func CheckSuggestions(args []string, cmd *cobra.Command) error {
 		return fmt.Errorf("invalid argument %q for %q%s", arg, cmd.CommandPath(), suggestionsString)
 	}
 	return nil
+}
+
+func fmtEnvKeys(prefix string, keys ...string) []string {
+	var formatted = []string{}
+	for _, key := range keys {
+		key = strings.ToUpper(strings.Join([]string{prefix, key}, "_"))
+		key = dashToUnderscoreReplacer.Replace(key)
+		formatted = append(formatted, key)
+	}
+	return formatted
 }
