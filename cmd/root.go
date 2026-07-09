@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/url"
 	"os"
+	"strings"
 
 	"contabo.com/cli/cntb/config"
 	"github.com/minio/minio-go/v7"
@@ -137,6 +138,11 @@ func init() {
 func initConfig() {
 	viper.SetConfigType("yaml")
 	viper.SetEnvPrefix("cntb")
+	// Config keys use hyphens (e.g. "oauth2-clientid") but environment
+	// variable names cannot. Replace hyphens with underscores so keys are
+	// reachable via env, e.g. CNTB_OAUTH2_CLIENTID -> oauth2-clientid.
+	// Without this, AutomaticEnv looks for the un-settable "CNTB_OAUTH2-CLIENTID".
+	viper.SetEnvKeyReplacer(strings.NewReplacer("-", "_"))
 	if cfgFile != "" {
 		// Use config file from the flag.
 		viper.SetConfigFile(cfgFile)

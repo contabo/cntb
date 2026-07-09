@@ -20,6 +20,17 @@
   cntb config set-credentials --oauth2-clientid=<ClientId from Customer Control Panel> --oauth2-client-secret=<ClientSecret from Customer Control Panel> --oauth2-user=<API User from Customer Control Panel> --oauth2-password=<API Password from Customer Control Panel>
   ```
 
+  Alternatively, any setting can be provided through an environment variable
+  prefixed with `CNTB_` (handy for CI or juggling multiple accounts). Hyphens
+  in the flag name become underscores:
+
+  ```sh
+  export CNTB_OAUTH2_CLIENTID=<ClientId>
+  export CNTB_OAUTH2_CLIENT_SECRET=<ClientSecret>
+  export CNTB_OAUTH2_USER=<API User>
+  export CNTB_OAUTH2_PASSWORD=<API Password>
+  ```
+
 2. Use the CLI, e.g.
 
 ```sh
