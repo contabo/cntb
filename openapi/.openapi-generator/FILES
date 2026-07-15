@@ -3,6 +3,7 @@
 .travis.yml
 README.md
 api/openapi.yaml
+api_check_collection_templates.go
 api_check_collections.go
 api_checks.go
 api_dns.go
@@ -19,18 +20,6 @@ api_instance_actions.go
 api_instance_actions_audits.go
 api_instances.go
 api_instances_audits.go
-api_internal_check_audits.go
-api_internal_check_collection_audits.go
-api_internal_check_collection_replay.go
-api_internal_check_collection_templates.go
-api_internal_check_collections.go
-api_internal_check_replay.go
-api_internal_check_templates.go
-api_internal_checks.go
-api_internal_remedies.go
-api_internal_remedy_audits.go
-api_internal_remedy_replay.go
-api_internal_remedy_templates.go
 api_object_storages.go
 api_object_storages_audits.go
 api_private_networks.go
@@ -46,6 +35,7 @@ api_tag_assignments.go
 api_tag_assignments_audits.go
 api_tags.go
 api_tags_audits.go
+api_user_accounts.go
 api_users.go
 api_users_audits.go
 api_users_object_storage_credentials.go
@@ -53,6 +43,7 @@ api_vip.go
 api_vip_audits.go
 client.go
 configuration.go
+docs/AccountDetails.md
 docs/AccountOrgResponse.md
 docs/AccountsListResponse.md
 docs/AddOnQuantityRequest.md
@@ -96,6 +87,7 @@ docs/CheckCollectionCheckTemplates.md
 docs/CheckCollectionCreateRequest.md
 docs/CheckCollectionResponse.md
 docs/CheckCollectionTemplateResponse.md
+docs/CheckCollectionTemplatesApi.md
 docs/CheckCollectionTemplatesCheckTemplates.md
 docs/CheckCollectionTemplatesGetResponse.md
 docs/CheckCollectionTemplatesListResponse.md
@@ -118,6 +110,7 @@ docs/ChecksListResponse.md
 docs/ChecksReplayRequest.md
 docs/ClientResponse.md
 docs/ClientSecretResponse.md
+docs/CmsErrorsResponse.md
 docs/CreateAssignmentResponse.md
 docs/CreateCustomImageFailResponse.md
 docs/CreateCustomImageRequest.md
@@ -176,6 +169,9 @@ docs/DomainsApi.md
 docs/DomainsAuditsApi.md
 docs/DomainsListResponse.md
 docs/ExtCheckCollectionResponse.md
+docs/ExtCheckCollectionTemplateResponse.md
+docs/ExtCheckCollectionTemplatesGetResponse.md
+docs/ExtCheckCollectionTemplatesListResponse.md
 docs/ExtCheckCollectionsGetResponse.md
 docs/ExtCheckCollectionsListResponse.md
 docs/ExtCheckResponse.md
@@ -196,6 +192,7 @@ docs/FindPrivateNetworkResponse.md
 docs/FindRoleResponse.md
 docs/FindSecretResponse.md
 docs/FindSnapshotResponse.md
+docs/FindSupportSignatureResponse.md
 docs/FindTagResponse.md
 docs/FindUserIsPasswordSetResponse.md
 docs/FindUserResponse.md
@@ -233,6 +230,7 @@ docs/InstanceActionsAuditsApi.md
 docs/InstanceAssignmentSelfLinks.md
 docs/InstanceAssignmentSelfLinks1.md
 docs/InstanceDetails.md
+docs/InstanceRegionChangeResponse.md
 docs/InstanceRescueActionResponse.md
 docs/InstanceRescueActionResponseData.md
 docs/InstanceResetPasswordActionResponse.md
@@ -255,18 +253,6 @@ docs/InstancesApi.md
 docs/InstancesAuditResponse.md
 docs/InstancesAuditsApi.md
 docs/InstancesResetPasswordActionsRequest.md
-docs/InternalCheckAuditsApi.md
-docs/InternalCheckCollectionAuditsApi.md
-docs/InternalCheckCollectionReplayApi.md
-docs/InternalCheckCollectionTemplatesApi.md
-docs/InternalCheckCollectionsApi.md
-docs/InternalCheckReplayApi.md
-docs/InternalCheckTemplatesApi.md
-docs/InternalChecksApi.md
-docs/InternalRemediesApi.md
-docs/InternalRemedyAuditsApi.md
-docs/InternalRemedyReplayApi.md
-docs/InternalRemedyTemplatesApi.md
 docs/IpConfig.md
 docs/IpConfig1.md
 docs/IpConfig2.md
@@ -310,6 +296,7 @@ docs/ListTagAuditsResponse.md
 docs/ListTagResponse.md
 docs/ListUserAuditResponse.md
 docs/ListUserResponse.md
+docs/ListUserSwitchAccountsResponse.md
 docs/ListVipAuditResponse.md
 docs/ListVipResponse.md
 docs/ListVipResponseData.md
@@ -345,6 +332,8 @@ docs/PutFirewallRequest.md
 docs/PutFirewallResponse.md
 docs/RecordAuditResponse.md
 docs/RecordAuditResponseData.md
+docs/RegionChangeRequest.md
+docs/RegionChangeResponseData.md
 docs/ReinstallInstanceRequest.md
 docs/ReinstallInstanceResponse.md
 docs/ReinstallInstanceResponseData.md
@@ -357,6 +346,7 @@ docs/RemediesListResponse.md
 docs/RemediesReplayRequest.md
 docs/RemedyResponse.md
 docs/RemedyTemplateResponse.md
+docs/RemedyTemplateSummary.md
 docs/RemedyTemplatesGetResponse.md
 docs/RemedyTemplatesListResponse.md
 docs/ReplayResponse.md
@@ -379,6 +369,7 @@ docs/SnapshotsApi.md
 docs/SnapshotsAuditResponse.md
 docs/SnapshotsAuditsApi.md
 docs/SrcCidr.md
+docs/SupportSignatureResponse.md
 docs/TagAssignmentSelfLinks.md
 docs/TagAssignmentsApi.md
 docs/TagAssignmentsAuditsApi.md
@@ -408,9 +399,16 @@ docs/UpgradeInstanceRequest.md
 docs/UpgradeObjectStorageRequest.md
 docs/UpgradeObjectStorageResponse.md
 docs/UpgradeObjectStorageResponseData.md
+docs/UserAccountsApi.md
 docs/UserAuditResponse.md
 docs/UserIsPasswordSetResponse.md
 docs/UserResponse.md
+docs/UserSwitchAccount.md
+docs/UserSwitchAccountDefaultRequest.md
+docs/UserSwitchAccountDefaultResponse.md
+docs/UserSwitchAccountRequest.md
+docs/UserSwitchAccountResponse.md
+docs/UserSwitchAccountTokens.md
 docs/UsersApi.md
 docs/UsersAuditsApi.md
 docs/UsersObjectStorageCredentialsApi.md
@@ -424,6 +422,7 @@ docs/ZoneAuditResponseData.md
 git_push.sh
 go.mod
 go.sum
+model_account_details.go
 model_account_org_response.go
 model_accounts_list_response.go
 model_add_on_quantity_request.go
@@ -487,6 +486,7 @@ model_checks_list_response.go
 model_checks_replay_request.go
 model_client_response.go
 model_client_secret_response.go
+model_cms_errors_response.go
 model_create_assignment_response.go
 model_create_custom_image_fail_response.go
 model_create_custom_image_request.go
@@ -541,6 +541,9 @@ model_domain_patch_response.go
 model_domain_response.go
 model_domains_list_response.go
 model_ext_check_collection_response.go
+model_ext_check_collection_template_response.go
+model_ext_check_collection_templates_get_response.go
+model_ext_check_collection_templates_list_response.go
 model_ext_check_collections_get_response.go
 model_ext_check_collections_list_response.go
 model_ext_check_response.go
@@ -561,6 +564,7 @@ model_find_private_network_response.go
 model_find_role_response.go
 model_find_secret_response.go
 model_find_snapshot_response.go
+model_find_support_signature_response.go
 model_find_tag_response.go
 model_find_user_is_password_set_response.go
 model_find_user_response.go
@@ -590,6 +594,7 @@ model_image_response.go
 model_instance_assignment_self_links.go
 model_instance_assignment_self_links1.go
 model_instance_details.go
+model_instance_region_change_response.go
 model_instance_rescue_action_response.go
 model_instance_rescue_action_response_data.go
 model_instance_reset_password_action_response.go
@@ -653,6 +658,7 @@ model_list_tag_audits_response.go
 model_list_tag_response.go
 model_list_user_audit_response.go
 model_list_user_response.go
+model_list_user_switch_accounts_response.go
 model_list_vip_audit_response.go
 model_list_vip_response.go
 model_list_vip_response_data.go
@@ -684,6 +690,8 @@ model_put_firewall_request.go
 model_put_firewall_response.go
 model_record_audit_response.go
 model_record_audit_response_data.go
+model_region_change_request.go
+model_region_change_response_data.go
 model_reinstall_instance_request.go
 model_reinstall_instance_response.go
 model_reinstall_instance_response_data.go
@@ -695,6 +703,7 @@ model_remedies_list_response.go
 model_remedies_replay_request.go
 model_remedy_response.go
 model_remedy_template_response.go
+model_remedy_template_summary.go
 model_remedy_templates_get_response.go
 model_remedy_templates_list_response.go
 model_replay_response.go
@@ -711,6 +720,7 @@ model_set_default_handle_response.go
 model_snapshot_response.go
 model_snapshots_audit_response.go
 model_src_cidr.go
+model_support_signature_response.go
 model_tag_assignment_self_links.go
 model_tag_audit_response.go
 model_tag_response.go
@@ -739,6 +749,12 @@ model_upgrade_object_storage_response_data.go
 model_user_audit_response.go
 model_user_is_password_set_response.go
 model_user_response.go
+model_user_switch_account.go
+model_user_switch_account_default_request.go
+model_user_switch_account_default_response.go
+model_user_switch_account_request.go
+model_user_switch_account_response.go
+model_user_switch_account_tokens.go
 model_vip_audit_response.go
 model_vip_response.go
 model_vnc_response.go

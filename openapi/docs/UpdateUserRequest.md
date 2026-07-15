@@ -6,11 +6,11 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **FirstName** | Pointer to **string** | The name of the user. Names may contain letters, numbers, colons, dashes, and underscores. There is a limit of 255 characters per user. | [optional] 
 **LastName** | Pointer to **string** | The last name of the user. Users may contain letters, numbers, colons, dashes, and underscores. There is a limit of 255 characters per user. | [optional] 
-**Email** | Pointer to **string** | The email of the user to which activation and forgot password links are being sent to. There is a limit of 255 characters per email. | [optional] 
 **Enabled** | Pointer to **bool** | If user is not enabled, he can&#39;t login and thus use services any longer. | [optional] 
 **Totp** | Pointer to **bool** | Enable or disable two-factor authentication (2FA) via time based OTP. | [optional] 
 **Locale** | Pointer to **string** | The locale of the user. This can be &#x60;de-DE&#x60;, &#x60;de&#x60;, &#x60;en-US&#x60;, &#x60;en&#x60;, &#x60;es-ES&#x60;, &#x60;es&#x60;, &#x60;pt-BR&#x60;, &#x60;pt&#x60;. | [optional] 
 **Roles** | Pointer to **[]int64** | The roles as list of &#x60;roleId&#x60;s of the user. | [optional] 
+**SendInvoiceEmail** | Pointer to **bool** | If enabled, the user receives invoice emails and is registered as an invoice contact in CMS. Only available for users with the Full Access role. | [optional] 
 
 ## Methods
 
@@ -80,31 +80,6 @@ SetLastName sets LastName field to given value.
 `func (o *UpdateUserRequest) HasLastName() bool`
 
 HasLastName returns a boolean if a field has been set.
-
-### GetEmail
-
-`func (o *UpdateUserRequest) GetEmail() string`
-
-GetEmail returns the Email field if non-nil, zero value otherwise.
-
-### GetEmailOk
-
-`func (o *UpdateUserRequest) GetEmailOk() (*string, bool)`
-
-GetEmailOk returns a tuple with the Email field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetEmail
-
-`func (o *UpdateUserRequest) SetEmail(v string)`
-
-SetEmail sets Email field to given value.
-
-### HasEmail
-
-`func (o *UpdateUserRequest) HasEmail() bool`
-
-HasEmail returns a boolean if a field has been set.
 
 ### GetEnabled
 
@@ -205,6 +180,31 @@ SetRoles sets Roles field to given value.
 `func (o *UpdateUserRequest) HasRoles() bool`
 
 HasRoles returns a boolean if a field has been set.
+
+### GetSendInvoiceEmail
+
+`func (o *UpdateUserRequest) GetSendInvoiceEmail() bool`
+
+GetSendInvoiceEmail returns the SendInvoiceEmail field if non-nil, zero value otherwise.
+
+### GetSendInvoiceEmailOk
+
+`func (o *UpdateUserRequest) GetSendInvoiceEmailOk() (*bool, bool)`
+
+GetSendInvoiceEmailOk returns a tuple with the SendInvoiceEmail field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetSendInvoiceEmail
+
+`func (o *UpdateUserRequest) SetSendInvoiceEmail(v bool)`
+
+SetSendInvoiceEmail sets SendInvoiceEmail field to given value.
+
+### HasSendInvoiceEmail
+
+`func (o *UpdateUserRequest) HasSendInvoiceEmail() bool`
+
+HasSendInvoiceEmail returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

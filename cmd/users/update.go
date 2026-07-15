@@ -27,9 +27,6 @@ var userUpdateCmd = &cobra.Command{
 		switch content {
 		case nil:
 			// from arguments
-			if updateUserEmail != "" {
-				updateUserRequest.Email = &updateUserEmail
-			}
 			if updateUserFirstName != "" {
 				updateUserRequest.FirstName = &updateUserFirstName
 			}
@@ -90,9 +87,6 @@ var userUpdateCmd = &cobra.Command{
 		viper.BindPFlag("lastName", cmd.Flags().Lookup("lastName"))
 		updateUserLastName = viper.GetString("lastName")
 
-		viper.BindPFlag("email", cmd.Flags().Lookup("email"))
-		updateUserEmail = viper.GetString("email")
-
 		viper.BindPFlag("enabled", cmd.Flags().Lookup("enabled"))
 		updateIsUserEnabled = viper.GetString("enabled")
 
@@ -131,9 +125,6 @@ func init() {
 
 	userUpdateCmd.Flags().StringVar(&updateUserLastName, "lastName", "",
 		`last name of the user`)
-
-	userUpdateCmd.Flags().StringVar(&updateUserEmail, "email", "",
-		`email of the user`)
 
 	userUpdateCmd.Flags().StringVar(&updateIsUserEnabled, "enabled", "",
 		`is the user enabled. ('true' or 'false')`)

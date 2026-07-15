@@ -16,12 +16,13 @@ Name | Type | Description | Notes
 **Locale** | **string** | The locale of the user. This can be &#x60;de-DE&#x60;, &#x60;de&#x60;, &#x60;en-US&#x60;, &#x60;en&#x60;, &#x60;es-ES&#x60;, &#x60;es&#x60;, &#x60;pt-BR&#x60;, &#x60;pt&#x60;. | 
 **Roles** | [**[]RoleResponse**](RoleResponse.md) | The roles as list of &#x60;roleId&#x60;s of the user. | 
 **Owner** | **bool** | If user is owner he will have permissions to all API endpoints and resources. Enabling this will superseed all role definitions and &#x60;accessAllResources&#x60;. | 
+**SendInvoiceEmail** | **bool** | If enabled, the user receives invoice emails and is registered as an invoice contact in CMS. | 
 
 ## Methods
 
 ### NewUserResponse
 
-`func NewUserResponse(tenantId string, customerId string, userId string, firstName string, lastName string, email string, emailVerified bool, enabled bool, totp bool, locale string, roles []RoleResponse, owner bool, ) *UserResponse`
+`func NewUserResponse(tenantId string, customerId string, userId string, firstName string, lastName string, email string, emailVerified bool, enabled bool, totp bool, locale string, roles []RoleResponse, owner bool, sendInvoiceEmail bool, ) *UserResponse`
 
 NewUserResponse instantiates a new UserResponse object
 This constructor will assign default values to properties that have it defined,
@@ -274,6 +275,26 @@ and a boolean to check if the value has been set.
 `func (o *UserResponse) SetOwner(v bool)`
 
 SetOwner sets Owner field to given value.
+
+
+### GetSendInvoiceEmail
+
+`func (o *UserResponse) GetSendInvoiceEmail() bool`
+
+GetSendInvoiceEmail returns the SendInvoiceEmail field if non-nil, zero value otherwise.
+
+### GetSendInvoiceEmailOk
+
+`func (o *UserResponse) GetSendInvoiceEmailOk() (*bool, bool)`
+
+GetSendInvoiceEmailOk returns a tuple with the SendInvoiceEmail field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetSendInvoiceEmail
+
+`func (o *UserResponse) SetSendInvoiceEmail(v bool)`
+
+SetSendInvoiceEmail sets SendInvoiceEmail field to given value.
 
 
 

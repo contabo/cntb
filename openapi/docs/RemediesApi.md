@@ -163,7 +163,7 @@ Name | Type | Description  | Notes
 
 ## ListExtRemedies
 
-> ExtRemediesListResponse ListExtRemedies(ctx).XRequestId(xRequestId).XTraceId(xTraceId).ObjectType(objectType).ObjectId(objectId).Status(status).RemedyCollectionId(remedyCollectionId).RemedyTemplateId(remedyTemplateId).Execute()
+> ExtRemediesListResponse ListExtRemedies(ctx).XRequestId(xRequestId).XTraceId(xTraceId).ObjectType(objectType).ObjectId(objectId).Status(status).RemedyCollectionId(remedyCollectionId).RemedyTemplateId(remedyTemplateId).Page(page).Size(size).OrderBy(orderBy).CreationStartTime(creationStartTime).CreationEndTime(creationEndTime).ModificationStartTime(modificationStartTime).ModificationEndTime(modificationEndTime).Execute()
 
 List remedy
 
@@ -178,6 +178,7 @@ import (
     "context"
     "fmt"
     "os"
+    "time"
     openapiclient "./openapi"
 )
 
@@ -189,10 +190,17 @@ func main() {
     status := "failed" // string | Status of the handle (optional)
     remedyCollectionId := float32(12345) // float32 | ID of remedy collection if started in scope of a collection (optional)
     remedyTemplateId := float32(12345) // float32 | Remedy Template for this check (optional)
+    page := int64(1) // int64 | Number of page to be fetched. (optional)
+    size := int64(10) // int64 | Number of elements per page. (optional)
+    orderBy := []string{"Inner_example"} // []string | Specify fields and ordering (ASC for ascending, DESC for descending) in following format `field:ASC|DESC`. (optional)
+    creationStartTime := time.Now() // time.Time | Start of search time range for created date (optional)
+    creationEndTime := time.Now() // time.Time | End of search time range for created date (optional)
+    modificationStartTime := time.Now() // time.Time | Start of search time range for modified date (optional)
+    modificationEndTime := time.Now() // time.Time | End of search time range for modified date (optional)
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.RemediesApi.ListExtRemedies(context.Background()).XRequestId(xRequestId).XTraceId(xTraceId).ObjectType(objectType).ObjectId(objectId).Status(status).RemedyCollectionId(remedyCollectionId).RemedyTemplateId(remedyTemplateId).Execute()
+    resp, r, err := api_client.RemediesApi.ListExtRemedies(context.Background()).XRequestId(xRequestId).XTraceId(xTraceId).ObjectType(objectType).ObjectId(objectId).Status(status).RemedyCollectionId(remedyCollectionId).RemedyTemplateId(remedyTemplateId).Page(page).Size(size).OrderBy(orderBy).CreationStartTime(creationStartTime).CreationEndTime(creationEndTime).ModificationStartTime(modificationStartTime).ModificationEndTime(modificationEndTime).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `RemediesApi.ListExtRemedies``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -220,6 +228,13 @@ Name | Type | Description  | Notes
  **status** | **string** | Status of the handle | 
  **remedyCollectionId** | **float32** | ID of remedy collection if started in scope of a collection | 
  **remedyTemplateId** | **float32** | Remedy Template for this check | 
+ **page** | **int64** | Number of page to be fetched. | 
+ **size** | **int64** | Number of elements per page. | 
+ **orderBy** | **[]string** | Specify fields and ordering (ASC for ascending, DESC for descending) in following format &#x60;field:ASC|DESC&#x60;. | 
+ **creationStartTime** | **time.Time** | Start of search time range for created date | 
+ **creationEndTime** | **time.Time** | End of search time range for created date | 
+ **modificationStartTime** | **time.Time** | Start of search time range for modified date | 
+ **modificationEndTime** | **time.Time** | End of search time range for modified date | 
 
 ### Return type
 

@@ -4,6 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**Internal** | **bool** | Is internal (not shown to the customer) | 
 **Status** | **string** | Status of the handle | 
 **ObjectType** | **string** | Object type to be handled | 
 **ObjectId** | **string** | ID of the object, to be handled | 
@@ -12,19 +13,20 @@ Name | Type | Description | Notes
 **CheckTemplateId** | **float32** | Check Template for this check | 
 **Name** | **string** | Name of this check template | 
 **Note** | **string** | Note to be shown to the customer | 
+**InternalNote** | **string** | Note which is shown only internally to the agent | 
 **DurationMs** | **float32** | Duration of the check in milliseconds | 
+**RemedyTemplates** | [**[]RemedyTemplateSummary**](RemedyTemplateSummary.md) | Remedy templates linked to this check template | 
 **CreatedDate** | **time.Time** | Creation date | 
 **ModifiedDate** | **time.Time** | Modify date | 
 **OrgId** | **string** | Org id | 
 **AccountId** | **string** | Account id | 
-**InternalNote** | **string** | Note which is shown only internally to the agent | 
 **Log** | **string** | Detailed log of the check execution | 
 
 ## Methods
 
 ### NewCheckResponse
 
-`func NewCheckResponse(status string, objectType string, objectId string, checkId float32, checkCollectionId float32, checkTemplateId float32, name string, note string, durationMs float32, createdDate time.Time, modifiedDate time.Time, orgId string, accountId string, internalNote string, log string, ) *CheckResponse`
+`func NewCheckResponse(internal bool, status string, objectType string, objectId string, checkId float32, checkCollectionId float32, checkTemplateId float32, name string, note string, internalNote string, durationMs float32, remedyTemplates []RemedyTemplateSummary, createdDate time.Time, modifiedDate time.Time, orgId string, accountId string, log string, ) *CheckResponse`
 
 NewCheckResponse instantiates a new CheckResponse object
 This constructor will assign default values to properties that have it defined,
@@ -38,6 +40,26 @@ will change when the set of required properties is changed
 NewCheckResponseWithDefaults instantiates a new CheckResponse object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
+
+### GetInternal
+
+`func (o *CheckResponse) GetInternal() bool`
+
+GetInternal returns the Internal field if non-nil, zero value otherwise.
+
+### GetInternalOk
+
+`func (o *CheckResponse) GetInternalOk() (*bool, bool)`
+
+GetInternalOk returns a tuple with the Internal field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetInternal
+
+`func (o *CheckResponse) SetInternal(v bool)`
+
+SetInternal sets Internal field to given value.
+
 
 ### GetStatus
 
@@ -199,6 +221,26 @@ and a boolean to check if the value has been set.
 SetNote sets Note field to given value.
 
 
+### GetInternalNote
+
+`func (o *CheckResponse) GetInternalNote() string`
+
+GetInternalNote returns the InternalNote field if non-nil, zero value otherwise.
+
+### GetInternalNoteOk
+
+`func (o *CheckResponse) GetInternalNoteOk() (*string, bool)`
+
+GetInternalNoteOk returns a tuple with the InternalNote field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetInternalNote
+
+`func (o *CheckResponse) SetInternalNote(v string)`
+
+SetInternalNote sets InternalNote field to given value.
+
+
 ### GetDurationMs
 
 `func (o *CheckResponse) GetDurationMs() float32`
@@ -217,6 +259,26 @@ and a boolean to check if the value has been set.
 `func (o *CheckResponse) SetDurationMs(v float32)`
 
 SetDurationMs sets DurationMs field to given value.
+
+
+### GetRemedyTemplates
+
+`func (o *CheckResponse) GetRemedyTemplates() []RemedyTemplateSummary`
+
+GetRemedyTemplates returns the RemedyTemplates field if non-nil, zero value otherwise.
+
+### GetRemedyTemplatesOk
+
+`func (o *CheckResponse) GetRemedyTemplatesOk() (*[]RemedyTemplateSummary, bool)`
+
+GetRemedyTemplatesOk returns a tuple with the RemedyTemplates field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetRemedyTemplates
+
+`func (o *CheckResponse) SetRemedyTemplates(v []RemedyTemplateSummary)`
+
+SetRemedyTemplates sets RemedyTemplates field to given value.
 
 
 ### GetCreatedDate
@@ -297,26 +359,6 @@ and a boolean to check if the value has been set.
 `func (o *CheckResponse) SetAccountId(v string)`
 
 SetAccountId sets AccountId field to given value.
-
-
-### GetInternalNote
-
-`func (o *CheckResponse) GetInternalNote() string`
-
-GetInternalNote returns the InternalNote field if non-nil, zero value otherwise.
-
-### GetInternalNoteOk
-
-`func (o *CheckResponse) GetInternalNoteOk() (*string, bool)`
-
-GetInternalNoteOk returns a tuple with the InternalNote field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetInternalNote
-
-`func (o *CheckResponse) SetInternalNote(v string)`
-
-SetInternalNote sets InternalNote field to given value.
 
 
 ### GetLog

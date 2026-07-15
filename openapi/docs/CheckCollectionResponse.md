@@ -4,6 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**Internal** | **bool** | Is internal (not shown to the customer) | 
 **Status** | **string** | Status of the handle | 
 **ObjectType** | **string** | Object type to be handled | 
 **ObjectId** | **string** | ID of the object, to be handled | 
@@ -20,7 +21,7 @@ Name | Type | Description | Notes
 
 ### NewCheckCollectionResponse
 
-`func NewCheckCollectionResponse(status string, objectType string, objectId string, checkCollectionId float32, checkCollectionTemplateId float32, checkTemplates []CheckCollectionCheckTemplates, createdDate time.Time, modifiedDate time.Time, orgId string, accountId string, checks []CheckResponse, ) *CheckCollectionResponse`
+`func NewCheckCollectionResponse(internal bool, status string, objectType string, objectId string, checkCollectionId float32, checkCollectionTemplateId float32, checkTemplates []CheckCollectionCheckTemplates, createdDate time.Time, modifiedDate time.Time, orgId string, accountId string, checks []CheckResponse, ) *CheckCollectionResponse`
 
 NewCheckCollectionResponse instantiates a new CheckCollectionResponse object
 This constructor will assign default values to properties that have it defined,
@@ -34,6 +35,26 @@ will change when the set of required properties is changed
 NewCheckCollectionResponseWithDefaults instantiates a new CheckCollectionResponse object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
+
+### GetInternal
+
+`func (o *CheckCollectionResponse) GetInternal() bool`
+
+GetInternal returns the Internal field if non-nil, zero value otherwise.
+
+### GetInternalOk
+
+`func (o *CheckCollectionResponse) GetInternalOk() (*bool, bool)`
+
+GetInternalOk returns a tuple with the Internal field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetInternal
+
+`func (o *CheckCollectionResponse) SetInternal(v bool)`
+
+SetInternal sets Internal field to given value.
+
 
 ### GetStatus
 

@@ -91,11 +91,87 @@ info:
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
        ```sh
        cntb config set-credentials --oauth2-clientid=<ClientId from Customer Control Panel> --oauth2-client-secret=<ClientSecret from Customer Control Panel> --oauth2-user=<API User from Customer Control Panel> --oauth2-password='<API Password from Customer Control Panel>'
        ```
 
     5. Use the CLI
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -178,8 +254,84 @@ info:
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
        This allows you to specify a restriction to certain functions of an API by allowing control over POST (=Create), GET (=Read), PUT/PATCH (=Update) and DELETE (=Delete) methods for each API endpoint (URL) individually.
     * `resourcePermission`
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -291,12 +443,6 @@ tags:
     (for custom images you'll need to provide cloud-init support packages). The API offers providing [cloud-init](https://cloud-init.io/) scripts via the `user_data` field.
     Custom images must be provided in .qcow2 or .iso format.
   name: Images Audits
-- description: |-
-    The Compute Management API allows you to manage compute resources (e.g. creation, deletion, starting, stopping)
-    as well as managing snapshots and custom images. It also supports [cloud-init](https://cloud-init.io/) at least on our default images
-    (for custom images you'll need to provide cloud-init support packages). The API offers providing [cloud-init](https://cloud-init.io/) scripts via the `user_data` field.
-    Custom images must be provided in .qcow2 or .iso format.
-  name: VNC
 - description: Manage S3 compatible Object Storage. With the Object Storage API you
     can create Object Storage in different locations. Please note that you can only
     have one Object Storage per location. Furthermore you can increase the amount
@@ -358,6 +504,12 @@ tags:
     in roles. Users can have roles assigned. Roles can grant and restrict access to
     different API's or to specific resources. Permissions for resources are declared
     by using tags which have been assigned to resources.
+  name: User Accounts
+- description: Give access to all api endpoints and resources or manage to which endpoints
+    and resources individual users might have access to. Permissions are organized
+    in roles. Users can have roles assigned. Roles can grant and restrict access to
+    different API's or to specific resources. Permissions for resources are declared
+    by using tags which have been assigned to resources.
   name: Users Object Storage Credentials
 - description: Give access to all api endpoints and resources or manage to which endpoints
     and resources individual users might have access to. Permissions are organized
@@ -406,24 +558,10 @@ tags:
     requires a paid firewall add-on. Rules allow inbound traffic based on protocols
     (TCP, UDP, ICMP), ports and sources (IPs or nets).
   name: Firewalls
-- description: Authoritative Troubleshooting API
-  name: Troubleshooting
-- name: Accounts
-- name: Internal Check Templates
-- name: Internal Checks
-- name: Internal Check Audits
-- name: Internal Check Replay
 - name: Checks
-- name: Internal Check Collection Templates
-- name: Internal Check Collections
-- name: Internal Check Collection Audits
-- name: Internal Check Collection Replay
+- name: Check Collection Templates
 - name: Check Collections
-- name: Internal Remedies
-- name: Internal Remedy Audits
-- name: Internal Remedy Replay
 - name: Remedies
-- name: Internal Remedy Templates
 paths:
   /v1/tags:
     get:
@@ -3974,6 +4112,15 @@ paths:
           example: true
           type: boolean
         style: form
+      - description: Filter if user is default account or not.
+        explode: true
+        in: query
+        name: default
+        required: false
+        schema:
+          example: true
+          type: boolean
+        style: form
       - description: Filter if user is owner or not.
         explode: true
         in: query
@@ -3982,6 +4129,16 @@ paths:
         schema:
           example: true
           type: boolean
+        style: form
+      - description: Full text search when listing the users. Can be searched by `first
+          name`, `last name`, `email` or `first name` and `last name` combined
+        explode: true
+        in: query
+        name: search
+        required: false
+        schema:
+          example: John Doe
+          type: string
         style: form
       responses:
         "200":
@@ -4004,11 +4161,11 @@ paths:
       - lang: cntb CLI
         source: cntb get users
     post:
-      description: Create a new user with required attributes name, email, enabled,
-        totp (=Two-factor authentication 2FA), admin (=access to all endpoints and
-        resources), accessAllResources and roles. You can't specify any password /
-        secrets for the user. For security reasons the user will have to specify secrets
-        on his own.
+      description: Create a new user with required attributes firstName, lastName,
+        email, enabled, totp (=Two-factor authentication 2FA), admin (=access to all
+        endpoints and resources), accessAllResources and roles. You can't specify
+        any password / secrets for the user. For security reasons the user will have
+        to specify secrets on his own.
       operationId: createUser
       parameters:
       - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
@@ -4056,7 +4213,8 @@ paths:
           application/json'' -H "Authorization: Bearer ${ACCESS_TOKEN}" -H ''x-request-id:
           04e0f898-37b4-48bc-a794-1a57abe6aa31'' -H ''x-trace-id: 123213'' -d ''{
           "firstName": "John", "lastName": "Doe", "email": "john.doe@example.com",
-          "enabled": true, "totp": false, "locale": "en", "roles": [2]}'''
+          "enabled": true, "totp": false, "sendInvoiceEmail": false, "locale": "en",
+          "roles": [2]}'''
       - lang: cntb CLI
         source: cntb create user --firstName John --lastName Doe --email john.doe@example.com
           --enabled --locale en --roles 2
@@ -4225,7 +4383,7 @@ paths:
         source: 'curl -X PATCH ''https://api.contabo.com/v1/users/6cdf5968-f9fe-4192-97c2-f349e813c5e8''
           -H ''Content-Type: application/json'' -H "Authorization: Bearer ${ACCESS_TOKEN}"
           -H ''x-request-id: 04e0f898-37b4-48bc-a794-1a57abe6aa31'' -H ''x-trace-id:
-          123213'' -d ''{"enabled":true,"roles":[1,2,3]}'''
+          123213'' -d ''{"enabled":true,"sendInvoiceEmail":true,"roles":[1,2,3]}'''
       - lang: cntb CLI
         source: cntb update user 6cdf5968-f9fe-4192-97c2-f349e813c5e8 --enabled --roles
           1
@@ -4480,6 +4638,217 @@ paths:
       summary: Get user is password set status
       tags:
       - Users
+  /v1/me/action/switchAccount:
+    post:
+      description: Switch user account
+      operationId: switchAccount
+      parameters:
+      - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
+          to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4)
+          to generate them manually.'
+        explode: false
+        in: header
+        name: x-request-id
+        required: true
+        schema:
+          example: 04e0f898-37b4-48bc-a794-1a57abe6aa31
+          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-5][0-9A-Fa-f]{3}-[089abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+          type: string
+        style: simple
+      - description: Identifier to trace group of requests.
+        explode: false
+        in: header
+        name: x-trace-id
+        required: false
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserSwitchAccountRequest'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSwitchAccountResponse'
+          description: The response will be a JSON object and contains user account
+            tokens.
+      security:
+      - bearer: []
+      summary: Switch user account
+      tags:
+      - User Accounts
+      x-codeSamples:
+      - lang: cURL
+        source: 'curl -X POST ''https://api.contabo.com/v1/me/action/switchAccount''
+          -H ''Content-Type: application/json'' -H "Authorization: Bearer ${ACCESS_TOKEN}"
+          -H ''x-request-id: 04e0f898-37b4-48bc-a794-1a57abe6aa31'' -H ''x-trace-id:
+          123213'' -d ''{ "customerId": "123", "tenantId": "DE", "email": "user@test.com"}'''
+  /v1/me/account/{tenantId}/{customerId}:
+    patch:
+      description: Make user account default
+      operationId: makeDefaultAccount
+      parameters:
+      - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
+          to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4)
+          to generate them manually.'
+        explode: false
+        in: header
+        name: x-request-id
+        required: true
+        schema:
+          example: 04e0f898-37b4-48bc-a794-1a57abe6aa31
+          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-5][0-9A-Fa-f]{3}-[089abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+          type: string
+        style: simple
+      - description: Identifier to trace group of requests.
+        explode: false
+        in: header
+        name: x-trace-id
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: Tenant ID.
+        explode: false
+        in: path
+        name: tenantId
+        required: true
+        schema:
+          example: DE
+          type: string
+        style: simple
+      - description: Customer ID.
+        explode: false
+        in: path
+        name: customerId
+        required: true
+        schema:
+          example: "12345"
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserSwitchAccountDefaultRequest'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSwitchAccountDefaultResponse'
+          description: The response will be a JSON object and contains user account
+            details.
+      security:
+      - bearer: []
+      summary: Make user account default
+      tags:
+      - User Accounts
+      x-codeSamples:
+      - lang: cURL
+        source: 'curl -X PATCH ''https://api.contabo.com/v1/me/account/DE/12345''
+          -H ''Content-Type: application/json'' -H "Authorization: Bearer ${ACCESS_TOKEN}"
+          -H ''x-request-id: 04e0f898-37b4-48bc-a794-1a57abe6aa31'' -H ''x-trace-id:
+          123213'' -d ''{ "default": true }'''
+  /v1/me/accounts:
+    get:
+      description: List of your accounts
+      operationId: listUserAccounts
+      parameters:
+      - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
+          to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4)
+          to generate them manually.'
+        explode: false
+        in: header
+        name: x-request-id
+        required: true
+        schema:
+          example: 04e0f898-37b4-48bc-a794-1a57abe6aa31
+          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-5][0-9A-Fa-f]{3}-[089abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+          type: string
+        style: simple
+      - description: Identifier to trace group of requests.
+        explode: false
+        in: header
+        name: x-trace-id
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: Number of page to be fetched.
+        explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          example: 1
+          format: int64
+          type: integer
+        style: form
+      - description: Number of elements per page.
+        explode: true
+        in: query
+        name: size
+        required: false
+        schema:
+          example: 10
+          format: int64
+          type: integer
+        style: form
+      - description: Specify fields and ordering (ASC for ascending, DESC for descending)
+          in following format `field:ASC|DESC`.
+        explode: true
+        in: query
+        name: orderBy
+        required: false
+        schema:
+          example: name:asc
+          items:
+            type: string
+          type: array
+        style: form
+      - description: Filter as substring match for user emails.
+        explode: true
+        in: query
+        name: email
+        required: false
+        schema:
+          example: john.doe@example.com
+          type: string
+        style: form
+      - description: Filter if default account or not.
+        explode: true
+        in: query
+        name: default
+        required: false
+        schema:
+          example: true
+          type: boolean
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListUserSwitchAccountsResponse'
+          description: The response will be a JSON object and contains user account
+            details.
+      security:
+      - bearer: []
+      summary: List of your accounts
+      tags:
+      - User Accounts
+      x-codeSamples:
+      - lang: cURL
+        source: 'curl -X GET ''https://api.contabo.com/v1/me/accounts'' -H ''Content-Type:
+          application/json'' -H "Authorization: Bearer ${ACCESS_TOKEN}" -H ''x-request-id:
+          04e0f898-37b4-48bc-a794-1a57abe6aa31'' -H ''x-trace-id: 123213'''
   /v1/roles:
     get:
       description: List and filter all your roles. A role allows you to specify permission
@@ -5591,6 +5960,44 @@ paths:
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                   "inbound":[
                       {
                           "protocol":"tcp",
@@ -5885,6 +6292,44 @@ paths:
       - lang: cURL
         source: |-
           curl -X POST "https://api.contabo.com/v1/firewalls/b943b25a-c8b5-4570-9135-4bbaa7615b81"" -H  "accept: application/json" -H "Authorization: Bearer ${ACCESS_TOKEN}" -H "x-request-id: 51A87ECD-754E-4104-9C54-D01AD0F83406"  -H  "x-trace-id: foo"  -H  "x-trace-id: 123213" -H "Content-Type: application/json" -d '{"rules":{
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -6257,10 +6702,10 @@ paths:
           -H  "x-trace-id: 123213" "https://api.contabo.com/v1/firewalls/audits"'
       - lang: cntb CLI
         source: cntb history firewalls
-  /internal/v1/troubleshooting/checks:
+  /v1/troubleshooting/checks:
     get:
-      description: List and filter all checks
-      operationId: listChecks
+      description: List and filter all check
+      operationId: listExtChecks
       parameters:
       - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
           to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4)
@@ -6408,274 +6853,6 @@ paths:
           example: 2021-06-03T10:27:12Z
           format: date-time
           type: string
-        style: form
-      - description: Org IDs
-        explode: true
-        in: query
-        name: orgIds
-        required: true
-        schema:
-          items:
-            type: string
-          type: array
-        style: form
-      - description: Filter by account ID
-        explode: true
-        in: query
-        name: accountId
-        required: false
-        schema:
-          example: DE-123
-          type: string
-        style: form
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ChecksListResponse'
-          description: Paginated list of checks
-      security:
-      - bearer: []
-      summary: List check
-      tags:
-      - Internal Checks
-    post:
-      description: Start a new check
-      operationId: startCheck
-      parameters:
-      - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
-          to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4)
-          to generate them manually.'
-        explode: false
-        in: header
-        name: x-request-id
-        required: true
-        schema:
-          example: 04e0f898-37b4-48bc-a794-1a57abe6aa31
-          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-5][0-9A-Fa-f]{3}-[089abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
-          type: string
-        style: simple
-      - description: Identifier to trace group of requests.
-        explode: false
-        in: header
-        name: x-trace-id
-        required: false
-        schema:
-          type: string
-        style: simple
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CheckCreateRequest'
-        required: true
-      responses:
-        "201":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ChecksGetResponse'
-          description: Started object
-      security:
-      - bearer: []
-      summary: Start check
-      tags:
-      - Internal Checks
-  /internal/v1/troubleshooting/checks/{orgId}/{checkId}:
-    get:
-      description: Get a single check by id
-      operationId: getCheck
-      parameters:
-      - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
-          to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4)
-          to generate them manually.'
-        explode: false
-        in: header
-        name: x-request-id
-        required: true
-        schema:
-          example: 04e0f898-37b4-48bc-a794-1a57abe6aa31
-          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-5][0-9A-Fa-f]{3}-[089abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
-          type: string
-        style: simple
-      - description: Identifier to trace group of requests.
-        explode: false
-        in: header
-        name: x-trace-id
-        required: false
-        schema:
-          type: string
-        style: simple
-      - description: Check's id
-        explode: false
-        in: path
-        name: checkId
-        required: true
-        schema:
-          example: 12345
-          type: number
-        style: simple
-      - description: Org ID
-        explode: false
-        in: path
-        name: orgId
-        required: true
-        schema:
-          example: cntb
-          type: string
-        style: simple
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ChecksGetResponse'
-          description: Single check
-      security:
-      - bearer: []
-      summary: Get check
-      tags:
-      - Internal Checks
-    patch:
-      description: Cancel check
-      operationId: cancelCheck
-      parameters:
-      - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
-          to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4)
-          to generate them manually.'
-        explode: false
-        in: header
-        name: x-request-id
-        required: true
-        schema:
-          example: 04e0f898-37b4-48bc-a794-1a57abe6aa31
-          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-5][0-9A-Fa-f]{3}-[089abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
-          type: string
-        style: simple
-      - description: Identifier to trace group of requests.
-        explode: false
-        in: header
-        name: x-trace-id
-        required: false
-        schema:
-          type: string
-        style: simple
-      - description: Check's id
-        explode: false
-        in: path
-        name: checkId
-        required: true
-        schema:
-          example: 12345
-          type: number
-        style: simple
-      - description: Org ID
-        explode: false
-        in: path
-        name: orgId
-        required: true
-        schema:
-          example: cntb
-          type: string
-        style: simple
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CancelRequest'
-        required: true
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ChecksGetResponse'
-          description: Cancelled object
-      security:
-      - bearer: []
-      summary: Cancel check
-      tags:
-      - Internal Checks
-  /v1/troubleshooting/checks:
-    get:
-      description: List and filter all check
-      operationId: listExtChecks
-      parameters:
-      - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
-          to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4)
-          to generate them manually.'
-        explode: false
-        in: header
-        name: x-request-id
-        required: true
-        schema:
-          example: 04e0f898-37b4-48bc-a794-1a57abe6aa31
-          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-5][0-9A-Fa-f]{3}-[089abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
-          type: string
-        style: simple
-      - description: Identifier to trace group of requests.
-        explode: false
-        in: header
-        name: x-trace-id
-        required: false
-        schema:
-          type: string
-        style: simple
-      - description: Object type to be handled
-        explode: true
-        in: query
-        name: objectType
-        required: false
-        schema:
-          enum:
-          - vserver
-          example: vserver
-          type: string
-        style: form
-      - description: ID of the object, to be handled
-        explode: true
-        in: query
-        name: objectId
-        required: false
-        schema:
-          example: "4711"
-          type: string
-        style: form
-      - description: Status of the handle
-        explode: true
-        in: query
-        name: status
-        required: false
-        schema:
-          enum:
-          - queued
-          - running
-          - skipped
-          - cancelled
-          - failed
-          - warn
-          - successful
-          example: failed
-          type: string
-        style: form
-      - description: ID of check collection if started in scope of a collection
-        explode: true
-        in: query
-        name: checkCollectionId
-        required: false
-        schema:
-          example: 12345
-          type: number
-        style: form
-      - description: Check Template for this check
-        explode: true
-        in: query
-        name: checkTemplateId
-        required: false
-        schema:
-          example: 12345
-          type: number
         style: form
       responses:
         "200":
@@ -6828,539 +7005,6 @@ paths:
       summary: Cancel check
       tags:
       - Checks
-  /internal/v1/troubleshooting/check-templates:
-    get:
-      description: List and filter all check templates
-      operationId: listCheckTemplates
-      parameters:
-      - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
-          to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4)
-          to generate them manually.'
-        explode: false
-        in: header
-        name: x-request-id
-        required: true
-        schema:
-          example: 04e0f898-37b4-48bc-a794-1a57abe6aa31
-          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-5][0-9A-Fa-f]{3}-[089abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
-          type: string
-        style: simple
-      - description: Identifier to trace group of requests.
-        explode: false
-        in: header
-        name: x-trace-id
-        required: false
-        schema:
-          type: string
-        style: simple
-      - description: Number of page to be fetched.
-        explode: true
-        in: query
-        name: page
-        required: false
-        schema:
-          example: 1
-          format: int64
-          type: integer
-        style: form
-      - description: Number of elements per page.
-        explode: true
-        in: query
-        name: size
-        required: false
-        schema:
-          example: 10
-          format: int64
-          type: integer
-        style: form
-      - description: Specify fields and ordering (ASC for ascending, DESC for descending)
-          in following format `field:ASC|DESC`.
-        explode: true
-        in: query
-        name: orderBy
-        required: false
-        schema:
-          example: name:asc
-          items:
-            type: string
-          type: array
-        style: form
-      - description: Start of search time range for created date
-        explode: true
-        in: query
-        name: creationStartTime
-        required: false
-        schema:
-          example: 2021-06-03T06:27:12Z
-          format: date-time
-          type: string
-        style: form
-      - description: End of search time range for created date
-        explode: true
-        in: query
-        name: creationEndTime
-        required: false
-        schema:
-          example: 2021-06-03T10:27:12Z
-          format: date-time
-          type: string
-        style: form
-      - description: Start of search time range for modified date
-        explode: true
-        in: query
-        name: modificationStartTime
-        required: false
-        schema:
-          example: 2021-06-03T06:27:12Z
-          format: date-time
-          type: string
-        style: form
-      - description: End of search time range for modified date
-        explode: true
-        in: query
-        name: modificationEndTime
-        required: false
-        schema:
-          example: 2021-06-03T10:27:12Z
-          format: date-time
-          type: string
-        style: form
-      - description: Org IDs
-        explode: true
-        in: query
-        name: orgIds
-        required: true
-        schema:
-          items:
-            type: string
-          type: array
-        style: form
-      - description: Filter by account ID
-        explode: true
-        in: query
-        name: accountId
-        required: false
-        schema:
-          example: DE-123
-          type: string
-        style: form
-      - description: Is check only internal (not shown to the customer)
-        explode: true
-        in: query
-        name: internal
-        required: false
-        schema:
-          example: false
-          type: boolean
-        style: form
-      - description: Object type for which the check template can be used
-        explode: true
-        in: query
-        name: objectType
-        required: false
-        schema:
-          example: vserver
-          type: string
-        style: form
-      - description: Class used to collect the required information for the check
-        explode: true
-        in: query
-        name: collectorClass
-        required: false
-        schema:
-          example: InstanceCollector.ts
-          type: string
-        style: form
-      - description: Class used to perform the check
-        explode: true
-        in: query
-        name: checkClass
-        required: false
-        schema:
-          example: PingCheck.ts
-          type: string
-        style: form
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CheckTemplatesListResponse'
-          description: Paginated list of check templates
-      security:
-      - bearer: []
-      summary: List check templates
-      tags:
-      - Internal Check Templates
-  /internal/v1/troubleshooting/check-templates/{orgId}/{checkTemplateId}:
-    get:
-      description: Get a single check template by id
-      operationId: getCheckTemplate
-      parameters:
-      - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
-          to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4)
-          to generate them manually.'
-        explode: false
-        in: header
-        name: x-request-id
-        required: true
-        schema:
-          example: 04e0f898-37b4-48bc-a794-1a57abe6aa31
-          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-5][0-9A-Fa-f]{3}-[089abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
-          type: string
-        style: simple
-      - description: Identifier to trace group of requests.
-        explode: false
-        in: header
-        name: x-trace-id
-        required: false
-        schema:
-          type: string
-        style: simple
-      - description: Org ID
-        explode: false
-        in: path
-        name: orgId
-        required: true
-        schema:
-          example: cntb
-          type: string
-        style: simple
-      - description: Check template's id
-        explode: false
-        in: path
-        name: checkTemplateId
-        required: true
-        schema:
-          example: 12345
-          type: number
-        style: simple
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CheckTemplatesGetResponse'
-          description: Single check template
-      security:
-      - bearer: []
-      summary: Get check
-      tags:
-      - Internal Check Templates
-  /internal/v1/troubleshooting/check-collections:
-    get:
-      description: List and filter all check collections
-      operationId: listCheckCollections
-      parameters:
-      - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
-          to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4)
-          to generate them manually.'
-        explode: false
-        in: header
-        name: x-request-id
-        required: true
-        schema:
-          example: 04e0f898-37b4-48bc-a794-1a57abe6aa31
-          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-5][0-9A-Fa-f]{3}-[089abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
-          type: string
-        style: simple
-      - description: Identifier to trace group of requests.
-        explode: false
-        in: header
-        name: x-trace-id
-        required: false
-        schema:
-          type: string
-        style: simple
-      - description: Object type to be handled
-        explode: true
-        in: query
-        name: objectType
-        required: false
-        schema:
-          enum:
-          - vserver
-          example: vserver
-          type: string
-        style: form
-      - description: ID of the object, to be handled
-        explode: true
-        in: query
-        name: objectId
-        required: false
-        schema:
-          example: "4711"
-          type: string
-        style: form
-      - description: Check Collection Template for this check collection
-        explode: true
-        in: query
-        name: checkCollectionTemplateId
-        required: false
-        schema:
-          example: 12345
-          type: number
-        style: form
-      - description: Number of page to be fetched.
-        explode: true
-        in: query
-        name: page
-        required: false
-        schema:
-          example: 1
-          format: int64
-          type: integer
-        style: form
-      - description: Number of elements per page.
-        explode: true
-        in: query
-        name: size
-        required: false
-        schema:
-          example: 10
-          format: int64
-          type: integer
-        style: form
-      - description: Specify fields and ordering (ASC for ascending, DESC for descending)
-          in following format `field:ASC|DESC`.
-        explode: true
-        in: query
-        name: orderBy
-        required: false
-        schema:
-          example: name:asc
-          items:
-            type: string
-          type: array
-        style: form
-      - description: Start of search time range for created date
-        explode: true
-        in: query
-        name: creationStartTime
-        required: false
-        schema:
-          example: 2021-06-03T06:27:12Z
-          format: date-time
-          type: string
-        style: form
-      - description: End of search time range for created date
-        explode: true
-        in: query
-        name: creationEndTime
-        required: false
-        schema:
-          example: 2021-06-03T10:27:12Z
-          format: date-time
-          type: string
-        style: form
-      - description: Start of search time range for modified date
-        explode: true
-        in: query
-        name: modificationStartTime
-        required: false
-        schema:
-          example: 2021-06-03T06:27:12Z
-          format: date-time
-          type: string
-        style: form
-      - description: End of search time range for modified date
-        explode: true
-        in: query
-        name: modificationEndTime
-        required: false
-        schema:
-          example: 2021-06-03T10:27:12Z
-          format: date-time
-          type: string
-        style: form
-      - description: Org IDs
-        explode: true
-        in: query
-        name: orgIds
-        required: true
-        schema:
-          items:
-            type: string
-          type: array
-        style: form
-      - description: Filter by account ID
-        explode: true
-        in: query
-        name: accountId
-        required: false
-        schema:
-          example: DE-123
-          type: string
-        style: form
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CheckCollectionsListResponse'
-          description: Paginated list of check collections
-      security:
-      - bearer: []
-      summary: List check collections
-      tags:
-      - Internal Check Collections
-    post:
-      description: Start a new check collection
-      operationId: startCheckCollection
-      parameters:
-      - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
-          to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4)
-          to generate them manually.'
-        explode: false
-        in: header
-        name: x-request-id
-        required: true
-        schema:
-          example: 04e0f898-37b4-48bc-a794-1a57abe6aa31
-          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-5][0-9A-Fa-f]{3}-[089abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
-          type: string
-        style: simple
-      - description: Identifier to trace group of requests.
-        explode: false
-        in: header
-        name: x-trace-id
-        required: false
-        schema:
-          type: string
-        style: simple
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CheckCollectionCreateRequest'
-        required: true
-      responses:
-        "201":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CheckCollectionsGetResponse'
-          description: Start check collection
-      security:
-      - bearer: []
-      summary: Start check collection
-      tags:
-      - Internal Check Collections
-  /internal/v1/troubleshooting/check-collections/{orgId}/{checkCollectionId}:
-    get:
-      description: Get a single check collection by id
-      operationId: getCheckCollection
-      parameters:
-      - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
-          to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4)
-          to generate them manually.'
-        explode: false
-        in: header
-        name: x-request-id
-        required: true
-        schema:
-          example: 04e0f898-37b4-48bc-a794-1a57abe6aa31
-          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-5][0-9A-Fa-f]{3}-[089abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
-          type: string
-        style: simple
-      - description: Identifier to trace group of requests.
-        explode: false
-        in: header
-        name: x-trace-id
-        required: false
-        schema:
-          type: string
-        style: simple
-      - description: Check collection's id
-        explode: false
-        in: path
-        name: checkCollectionId
-        required: true
-        schema:
-          example: 12345
-          type: number
-        style: simple
-      - description: Org ID
-        explode: false
-        in: path
-        name: orgId
-        required: true
-        schema:
-          example: cntb
-          type: string
-        style: simple
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CheckCollectionsGetResponse'
-          description: Single check collection
-      security:
-      - bearer: []
-      summary: Get check collection
-      tags:
-      - Internal Check Collections
-    patch:
-      description: Cancel check collection
-      operationId: cancelCheckCollection
-      parameters:
-      - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
-          to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4)
-          to generate them manually.'
-        explode: false
-        in: header
-        name: x-request-id
-        required: true
-        schema:
-          example: 04e0f898-37b4-48bc-a794-1a57abe6aa31
-          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-5][0-9A-Fa-f]{3}-[089abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
-          type: string
-        style: simple
-      - description: Identifier to trace group of requests.
-        explode: false
-        in: header
-        name: x-trace-id
-        required: false
-        schema:
-          type: string
-        style: simple
-      - description: Check collection's id
-        explode: false
-        in: path
-        name: checkCollectionId
-        required: true
-        schema:
-          example: 12345
-          type: number
-        style: simple
-      - description: Org ID
-        explode: false
-        in: path
-        name: orgId
-        required: true
-        schema:
-          example: cntb
-          type: string
-        style: simple
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CancelRequest'
-        required: true
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CheckCollectionsGetResponse'
-          description: Cancelled check collection
-      security:
-      - bearer: []
-      summary: Cancel check collection
-      tags:
-      - Internal Check Collections
   /v1/troubleshooting/check-collections:
     get:
       description: List and filter all check collections
@@ -7414,6 +7058,99 @@ paths:
         schema:
           example: 12345
           type: number
+        style: form
+      - description: Check statuses to exclude
+        explode: true
+        in: query
+        name: excludeCheckStatuses
+        required: false
+        schema:
+          example:
+          - skipped
+          - cancelled
+          items:
+            enum:
+            - queued
+            - running
+            - skipped
+            - cancelled
+            - failed
+            - warn
+            - successful
+            type: string
+          type: array
+        style: form
+      - description: Number of page to be fetched.
+        explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          example: 1
+          format: int64
+          type: integer
+        style: form
+      - description: Number of elements per page.
+        explode: true
+        in: query
+        name: size
+        required: false
+        schema:
+          example: 10
+          format: int64
+          type: integer
+        style: form
+      - description: Specify fields and ordering (ASC for ascending, DESC for descending)
+          in following format `field:ASC|DESC`.
+        explode: true
+        in: query
+        name: orderBy
+        required: false
+        schema:
+          example: name:asc
+          items:
+            type: string
+          type: array
+        style: form
+      - description: Start of search time range for created date
+        explode: true
+        in: query
+        name: creationStartTime
+        required: false
+        schema:
+          example: 2021-06-03T06:27:12Z
+          format: date-time
+          type: string
+        style: form
+      - description: End of search time range for created date
+        explode: true
+        in: query
+        name: creationEndTime
+        required: false
+        schema:
+          example: 2021-06-03T10:27:12Z
+          format: date-time
+          type: string
+        style: form
+      - description: Start of search time range for modified date
+        explode: true
+        in: query
+        name: modificationStartTime
+        required: false
+        schema:
+          example: 2021-06-03T06:27:12Z
+          format: date-time
+          type: string
+        style: form
+      - description: End of search time range for modified date
+        explode: true
+        in: query
+        name: modificationEndTime
+        required: false
+        schema:
+          example: 2021-06-03T10:27:12Z
+          format: date-time
+          type: string
         style: form
       responses:
         "200":
@@ -7503,6 +7240,27 @@ paths:
           example: 12345
           type: number
         style: simple
+      - description: Check statuses to exclude
+        explode: true
+        in: query
+        name: excludeCheckStatuses
+        required: false
+        schema:
+          example:
+          - skipped
+          - cancelled
+          items:
+            enum:
+            - queued
+            - running
+            - skipped
+            - cancelled
+            - failed
+            - warn
+            - successful
+            type: string
+          type: array
+        style: form
       responses:
         "200":
           content:
@@ -7566,10 +7324,10 @@ paths:
       summary: Cancel check collection
       tags:
       - Check Collections
-  /internal/v1/troubleshooting/check-collection-templates:
+  /v1/troubleshooting/check-collection-templates:
     get:
       description: List and filter all check collection templates
-      operationId: listCheckCollectionTemplates
+      operationId: listExtCheckCollectionTemplates
       parameters:
       - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
           to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4)
@@ -7591,6 +7349,15 @@ paths:
         schema:
           type: string
         style: simple
+      - description: Object type for which the check template can be used
+        explode: true
+        in: query
+        name: objectType
+        required: false
+        schema:
+          example: vserver
+          type: string
+        style: form
       - description: Number of page to be fetched.
         explode: true
         in: query
@@ -7663,59 +7430,22 @@ paths:
           format: date-time
           type: string
         style: form
-      - description: Org IDs
-        explode: true
-        in: query
-        name: orgIds
-        required: true
-        schema:
-          items:
-            type: string
-          type: array
-        style: form
-      - description: Filter by account ID
-        explode: true
-        in: query
-        name: accountId
-        required: false
-        schema:
-          example: DE-123
-          type: string
-        style: form
-      - description: Is check only internal (not shown to the customer)
-        explode: true
-        in: query
-        name: internal
-        required: false
-        schema:
-          example: false
-          type: boolean
-        style: form
-      - description: Object type for which the check template can be used
-        explode: true
-        in: query
-        name: objectType
-        required: false
-        schema:
-          example: vserver
-          type: string
-        style: form
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CheckCollectionTemplatesListResponse'
+                $ref: '#/components/schemas/ExtCheckCollectionTemplatesListResponse'
           description: Paginated list of check collection templates
       security:
       - bearer: []
       summary: List check collection templates
       tags:
-      - Internal Check Collection Templates
-  /internal/v1/troubleshooting/check-collection-templates/{orgId}/{checkCollectionTemplateId}:
+      - Check Collection Templates
+  /v1/troubleshooting/check-collection-templates/{checkCollectionTemplateId}:
     get:
       description: Get a single check collection template by id
-      operationId: getCheckCollectionTemplate
+      operationId: getExtCheckCollectionTemplate
       parameters:
       - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
           to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4)
@@ -7735,15 +7465,6 @@ paths:
         name: x-trace-id
         required: false
         schema:
-          type: string
-        style: simple
-      - description: Org ID
-        explode: false
-        in: path
-        name: orgId
-        required: true
-        schema:
-          example: cntb
           type: string
         style: simple
       - description: Check collection template's id
@@ -7760,353 +7481,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CheckCollectionTemplatesGetResponse'
+                $ref: '#/components/schemas/ExtCheckCollectionTemplatesGetResponse'
           description: Single check collection template
       security:
       - bearer: []
       summary: Get check
       tags:
-      - Internal Check Collection Templates
-  /internal/v1/troubleshooting/remedies:
-    get:
-      description: List and filter all remedies
-      operationId: listRemedies
-      parameters:
-      - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
-          to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4)
-          to generate them manually.'
-        explode: false
-        in: header
-        name: x-request-id
-        required: true
-        schema:
-          example: 04e0f898-37b4-48bc-a794-1a57abe6aa31
-          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-5][0-9A-Fa-f]{3}-[089abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
-          type: string
-        style: simple
-      - description: Identifier to trace group of requests.
-        explode: false
-        in: header
-        name: x-trace-id
-        required: false
-        schema:
-          type: string
-        style: simple
-      - description: Object type to be handled
-        explode: true
-        in: query
-        name: objectType
-        required: false
-        schema:
-          enum:
-          - vserver
-          example: vserver
-          type: string
-        style: form
-      - description: ID of the object, to be handled
-        explode: true
-        in: query
-        name: objectId
-        required: false
-        schema:
-          example: "4711"
-          type: string
-        style: form
-      - description: Status of the handle
-        explode: true
-        in: query
-        name: status
-        required: false
-        schema:
-          enum:
-          - queued
-          - running
-          - skipped
-          - cancelled
-          - failed
-          - warn
-          - successful
-          example: failed
-          type: string
-        style: form
-      - description: ID of remedy collection if started in scope of a collection
-        explode: true
-        in: query
-        name: remedyCollectionId
-        required: false
-        schema:
-          example: 12345
-          type: number
-        style: form
-      - description: Remedy Template for this check
-        explode: true
-        in: query
-        name: remedyTemplateId
-        required: false
-        schema:
-          example: 12345
-          type: number
-        style: form
-      - description: Number of page to be fetched.
-        explode: true
-        in: query
-        name: page
-        required: false
-        schema:
-          example: 1
-          format: int64
-          type: integer
-        style: form
-      - description: Number of elements per page.
-        explode: true
-        in: query
-        name: size
-        required: false
-        schema:
-          example: 10
-          format: int64
-          type: integer
-        style: form
-      - description: Specify fields and ordering (ASC for ascending, DESC for descending)
-          in following format `field:ASC|DESC`.
-        explode: true
-        in: query
-        name: orderBy
-        required: false
-        schema:
-          example: name:asc
-          items:
-            type: string
-          type: array
-        style: form
-      - description: Start of search time range for created date
-        explode: true
-        in: query
-        name: creationStartTime
-        required: false
-        schema:
-          example: 2021-06-03T06:27:12Z
-          format: date-time
-          type: string
-        style: form
-      - description: End of search time range for created date
-        explode: true
-        in: query
-        name: creationEndTime
-        required: false
-        schema:
-          example: 2021-06-03T10:27:12Z
-          format: date-time
-          type: string
-        style: form
-      - description: Start of search time range for modified date
-        explode: true
-        in: query
-        name: modificationStartTime
-        required: false
-        schema:
-          example: 2021-06-03T06:27:12Z
-          format: date-time
-          type: string
-        style: form
-      - description: End of search time range for modified date
-        explode: true
-        in: query
-        name: modificationEndTime
-        required: false
-        schema:
-          example: 2021-06-03T10:27:12Z
-          format: date-time
-          type: string
-        style: form
-      - description: Org IDs
-        explode: true
-        in: query
-        name: orgIds
-        required: true
-        schema:
-          items:
-            type: string
-          type: array
-        style: form
-      - description: Filter by account ID
-        explode: true
-        in: query
-        name: accountId
-        required: false
-        schema:
-          example: DE-123
-          type: string
-        style: form
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RemediesListResponse'
-          description: Paginated list of remedies
-      security:
-      - bearer: []
-      summary: List remedy
-      tags:
-      - Internal Remedies
-    post:
-      description: Start a new remedy
-      operationId: startRemedy
-      parameters:
-      - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
-          to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4)
-          to generate them manually.'
-        explode: false
-        in: header
-        name: x-request-id
-        required: true
-        schema:
-          example: 04e0f898-37b4-48bc-a794-1a57abe6aa31
-          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-5][0-9A-Fa-f]{3}-[089abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
-          type: string
-        style: simple
-      - description: Identifier to trace group of requests.
-        explode: false
-        in: header
-        name: x-trace-id
-        required: false
-        schema:
-          type: string
-        style: simple
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RemediesCreateRequest'
-        required: true
-      responses:
-        "201":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RemediesGetResponse'
-          description: Started object
-      security:
-      - bearer: []
-      summary: Start remedy
-      tags:
-      - Internal Remedies
-  /internal/v1/troubleshooting/remedies/{orgId}/{remedyId}:
-    get:
-      description: Get a single remedy by id
-      operationId: getRemedy
-      parameters:
-      - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
-          to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4)
-          to generate them manually.'
-        explode: false
-        in: header
-        name: x-request-id
-        required: true
-        schema:
-          example: 04e0f898-37b4-48bc-a794-1a57abe6aa31
-          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-5][0-9A-Fa-f]{3}-[089abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
-          type: string
-        style: simple
-      - description: Identifier to trace group of requests.
-        explode: false
-        in: header
-        name: x-trace-id
-        required: false
-        schema:
-          type: string
-        style: simple
-      - description: Remedy's id
-        explode: false
-        in: path
-        name: remedyId
-        required: true
-        schema:
-          example: 12345
-          type: number
-        style: simple
-      - description: Org ID
-        explode: false
-        in: path
-        name: orgId
-        required: true
-        schema:
-          example: cntb
-          type: string
-        style: simple
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RemediesGetResponse'
-          description: Single remedy
-      security:
-      - bearer: []
-      summary: Get remedy
-      tags:
-      - Internal Remedies
-    patch:
-      description: Cancel remedy
-      operationId: cancelRemedy
-      parameters:
-      - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
-          to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4)
-          to generate them manually.'
-        explode: false
-        in: header
-        name: x-request-id
-        required: true
-        schema:
-          example: 04e0f898-37b4-48bc-a794-1a57abe6aa31
-          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-5][0-9A-Fa-f]{3}-[089abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
-          type: string
-        style: simple
-      - description: Identifier to trace group of requests.
-        explode: false
-        in: header
-        name: x-trace-id
-        required: false
-        schema:
-          type: string
-        style: simple
-      - description: Remedy's id
-        explode: false
-        in: path
-        name: remedyId
-        required: true
-        schema:
-          example: 12345
-          type: number
-        style: simple
-      - description: Org ID
-        explode: false
-        in: path
-        name: orgId
-        required: true
-        schema:
-          example: cntb
-          type: string
-        style: simple
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CancelRequest'
-        required: true
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RemediesGetResponse'
-          description: Cancelled object
-      security:
-      - bearer: []
-      summary: Cancel remedy
-      tags:
-      - Internal Remedies
+      - Check Collection Templates
   /v1/troubleshooting/remedies:
     get:
       description: List and filter all remedy
@@ -8186,6 +7567,78 @@ paths:
         schema:
           example: 12345
           type: number
+        style: form
+      - description: Number of page to be fetched.
+        explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          example: 1
+          format: int64
+          type: integer
+        style: form
+      - description: Number of elements per page.
+        explode: true
+        in: query
+        name: size
+        required: false
+        schema:
+          example: 10
+          format: int64
+          type: integer
+        style: form
+      - description: Specify fields and ordering (ASC for ascending, DESC for descending)
+          in following format `field:ASC|DESC`.
+        explode: true
+        in: query
+        name: orderBy
+        required: false
+        schema:
+          example: name:asc
+          items:
+            type: string
+          type: array
+        style: form
+      - description: Start of search time range for created date
+        explode: true
+        in: query
+        name: creationStartTime
+        required: false
+        schema:
+          example: 2021-06-03T06:27:12Z
+          format: date-time
+          type: string
+        style: form
+      - description: End of search time range for created date
+        explode: true
+        in: query
+        name: creationEndTime
+        required: false
+        schema:
+          example: 2021-06-03T10:27:12Z
+          format: date-time
+          type: string
+        style: form
+      - description: Start of search time range for modified date
+        explode: true
+        in: query
+        name: modificationStartTime
+        required: false
+        schema:
+          example: 2021-06-03T06:27:12Z
+          format: date-time
+          type: string
+        style: form
+      - description: End of search time range for modified date
+        explode: true
+        in: query
+        name: modificationEndTime
+        required: false
+        schema:
+          example: 2021-06-03T10:27:12Z
+          format: date-time
+          type: string
         style: form
       responses:
         "200":
@@ -8338,789 +7791,6 @@ paths:
       summary: Cancel remedy
       tags:
       - Remedies
-  /internal/v1/troubleshooting/remedy-templates:
-    get:
-      description: List and filter all remedy templates
-      operationId: listRemedyTemplates
-      parameters:
-      - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
-          to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4)
-          to generate them manually.'
-        explode: false
-        in: header
-        name: x-request-id
-        required: true
-        schema:
-          example: 04e0f898-37b4-48bc-a794-1a57abe6aa31
-          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-5][0-9A-Fa-f]{3}-[089abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
-          type: string
-        style: simple
-      - description: Identifier to trace group of requests.
-        explode: false
-        in: header
-        name: x-trace-id
-        required: false
-        schema:
-          type: string
-        style: simple
-      - description: Number of page to be fetched.
-        explode: true
-        in: query
-        name: page
-        required: false
-        schema:
-          example: 1
-          format: int64
-          type: integer
-        style: form
-      - description: Number of elements per page.
-        explode: true
-        in: query
-        name: size
-        required: false
-        schema:
-          example: 10
-          format: int64
-          type: integer
-        style: form
-      - description: Specify fields and ordering (ASC for ascending, DESC for descending)
-          in following format `field:ASC|DESC`.
-        explode: true
-        in: query
-        name: orderBy
-        required: false
-        schema:
-          example: name:asc
-          items:
-            type: string
-          type: array
-        style: form
-      - description: Start of search time range for created date
-        explode: true
-        in: query
-        name: creationStartTime
-        required: false
-        schema:
-          example: 2021-06-03T06:27:12Z
-          format: date-time
-          type: string
-        style: form
-      - description: End of search time range for created date
-        explode: true
-        in: query
-        name: creationEndTime
-        required: false
-        schema:
-          example: 2021-06-03T10:27:12Z
-          format: date-time
-          type: string
-        style: form
-      - description: Start of search time range for modified date
-        explode: true
-        in: query
-        name: modificationStartTime
-        required: false
-        schema:
-          example: 2021-06-03T06:27:12Z
-          format: date-time
-          type: string
-        style: form
-      - description: End of search time range for modified date
-        explode: true
-        in: query
-        name: modificationEndTime
-        required: false
-        schema:
-          example: 2021-06-03T10:27:12Z
-          format: date-time
-          type: string
-        style: form
-      - description: Org IDs
-        explode: true
-        in: query
-        name: orgIds
-        required: true
-        schema:
-          items:
-            type: string
-          type: array
-        style: form
-      - description: Filter by account ID
-        explode: true
-        in: query
-        name: accountId
-        required: false
-        schema:
-          example: DE-123
-          type: string
-        style: form
-      - description: Is remedy only internal (not shown to the customer)
-        explode: true
-        in: query
-        name: internal
-        required: false
-        schema:
-          example: false
-          type: boolean
-        style: form
-      - description: Object type for which the remedy template can be used
-        explode: true
-        in: query
-        name: objectType
-        required: false
-        schema:
-          example: vserver
-          type: string
-        style: form
-      - description: Class used to collect the required information for the remedy
-        explode: true
-        in: query
-        name: collectorClass
-        required: false
-        schema:
-          example: InstanceCollector.ts
-          type: string
-        style: form
-      - description: Class used to perform the remedy
-        explode: true
-        in: query
-        name: remedyClass
-        required: false
-        schema:
-          example: PingRemedy.ts
-          type: string
-        style: form
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RemedyTemplatesListResponse'
-          description: Paginated list of remedy templates
-      security:
-      - bearer: []
-      summary: List remedy templates
-      tags:
-      - Internal Remedy Templates
-  /internal/v1/troubleshooting/remedy-templates/{orgId}/{remedyTemplateId}:
-    get:
-      description: Get a single remedy template by id
-      operationId: getRemedyTemplate
-      parameters:
-      - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
-          to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4)
-          to generate them manually.'
-        explode: false
-        in: header
-        name: x-request-id
-        required: true
-        schema:
-          example: 04e0f898-37b4-48bc-a794-1a57abe6aa31
-          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-5][0-9A-Fa-f]{3}-[089abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
-          type: string
-        style: simple
-      - description: Identifier to trace group of requests.
-        explode: false
-        in: header
-        name: x-trace-id
-        required: false
-        schema:
-          type: string
-        style: simple
-      - description: Org ID
-        explode: false
-        in: path
-        name: orgId
-        required: true
-        schema:
-          example: cntb
-          type: string
-        style: simple
-      - description: Remedy template's id
-        explode: false
-        in: path
-        name: remedyTemplateId
-        required: true
-        schema:
-          example: 12345
-          type: number
-        style: simple
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RemedyTemplatesGetResponse'
-          description: Single remedy template
-      security:
-      - bearer: []
-      summary: Get remedy
-      tags:
-      - Internal Remedy Templates
-  /internal/v1/troubleshooting/checks/audits:
-    get:
-      description: List and filters the history about your Data.
-      operationId: retrieveChecksAuditsList
-      parameters:
-      - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
-          to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4)
-          to generate them manually.'
-        explode: false
-        in: header
-        name: x-request-id
-        required: true
-        schema:
-          example: 04e0f898-37b4-48bc-a794-1a57abe6aa31
-          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-5][0-9A-Fa-f]{3}-[089abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
-          type: string
-        style: simple
-      - description: Identifier to trace group of requests.
-        explode: false
-        in: header
-        name: x-trace-id
-        required: false
-        schema:
-          type: string
-        style: simple
-      - description: Number of page to be fetched.
-        explode: true
-        in: query
-        name: page
-        required: false
-        schema:
-          example: 1
-          format: int64
-          type: integer
-        style: form
-      - description: Number of elements per page.
-        explode: true
-        in: query
-        name: size
-        required: false
-        schema:
-          example: 10
-          format: int64
-          type: integer
-        style: form
-      - description: Specify fields and ordering (ASC for ascending, DESC for descending)
-          in following format `field:ASC|DESC`.
-        explode: true
-        in: query
-        name: orderBy
-        required: false
-        schema:
-          example: name:asc
-          items:
-            type: string
-          type: array
-        style: form
-      - description: Start of search time range for created date
-        explode: true
-        in: query
-        name: creationStartTime
-        required: false
-        schema:
-          example: 2021-06-03T06:27:12Z
-          format: date-time
-          type: string
-        style: form
-      - description: End of search time range for created date
-        explode: true
-        in: query
-        name: creationEndTime
-        required: false
-        schema:
-          example: 2021-06-03T10:27:12Z
-          format: date-time
-          type: string
-        style: form
-      - description: Org IDs
-        explode: true
-        in: query
-        name: orgIds
-        required: true
-        schema:
-          items:
-            type: string
-          type: array
-        style: form
-      - description: Filter by account ID
-        explode: true
-        in: query
-        name: accountId
-        required: false
-        schema:
-          example: DE-123
-          type: string
-        style: form
-      - description: The requestId of the API call which led to the change.
-        explode: true
-        in: query
-        name: requestId
-        required: false
-        schema:
-          example: D5FD9FAF-58C0-4406-8F46-F449B8E4FEC3
-          type: string
-        style: form
-      - description: Foreign uerId of the user which led to the change.
-        explode: true
-        in: query
-        name: foreignChangedBy
-        required: false
-        schema:
-          example: 23cbb6d6-cb11-4330-bdff-7bb791df2e23
-          type: string
-        style: form
-      - description: UserId of the user which led to the change.
-        explode: true
-        in: query
-        name: changedBy
-        required: false
-        schema:
-          example: 23cbb6d6-cb11-4330-bdff-7bb791df2e23
-          type: string
-        style: form
-      - description: Check's id
-        explode: true
-        in: query
-        name: checkId
-        required: false
-        schema:
-          example: 12345
-          type: number
-        style: form
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ChecksAuditListResponse'
-          description: The response will be a JSON object and contains a paginated
-            list of Data audits.
-      security:
-      - bearer: []
-      summary: List history about your Data (audit)
-      tags:
-      - Internal Check Audits
-  /internal/v1/troubleshooting/checks/replays:
-    post:
-      description: Replay changes for Check
-      operationId: replayCheck
-      parameters:
-      - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
-          to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4)
-          to generate them manually.'
-        explode: false
-        in: header
-        name: x-request-id
-        required: true
-        schema:
-          example: 04e0f898-37b4-48bc-a794-1a57abe6aa31
-          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-5][0-9A-Fa-f]{3}-[089abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
-          type: string
-        style: simple
-      - description: Identifier to trace group of requests.
-        explode: false
-        in: header
-        name: x-trace-id
-        required: false
-        schema:
-          type: string
-        style: simple
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ChecksReplayRequest'
-        required: true
-      responses:
-        "202":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ReplayResponse'
-          description: Audit count sent to publish
-      security:
-      - bearer: []
-      summary: Replay changes for Check
-      tags:
-      - Internal Check Replay
-  /internal/v1/troubleshooting/check-collections/audits:
-    get:
-      description: List and filters the history about your Data.
-      operationId: retrieveCheckCollectionsAuditsList
-      parameters:
-      - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
-          to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4)
-          to generate them manually.'
-        explode: false
-        in: header
-        name: x-request-id
-        required: true
-        schema:
-          example: 04e0f898-37b4-48bc-a794-1a57abe6aa31
-          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-5][0-9A-Fa-f]{3}-[089abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
-          type: string
-        style: simple
-      - description: Identifier to trace group of requests.
-        explode: false
-        in: header
-        name: x-trace-id
-        required: false
-        schema:
-          type: string
-        style: simple
-      - description: Number of page to be fetched.
-        explode: true
-        in: query
-        name: page
-        required: false
-        schema:
-          example: 1
-          format: int64
-          type: integer
-        style: form
-      - description: Number of elements per page.
-        explode: true
-        in: query
-        name: size
-        required: false
-        schema:
-          example: 10
-          format: int64
-          type: integer
-        style: form
-      - description: Specify fields and ordering (ASC for ascending, DESC for descending)
-          in following format `field:ASC|DESC`.
-        explode: true
-        in: query
-        name: orderBy
-        required: false
-        schema:
-          example: name:asc
-          items:
-            type: string
-          type: array
-        style: form
-      - description: Start of search time range for created date
-        explode: true
-        in: query
-        name: creationStartTime
-        required: false
-        schema:
-          example: 2021-06-03T06:27:12Z
-          format: date-time
-          type: string
-        style: form
-      - description: End of search time range for created date
-        explode: true
-        in: query
-        name: creationEndTime
-        required: false
-        schema:
-          example: 2021-06-03T10:27:12Z
-          format: date-time
-          type: string
-        style: form
-      - description: Org IDs
-        explode: true
-        in: query
-        name: orgIds
-        required: true
-        schema:
-          items:
-            type: string
-          type: array
-        style: form
-      - description: Filter by account ID
-        explode: true
-        in: query
-        name: accountId
-        required: false
-        schema:
-          example: DE-123
-          type: string
-        style: form
-      - description: The requestId of the API call which led to the change.
-        explode: true
-        in: query
-        name: requestId
-        required: false
-        schema:
-          example: D5FD9FAF-58C0-4406-8F46-F449B8E4FEC3
-          type: string
-        style: form
-      - description: Foreign uerId of the user which led to the change.
-        explode: true
-        in: query
-        name: foreignChangedBy
-        required: false
-        schema:
-          example: 23cbb6d6-cb11-4330-bdff-7bb791df2e23
-          type: string
-        style: form
-      - description: UserId of the user which led to the change.
-        explode: true
-        in: query
-        name: changedBy
-        required: false
-        schema:
-          example: 23cbb6d6-cb11-4330-bdff-7bb791df2e23
-          type: string
-        style: form
-      - description: Check collection's id
-        explode: true
-        in: query
-        name: checkCollectionId
-        required: false
-        schema:
-          example: 12345
-          type: number
-        style: form
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CheckCollectionsAuditListResponse'
-          description: The response will be a JSON object and contains a paginated
-            list of Data audits.
-      security:
-      - bearer: []
-      summary: List history about your Data (audit)
-      tags:
-      - Internal Check Collection Audits
-  /internal/v1/troubleshooting/check-collections/replays:
-    post:
-      description: Replay changes for Check
-      operationId: replayCheckCollection
-      parameters:
-      - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
-          to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4)
-          to generate them manually.'
-        explode: false
-        in: header
-        name: x-request-id
-        required: true
-        schema:
-          example: 04e0f898-37b4-48bc-a794-1a57abe6aa31
-          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-5][0-9A-Fa-f]{3}-[089abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
-          type: string
-        style: simple
-      - description: Identifier to trace group of requests.
-        explode: false
-        in: header
-        name: x-trace-id
-        required: false
-        schema:
-          type: string
-        style: simple
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CheckCollectionsReplayRequest'
-        required: true
-      responses:
-        "202":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ReplayResponse'
-          description: Audit count sent to publish
-      security:
-      - bearer: []
-      summary: Replay changes for Check
-      tags:
-      - Internal Check Collection Replay
-  /internal/v1/troubleshooting/remedies/audits:
-    get:
-      description: List and filters the history about your Data.
-      operationId: retrieveRemediesAuditsList
-      parameters:
-      - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
-          to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4)
-          to generate them manually.'
-        explode: false
-        in: header
-        name: x-request-id
-        required: true
-        schema:
-          example: 04e0f898-37b4-48bc-a794-1a57abe6aa31
-          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-5][0-9A-Fa-f]{3}-[089abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
-          type: string
-        style: simple
-      - description: Identifier to trace group of requests.
-        explode: false
-        in: header
-        name: x-trace-id
-        required: false
-        schema:
-          type: string
-        style: simple
-      - description: Number of page to be fetched.
-        explode: true
-        in: query
-        name: page
-        required: false
-        schema:
-          example: 1
-          format: int64
-          type: integer
-        style: form
-      - description: Number of elements per page.
-        explode: true
-        in: query
-        name: size
-        required: false
-        schema:
-          example: 10
-          format: int64
-          type: integer
-        style: form
-      - description: Specify fields and ordering (ASC for ascending, DESC for descending)
-          in following format `field:ASC|DESC`.
-        explode: true
-        in: query
-        name: orderBy
-        required: false
-        schema:
-          example: name:asc
-          items:
-            type: string
-          type: array
-        style: form
-      - description: Start of search time range for created date
-        explode: true
-        in: query
-        name: creationStartTime
-        required: false
-        schema:
-          example: 2021-06-03T06:27:12Z
-          format: date-time
-          type: string
-        style: form
-      - description: End of search time range for created date
-        explode: true
-        in: query
-        name: creationEndTime
-        required: false
-        schema:
-          example: 2021-06-03T10:27:12Z
-          format: date-time
-          type: string
-        style: form
-      - description: Org IDs
-        explode: true
-        in: query
-        name: orgIds
-        required: true
-        schema:
-          items:
-            type: string
-          type: array
-        style: form
-      - description: Filter by account ID
-        explode: true
-        in: query
-        name: accountId
-        required: false
-        schema:
-          example: DE-123
-          type: string
-        style: form
-      - description: The requestId of the API call which led to the change.
-        explode: true
-        in: query
-        name: requestId
-        required: false
-        schema:
-          example: D5FD9FAF-58C0-4406-8F46-F449B8E4FEC3
-          type: string
-        style: form
-      - description: Foreign uerId of the user which led to the change.
-        explode: true
-        in: query
-        name: foreignChangedBy
-        required: false
-        schema:
-          example: 23cbb6d6-cb11-4330-bdff-7bb791df2e23
-          type: string
-        style: form
-      - description: UserId of the user which led to the change.
-        explode: true
-        in: query
-        name: changedBy
-        required: false
-        schema:
-          example: 23cbb6d6-cb11-4330-bdff-7bb791df2e23
-          type: string
-        style: form
-      - description: Remedy's id
-        explode: true
-        in: query
-        name: remedyId
-        required: false
-        schema:
-          example: 12345
-          type: number
-        style: form
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RemediesAuditListResponse'
-          description: The response will be a JSON object and contains a paginated
-            list of Data audits.
-      security:
-      - bearer: []
-      summary: List history about your Data (audit)
-      tags:
-      - Internal Remedy Audits
-  /internal/v1/troubleshooting/remedies/replays:
-    post:
-      description: Replay changes for Remedy
-      operationId: replayRemedy
-      parameters:
-      - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
-          to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4)
-          to generate them manually.'
-        explode: false
-        in: header
-        name: x-request-id
-        required: true
-        schema:
-          example: 04e0f898-37b4-48bc-a794-1a57abe6aa31
-          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-5][0-9A-Fa-f]{3}-[089abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
-          type: string
-        style: simple
-      - description: Identifier to trace group of requests.
-        explode: false
-        in: header
-        name: x-trace-id
-        required: false
-        schema:
-          type: string
-        style: simple
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RemediesReplayRequest'
-        required: true
-      responses:
-        "202":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ReplayResponse'
-          description: Audit count sent to publish
-      security:
-      - bearer: []
-      summary: Replay changes for Remedy
-      tags:
-      - Internal Remedy Replay
   /v1/compute/instances/{instanceId}/actions/start:
     post:
       description: Starting a compute instance / resource is like powering on a real
@@ -9418,6 +8088,44 @@ paths:
       - lang: cntb CLI
         source: |-
           cntb rescue instance 1234 --sshKeys "1,2" --rootPassword 12 --userData '#cloud-config
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -9806,6 +8514,133 @@ paths:
       - lang: cntb CLI
         source: create instance --period 1 --imageId "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d"
           --license 'PleskHost' --productId "V1" -r "EU"
+  /v1/compute/instances/{instanceId}/regionChange/check:
+    get:
+      description: Verifies preconditions with CMS before relocating the instance
+        from its current host. Returns no content when the check succeeds. When CMS
+        responds with an error list, returns that payload with the same HTTP status
+        as CMS.
+      operationId: checkSetNewHost
+      parameters:
+      - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
+          to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4)
+          to generate them manually.'
+        explode: false
+        in: header
+        name: x-request-id
+        required: true
+        schema:
+          example: 04e0f898-37b4-48bc-a794-1a57abe6aa31
+          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-5][0-9A-Fa-f]{3}-[089abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+          type: string
+        style: simple
+      - description: Identifier to trace group of requests.
+        explode: false
+        in: header
+        name: x-trace-id
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: The identifier of the instance
+        explode: false
+        in: path
+        name: instanceId
+        required: true
+        schema:
+          example: 12345
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        "204":
+          description: The instance may be moved; CMS returned success.
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CmsErrorsResponse'
+          description: CMS rejected the check; response lists error codes. Actual
+            status matches CMS (4xx).
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CmsErrorsResponse'
+          description: CMS or upstream failure with an errors list in the body when
+            applicable.
+      security:
+      - bearer: []
+      summary: Check if the instance can be moved to another host
+      tags:
+      - Instances
+  /v1/compute/instances/{instanceId}/regionChange:
+    post:
+      description: Starts a region change for the instance via CMS. Returns the support
+        ticket number when the operation was accepted.
+      operationId: requestRegionChange
+      parameters:
+      - description: '[Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random))
+          to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4)
+          to generate them manually.'
+        explode: false
+        in: header
+        name: x-request-id
+        required: true
+        schema:
+          example: 04e0f898-37b4-48bc-a794-1a57abe6aa31
+          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-5][0-9A-Fa-f]{3}-[089abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+          type: string
+        style: simple
+      - description: Identifier to trace group of requests.
+        explode: false
+        in: header
+        name: x-trace-id
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: The identifier of the instance
+        explode: false
+        in: path
+        name: instanceId
+        required: true
+        schema:
+          example: 12345
+          format: int64
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegionChangeRequest'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InstanceRegionChangeResponse'
+          description: CMS accepted the region change request and returned a ticket
+            number.
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CmsErrorsResponse'
+          description: CMS rejected the request; response lists error codes.
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CmsErrorsResponse'
+          description: CMS or upstream error; may include error codes.
+      security:
+      - bearer: []
+      summary: Request instance region change
+      tags:
+      - Instances
   /v1/compute/instances/{instanceId}:
     get:
       description: Get attributes values to a specific instance on your account.
@@ -17247,9 +16082,7 @@ components:
     UserResponse:
       example:
         owner: false
-        firstName: John
         lastName: Doe
-        emailVerified: false
         totp: false
         roles:
         - roleId: 12345
@@ -17304,12 +16137,15 @@ components:
           name: infrastructure
           admin: true
           type: custom
-        tenantId: DE
-        customerId: "54321"
         locale: de
         userId: 6cdf5968-f9fe-4192-97c2-f349e813c5e8
-        email: john.doe@example.com
         enabled: false
+        firstName: John
+        emailVerified: false
+        sendInvoiceEmail: false
+        tenantId: DE
+        customerId: "54321"
+        email: john.doe@example.com
       properties:
         tenantId:
           description: Your customer tenant id
@@ -17386,6 +16222,11 @@ components:
             and resources. Enabling this will superseed all role definitions and `accessAllResources`.
           example: false
           type: boolean
+        sendInvoiceEmail:
+          description: If enabled, the user receives invoice emails and is registered
+            as an invoice contact in CMS.
+          example: false
+          type: boolean
       required:
       - customerId
       - email
@@ -17396,6 +16237,7 @@ components:
       - locale
       - owner
       - roles
+      - sendInvoiceEmail
       - tenantId
       - totp
       - userId
@@ -17404,9 +16246,7 @@ components:
       example:
         data:
         - owner: false
-          firstName: John
           lastName: Doe
-          emailVerified: false
           totp: false
           roles:
           - roleId: 12345
@@ -17461,16 +16301,17 @@ components:
             name: infrastructure
             admin: true
             type: custom
-          tenantId: DE
-          customerId: "54321"
           locale: de
           userId: 6cdf5968-f9fe-4192-97c2-f349e813c5e8
-          email: john.doe@example.com
           enabled: false
+          firstName: John
+          emailVerified: false
+          sendInvoiceEmail: false
+          tenantId: DE
+          customerId: "54321"
+          email: john.doe@example.com
         - owner: false
-          firstName: John
           lastName: Doe
-          emailVerified: false
           totp: false
           roles:
           - roleId: 12345
@@ -17525,12 +16366,15 @@ components:
             name: infrastructure
             admin: true
             type: custom
-          tenantId: DE
-          customerId: "54321"
           locale: de
           userId: 6cdf5968-f9fe-4192-97c2-f349e813c5e8
-          email: john.doe@example.com
           enabled: false
+          firstName: John
+          emailVerified: false
+          sendInvoiceEmail: false
+          tenantId: DE
+          customerId: "54321"
+          email: john.doe@example.com
         _links:
           first: /v1/users?page=1
           next: /v1/users?page=19
@@ -17566,6 +16410,7 @@ components:
         firstName: John
         lastName: Doe
         totp: false
+        sendInvoiceEmail: false
         roles:
         - 1
         - 2
@@ -17632,9 +16477,17 @@ components:
             format: int64
             type: integer
           type: array
+        sendInvoiceEmail:
+          description: If enabled, the user receives invoice emails and is registered
+            as an invoice contact in CMS. Only available for users with the Full Access
+            role.
+          example: false
+          type: boolean
       required:
       - email
       - enabled
+      - firstName
+      - lastName
       - locale
       - totp
       type: object
@@ -17692,9 +16545,7 @@ components:
       example:
         data:
         - owner: false
-          firstName: John
           lastName: Doe
-          emailVerified: false
           totp: false
           roles:
           - roleId: 12345
@@ -17749,16 +16600,17 @@ components:
             name: infrastructure
             admin: true
             type: custom
-          tenantId: DE
-          customerId: "54321"
           locale: de
           userId: 6cdf5968-f9fe-4192-97c2-f349e813c5e8
-          email: john.doe@example.com
           enabled: false
+          firstName: John
+          emailVerified: false
+          sendInvoiceEmail: false
+          tenantId: DE
+          customerId: "54321"
+          email: john.doe@example.com
         - owner: false
-          firstName: John
           lastName: Doe
-          emailVerified: false
           totp: false
           roles:
           - roleId: 12345
@@ -17813,12 +16665,15 @@ components:
             name: infrastructure
             admin: true
             type: custom
-          tenantId: DE
-          customerId: "54321"
           locale: de
           userId: 6cdf5968-f9fe-4192-97c2-f349e813c5e8
-          email: john.doe@example.com
           enabled: false
+          firstName: John
+          emailVerified: false
+          sendInvoiceEmail: false
+          tenantId: DE
+          customerId: "54321"
+          email: john.doe@example.com
         _links:
           self: /v1/users/12345
       properties:
@@ -17840,13 +16695,13 @@ components:
         firstName: John
         lastName: Doe
         totp: false
+        sendInvoiceEmail: false
         roles:
         - 1
         - 2
         - 3
         - 4
         locale: de
-        email: john.doe@example.com
         enabled: false
       properties:
         firstName:
@@ -17861,13 +16716,6 @@ components:
             colons, dashes, and underscores. There is a limit of 255 characters per
             user.
           example: Doe
-          maxLength: 255
-          minLength: 1
-          type: string
-        email:
-          description: The email of the user to which activation and forgot password
-            links are being sent to. There is a limit of 255 characters per email.
-          example: john.doe@example.com
           maxLength: 255
           minLength: 1
           type: string
@@ -17906,6 +16754,12 @@ components:
             format: int64
             type: integer
           type: array
+        sendInvoiceEmail:
+          description: If enabled, the user receives invoice emails and is registered
+            as an invoice contact in CMS. Only available for users with the Full Access
+            role.
+          example: false
+          type: boolean
       type: object
     UpdateUserResponse:
       example:
@@ -18085,6 +16939,356 @@ components:
             self: /v1/users/is-password-set
       required:
       - _links
+      - data
+      type: object
+    UserSwitchAccountRequest:
+      example:
+        customerId: "12345"
+        tenantId: DE
+        email: user@test.com
+      properties:
+        customerId:
+          description: Customer ID
+          example: "12345"
+          maxLength: 255
+          minLength: 1
+          type: string
+        tenantId:
+          description: Tenant ID
+          example: DE
+          maxLength: 255
+          minLength: 1
+          type: string
+        email:
+          description: Email of the user
+          example: user@test.com
+          maxLength: 255
+          minLength: 1
+          type: string
+      required:
+      - customerId
+      - email
+      - tenantId
+      type: object
+    UserSwitchAccountTokens:
+      example:
+        tenantId: DE
+        customerId: "54321"
+        token: eyJhbGciOiJIUzUxMiIsInR5cCIgOiAiSldUIiwia2l
+        refreshToken: eyJhbGciOiJIUzUxMiIsInR5cCIgOiAiSldUIiwia2l
+      properties:
+        tenantId:
+          description: Your customer tenant id
+          example: DE
+          minLength: 1
+          type: string
+        customerId:
+          description: Your customer number
+          example: "54321"
+          minLength: 1
+          type: string
+        token:
+          description: Token
+          example: eyJhbGciOiJIUzUxMiIsInR5cCIgOiAiSldUIiwia2l
+          type: string
+        refreshToken:
+          description: Refresh Token
+          example: eyJhbGciOiJIUzUxMiIsInR5cCIgOiAiSldUIiwia2l
+          type: string
+      required:
+      - customerId
+      - refreshToken
+      - tenantId
+      - token
+      type: object
+    UserSwitchAccountResponse:
+      example:
+        data:
+        - tenantId: DE
+          customerId: "54321"
+          token: eyJhbGciOiJIUzUxMiIsInR5cCIgOiAiSldUIiwia2l
+          refreshToken: eyJhbGciOiJIUzUxMiIsInR5cCIgOiAiSldUIiwia2l
+        - tenantId: DE
+          customerId: "54321"
+          token: eyJhbGciOiJIUzUxMiIsInR5cCIgOiAiSldUIiwia2l
+          refreshToken: eyJhbGciOiJIUzUxMiIsInR5cCIgOiAiSldUIiwia2l
+        _links:
+          self: /v1/me/action/switchAccount
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/UserSwitchAccountTokens'
+          type: array
+        _links:
+          allOf:
+          - $ref: '#/components/schemas/SelfLinks'
+          example:
+            self: /v1/me/action/switchAccount
+      required:
+      - _links
+      - data
+      type: object
+    UserSwitchAccountDefaultRequest:
+      example:
+        default: true
+      properties:
+        default:
+          description: Default flag for the selected account
+          example: true
+          type: boolean
+      required:
+      - default
+      type: object
+    AccountDetails:
+      properties:
+        customerId:
+          description: Customer ID of the sub account.
+          example: "45678"
+          maxLength: 255
+          minLength: 1
+          nullable: true
+          type: string
+        tenantId:
+          description: Tenant ID of the sub account.
+          example: INT
+          maxLength: 255
+          minLength: 1
+          nullable: true
+          type: string
+        type:
+          description: Customer account type (from customer record). Example values
+            are `private` or `business`.
+          example: business
+          nullable: true
+          type: string
+        company:
+          description: Customer company name (from customer record).
+          example: Acme GmbH
+          nullable: true
+          type: string
+        email:
+          description: The email displayed for this account.
+          example: john.doe@example.com
+          maxLength: 255
+          minLength: 1
+          nullable: true
+          type: string
+        firstName:
+          description: First name associated with this account.
+          example: John
+          maxLength: 255
+          minLength: 1
+          nullable: true
+          type: string
+        lastName:
+          description: Last name associated with this account.
+          example: Doe
+          maxLength: 255
+          minLength: 1
+          nullable: true
+          type: string
+      required:
+      - company
+      - customerId
+      - email
+      - firstName
+      - lastName
+      - tenantId
+      - type
+      type: object
+    UserSwitchAccount:
+      example:
+        owner: false
+        firstName: John
+        lastName: Doe
+        totp: false
+        default: false
+        accountDetails: ""
+        tenantId: DE
+        customerId: "54321"
+        roleName: Role Name
+        locale: de
+        userId: 6cdf5968-f9fe-4192-97c2-f349e813c5e8
+        email: john.doe@example.com
+      properties:
+        tenantId:
+          description: Your customer tenant id
+          example: DE
+          minLength: 1
+          type: string
+        customerId:
+          description: Your customer number
+          example: "54321"
+          minLength: 1
+          type: string
+        userId:
+          description: The identifier of the sub user account.
+          example: 6cdf5968-f9fe-4192-97c2-f349e813c5e8
+          type: string
+        firstName:
+          description: The first name of the main account.
+          example: John
+          maxLength: 255
+          minLength: 1
+          type: string
+        lastName:
+          description: The last name of the main account.
+          example: Doe
+          maxLength: 255
+          minLength: 1
+          type: string
+        email:
+          description: The email of the main account
+          example: john.doe@example.com
+          maxLength: 255
+          minLength: 1
+          type: string
+        totp:
+          description: Enable or disable two-factor authentication (2FA) via time
+            based OTP.
+          example: false
+          type: boolean
+        default:
+          description: Flag to mark if the account is set as default
+          example: false
+          type: boolean
+        locale:
+          description: The locale of the user. This can be `de-DE`, `de`, `en-US`,
+            `en`
+          enum:
+          - de-DE
+          - de
+          - en-US
+          - en
+          example: de
+          type: string
+        roleName:
+          description: The name of the role.
+          example: Role Name
+          maxLength: 255
+          minLength: 1
+          type: string
+        owner:
+          description: If user is owner he will have permissions to all API endpoints
+            and resources.
+          example: false
+          type: boolean
+        accountDetails:
+          allOf:
+          - $ref: '#/components/schemas/AccountDetails'
+          description: Details about the primary account holder for this sub account.
+      required:
+      - accountDetails
+      - customerId
+      - default
+      - email
+      - firstName
+      - lastName
+      - locale
+      - owner
+      - roleName
+      - tenantId
+      - totp
+      - userId
+      type: object
+    UserSwitchAccountDefaultResponse:
+      example:
+        data:
+        - owner: false
+          firstName: John
+          lastName: Doe
+          totp: false
+          default: false
+          accountDetails: ""
+          tenantId: DE
+          customerId: "54321"
+          roleName: Role Name
+          locale: de
+          userId: 6cdf5968-f9fe-4192-97c2-f349e813c5e8
+          email: john.doe@example.com
+        - owner: false
+          firstName: John
+          lastName: Doe
+          totp: false
+          default: false
+          accountDetails: ""
+          tenantId: DE
+          customerId: "54321"
+          roleName: Role Name
+          locale: de
+          userId: 6cdf5968-f9fe-4192-97c2-f349e813c5e8
+          email: john.doe@example.com
+        _links:
+          self: /v1/me/account/DE/12345
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/UserSwitchAccount'
+          type: array
+        _links:
+          allOf:
+          - $ref: '#/components/schemas/SelfLinks'
+          example:
+            self: /v1/me/account/DE/12345
+      required:
+      - _links
+      - data
+      type: object
+    ListUserSwitchAccountsResponse:
+      example:
+        data:
+        - owner: false
+          firstName: John
+          lastName: Doe
+          totp: false
+          default: false
+          accountDetails: ""
+          tenantId: DE
+          customerId: "54321"
+          roleName: Role Name
+          locale: de
+          userId: 6cdf5968-f9fe-4192-97c2-f349e813c5e8
+          email: john.doe@example.com
+        - owner: false
+          firstName: John
+          lastName: Doe
+          totp: false
+          default: false
+          accountDetails: ""
+          tenantId: DE
+          customerId: "54321"
+          roleName: Role Name
+          locale: de
+          userId: 6cdf5968-f9fe-4192-97c2-f349e813c5e8
+          email: john.doe@example.com
+        _links:
+          first: /v1/me/accounts?page=1
+          next: /v1/me/accounts?page=19
+          self: /v1/me/account/DE/12345
+          previous: /v1/me/accounts?page=21
+          last: /v1/me/accounts?page=101
+        _pagination: ""
+      properties:
+        _pagination:
+          allOf:
+          - $ref: '#/components/schemas/PaginationMeta'
+          description: Data about pagination like how many results, pages, page size.
+        data:
+          items:
+            $ref: '#/components/schemas/UserSwitchAccount'
+          type: array
+        _links:
+          allOf:
+          - $ref: '#/components/schemas/Links'
+          example:
+            first: /v1/me/accounts?page=1
+            next: /v1/me/accounts?page=19
+            self: /v1/me/account/DE/12345
+            previous: /v1/me/accounts?page=21
+            last: /v1/me/accounts?page=101
+      required:
+      - _links
+      - _pagination
       - data
       type: object
     ListRoleResponse:
@@ -18655,6 +17859,58 @@ components:
           - $ref: '#/components/schemas/SelfLinks'
           example:
             self: v1/users/08a92037-01e8-4dff-8565-47cad7be701a/object-storages/e3f0207c-f7fe-433a-92ab-39a9e976642d/credentials
+      required:
+      - _links
+      - data
+      type: object
+    SupportSignatureResponse:
+      properties:
+        tenantId:
+          description: Your customer tenant id
+          example: DE
+          minLength: 1
+          type: string
+        customerId:
+          description: Your customer number
+          example: "54321"
+          minLength: 1
+          type: string
+        id:
+          description: HMAC-SHA256 signature of the user id, hex encoded.
+          example: d2a1f4c8e0b3a6d9f1c4e7b0a3d6f9c2e5b8a1d4f7c0e3b6a9d2f5c8e1b4a7d0
+          type: string
+        validity:
+          description: Signature lifetime in seconds.
+          example: 86400
+          type: number
+        timestamp:
+          description: Unix timestamp (seconds) at which the signature expires. Passed
+            to Decagon as the epoch.
+          example: 1750000000
+          type: number
+        system:
+          description: Signing system identifier.
+          example: decagon
+          type: string
+      required:
+      - customerId
+      - id
+      - system
+      - tenantId
+      - timestamp
+      - validity
+      type: object
+    FindSupportSignatureResponse:
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/SupportSignatureResponse'
+          type: array
+        _links:
+          allOf:
+          - $ref: '#/components/schemas/SelfLinks'
+          example:
+            self: /v1/users/support-signature
       required:
       - _links
       - data
@@ -20857,25 +20113,54 @@ components:
       - _pagination
       - data
       type: object
-    CheckResponse:
+    RemedyTemplateSummary:
       example:
-        note: Ping failed with timeout, please check the firewall rules and connectivity
-        log: 6 packets transmitted, 0 received, 100% packet loss, time 5107ms
-        checkTemplateId: 12345
-        orgId: cntb
-        objectType: vserver
-        accountId: d8d15718-8f0a-4933-8844-6b69b9c2f15f
-        createdDate: 1998-02-14T12:00:01.654Z
-        internalNote: Ping failed with error code 123, could be an issue with the
-          route server settings
-        name: Ping check
-        modifiedDate: 2024-12-14T12:00:01.654Z
-        checkId: 12345
-        checkCollectionId: 12345
-        durationMs: 4711
-        objectId: "4711"
-        status: failed
+        name: instance_restart_remedy_name
+        description: instance_restart_remedy_description
+        id: 101
       properties:
+        id:
+          description: Remedy template id
+          example: 101
+          type: number
+        name:
+          description: 'Translation key for the remedy name. Possible values: dummy_remedy_name,
+            success_remedy_name, fail_remedy_name, instance_restart_remedy_name, instance_firewall_detach_remedy_name,
+            instance_live_migration_remedy_name'
+          enum:
+          - dummy_remedy_name
+          - success_remedy_name
+          - fail_remedy_name
+          - instance_restart_remedy_name
+          - instance_firewall_detach_remedy_name
+          - instance_live_migration_remedy_name
+          example: instance_restart_remedy_name
+          type: string
+        description:
+          description: 'Translation key for the remedy description. Possible values:
+            dummy_remedy_description, success_remedy_description, fail_remedy_description,
+            instance_restart_remedy_description, instance_firewall_detach_remedy_description,
+            instance_live_migration_remedy_description'
+          enum:
+          - dummy_remedy_description
+          - success_remedy_description
+          - fail_remedy_description
+          - instance_restart_remedy_description
+          - instance_firewall_detach_remedy_description
+          - instance_live_migration_remedy_description
+          example: instance_restart_remedy_description
+          type: string
+      required:
+      - description
+      - id
+      - name
+      type: object
+    CheckResponse:
+      properties:
+        internal:
+          description: Is internal (not shown to the customer)
+          example: false
+          type: boolean
         status:
           description: Status of the handle
           enum:
@@ -20918,10 +20203,20 @@ components:
           description: Note to be shown to the customer
           example: Ping failed with timeout, please check the firewall rules and connectivity
           type: string
+        internalNote:
+          description: Note which is shown only internally to the agent
+          example: Ping failed with error code 123, could be an issue with the route
+            server settings
+          type: string
         durationMs:
           description: Duration of the check in milliseconds
           example: 4711
           type: number
+        remedyTemplates:
+          description: Remedy templates linked to this check template
+          items:
+            $ref: '#/components/schemas/RemedyTemplateSummary'
+          type: array
         createdDate:
           description: Creation date
           example: 1998-02-14T12:00:01.654Z
@@ -20942,11 +20237,6 @@ components:
           example: d8d15718-8f0a-4933-8844-6b69b9c2f15f
           minLength: 1
           type: string
-        internalNote:
-          description: Note which is shown only internally to the agent
-          example: Ping failed with error code 123, could be an issue with the route
-            server settings
-          type: string
         log:
           description: Detailed log of the check execution
           example: 6 packets transmitted, 0 received, 100% packet loss, time 5107ms
@@ -20958,6 +20248,7 @@ components:
       - checkTemplateId
       - createdDate
       - durationMs
+      - internal
       - internalNote
       - log
       - modifiedDate
@@ -20966,50 +20257,10 @@ components:
       - objectId
       - objectType
       - orgId
+      - remedyTemplates
       - status
       type: object
     ChecksListResponse:
-      example:
-        data:
-        - note: Ping failed with timeout, please check the firewall rules and connectivity
-          log: 6 packets transmitted, 0 received, 100% packet loss, time 5107ms
-          checkTemplateId: 12345
-          orgId: cntb
-          objectType: vserver
-          accountId: d8d15718-8f0a-4933-8844-6b69b9c2f15f
-          createdDate: 1998-02-14T12:00:01.654Z
-          internalNote: Ping failed with error code 123, could be an issue with the
-            route server settings
-          name: Ping check
-          modifiedDate: 2024-12-14T12:00:01.654Z
-          checkId: 12345
-          checkCollectionId: 12345
-          durationMs: 4711
-          objectId: "4711"
-          status: failed
-        - note: Ping failed with timeout, please check the firewall rules and connectivity
-          log: 6 packets transmitted, 0 received, 100% packet loss, time 5107ms
-          checkTemplateId: 12345
-          orgId: cntb
-          objectType: vserver
-          accountId: d8d15718-8f0a-4933-8844-6b69b9c2f15f
-          createdDate: 1998-02-14T12:00:01.654Z
-          internalNote: Ping failed with error code 123, could be an issue with the
-            route server settings
-          name: Ping check
-          modifiedDate: 2024-12-14T12:00:01.654Z
-          checkId: 12345
-          checkCollectionId: 12345
-          durationMs: 4711
-          objectId: "4711"
-          status: failed
-        _links:
-          first: internal/v1/troubleshooting/checks?page=1
-          next: internal/v1/troubleshooting/checks?page=19
-          self: internal/v1/troubleshooting/checks
-          previous: internal/v1/troubleshooting/checks?page=18
-          last: internal/v1/troubleshooting/checks?page=100
-        _pagination: ""
       properties:
         _pagination:
           allOf:
@@ -21034,42 +20285,6 @@ components:
       - data
       type: object
     ChecksGetResponse:
-      example:
-        data:
-        - note: Ping failed with timeout, please check the firewall rules and connectivity
-          log: 6 packets transmitted, 0 received, 100% packet loss, time 5107ms
-          checkTemplateId: 12345
-          orgId: cntb
-          objectType: vserver
-          accountId: d8d15718-8f0a-4933-8844-6b69b9c2f15f
-          createdDate: 1998-02-14T12:00:01.654Z
-          internalNote: Ping failed with error code 123, could be an issue with the
-            route server settings
-          name: Ping check
-          modifiedDate: 2024-12-14T12:00:01.654Z
-          checkId: 12345
-          checkCollectionId: 12345
-          durationMs: 4711
-          objectId: "4711"
-          status: failed
-        - note: Ping failed with timeout, please check the firewall rules and connectivity
-          log: 6 packets transmitted, 0 received, 100% packet loss, time 5107ms
-          checkTemplateId: 12345
-          orgId: cntb
-          objectType: vserver
-          accountId: d8d15718-8f0a-4933-8844-6b69b9c2f15f
-          createdDate: 1998-02-14T12:00:01.654Z
-          internalNote: Ping failed with error code 123, could be an issue with the
-            route server settings
-          name: Ping check
-          modifiedDate: 2024-12-14T12:00:01.654Z
-          checkId: 12345
-          checkCollectionId: 12345
-          durationMs: 4711
-          objectId: "4711"
-          status: failed
-        _links:
-          self: internal/v1/troubleshooting/checks/666
       properties:
         data:
           items:
@@ -21085,13 +20300,6 @@ components:
       - data
       type: object
     CheckCreateRequest:
-      example:
-        accountId: DE-123
-        checkTemplateId: 12345
-        checkCollectionId: 12345
-        objectId: "4711"
-        orgId: cntb
-        objectType: vserver
       properties:
         objectType:
           description: Object type to be handled
@@ -21140,9 +20348,19 @@ components:
     ExtCheckResponse:
       example:
         note: Ping failed with timeout, please check the firewall rules and connectivity
+        internal: false
         checkTemplateId: 12345
+        remedyTemplates:
+        - name: instance_restart_remedy_name
+          description: instance_restart_remedy_description
+          id: 101
+        - name: instance_restart_remedy_name
+          description: instance_restart_remedy_description
+          id: 101
         objectType: vserver
         createdDate: 1998-02-14T12:00:01.654Z
+        internalNote: Ping failed with error code 123, could be an issue with the
+          route server settings
         name: Ping check
         modifiedDate: 2024-12-14T12:00:01.654Z
         tenantId: DE
@@ -21153,6 +20371,10 @@ components:
         objectId: "4711"
         status: failed
       properties:
+        internal:
+          description: Is internal (not shown to the customer)
+          example: false
+          type: boolean
         status:
           description: Status of the handle
           enum:
@@ -21195,10 +20417,20 @@ components:
           description: Note to be shown to the customer
           example: Ping failed with timeout, please check the firewall rules and connectivity
           type: string
+        internalNote:
+          description: Note which is shown only internally to the agent
+          example: Ping failed with error code 123, could be an issue with the route
+            server settings
+          type: string
         durationMs:
           description: Duration of the check in milliseconds
           example: 4711
           type: number
+        remedyTemplates:
+          description: Remedy templates linked to this check template
+          items:
+            $ref: '#/components/schemas/RemedyTemplateSummary'
+          type: array
         createdDate:
           description: Creation date
           example: 1998-02-14T12:00:01.654Z
@@ -21226,11 +20458,14 @@ components:
       - createdDate
       - customerId
       - durationMs
+      - internal
+      - internalNote
       - modifiedDate
       - name
       - note
       - objectId
       - objectType
+      - remedyTemplates
       - status
       - tenantId
       type: object
@@ -21238,9 +20473,19 @@ components:
       example:
         data:
         - note: Ping failed with timeout, please check the firewall rules and connectivity
+          internal: false
           checkTemplateId: 12345
+          remedyTemplates:
+          - name: instance_restart_remedy_name
+            description: instance_restart_remedy_description
+            id: 101
+          - name: instance_restart_remedy_name
+            description: instance_restart_remedy_description
+            id: 101
           objectType: vserver
           createdDate: 1998-02-14T12:00:01.654Z
+          internalNote: Ping failed with error code 123, could be an issue with the
+            route server settings
           name: Ping check
           modifiedDate: 2024-12-14T12:00:01.654Z
           tenantId: DE
@@ -21251,9 +20496,19 @@ components:
           objectId: "4711"
           status: failed
         - note: Ping failed with timeout, please check the firewall rules and connectivity
+          internal: false
           checkTemplateId: 12345
+          remedyTemplates:
+          - name: instance_restart_remedy_name
+            description: instance_restart_remedy_description
+            id: 101
+          - name: instance_restart_remedy_name
+            description: instance_restart_remedy_description
+            id: 101
           objectType: vserver
           createdDate: 1998-02-14T12:00:01.654Z
+          internalNote: Ping failed with error code 123, could be an issue with the
+            route server settings
           name: Ping check
           modifiedDate: 2024-12-14T12:00:01.654Z
           tenantId: DE
@@ -21297,9 +20552,19 @@ components:
       example:
         data:
         - note: Ping failed with timeout, please check the firewall rules and connectivity
+          internal: false
           checkTemplateId: 12345
+          remedyTemplates:
+          - name: instance_restart_remedy_name
+            description: instance_restart_remedy_description
+            id: 101
+          - name: instance_restart_remedy_name
+            description: instance_restart_remedy_description
+            id: 101
           objectType: vserver
           createdDate: 1998-02-14T12:00:01.654Z
+          internalNote: Ping failed with error code 123, could be an issue with the
+            route server settings
           name: Ping check
           modifiedDate: 2024-12-14T12:00:01.654Z
           tenantId: DE
@@ -21310,9 +20575,19 @@ components:
           objectId: "4711"
           status: failed
         - note: Ping failed with timeout, please check the firewall rules and connectivity
+          internal: false
           checkTemplateId: 12345
+          remedyTemplates:
+          - name: instance_restart_remedy_name
+            description: instance_restart_remedy_description
+            id: 101
+          - name: instance_restart_remedy_name
+            description: instance_restart_remedy_description
+            id: 101
           objectType: vserver
           createdDate: 1998-02-14T12:00:01.654Z
+          internalNote: Ping failed with error code 123, could be an issue with the
+            route server settings
           name: Ping check
           modifiedDate: 2024-12-14T12:00:01.654Z
           tenantId: DE
@@ -21369,19 +20644,6 @@ components:
       - objectType
       type: object
     CheckTemplateResponse:
-      example:
-        accountId: d8d15718-8f0a-4933-8844-6b69b9c2f15f
-        internal: false
-        collectorClass: InstanceCollector.ts
-        createdDate: 1998-02-14T12:00:01.654Z
-        checkTemplateId: 12345
-        modifiedDate: 2024-12-14T12:00:01.654Z
-        name: Ping check instance
-        description: Performs a ping check on an instance
-        remedyTemplateIds: 1, 2, ...
-        checkClass: PingCheck.ts
-        orgId: cntb
-        objectType: vserver
       properties:
         createdDate:
           description: Creation date
@@ -21454,39 +20716,6 @@ components:
       - remedyTemplateIds
       type: object
     CheckTemplatesListResponse:
-      example:
-        data:
-        - accountId: d8d15718-8f0a-4933-8844-6b69b9c2f15f
-          internal: false
-          collectorClass: InstanceCollector.ts
-          createdDate: 1998-02-14T12:00:01.654Z
-          checkTemplateId: 12345
-          modifiedDate: 2024-12-14T12:00:01.654Z
-          name: Ping check instance
-          description: Performs a ping check on an instance
-          remedyTemplateIds: 1, 2, ...
-          checkClass: PingCheck.ts
-          orgId: cntb
-          objectType: vserver
-        - accountId: d8d15718-8f0a-4933-8844-6b69b9c2f15f
-          internal: false
-          collectorClass: InstanceCollector.ts
-          createdDate: 1998-02-14T12:00:01.654Z
-          checkTemplateId: 12345
-          modifiedDate: 2024-12-14T12:00:01.654Z
-          name: Ping check instance
-          description: Performs a ping check on an instance
-          remedyTemplateIds: 1, 2, ...
-          checkClass: PingCheck.ts
-          orgId: cntb
-          objectType: vserver
-        _links:
-          first: internal/v1/troubleshooting/check-templates?page=1
-          next: internal/v1/troubleshooting/check-templates?page=19
-          self: internal/v1/troubleshooting/check-templates
-          previous: internal/v1/troubleshooting/check-templates?page=18
-          last: internal/v1/troubleshooting/check-templates?page=100
-        _pagination: ""
       properties:
         _pagination:
           allOf:
@@ -21511,34 +20740,6 @@ components:
       - data
       type: object
     CheckTemplatesGetResponse:
-      example:
-        data:
-        - accountId: d8d15718-8f0a-4933-8844-6b69b9c2f15f
-          internal: false
-          collectorClass: InstanceCollector.ts
-          createdDate: 1998-02-14T12:00:01.654Z
-          checkTemplateId: 12345
-          modifiedDate: 2024-12-14T12:00:01.654Z
-          name: Ping check instance
-          description: Performs a ping check on an instance
-          remedyTemplateIds: 1, 2, ...
-          checkClass: PingCheck.ts
-          orgId: cntb
-          objectType: vserver
-        - accountId: d8d15718-8f0a-4933-8844-6b69b9c2f15f
-          internal: false
-          collectorClass: InstanceCollector.ts
-          createdDate: 1998-02-14T12:00:01.654Z
-          checkTemplateId: 12345
-          modifiedDate: 2024-12-14T12:00:01.654Z
-          name: Ping check instance
-          description: Performs a ping check on an instance
-          remedyTemplateIds: 1, 2, ...
-          checkClass: PingCheck.ts
-          orgId: cntb
-          objectType: vserver
-        _links:
-          self: internal/v1/troubleshooting/check-templates/666
       properties:
         data:
           items:
@@ -21583,64 +20784,11 @@ components:
       - runConcurrent
       type: object
     CheckCollectionResponse:
-      example:
-        accountId: d8d15718-8f0a-4933-8844-6b69b9c2f15f
-        createdDate: 1998-02-14T12:00:01.654Z
-        checks:
-        - note: Ping failed with timeout, please check the firewall rules and connectivity
-          log: 6 packets transmitted, 0 received, 100% packet loss, time 5107ms
-          checkTemplateId: 12345
-          orgId: cntb
-          objectType: vserver
-          accountId: d8d15718-8f0a-4933-8844-6b69b9c2f15f
-          createdDate: 1998-02-14T12:00:01.654Z
-          internalNote: Ping failed with error code 123, could be an issue with the
-            route server settings
-          name: Ping check
-          modifiedDate: 2024-12-14T12:00:01.654Z
-          checkId: 12345
-          checkCollectionId: 12345
-          durationMs: 4711
-          objectId: "4711"
-          status: failed
-        - note: Ping failed with timeout, please check the firewall rules and connectivity
-          log: 6 packets transmitted, 0 received, 100% packet loss, time 5107ms
-          checkTemplateId: 12345
-          orgId: cntb
-          objectType: vserver
-          accountId: d8d15718-8f0a-4933-8844-6b69b9c2f15f
-          createdDate: 1998-02-14T12:00:01.654Z
-          internalNote: Ping failed with error code 123, could be an issue with the
-            route server settings
-          name: Ping check
-          modifiedDate: 2024-12-14T12:00:01.654Z
-          checkId: 12345
-          checkCollectionId: 12345
-          durationMs: 4711
-          objectId: "4711"
-          status: failed
-        modifiedDate: 2024-12-14T12:00:01.654Z
-        checkCollectionTemplateId: 12345
-        checkTemplates:
-        - checkId: 1
-          checkTemplateId: 2
-          runConcurrent: false
-          ignoreErrors: false
-          checkTemplates:
-          - checkId: 2
-            checkTemplateId: 3
-            runConcurrent: true
-            ignoreErrors: false
-          - checkId: 3
-            checkTemplateId: 4
-            runConcurrent: true
-            ignoreErrors: true
-        checkCollectionId: 12345
-        objectId: "4711"
-        orgId: cntb
-        status: failed
-        objectType: vserver
       properties:
+        internal:
+          description: Is internal (not shown to the customer)
+          example: false
+          type: boolean
         status:
           description: Status of the handle
           enum:
@@ -21722,6 +20870,7 @@ components:
       - checkTemplates
       - checks
       - createdDate
+      - internal
       - modifiedDate
       - objectId
       - objectType
@@ -21729,127 +20878,6 @@ components:
       - status
       type: object
     CheckCollectionsListResponse:
-      example:
-        data:
-        - accountId: d8d15718-8f0a-4933-8844-6b69b9c2f15f
-          createdDate: 1998-02-14T12:00:01.654Z
-          checks:
-          - note: Ping failed with timeout, please check the firewall rules and connectivity
-            log: 6 packets transmitted, 0 received, 100% packet loss, time 5107ms
-            checkTemplateId: 12345
-            orgId: cntb
-            objectType: vserver
-            accountId: d8d15718-8f0a-4933-8844-6b69b9c2f15f
-            createdDate: 1998-02-14T12:00:01.654Z
-            internalNote: Ping failed with error code 123, could be an issue with
-              the route server settings
-            name: Ping check
-            modifiedDate: 2024-12-14T12:00:01.654Z
-            checkId: 12345
-            checkCollectionId: 12345
-            durationMs: 4711
-            objectId: "4711"
-            status: failed
-          - note: Ping failed with timeout, please check the firewall rules and connectivity
-            log: 6 packets transmitted, 0 received, 100% packet loss, time 5107ms
-            checkTemplateId: 12345
-            orgId: cntb
-            objectType: vserver
-            accountId: d8d15718-8f0a-4933-8844-6b69b9c2f15f
-            createdDate: 1998-02-14T12:00:01.654Z
-            internalNote: Ping failed with error code 123, could be an issue with
-              the route server settings
-            name: Ping check
-            modifiedDate: 2024-12-14T12:00:01.654Z
-            checkId: 12345
-            checkCollectionId: 12345
-            durationMs: 4711
-            objectId: "4711"
-            status: failed
-          modifiedDate: 2024-12-14T12:00:01.654Z
-          checkCollectionTemplateId: 12345
-          checkTemplates:
-          - checkId: 1
-            checkTemplateId: 2
-            runConcurrent: false
-            ignoreErrors: false
-            checkTemplates:
-            - checkId: 2
-              checkTemplateId: 3
-              runConcurrent: true
-              ignoreErrors: false
-            - checkId: 3
-              checkTemplateId: 4
-              runConcurrent: true
-              ignoreErrors: true
-          checkCollectionId: 12345
-          objectId: "4711"
-          orgId: cntb
-          status: failed
-          objectType: vserver
-        - accountId: d8d15718-8f0a-4933-8844-6b69b9c2f15f
-          createdDate: 1998-02-14T12:00:01.654Z
-          checks:
-          - note: Ping failed with timeout, please check the firewall rules and connectivity
-            log: 6 packets transmitted, 0 received, 100% packet loss, time 5107ms
-            checkTemplateId: 12345
-            orgId: cntb
-            objectType: vserver
-            accountId: d8d15718-8f0a-4933-8844-6b69b9c2f15f
-            createdDate: 1998-02-14T12:00:01.654Z
-            internalNote: Ping failed with error code 123, could be an issue with
-              the route server settings
-            name: Ping check
-            modifiedDate: 2024-12-14T12:00:01.654Z
-            checkId: 12345
-            checkCollectionId: 12345
-            durationMs: 4711
-            objectId: "4711"
-            status: failed
-          - note: Ping failed with timeout, please check the firewall rules and connectivity
-            log: 6 packets transmitted, 0 received, 100% packet loss, time 5107ms
-            checkTemplateId: 12345
-            orgId: cntb
-            objectType: vserver
-            accountId: d8d15718-8f0a-4933-8844-6b69b9c2f15f
-            createdDate: 1998-02-14T12:00:01.654Z
-            internalNote: Ping failed with error code 123, could be an issue with
-              the route server settings
-            name: Ping check
-            modifiedDate: 2024-12-14T12:00:01.654Z
-            checkId: 12345
-            checkCollectionId: 12345
-            durationMs: 4711
-            objectId: "4711"
-            status: failed
-          modifiedDate: 2024-12-14T12:00:01.654Z
-          checkCollectionTemplateId: 12345
-          checkTemplates:
-          - checkId: 1
-            checkTemplateId: 2
-            runConcurrent: false
-            ignoreErrors: false
-            checkTemplates:
-            - checkId: 2
-              checkTemplateId: 3
-              runConcurrent: true
-              ignoreErrors: false
-            - checkId: 3
-              checkTemplateId: 4
-              runConcurrent: true
-              ignoreErrors: true
-          checkCollectionId: 12345
-          objectId: "4711"
-          orgId: cntb
-          status: failed
-          objectType: vserver
-        _links:
-          first: internal/v1/troubleshooting/check-collections?page=1
-          next: internal/v1/troubleshooting/check-collections?page=19
-          self: internal/v1/troubleshooting/check-collections
-          previous: internal/v1/troubleshooting/check-collections?page=18
-          last: internal/v1/troubleshooting/check-collections?page=100
-        _pagination: ""
       properties:
         _pagination:
           allOf:
@@ -21874,122 +20902,6 @@ components:
       - data
       type: object
     CheckCollectionsGetResponse:
-      example:
-        data:
-        - accountId: d8d15718-8f0a-4933-8844-6b69b9c2f15f
-          createdDate: 1998-02-14T12:00:01.654Z
-          checks:
-          - note: Ping failed with timeout, please check the firewall rules and connectivity
-            log: 6 packets transmitted, 0 received, 100% packet loss, time 5107ms
-            checkTemplateId: 12345
-            orgId: cntb
-            objectType: vserver
-            accountId: d8d15718-8f0a-4933-8844-6b69b9c2f15f
-            createdDate: 1998-02-14T12:00:01.654Z
-            internalNote: Ping failed with error code 123, could be an issue with
-              the route server settings
-            name: Ping check
-            modifiedDate: 2024-12-14T12:00:01.654Z
-            checkId: 12345
-            checkCollectionId: 12345
-            durationMs: 4711
-            objectId: "4711"
-            status: failed
-          - note: Ping failed with timeout, please check the firewall rules and connectivity
-            log: 6 packets transmitted, 0 received, 100% packet loss, time 5107ms
-            checkTemplateId: 12345
-            orgId: cntb
-            objectType: vserver
-            accountId: d8d15718-8f0a-4933-8844-6b69b9c2f15f
-            createdDate: 1998-02-14T12:00:01.654Z
-            internalNote: Ping failed with error code 123, could be an issue with
-              the route server settings
-            name: Ping check
-            modifiedDate: 2024-12-14T12:00:01.654Z
-            checkId: 12345
-            checkCollectionId: 12345
-            durationMs: 4711
-            objectId: "4711"
-            status: failed
-          modifiedDate: 2024-12-14T12:00:01.654Z
-          checkCollectionTemplateId: 12345
-          checkTemplates:
-          - checkId: 1
-            checkTemplateId: 2
-            runConcurrent: false
-            ignoreErrors: false
-            checkTemplates:
-            - checkId: 2
-              checkTemplateId: 3
-              runConcurrent: true
-              ignoreErrors: false
-            - checkId: 3
-              checkTemplateId: 4
-              runConcurrent: true
-              ignoreErrors: true
-          checkCollectionId: 12345
-          objectId: "4711"
-          orgId: cntb
-          status: failed
-          objectType: vserver
-        - accountId: d8d15718-8f0a-4933-8844-6b69b9c2f15f
-          createdDate: 1998-02-14T12:00:01.654Z
-          checks:
-          - note: Ping failed with timeout, please check the firewall rules and connectivity
-            log: 6 packets transmitted, 0 received, 100% packet loss, time 5107ms
-            checkTemplateId: 12345
-            orgId: cntb
-            objectType: vserver
-            accountId: d8d15718-8f0a-4933-8844-6b69b9c2f15f
-            createdDate: 1998-02-14T12:00:01.654Z
-            internalNote: Ping failed with error code 123, could be an issue with
-              the route server settings
-            name: Ping check
-            modifiedDate: 2024-12-14T12:00:01.654Z
-            checkId: 12345
-            checkCollectionId: 12345
-            durationMs: 4711
-            objectId: "4711"
-            status: failed
-          - note: Ping failed with timeout, please check the firewall rules and connectivity
-            log: 6 packets transmitted, 0 received, 100% packet loss, time 5107ms
-            checkTemplateId: 12345
-            orgId: cntb
-            objectType: vserver
-            accountId: d8d15718-8f0a-4933-8844-6b69b9c2f15f
-            createdDate: 1998-02-14T12:00:01.654Z
-            internalNote: Ping failed with error code 123, could be an issue with
-              the route server settings
-            name: Ping check
-            modifiedDate: 2024-12-14T12:00:01.654Z
-            checkId: 12345
-            checkCollectionId: 12345
-            durationMs: 4711
-            objectId: "4711"
-            status: failed
-          modifiedDate: 2024-12-14T12:00:01.654Z
-          checkCollectionTemplateId: 12345
-          checkTemplates:
-          - checkId: 1
-            checkTemplateId: 2
-            runConcurrent: false
-            ignoreErrors: false
-            checkTemplates:
-            - checkId: 2
-              checkTemplateId: 3
-              runConcurrent: true
-              ignoreErrors: false
-            - checkId: 3
-              checkTemplateId: 4
-              runConcurrent: true
-              ignoreErrors: true
-          checkCollectionId: 12345
-          objectId: "4711"
-          orgId: cntb
-          status: failed
-          objectType: vserver
-        _links:
-          self: internal/v1/troubleshooting/check-collections/666
       properties:
         data:
           items:
@@ -22005,12 +20917,6 @@ components:
       - data
       type: object
     CheckCollectionCreateRequest:
-      example:
-        accountId: DE-123
-        checkCollectionTemplateId: 12345
-        objectId: "4711"
-        orgId: cntb
-        objectType: vserver
       properties:
         objectType:
           description: Object type to be handled
@@ -22043,6 +20949,7 @@ components:
       type: object
     ExtCheckCollectionResponse:
       example:
+        internal: false
         createdDate: 1998-02-14T12:00:01.654Z
         checks:
         - tenantId: DE
@@ -22057,6 +20964,10 @@ components:
           durationMs: null
           objectType: vserver
           objectId: "42"
+          remedyTemplates:
+          - id: 4
+            name: Instance restart remedy
+            description: Instance will be restarted
         modifiedDate: 2024-12-14T12:00:01.654Z
         tenantId: DE
         customerId: "123456"
@@ -22080,6 +20991,10 @@ components:
         status: failed
         objectType: vserver
       properties:
+        internal:
+          description: Is internal (not shown to the customer)
+          example: false
+          type: boolean
         status:
           description: Status of the handle
           enum:
@@ -22164,6 +21079,10 @@ components:
             durationMs: null
             objectType: vserver
             objectId: "42"
+            remedyTemplates:
+            - id: 4
+              name: Instance restart remedy
+              description: Instance will be restarted
           items:
             $ref: '#/components/schemas/ExtCheckResponse'
           type: array
@@ -22174,6 +21093,7 @@ components:
       - checks
       - createdDate
       - customerId
+      - internal
       - modifiedDate
       - objectId
       - objectType
@@ -22183,7 +21103,8 @@ components:
     ExtCheckCollectionsListResponse:
       example:
         data:
-        - createdDate: 1998-02-14T12:00:01.654Z
+        - internal: false
+          createdDate: 1998-02-14T12:00:01.654Z
           checks:
           - tenantId: DE
             customerId: "12345"
@@ -22197,6 +21118,10 @@ components:
             durationMs: null
             objectType: vserver
             objectId: "42"
+            remedyTemplates:
+            - id: 4
+              name: Instance restart remedy
+              description: Instance will be restarted
           modifiedDate: 2024-12-14T12:00:01.654Z
           tenantId: DE
           customerId: "123456"
@@ -22219,7 +21144,8 @@ components:
           objectId: "4711"
           status: failed
           objectType: vserver
-        - createdDate: 1998-02-14T12:00:01.654Z
+        - internal: false
+          createdDate: 1998-02-14T12:00:01.654Z
           checks:
           - tenantId: DE
             customerId: "12345"
@@ -22233,6 +21159,10 @@ components:
             durationMs: null
             objectType: vserver
             objectId: "42"
+            remedyTemplates:
+            - id: 4
+              name: Instance restart remedy
+              description: Instance will be restarted
           modifiedDate: 2024-12-14T12:00:01.654Z
           tenantId: DE
           customerId: "123456"
@@ -22288,7 +21218,8 @@ components:
     ExtCheckCollectionsGetResponse:
       example:
         data:
-        - createdDate: 1998-02-14T12:00:01.654Z
+        - internal: false
+          createdDate: 1998-02-14T12:00:01.654Z
           checks:
           - tenantId: DE
             customerId: "12345"
@@ -22302,6 +21233,10 @@ components:
             durationMs: null
             objectType: vserver
             objectId: "42"
+            remedyTemplates:
+            - id: 4
+              name: Instance restart remedy
+              description: Instance will be restarted
           modifiedDate: 2024-12-14T12:00:01.654Z
           tenantId: DE
           customerId: "123456"
@@ -22324,7 +21259,8 @@ components:
           objectId: "4711"
           status: failed
           objectType: vserver
-        - createdDate: 1998-02-14T12:00:01.654Z
+        - internal: false
+          createdDate: 1998-02-14T12:00:01.654Z
           checks:
           - tenantId: DE
             customerId: "12345"
@@ -22338,6 +21274,10 @@ components:
             durationMs: null
             objectType: vserver
             objectId: "42"
+            remedyTemplates:
+            - id: 4
+              name: Instance restart remedy
+              description: Instance will be restarted
           modifiedDate: 2024-12-14T12:00:01.654Z
           tenantId: DE
           customerId: "123456"
@@ -22415,6 +21355,11 @@ components:
           description: Will errors be ignored when running this check template
           example: true
           type: boolean
+        remedyTemplates:
+          description: Remedy templates linked to this check template
+          items:
+            $ref: '#/components/schemas/RemedyTemplateSummary'
+          type: array
         checkTemplates:
           description: Nested check templates
           items:
@@ -22426,48 +21371,7 @@ components:
       - runConcurrent
       type: object
     CheckCollectionTemplateResponse:
-      example:
-        accountId: d8d15718-8f0a-4933-8844-6b69b9c2f15f
-        internal: false
-        createdDate: 1998-02-14T12:00:01.654Z
-        modifiedDate: 2024-12-14T12:00:01.654Z
-        name: Instance checks
-        checkCollectionTemplateId: 12345
-        description: Performs all checks for an instance
-        checkTemplates:
-        - checkTemplateId: 2
-          runConcurrent: false
-          ignoreErrors: false
-          checkTemplates:
-          - checkTemplateId: 3
-            runConcurrent: true
-            ignoreErrors: false
-          - checkTemplateId: 4
-            runConcurrent: true
-            ignoreErrors: true
-        orgId: cntb
-        objectType: vserver
       properties:
-        createdDate:
-          description: Creation date
-          example: 1998-02-14T12:00:01.654Z
-          format: date-time
-          type: string
-        modifiedDate:
-          description: Modify date
-          example: 2024-12-14T12:00:01.654Z
-          format: date-time
-          type: string
-        orgId:
-          description: Org id
-          example: cntb
-          minLength: 1
-          type: string
-        accountId:
-          description: Account id
-          example: d8d15718-8f0a-4933-8844-6b69b9c2f15f
-          minLength: 1
-          type: string
         checkCollectionTemplateId:
           description: Check collection template's id
           example: 12345
@@ -22507,6 +21411,26 @@ components:
           items:
             $ref: '#/components/schemas/CheckCollectionTemplatesCheckTemplates'
           type: array
+        createdDate:
+          description: Creation date
+          example: 1998-02-14T12:00:01.654Z
+          format: date-time
+          type: string
+        modifiedDate:
+          description: Modify date
+          example: 2024-12-14T12:00:01.654Z
+          format: date-time
+          type: string
+        orgId:
+          description: Org id
+          example: cntb
+          minLength: 1
+          type: string
+        accountId:
+          description: Account id
+          example: d8d15718-8f0a-4933-8844-6b69b9c2f15f
+          minLength: 1
+          type: string
       required:
       - accountId
       - checkCollectionTemplateId
@@ -22520,55 +21444,6 @@ components:
       - orgId
       type: object
     CheckCollectionTemplatesListResponse:
-      example:
-        data:
-        - accountId: d8d15718-8f0a-4933-8844-6b69b9c2f15f
-          internal: false
-          createdDate: 1998-02-14T12:00:01.654Z
-          modifiedDate: 2024-12-14T12:00:01.654Z
-          name: Instance checks
-          checkCollectionTemplateId: 12345
-          description: Performs all checks for an instance
-          checkTemplates:
-          - checkTemplateId: 2
-            runConcurrent: false
-            ignoreErrors: false
-            checkTemplates:
-            - checkTemplateId: 3
-              runConcurrent: true
-              ignoreErrors: false
-            - checkTemplateId: 4
-              runConcurrent: true
-              ignoreErrors: true
-          orgId: cntb
-          objectType: vserver
-        - accountId: d8d15718-8f0a-4933-8844-6b69b9c2f15f
-          internal: false
-          createdDate: 1998-02-14T12:00:01.654Z
-          modifiedDate: 2024-12-14T12:00:01.654Z
-          name: Instance checks
-          checkCollectionTemplateId: 12345
-          description: Performs all checks for an instance
-          checkTemplates:
-          - checkTemplateId: 2
-            runConcurrent: false
-            ignoreErrors: false
-            checkTemplates:
-            - checkTemplateId: 3
-              runConcurrent: true
-              ignoreErrors: false
-            - checkTemplateId: 4
-              runConcurrent: true
-              ignoreErrors: true
-          orgId: cntb
-          objectType: vserver
-        _links:
-          first: internal/v1/troubleshooting/check-collection-templates?page=1
-          next: internal/v1/troubleshooting/check-collection-templates?page=19
-          self: internal/v1/troubleshooting/check-collection-templates
-          previous: internal/v1/troubleshooting/check-collection-templates?page=18
-          last: internal/v1/troubleshooting/check-collection-templates?page=100
-        _pagination: ""
       properties:
         _pagination:
           allOf:
@@ -22593,50 +21468,6 @@ components:
       - data
       type: object
     CheckCollectionTemplatesGetResponse:
-      example:
-        data:
-        - accountId: d8d15718-8f0a-4933-8844-6b69b9c2f15f
-          internal: false
-          createdDate: 1998-02-14T12:00:01.654Z
-          modifiedDate: 2024-12-14T12:00:01.654Z
-          name: Instance checks
-          checkCollectionTemplateId: 12345
-          description: Performs all checks for an instance
-          checkTemplates:
-          - checkTemplateId: 2
-            runConcurrent: false
-            ignoreErrors: false
-            checkTemplates:
-            - checkTemplateId: 3
-              runConcurrent: true
-              ignoreErrors: false
-            - checkTemplateId: 4
-              runConcurrent: true
-              ignoreErrors: true
-          orgId: cntb
-          objectType: vserver
-        - accountId: d8d15718-8f0a-4933-8844-6b69b9c2f15f
-          internal: false
-          createdDate: 1998-02-14T12:00:01.654Z
-          modifiedDate: 2024-12-14T12:00:01.654Z
-          name: Instance checks
-          checkCollectionTemplateId: 12345
-          description: Performs all checks for an instance
-          checkTemplates:
-          - checkTemplateId: 2
-            runConcurrent: false
-            ignoreErrors: false
-            checkTemplates:
-            - checkTemplateId: 3
-              runConcurrent: true
-              ignoreErrors: false
-            - checkTemplateId: 4
-              runConcurrent: true
-              ignoreErrors: true
-          orgId: cntb
-          objectType: vserver
-        _links:
-          self: internal/v1/troubleshooting/check-collection-templates/666
       properties:
         data:
           items:
@@ -22651,25 +21482,238 @@ components:
       - _links
       - data
       type: object
-    RemedyResponse:
+    ExtCheckCollectionTemplateResponse:
       example:
-        remedyId: 12345
-        note: Remedy failed with timeout, please check the firewall rules and connectivity
-        log: 6 packets transmitted, 0 received, 100% packet loss, time 5107ms
-        orgId: cntb
-        objectType: vserver
-        remedyCollectionId: 12345
-        accountId: d8d15718-8f0a-4933-8844-6b69b9c2f15f
+        internal: false
         createdDate: 1998-02-14T12:00:01.654Z
-        internalNote: Ping failed with error code 123, could be an issue with the
-          route server settings
-        name: Ping remedy
+        name: Instance checks
         modifiedDate: 2024-12-14T12:00:01.654Z
-        remedyTemplateId: 12345
-        durationMs: 4711
-        objectId: "4711"
-        status: failed
+        tenantId: DE
+        customerId: "123456"
+        checkCollectionTemplateId: 12345
+        description: Performs all checks for an instance
+        checkTemplates:
+        - checkTemplateId: 2
+          runConcurrent: false
+          ignoreErrors: false
+          checkTemplates:
+          - checkTemplateId: 3
+            runConcurrent: true
+            ignoreErrors: false
+          - checkTemplateId: 4
+            runConcurrent: true
+            ignoreErrors: true
+        objectType: vserver
       properties:
+        checkCollectionTemplateId:
+          description: Check collection template's id
+          example: 12345
+          type: number
+        name:
+          description: Name of the check collection template
+          example: Instance checks
+          type: string
+        description:
+          description: Description for the check collection template
+          example: Performs all checks for an instance
+          type: string
+        internal:
+          description: Is check collection only internal (not shown to the customer)
+          example: false
+          type: boolean
+        objectType:
+          description: Object type for which the check collection template can be
+            used
+          enum:
+          - vserver
+          example: vserver
+          type: string
+        checkTemplates:
+          description: Check templates which are part of this collection template
+          example:
+          - checkTemplateId: 2
+            runConcurrent: false
+            ignoreErrors: false
+            checkTemplates:
+            - checkTemplateId: 3
+              runConcurrent: true
+              ignoreErrors: false
+            - checkTemplateId: 4
+              runConcurrent: true
+              ignoreErrors: true
+          items:
+            $ref: '#/components/schemas/CheckCollectionTemplatesCheckTemplates'
+          type: array
+        createdDate:
+          description: Creation date
+          example: 1998-02-14T12:00:01.654Z
+          format: date-time
+          type: string
+        modifiedDate:
+          description: Modify date
+          example: 2024-12-14T12:00:01.654Z
+          format: date-time
+          type: string
+        tenantId:
+          description: Tenant id
+          example: DE
+          minLength: 1
+          type: string
+        customerId:
+          description: Customer id
+          example: "123456"
+          minLength: 1
+          type: string
+      required:
+      - checkCollectionTemplateId
+      - checkTemplates
+      - createdDate
+      - customerId
+      - description
+      - internal
+      - modifiedDate
+      - name
+      - objectType
+      - tenantId
+      type: object
+    ExtCheckCollectionTemplatesListResponse:
+      example:
+        data:
+        - internal: false
+          createdDate: 1998-02-14T12:00:01.654Z
+          name: Instance checks
+          modifiedDate: 2024-12-14T12:00:01.654Z
+          tenantId: DE
+          customerId: "123456"
+          checkCollectionTemplateId: 12345
+          description: Performs all checks for an instance
+          checkTemplates:
+          - checkTemplateId: 2
+            runConcurrent: false
+            ignoreErrors: false
+            checkTemplates:
+            - checkTemplateId: 3
+              runConcurrent: true
+              ignoreErrors: false
+            - checkTemplateId: 4
+              runConcurrent: true
+              ignoreErrors: true
+          objectType: vserver
+        - internal: false
+          createdDate: 1998-02-14T12:00:01.654Z
+          name: Instance checks
+          modifiedDate: 2024-12-14T12:00:01.654Z
+          tenantId: DE
+          customerId: "123456"
+          checkCollectionTemplateId: 12345
+          description: Performs all checks for an instance
+          checkTemplates:
+          - checkTemplateId: 2
+            runConcurrent: false
+            ignoreErrors: false
+            checkTemplates:
+            - checkTemplateId: 3
+              runConcurrent: true
+              ignoreErrors: false
+            - checkTemplateId: 4
+              runConcurrent: true
+              ignoreErrors: true
+          objectType: vserver
+        _links:
+          first: v1/troubleshooting/check-collection-templates?page=1
+          next: v1/troubleshooting/check-collection-templates?page=19
+          self: v1/troubleshooting/check-collection-templates
+          previous: v1/troubleshooting/check-collection-templates?page=18
+          last: v1/troubleshooting/check-collection-templates?page=100
+        _pagination: ""
+      properties:
+        _pagination:
+          allOf:
+          - $ref: '#/components/schemas/PaginationMeta'
+          description: Data about pagination like how many results, pages, page size.
+        data:
+          items:
+            $ref: '#/components/schemas/ExtCheckCollectionTemplateResponse'
+          type: array
+        _links:
+          allOf:
+          - $ref: '#/components/schemas/Links'
+          example:
+            first: v1/troubleshooting/check-collection-templates?page=1
+            next: v1/troubleshooting/check-collection-templates?page=19
+            self: v1/troubleshooting/check-collection-templates
+            previous: v1/troubleshooting/check-collection-templates?page=18
+            last: v1/troubleshooting/check-collection-templates?page=100
+      required:
+      - _links
+      - _pagination
+      - data
+      type: object
+    ExtCheckCollectionTemplatesGetResponse:
+      example:
+        data:
+        - internal: false
+          createdDate: 1998-02-14T12:00:01.654Z
+          name: Instance checks
+          modifiedDate: 2024-12-14T12:00:01.654Z
+          tenantId: DE
+          customerId: "123456"
+          checkCollectionTemplateId: 12345
+          description: Performs all checks for an instance
+          checkTemplates:
+          - checkTemplateId: 2
+            runConcurrent: false
+            ignoreErrors: false
+            checkTemplates:
+            - checkTemplateId: 3
+              runConcurrent: true
+              ignoreErrors: false
+            - checkTemplateId: 4
+              runConcurrent: true
+              ignoreErrors: true
+          objectType: vserver
+        - internal: false
+          createdDate: 1998-02-14T12:00:01.654Z
+          name: Instance checks
+          modifiedDate: 2024-12-14T12:00:01.654Z
+          tenantId: DE
+          customerId: "123456"
+          checkCollectionTemplateId: 12345
+          description: Performs all checks for an instance
+          checkTemplates:
+          - checkTemplateId: 2
+            runConcurrent: false
+            ignoreErrors: false
+            checkTemplates:
+            - checkTemplateId: 3
+              runConcurrent: true
+              ignoreErrors: false
+            - checkTemplateId: 4
+              runConcurrent: true
+              ignoreErrors: true
+          objectType: vserver
+        _links:
+          self: v1/troubleshooting/check-collection-templates/666
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/ExtCheckCollectionTemplateResponse'
+          type: array
+        _links:
+          allOf:
+          - $ref: '#/components/schemas/SelfLinks'
+          example:
+            self: v1/troubleshooting/check-collection-templates/666
+      required:
+      - _links
+      - data
+      type: object
+    RemedyResponse:
+      properties:
+        internal:
+          description: Is internal (not shown to the customer)
+          example: false
+          type: boolean
         status:
           description: Status of the handle
           enum:
@@ -22709,9 +21753,29 @@ components:
           example: Ping remedy
           type: string
         note:
-          description: Note to be shown to the customer
-          example: Remedy failed with timeout, please check the firewall rules and
-            connectivity
+          description: 'Translation key for the customer-facing remedy note. Possible
+            values: fail_remedy_failed, success_remedy_successful, remedy_internal_error,
+            instance_firewall_detach_successful, instance_live_migration_successful,
+            instance_reboot_successful'
+          enum:
+          - fail_remedy_failed
+          - success_remedy_successful
+          - remedy_internal_error
+          - instance_firewall_detach_successful
+          - instance_live_migration_successful
+          - instance_reboot_successful
+          example: success_remedy_successful
+          type: string
+        internalNote:
+          description: 'Translation key for the internal-only remedy note (agent view).
+            Possible values: remedy_internal_error_internal, instance_firewall_detach_successful_internal,
+            instance_live_migration_successful_internal, instance_reboot_successful_internal'
+          enum:
+          - remedy_internal_error_internal
+          - instance_firewall_detach_successful_internal
+          - instance_live_migration_successful_internal
+          - instance_reboot_successful_internal
+          example: remedy_internal_error_internal
           type: string
         durationMs:
           description: Duration of the remedy in milliseconds
@@ -22737,11 +21801,6 @@ components:
           example: d8d15718-8f0a-4933-8844-6b69b9c2f15f
           minLength: 1
           type: string
-        internalNote:
-          description: Note which is shown only internally to the agent
-          example: Ping failed with error code 123, could be an issue with the route
-            server settings
-          type: string
         log:
           description: Detailed log of the check execution
           example: 6 packets transmitted, 0 received, 100% packet loss, time 5107ms
@@ -22750,6 +21809,7 @@ components:
       - accountId
       - createdDate
       - durationMs
+      - internal
       - internalNote
       - log
       - modifiedDate
@@ -22764,47 +21824,6 @@ components:
       - status
       type: object
     RemediesListResponse:
-      example:
-        data:
-        - remedyId: 12345
-          note: Remedy failed with timeout, please check the firewall rules and connectivity
-          log: 6 packets transmitted, 0 received, 100% packet loss, time 5107ms
-          orgId: cntb
-          objectType: vserver
-          remedyCollectionId: 12345
-          accountId: d8d15718-8f0a-4933-8844-6b69b9c2f15f
-          createdDate: 1998-02-14T12:00:01.654Z
-          internalNote: Ping failed with error code 123, could be an issue with the
-            route server settings
-          name: Ping remedy
-          modifiedDate: 2024-12-14T12:00:01.654Z
-          remedyTemplateId: 12345
-          durationMs: 4711
-          objectId: "4711"
-          status: failed
-        - remedyId: 12345
-          note: Remedy failed with timeout, please check the firewall rules and connectivity
-          log: 6 packets transmitted, 0 received, 100% packet loss, time 5107ms
-          orgId: cntb
-          objectType: vserver
-          remedyCollectionId: 12345
-          accountId: d8d15718-8f0a-4933-8844-6b69b9c2f15f
-          createdDate: 1998-02-14T12:00:01.654Z
-          internalNote: Ping failed with error code 123, could be an issue with the
-            route server settings
-          name: Ping remedy
-          modifiedDate: 2024-12-14T12:00:01.654Z
-          remedyTemplateId: 12345
-          durationMs: 4711
-          objectId: "4711"
-          status: failed
-        _links:
-          first: internal/v1/troubleshooting/remedies?page=1
-          next: internal/v1/troubleshooting/remedies?page=19
-          self: internal/v1/troubleshooting/remedies
-          previous: internal/v1/troubleshooting/remedies?page=18
-          last: internal/v1/troubleshooting/remedies?page=100
-        _pagination: ""
       properties:
         _pagination:
           allOf:
@@ -22829,42 +21848,6 @@ components:
       - data
       type: object
     RemediesGetResponse:
-      example:
-        data:
-        - remedyId: 12345
-          note: Remedy failed with timeout, please check the firewall rules and connectivity
-          log: 6 packets transmitted, 0 received, 100% packet loss, time 5107ms
-          orgId: cntb
-          objectType: vserver
-          remedyCollectionId: 12345
-          accountId: d8d15718-8f0a-4933-8844-6b69b9c2f15f
-          createdDate: 1998-02-14T12:00:01.654Z
-          internalNote: Ping failed with error code 123, could be an issue with the
-            route server settings
-          name: Ping remedy
-          modifiedDate: 2024-12-14T12:00:01.654Z
-          remedyTemplateId: 12345
-          durationMs: 4711
-          objectId: "4711"
-          status: failed
-        - remedyId: 12345
-          note: Remedy failed with timeout, please check the firewall rules and connectivity
-          log: 6 packets transmitted, 0 received, 100% packet loss, time 5107ms
-          orgId: cntb
-          objectType: vserver
-          remedyCollectionId: 12345
-          accountId: d8d15718-8f0a-4933-8844-6b69b9c2f15f
-          createdDate: 1998-02-14T12:00:01.654Z
-          internalNote: Ping failed with error code 123, could be an issue with the
-            route server settings
-          name: Ping remedy
-          modifiedDate: 2024-12-14T12:00:01.654Z
-          remedyTemplateId: 12345
-          durationMs: 4711
-          objectId: "4711"
-          status: failed
-        _links:
-          self: internal/v1/troubleshooting/checks/666
       properties:
         data:
           items:
@@ -22880,13 +21863,6 @@ components:
       - data
       type: object
     RemediesCreateRequest:
-      example:
-        remedyCollectionId: 12345
-        accountId: DE-123
-        remedyTemplateId: 12345
-        objectId: "4711"
-        orgId: cntb
-        objectType: vserver
       properties:
         objectType:
           description: Object type to be handled
@@ -22924,10 +21900,12 @@ components:
     ExtRemedyResponse:
       example:
         remedyId: 12345
-        note: Remedy failed with timeout, please check the firewall rules and connectivity
+        note: success_remedy_successful
+        internal: false
         objectType: vserver
         remedyCollectionId: 12345
         createdDate: 1998-02-14T12:00:01.654Z
+        internalNote: remedy_internal_error_internal
         name: Ping remedy
         modifiedDate: 2024-12-14T12:00:01.654Z
         tenantId: DE
@@ -22937,6 +21915,10 @@ components:
         objectId: "4711"
         status: failed
       properties:
+        internal:
+          description: Is internal (not shown to the customer)
+          example: false
+          type: boolean
         status:
           description: Status of the handle
           enum:
@@ -22976,9 +21958,29 @@ components:
           example: Ping remedy
           type: string
         note:
-          description: Note to be shown to the customer
-          example: Remedy failed with timeout, please check the firewall rules and
-            connectivity
+          description: 'Translation key for the customer-facing remedy note. Possible
+            values: fail_remedy_failed, success_remedy_successful, remedy_internal_error,
+            instance_firewall_detach_successful, instance_live_migration_successful,
+            instance_reboot_successful'
+          enum:
+          - fail_remedy_failed
+          - success_remedy_successful
+          - remedy_internal_error
+          - instance_firewall_detach_successful
+          - instance_live_migration_successful
+          - instance_reboot_successful
+          example: success_remedy_successful
+          type: string
+        internalNote:
+          description: 'Translation key for the internal-only remedy note (agent view).
+            Possible values: remedy_internal_error_internal, instance_firewall_detach_successful_internal,
+            instance_live_migration_successful_internal, instance_reboot_successful_internal'
+          enum:
+          - remedy_internal_error_internal
+          - instance_firewall_detach_successful_internal
+          - instance_live_migration_successful_internal
+          - instance_reboot_successful_internal
+          example: remedy_internal_error_internal
           type: string
         durationMs:
           description: Duration of the remedy in milliseconds
@@ -23008,6 +22010,8 @@ components:
       - createdDate
       - customerId
       - durationMs
+      - internal
+      - internalNote
       - modifiedDate
       - name
       - note
@@ -23023,10 +22027,12 @@ components:
       example:
         data:
         - remedyId: 12345
-          note: Remedy failed with timeout, please check the firewall rules and connectivity
+          note: success_remedy_successful
+          internal: false
           objectType: vserver
           remedyCollectionId: 12345
           createdDate: 1998-02-14T12:00:01.654Z
+          internalNote: remedy_internal_error_internal
           name: Ping remedy
           modifiedDate: 2024-12-14T12:00:01.654Z
           tenantId: DE
@@ -23036,10 +22042,12 @@ components:
           objectId: "4711"
           status: failed
         - remedyId: 12345
-          note: Remedy failed with timeout, please check the firewall rules and connectivity
+          note: success_remedy_successful
+          internal: false
           objectType: vserver
           remedyCollectionId: 12345
           createdDate: 1998-02-14T12:00:01.654Z
+          internalNote: remedy_internal_error_internal
           name: Ping remedy
           modifiedDate: 2024-12-14T12:00:01.654Z
           tenantId: DE
@@ -23082,10 +22090,12 @@ components:
       example:
         data:
         - remedyId: 12345
-          note: Remedy failed with timeout, please check the firewall rules and connectivity
+          note: success_remedy_successful
+          internal: false
           objectType: vserver
           remedyCollectionId: 12345
           createdDate: 1998-02-14T12:00:01.654Z
+          internalNote: remedy_internal_error_internal
           name: Ping remedy
           modifiedDate: 2024-12-14T12:00:01.654Z
           tenantId: DE
@@ -23095,10 +22105,12 @@ components:
           objectId: "4711"
           status: failed
         - remedyId: 12345
-          note: Remedy failed with timeout, please check the firewall rules and connectivity
+          note: success_remedy_successful
+          internal: false
           objectType: vserver
           remedyCollectionId: 12345
           createdDate: 1998-02-14T12:00:01.654Z
+          internalNote: remedy_internal_error_internal
           name: Ping remedy
           modifiedDate: 2024-12-14T12:00:01.654Z
           tenantId: DE
@@ -23154,20 +22166,6 @@ components:
       - remedyTemplateId
       type: object
     RemedyTemplateResponse:
-      example:
-        internal: false
-        requirements: '{ reboot: true }'
-        description: Performs a ping remedy on an instance
-        checkTemplateIds: 1, 2, ...
-        orgId: cntb
-        objectType: vserver
-        remedyClass: PingRemedy.ts
-        accountId: d8d15718-8f0a-4933-8844-6b69b9c2f15f
-        collectorClass: InstanceCollector.ts
-        createdDate: 1998-02-14T12:00:01.654Z
-        modifiedDate: 2024-12-14T12:00:01.654Z
-        name: Ping remedy instance
-        remedyTemplateId: 12345
       properties:
         createdDate:
           description: Creation date
@@ -23245,41 +22243,6 @@ components:
       - requirements
       type: object
     RemedyTemplatesListResponse:
-      example:
-        data:
-        - internal: false
-          requirements: '{ reboot: true }'
-          description: Performs a ping remedy on an instance
-          checkTemplateIds: 1, 2, ...
-          orgId: cntb
-          objectType: vserver
-          remedyClass: PingRemedy.ts
-          accountId: d8d15718-8f0a-4933-8844-6b69b9c2f15f
-          collectorClass: InstanceCollector.ts
-          createdDate: 1998-02-14T12:00:01.654Z
-          modifiedDate: 2024-12-14T12:00:01.654Z
-          name: Ping remedy instance
-          remedyTemplateId: 12345
-        - internal: false
-          requirements: '{ reboot: true }'
-          description: Performs a ping remedy on an instance
-          checkTemplateIds: 1, 2, ...
-          orgId: cntb
-          objectType: vserver
-          remedyClass: PingRemedy.ts
-          accountId: d8d15718-8f0a-4933-8844-6b69b9c2f15f
-          collectorClass: InstanceCollector.ts
-          createdDate: 1998-02-14T12:00:01.654Z
-          modifiedDate: 2024-12-14T12:00:01.654Z
-          name: Ping remedy instance
-          remedyTemplateId: 12345
-        _links:
-          first: internal/v1/troubleshooting/remedy-templates?page=1
-          next: internal/v1/troubleshooting/remedy-templates?page=19
-          self: internal/v1/troubleshooting/remedy-templates
-          previous: internal/v1/troubleshooting/remedy-templates?page=18
-          last: internal/v1/troubleshooting/remedy-templates?page=100
-        _pagination: ""
       properties:
         _pagination:
           allOf:
@@ -23304,36 +22267,6 @@ components:
       - data
       type: object
     RemedyTemplatesGetResponse:
-      example:
-        data:
-        - internal: false
-          requirements: '{ reboot: true }'
-          description: Performs a ping remedy on an instance
-          checkTemplateIds: 1, 2, ...
-          orgId: cntb
-          objectType: vserver
-          remedyClass: PingRemedy.ts
-          accountId: d8d15718-8f0a-4933-8844-6b69b9c2f15f
-          collectorClass: InstanceCollector.ts
-          createdDate: 1998-02-14T12:00:01.654Z
-          modifiedDate: 2024-12-14T12:00:01.654Z
-          name: Ping remedy instance
-          remedyTemplateId: 12345
-        - internal: false
-          requirements: '{ reboot: true }'
-          description: Performs a ping remedy on an instance
-          checkTemplateIds: 1, 2, ...
-          orgId: cntb
-          objectType: vserver
-          remedyClass: PingRemedy.ts
-          accountId: d8d15718-8f0a-4933-8844-6b69b9c2f15f
-          collectorClass: InstanceCollector.ts
-          createdDate: 1998-02-14T12:00:01.654Z
-          modifiedDate: 2024-12-14T12:00:01.654Z
-          name: Ping remedy instance
-          remedyTemplateId: 12345
-        _links:
-          self: internal/v1/troubleshooting/remedy-templates/666
       properties:
         data:
           items:
@@ -23420,21 +22353,6 @@ components:
       - prev
       type: object
     ChecksAuditResponse:
-      example:
-        auditId: 12345
-        traceId: 78E9A428-94E9-4A2A-92F5-26038C6884F
-        foreignUsername: John.Doe
-        foreignChangedBy: c4c800ff-e524-47dd-9543-71dfc8b91113
-        changes: ""
-        orgId: cntb
-        accountId: d8d15718-8f0a-4933-8844-6b69b9c2f15f
-        createdDate: 1998-02-14T12:00:01.654Z
-        changedBy: c4c800ff-e524-47dd-9543-71dfc8b91113
-        requestId: A2F56FAF-18N0-4893-11HG-R312M1E4FEC5
-        modifiedDate: 2024-12-14T12:00:01.654Z
-        action: CREATED
-        checkId: 12345
-        username: John.Doe
       properties:
         createdDate:
           description: Creation date
@@ -23522,43 +22440,6 @@ components:
       - username
       type: object
     ChecksAuditListResponse:
-      example:
-        data:
-        - auditId: 12345
-          traceId: 78E9A428-94E9-4A2A-92F5-26038C6884F
-          foreignUsername: John.Doe
-          foreignChangedBy: c4c800ff-e524-47dd-9543-71dfc8b91113
-          changes: ""
-          orgId: cntb
-          accountId: d8d15718-8f0a-4933-8844-6b69b9c2f15f
-          createdDate: 1998-02-14T12:00:01.654Z
-          changedBy: c4c800ff-e524-47dd-9543-71dfc8b91113
-          requestId: A2F56FAF-18N0-4893-11HG-R312M1E4FEC5
-          modifiedDate: 2024-12-14T12:00:01.654Z
-          action: CREATED
-          checkId: 12345
-          username: John.Doe
-        - auditId: 12345
-          traceId: 78E9A428-94E9-4A2A-92F5-26038C6884F
-          foreignUsername: John.Doe
-          foreignChangedBy: c4c800ff-e524-47dd-9543-71dfc8b91113
-          changes: ""
-          orgId: cntb
-          accountId: d8d15718-8f0a-4933-8844-6b69b9c2f15f
-          createdDate: 1998-02-14T12:00:01.654Z
-          changedBy: c4c800ff-e524-47dd-9543-71dfc8b91113
-          requestId: A2F56FAF-18N0-4893-11HG-R312M1E4FEC5
-          modifiedDate: 2024-12-14T12:00:01.654Z
-          action: CREATED
-          checkId: 12345
-          username: John.Doe
-        _links:
-          first: internal/v1/troubleshooting/checks/audits?page=1
-          previous: internal/v1/troubleshooting/checks/audits?page=3
-          next: internal/v1/troubleshooting/checks/audits?page=5
-          last: internal/v1/troubleshooting/checks/audits?page=10
-          self: internal/v1/troubleshooting/checks/audits
-        _pagination: ""
       properties:
         _pagination:
           allOf:
@@ -23583,15 +22464,6 @@ components:
       - data
       type: object
     ChecksReplayRequest:
-      example:
-        accountId: DE-123
-        creationEndTime: 2021-06-03T10:27:12Z
-        rate: 10
-        checkIds:
-        - 12345
-        - 23456
-        creationStartTime: 2021-06-03T06:27:12Z
-        orgId: cntb
       properties:
         orgId:
           description: Id of your organization, if unknown please contact us
@@ -23629,12 +22501,6 @@ components:
       - orgId
       type: object
     AuditCountResponse:
-      example:
-        accountId: d8d15718-8f0a-4933-8844-6b69b9c2f15f
-        createdDate: 1998-02-14T12:00:01.654Z
-        modifiedDate: 2024-12-14T12:00:01.654Z
-        count: 5
-        orgId: cntb
       properties:
         createdDate:
           description: Creation date
@@ -23668,18 +22534,6 @@ components:
       - orgId
       type: object
     ReplayResponse:
-      example:
-        data:
-        - accountId: d8d15718-8f0a-4933-8844-6b69b9c2f15f
-          createdDate: 1998-02-14T12:00:01.654Z
-          modifiedDate: 2024-12-14T12:00:01.654Z
-          count: 5
-          orgId: cntb
-        - accountId: d8d15718-8f0a-4933-8844-6b69b9c2f15f
-          createdDate: 1998-02-14T12:00:01.654Z
-          modifiedDate: 2024-12-14T12:00:01.654Z
-          count: 5
-          orgId: cntb
       properties:
         data:
           items:
@@ -23689,21 +22543,6 @@ components:
       - data
       type: object
     CheckCollectionsAuditResponse:
-      example:
-        auditId: 12345
-        traceId: 78E9A428-94E9-4A2A-92F5-26038C6884F
-        foreignUsername: John.Doe
-        foreignChangedBy: c4c800ff-e524-47dd-9543-71dfc8b91113
-        changes: ""
-        orgId: cntb
-        accountId: d8d15718-8f0a-4933-8844-6b69b9c2f15f
-        createdDate: 1998-02-14T12:00:01.654Z
-        changedBy: c4c800ff-e524-47dd-9543-71dfc8b91113
-        requestId: A2F56FAF-18N0-4893-11HG-R312M1E4FEC5
-        modifiedDate: 2024-12-14T12:00:01.654Z
-        action: CREATED
-        checkCollectionId: 12345
-        username: John.Doe
       properties:
         createdDate:
           description: Creation date
@@ -23791,43 +22630,6 @@ components:
       - username
       type: object
     CheckCollectionsAuditListResponse:
-      example:
-        data:
-        - auditId: 12345
-          traceId: 78E9A428-94E9-4A2A-92F5-26038C6884F
-          foreignUsername: John.Doe
-          foreignChangedBy: c4c800ff-e524-47dd-9543-71dfc8b91113
-          changes: ""
-          orgId: cntb
-          accountId: d8d15718-8f0a-4933-8844-6b69b9c2f15f
-          createdDate: 1998-02-14T12:00:01.654Z
-          changedBy: c4c800ff-e524-47dd-9543-71dfc8b91113
-          requestId: A2F56FAF-18N0-4893-11HG-R312M1E4FEC5
-          modifiedDate: 2024-12-14T12:00:01.654Z
-          action: CREATED
-          checkCollectionId: 12345
-          username: John.Doe
-        - auditId: 12345
-          traceId: 78E9A428-94E9-4A2A-92F5-26038C6884F
-          foreignUsername: John.Doe
-          foreignChangedBy: c4c800ff-e524-47dd-9543-71dfc8b91113
-          changes: ""
-          orgId: cntb
-          accountId: d8d15718-8f0a-4933-8844-6b69b9c2f15f
-          createdDate: 1998-02-14T12:00:01.654Z
-          changedBy: c4c800ff-e524-47dd-9543-71dfc8b91113
-          requestId: A2F56FAF-18N0-4893-11HG-R312M1E4FEC5
-          modifiedDate: 2024-12-14T12:00:01.654Z
-          action: CREATED
-          checkCollectionId: 12345
-          username: John.Doe
-        _links:
-          first: internal/v1/troubleshooting/check-collections/audits?page=1
-          previous: internal/v1/troubleshooting/check-collections/audits?page=3
-          next: internal/v1/troubleshooting/check-collections/audits?page=5
-          last: internal/v1/troubleshooting/check-collections/audits?page=10
-          self: internal/v1/troubleshooting/check-collections/audits
-        _pagination: ""
       properties:
         _pagination:
           allOf:
@@ -23852,15 +22654,6 @@ components:
       - data
       type: object
     CheckCollectionsReplayRequest:
-      example:
-        checkCollectionIds:
-        - 12345
-        - 23456
-        accountId: DE-123
-        creationEndTime: 2021-06-03T10:27:12Z
-        rate: 10
-        creationStartTime: 2021-06-03T06:27:12Z
-        orgId: cntb
       properties:
         orgId:
           description: Id of your organization, if unknown please contact us
@@ -23898,21 +22691,6 @@ components:
       - orgId
       type: object
     RemediesAuditResponse:
-      example:
-        auditId: 12345
-        traceId: 78E9A428-94E9-4A2A-92F5-26038C6884F
-        foreignUsername: John.Doe
-        remedyId: 12345
-        foreignChangedBy: c4c800ff-e524-47dd-9543-71dfc8b91113
-        changes: ""
-        orgId: cntb
-        accountId: d8d15718-8f0a-4933-8844-6b69b9c2f15f
-        createdDate: 1998-02-14T12:00:01.654Z
-        changedBy: c4c800ff-e524-47dd-9543-71dfc8b91113
-        requestId: A2F56FAF-18N0-4893-11HG-R312M1E4FEC5
-        modifiedDate: 2024-12-14T12:00:01.654Z
-        action: CREATED
-        username: John.Doe
       properties:
         createdDate:
           description: Creation date
@@ -24000,43 +22778,6 @@ components:
       - username
       type: object
     RemediesAuditListResponse:
-      example:
-        data:
-        - auditId: 12345
-          traceId: 78E9A428-94E9-4A2A-92F5-26038C6884F
-          foreignUsername: John.Doe
-          remedyId: 12345
-          foreignChangedBy: c4c800ff-e524-47dd-9543-71dfc8b91113
-          changes: ""
-          orgId: cntb
-          accountId: d8d15718-8f0a-4933-8844-6b69b9c2f15f
-          createdDate: 1998-02-14T12:00:01.654Z
-          changedBy: c4c800ff-e524-47dd-9543-71dfc8b91113
-          requestId: A2F56FAF-18N0-4893-11HG-R312M1E4FEC5
-          modifiedDate: 2024-12-14T12:00:01.654Z
-          action: CREATED
-          username: John.Doe
-        - auditId: 12345
-          traceId: 78E9A428-94E9-4A2A-92F5-26038C6884F
-          foreignUsername: John.Doe
-          remedyId: 12345
-          foreignChangedBy: c4c800ff-e524-47dd-9543-71dfc8b91113
-          changes: ""
-          orgId: cntb
-          accountId: d8d15718-8f0a-4933-8844-6b69b9c2f15f
-          createdDate: 1998-02-14T12:00:01.654Z
-          changedBy: c4c800ff-e524-47dd-9543-71dfc8b91113
-          requestId: A2F56FAF-18N0-4893-11HG-R312M1E4FEC5
-          modifiedDate: 2024-12-14T12:00:01.654Z
-          action: CREATED
-          username: John.Doe
-        _links:
-          first: internal/v1/troubleshooting/remedies/audits?page=1
-          previous: internal/v1/troubleshooting/remedies/audits?page=3
-          next: internal/v1/troubleshooting/remedies/audits?page=5
-          last: internal/v1/troubleshooting/remedies/audits?page=10
-          self: internal/v1/troubleshooting/remedies/audits
-        _pagination: ""
       properties:
         _pagination:
           allOf:
@@ -24061,15 +22802,6 @@ components:
       - data
       type: object
     RemediesReplayRequest:
-      example:
-        accountId: DE-123
-        creationEndTime: 2021-06-03T10:27:12Z
-        remedyIds:
-        - 12345
-        - 23456
-        rate: 10
-        creationStartTime: 2021-06-03T06:27:12Z
-        orgId: cntb
       properties:
         orgId:
           description: Id of your organization, if unknown please contact us
@@ -24988,6 +23720,87 @@ components:
       - _pagination
       - data
       type: object
+    CmsErrorsResponse:
+      properties:
+        errors:
+          description: Machine-readable error codes from CMS
+          example:
+          - invalid_token
+          - invalid_order_id
+          items:
+            type: string
+          type: array
+      required:
+      - errors
+      type: object
+    RegionChangeRequest:
+      example:
+        method: installation
+        region: EU
+      properties:
+        region:
+          description: Target region identifier passed to CMS
+          example: EU
+          type: string
+        method:
+          description: Region change method as defined by CMS
+          example: installation
+          type: string
+      required:
+      - method
+      - region
+      type: object
+    RegionChangeResponseData:
+      example:
+        ticketNumber: 123456
+        tenantId: DE
+        customerId: "54321"
+      properties:
+        tenantId:
+          description: Your customer tenant id
+          example: DE
+          minLength: 1
+          type: string
+        customerId:
+          description: Your customer number
+          example: "54321"
+          minLength: 1
+          type: string
+        ticketNumber:
+          description: Support ticket number created for the region change
+          example: 123456
+          format: int64
+          type: integer
+      required:
+      - customerId
+      - tenantId
+      - ticketNumber
+      type: object
+    InstanceRegionChangeResponse:
+      example:
+        data:
+        - ticketNumber: 123456
+          tenantId: DE
+          customerId: "54321"
+        - ticketNumber: 123456
+          tenantId: DE
+          customerId: "54321"
+        _links:
+          self: /v1/compute/instances/12345/regionChange
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/RegionChangeResponseData'
+          type: array
+        _links:
+          allOf:
+          - $ref: '#/components/schemas/SelfLinks'
+          example:
+            self: /v1/compute/instances/12345/regionChange
+      required:
+      - _links
+      - data
+      type: object
     InstanceResponse:
       example:
         cancelDate: 2021-06-03T00:00:00.000+0000
@@ -25353,7 +24166,8 @@ components:
         displayName: VPS
       properties:
         displayName:
-          description: The display name of the instance
+          description: The display name of the instance. Pass an empty string to clear
+            it.
           example: VPS
           maxLength: 255
           type: string
@@ -25731,7 +24545,8 @@ components:
           format: int64
           type: integer
         displayName:
-          description: The display name of the instance
+          description: The display name of the instance. Pass an empty string to leave
+            it unset.
           example: VPS
           maxLength: 255
           type: string
@@ -30539,6 +29354,7 @@ x-tagGroups:
   - Users
   - Users Object Storage Credentials
   - Roles
+  - User Accounts
   - Users Audits
   - Roles Audits
 - name: Secrets
@@ -30564,19 +29380,7 @@ x-tagGroups:
   - Firewalls Audits
 - name: Troubleshooting
   tags:
-  - Accounts
-  - Internal Check Templates
-  - Internal Checks
-  - Internal Check Audits
-  - Internal Check Replay
   - Checks
-  - Internal Check Collection Templates
-  - Internal Check Collections
-  - Internal Check Collection Audits
-  - Internal Check Collection Replay
+  - Check Collection Templates
   - Check Collections
-  - Internal Remedies
-  - Internal Remedy Audits
-  - Internal Remedy Replay
   - Remedies
-  - Internal Remedy Templates

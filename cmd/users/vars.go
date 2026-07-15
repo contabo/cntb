@@ -52,7 +52,6 @@ var (
 var (
 	updateUserFirstName string
 	updateUserLastName  string
-	updateUserEmail     string
 	updateIsUserEnabled string
 	updateIsTotpEnabeld string
 	updateRoles         []int64

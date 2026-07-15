@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**DisplayName** | Pointer to **string** | The display name of the instance | [optional] 
+**DisplayName** | Pointer to **string** | The display name of the instance. Pass an empty string to clear it. | [optional] 
 
 ## Methods
 

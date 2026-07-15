@@ -39,7 +39,7 @@ import (
 
 func main() {
     xRequestId := "04e0f898-37b4-48bc-a794-1a57abe6aa31" // string | [Uuid4](https://en.wikipedia.org/wiki/Universally_unique_identifier#Version_4_(random)) to identify individual requests for support cases. You can use [uuidgenerator](https://www.uuidgenerator.net/version4) to generate them manually.
-    createUserRequest := *openapiclient.NewCreateUserRequest("john.doe@example.com", false, false, "de") // CreateUserRequest | 
+    createUserRequest := *openapiclient.NewCreateUserRequest("John", "Doe", "john.doe@example.com", false, false, "de") // CreateUserRequest | 
     xTraceId := "xTraceId_example" // string | Identifier to trace group of requests. (optional)
 
     configuration := openapiclient.NewConfiguration()
@@ -589,7 +589,7 @@ Name | Type | Description  | Notes
 
 ## RetrieveUserList
 
-> ListUserResponse RetrieveUserList(ctx).XRequestId(xRequestId).XTraceId(xTraceId).Page(page).Size(size).OrderBy(orderBy).Email(email).Enabled(enabled).Owner(owner).Execute()
+> ListUserResponse RetrieveUserList(ctx).XRequestId(xRequestId).XTraceId(xTraceId).Page(page).Size(size).OrderBy(orderBy).Email(email).Enabled(enabled).Default_(default_).Owner(owner).Search(search).Execute()
 
 List users
 
@@ -615,11 +615,13 @@ func main() {
     orderBy := []string{"Inner_example"} // []string | Specify fields and ordering (ASC for ascending, DESC for descending) in following format `field:ASC|DESC`. (optional)
     email := "john.doe@example.com" // string | Filter as substring match for user emails. (optional)
     enabled := true // bool | Filter if user is enabled or not. (optional)
+    default_ := true // bool | Filter if user is default account or not. (optional)
     owner := true // bool | Filter if user is owner or not. (optional)
+    search := "John Doe" // string | Full text search when listing the users. Can be searched by `first name`, `last name`, `email` or `first name` and `last name` combined (optional)
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.UsersApi.RetrieveUserList(context.Background()).XRequestId(xRequestId).XTraceId(xTraceId).Page(page).Size(size).OrderBy(orderBy).Email(email).Enabled(enabled).Owner(owner).Execute()
+    resp, r, err := api_client.UsersApi.RetrieveUserList(context.Background()).XRequestId(xRequestId).XTraceId(xTraceId).Page(page).Size(size).OrderBy(orderBy).Email(email).Enabled(enabled).Default_(default_).Owner(owner).Search(search).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `UsersApi.RetrieveUserList``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -647,7 +649,9 @@ Name | Type | Description  | Notes
  **orderBy** | **[]string** | Specify fields and ordering (ASC for ascending, DESC for descending) in following format &#x60;field:ASC|DESC&#x60;. | 
  **email** | **string** | Filter as substring match for user emails. | 
  **enabled** | **bool** | Filter if user is enabled or not. | 
+ **default_** | **bool** | Filter if user is default account or not. | 
  **owner** | **bool** | Filter if user is owner or not. | 
+ **search** | **string** | Full text search when listing the users. Can be searched by &#x60;first name&#x60;, &#x60;last name&#x60;, &#x60;email&#x60; or &#x60;first name&#x60; and &#x60;last name&#x60; combined | 
 
 ### Return type
 

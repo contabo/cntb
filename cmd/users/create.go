@@ -34,12 +34,8 @@ var userManagementCreateCmd = &cobra.Command{
 			if createRoles != nil {
 				createUserRequest.Roles = &createRoles
 			}
-			if createUserFirstName != "" {
-				createUserRequest.FirstName = &createUserFirstName
-			}
-			if createUserLastName != "" {
-				createUserRequest.LastName = &createUserLastName
-			}
+			createUserRequest.FirstName = createUserFirstName
+			createUserRequest.LastName = createUserLastName
 		default:
 			// from file / stdin
 			var requestFromFile userManagementClient.CreateUserRequest
@@ -89,6 +85,14 @@ var userManagementCreateCmd = &cobra.Command{
 
 		if contaboCmd.InputFile == "" {
 			// arguments required
+			if createUserFirstName == "" {
+				cmd.Help()
+				log.Fatal("Argument firstName is empty. Please provide one.")
+			}
+			if createUserLastName == "" {
+				cmd.Help()
+				log.Fatal("Argument lastName is empty. Please provide one.")
+			}
 			if createUserEmail == "" {
 				cmd.Help()
 				log.Fatal("Argument email is empty. Please provide one.")

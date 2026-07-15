@@ -12,7 +12,7 @@ Name | Type | Description | Notes
 **UserData** | Pointer to **string** | [Cloud-Init](https://cloud-init.io/) Config in order to customize during start of compute instance. | [optional] 
 **License** | Pointer to **string** | Additional licence in order to enhance your chosen product, mainly needed for software licenses on your product (not needed for windows). | [optional] 
 **Period** | **int64** | Initial contract period in months. Available periods are: 1, 3, 6 and 12 months. Default to 1 month | [default to 1]
-**DisplayName** | Pointer to **string** | The display name of the instance | [optional] 
+**DisplayName** | Pointer to **string** | The display name of the instance. Pass an empty string to leave it unset. | [optional] 
 **DefaultUser** | Pointer to **string** | Default user name created for login during (re-)installation with administrative privileges. Allowed values for Linux/BSD are &#x60;admin&#x60; (use sudo to apply administrative privileges like root) or &#x60;root&#x60;. Allowed values for Windows are &#x60;admin&#x60; (has administrative privileges like administrator) or &#x60;administrator&#x60;. | [optional] [default to "admin"]
 **AddOns** | Pointer to [**CreateInstanceAddons**](CreateInstanceAddons.md) | Set attributes in the addons object for the corresponding ones that need to be added to the instance | [optional] 
 **ApplicationId** | Pointer to **string** | Application ID | [optional] 

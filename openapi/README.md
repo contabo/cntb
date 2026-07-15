@@ -87,11 +87,87 @@ Invoke-WebRequest -Uri 'https://api.contabo.com/v1/compute/instances' -Method 'G
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
    ```sh
    cntb config set-credentials --oauth2-clientid=<ClientId from Customer Control Panel> --oauth2-client-secret=<ClientSecret from Customer Control Panel> --oauth2-user=<API User from Customer Control Panel> --oauth2-password='<API Password from Customer Control Panel>'
    ```
 
 5. Use the CLI
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -174,8 +250,84 @@ If you need to allow other persons or automation scripts to access specific API 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
    This allows you to specify a restriction to certain functions of an API by allowing control over POST (=Create), GET (=Read), PUT/PATCH (=Update) and DELETE (=Delete) methods for each API endpoint (URL) individually.
 * `resourcePermission`
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -321,6 +473,8 @@ All URIs are relative to *https://api.contabo.com*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
+*CheckCollectionTemplatesApi* | [**GetExtCheckCollectionTemplate**](docs/CheckCollectionTemplatesApi.md#getextcheckcollectiontemplate) | **Get** /v1/troubleshooting/check-collection-templates/{checkCollectionTemplateId} | Get check
+*CheckCollectionTemplatesApi* | [**ListExtCheckCollectionTemplates**](docs/CheckCollectionTemplatesApi.md#listextcheckcollectiontemplates) | **Get** /v1/troubleshooting/check-collection-templates | List check collection templates
 *CheckCollectionsApi* | [**CancelExtCheckCollection**](docs/CheckCollectionsApi.md#cancelextcheckcollection) | **Patch** /v1/troubleshooting/check-collections/{checkCollectionId} | Cancel check collection
 *CheckCollectionsApi* | [**GetExtCheckCollection**](docs/CheckCollectionsApi.md#getextcheckcollection) | **Get** /v1/troubleshooting/check-collections/{checkCollectionId} | Get check collection
 *CheckCollectionsApi* | [**ListExtCheckCollections**](docs/CheckCollectionsApi.md#listextcheckcollections) | **Get** /v1/troubleshooting/check-collections | List check collections
@@ -390,37 +544,15 @@ Class | Method | HTTP request | Description
 *InstanceActionsApi* | [**Stop**](docs/InstanceActionsApi.md#stop) | **Post** /v1/compute/instances/{instanceId}/actions/stop | Stop compute instance / resource by its id
 *InstanceActionsAuditsApi* | [**RetrieveInstancesActionsAuditsList**](docs/InstanceActionsAuditsApi.md#retrieveinstancesactionsauditslist) | **Get** /v1/compute/instances/actions/audits | List history about your actions (audit) triggered via the API
 *InstancesApi* | [**CancelInstance**](docs/InstancesApi.md#cancelinstance) | **Post** /v1/compute/instances/{instanceId}/cancel | Cancel specific instance by id
+*InstancesApi* | [**CheckSetNewHost**](docs/InstancesApi.md#checksetnewhost) | **Get** /v1/compute/instances/{instanceId}/regionChange/check | Check if the instance can be moved to another host
 *InstancesApi* | [**CreateInstance**](docs/InstancesApi.md#createinstance) | **Post** /v1/compute/instances | Create a new instance
 *InstancesApi* | [**PatchInstance**](docs/InstancesApi.md#patchinstance) | **Patch** /v1/compute/instances/{instanceId} | Update specific instance
 *InstancesApi* | [**ReinstallInstance**](docs/InstancesApi.md#reinstallinstance) | **Put** /v1/compute/instances/{instanceId} | Reinstall specific instance
+*InstancesApi* | [**RequestRegionChange**](docs/InstancesApi.md#requestregionchange) | **Post** /v1/compute/instances/{instanceId}/regionChange | Request instance region change
 *InstancesApi* | [**RetrieveInstance**](docs/InstancesApi.md#retrieveinstance) | **Get** /v1/compute/instances/{instanceId} | Get specific instance by id
 *InstancesApi* | [**RetrieveInstancesList**](docs/InstancesApi.md#retrieveinstanceslist) | **Get** /v1/compute/instances | List instances
 *InstancesApi* | [**UpgradeInstance**](docs/InstancesApi.md#upgradeinstance) | **Post** /v1/compute/instances/{instanceId}/upgrade | Upgrading instance capabilities
 *InstancesAuditsApi* | [**RetrieveInstancesAuditsList**](docs/InstancesAuditsApi.md#retrieveinstancesauditslist) | **Get** /v1/compute/instances/audits | List history about your instances (audit)
-*InternalCheckAuditsApi* | [**RetrieveChecksAuditsList**](docs/InternalCheckAuditsApi.md#retrievechecksauditslist) | **Get** /internal/v1/troubleshooting/checks/audits | List history about your Data (audit)
-*InternalCheckCollectionAuditsApi* | [**RetrieveCheckCollectionsAuditsList**](docs/InternalCheckCollectionAuditsApi.md#retrievecheckcollectionsauditslist) | **Get** /internal/v1/troubleshooting/check-collections/audits | List history about your Data (audit)
-*InternalCheckCollectionReplayApi* | [**ReplayCheckCollection**](docs/InternalCheckCollectionReplayApi.md#replaycheckcollection) | **Post** /internal/v1/troubleshooting/check-collections/replays | Replay changes for Check
-*InternalCheckCollectionTemplatesApi* | [**GetCheckCollectionTemplate**](docs/InternalCheckCollectionTemplatesApi.md#getcheckcollectiontemplate) | **Get** /internal/v1/troubleshooting/check-collection-templates/{orgId}/{checkCollectionTemplateId} | Get check
-*InternalCheckCollectionTemplatesApi* | [**ListCheckCollectionTemplates**](docs/InternalCheckCollectionTemplatesApi.md#listcheckcollectiontemplates) | **Get** /internal/v1/troubleshooting/check-collection-templates | List check collection templates
-*InternalCheckCollectionsApi* | [**CancelCheckCollection**](docs/InternalCheckCollectionsApi.md#cancelcheckcollection) | **Patch** /internal/v1/troubleshooting/check-collections/{orgId}/{checkCollectionId} | Cancel check collection
-*InternalCheckCollectionsApi* | [**GetCheckCollection**](docs/InternalCheckCollectionsApi.md#getcheckcollection) | **Get** /internal/v1/troubleshooting/check-collections/{orgId}/{checkCollectionId} | Get check collection
-*InternalCheckCollectionsApi* | [**ListCheckCollections**](docs/InternalCheckCollectionsApi.md#listcheckcollections) | **Get** /internal/v1/troubleshooting/check-collections | List check collections
-*InternalCheckCollectionsApi* | [**StartCheckCollection**](docs/InternalCheckCollectionsApi.md#startcheckcollection) | **Post** /internal/v1/troubleshooting/check-collections | Start check collection
-*InternalCheckReplayApi* | [**ReplayCheck**](docs/InternalCheckReplayApi.md#replaycheck) | **Post** /internal/v1/troubleshooting/checks/replays | Replay changes for Check
-*InternalCheckTemplatesApi* | [**GetCheckTemplate**](docs/InternalCheckTemplatesApi.md#getchecktemplate) | **Get** /internal/v1/troubleshooting/check-templates/{orgId}/{checkTemplateId} | Get check
-*InternalCheckTemplatesApi* | [**ListCheckTemplates**](docs/InternalCheckTemplatesApi.md#listchecktemplates) | **Get** /internal/v1/troubleshooting/check-templates | List check templates
-*InternalChecksApi* | [**CancelCheck**](docs/InternalChecksApi.md#cancelcheck) | **Patch** /internal/v1/troubleshooting/checks/{orgId}/{checkId} | Cancel check
-*InternalChecksApi* | [**GetCheck**](docs/InternalChecksApi.md#getcheck) | **Get** /internal/v1/troubleshooting/checks/{orgId}/{checkId} | Get check
-*InternalChecksApi* | [**ListChecks**](docs/InternalChecksApi.md#listchecks) | **Get** /internal/v1/troubleshooting/checks | List check
-*InternalChecksApi* | [**StartCheck**](docs/InternalChecksApi.md#startcheck) | **Post** /internal/v1/troubleshooting/checks | Start check
-*InternalRemediesApi* | [**CancelRemedy**](docs/InternalRemediesApi.md#cancelremedy) | **Patch** /internal/v1/troubleshooting/remedies/{orgId}/{remedyId} | Cancel remedy
-*InternalRemediesApi* | [**GetRemedy**](docs/InternalRemediesApi.md#getremedy) | **Get** /internal/v1/troubleshooting/remedies/{orgId}/{remedyId} | Get remedy
-*InternalRemediesApi* | [**ListRemedies**](docs/InternalRemediesApi.md#listremedies) | **Get** /internal/v1/troubleshooting/remedies | List remedy
-*InternalRemediesApi* | [**StartRemedy**](docs/InternalRemediesApi.md#startremedy) | **Post** /internal/v1/troubleshooting/remedies | Start remedy
-*InternalRemedyAuditsApi* | [**RetrieveRemediesAuditsList**](docs/InternalRemedyAuditsApi.md#retrieveremediesauditslist) | **Get** /internal/v1/troubleshooting/remedies/audits | List history about your Data (audit)
-*InternalRemedyReplayApi* | [**ReplayRemedy**](docs/InternalRemedyReplayApi.md#replayremedy) | **Post** /internal/v1/troubleshooting/remedies/replays | Replay changes for Remedy
-*InternalRemedyTemplatesApi* | [**GetRemedyTemplate**](docs/InternalRemedyTemplatesApi.md#getremedytemplate) | **Get** /internal/v1/troubleshooting/remedy-templates/{orgId}/{remedyTemplateId} | Get remedy
-*InternalRemedyTemplatesApi* | [**ListRemedyTemplates**](docs/InternalRemedyTemplatesApi.md#listremedytemplates) | **Get** /internal/v1/troubleshooting/remedy-templates | List remedy templates
 *ObjectStoragesApi* | [**CancelObjectStorage**](docs/ObjectStoragesApi.md#cancelobjectstorage) | **Patch** /v1/object-storages/{objectStorageId}/cancel | Cancels the specified object storage at the next possible date
 *ObjectStoragesApi* | [**CreateObjectStorage**](docs/ObjectStoragesApi.md#createobjectstorage) | **Post** /v1/object-storages | Create a new object storage
 *ObjectStoragesApi* | [**RetrieveDataCenterList**](docs/ObjectStoragesApi.md#retrievedatacenterlist) | **Get** /v1/data-centers | List data centers
@@ -473,6 +605,9 @@ Class | Method | HTTP request | Description
 *TagsApi* | [**RetrieveTagList**](docs/TagsApi.md#retrievetaglist) | **Get** /v1/tags | List tags
 *TagsApi* | [**UpdateTag**](docs/TagsApi.md#updatetag) | **Patch** /v1/tags/{tagId} | Update specific tag by id
 *TagsAuditsApi* | [**RetrieveTagAuditsList**](docs/TagsAuditsApi.md#retrievetagauditslist) | **Get** /v1/tags/audits | List history about your assignments (audit)
+*UserAccountsApi* | [**ListUserAccounts**](docs/UserAccountsApi.md#listuseraccounts) | **Get** /v1/me/accounts | List of your accounts
+*UserAccountsApi* | [**MakeDefaultAccount**](docs/UserAccountsApi.md#makedefaultaccount) | **Patch** /v1/me/account/{tenantId}/{customerId} | Make user account default
+*UserAccountsApi* | [**SwitchAccount**](docs/UserAccountsApi.md#switchaccount) | **Post** /v1/me/action/switchAccount | Switch user account
 *UsersApi* | [**CreateUser**](docs/UsersApi.md#createuser) | **Post** /v1/users | Create a new user
 *UsersApi* | [**DeleteUser**](docs/UsersApi.md#deleteuser) | **Delete** /v1/users/{userId} | Delete existing user by id
 *UsersApi* | [**GenerateClientSecret**](docs/UsersApi.md#generateclientsecret) | **Put** /v1/users/client/secret | Generate new client secret
@@ -496,6 +631,7 @@ Class | Method | HTTP request | Description
 
 ## Documentation For Models
 
+ - [AccountDetails](docs/AccountDetails.md)
  - [AccountOrgResponse](docs/AccountOrgResponse.md)
  - [AccountsListResponse](docs/AccountsListResponse.md)
  - [AddOnQuantityRequest](docs/AddOnQuantityRequest.md)
@@ -559,6 +695,7 @@ Class | Method | HTTP request | Description
  - [ChecksReplayRequest](docs/ChecksReplayRequest.md)
  - [ClientResponse](docs/ClientResponse.md)
  - [ClientSecretResponse](docs/ClientSecretResponse.md)
+ - [CmsErrorsResponse](docs/CmsErrorsResponse.md)
  - [CreateAssignmentResponse](docs/CreateAssignmentResponse.md)
  - [CreateCustomImageFailResponse](docs/CreateCustomImageFailResponse.md)
  - [CreateCustomImageRequest](docs/CreateCustomImageRequest.md)
@@ -613,6 +750,9 @@ Class | Method | HTTP request | Description
  - [DomainResponse](docs/DomainResponse.md)
  - [DomainsListResponse](docs/DomainsListResponse.md)
  - [ExtCheckCollectionResponse](docs/ExtCheckCollectionResponse.md)
+ - [ExtCheckCollectionTemplateResponse](docs/ExtCheckCollectionTemplateResponse.md)
+ - [ExtCheckCollectionTemplatesGetResponse](docs/ExtCheckCollectionTemplatesGetResponse.md)
+ - [ExtCheckCollectionTemplatesListResponse](docs/ExtCheckCollectionTemplatesListResponse.md)
  - [ExtCheckCollectionsGetResponse](docs/ExtCheckCollectionsGetResponse.md)
  - [ExtCheckCollectionsListResponse](docs/ExtCheckCollectionsListResponse.md)
  - [ExtCheckResponse](docs/ExtCheckResponse.md)
@@ -633,6 +773,7 @@ Class | Method | HTTP request | Description
  - [FindRoleResponse](docs/FindRoleResponse.md)
  - [FindSecretResponse](docs/FindSecretResponse.md)
  - [FindSnapshotResponse](docs/FindSnapshotResponse.md)
+ - [FindSupportSignatureResponse](docs/FindSupportSignatureResponse.md)
  - [FindTagResponse](docs/FindTagResponse.md)
  - [FindUserIsPasswordSetResponse](docs/FindUserIsPasswordSetResponse.md)
  - [FindUserResponse](docs/FindUserResponse.md)
@@ -662,6 +803,7 @@ Class | Method | HTTP request | Description
  - [InstanceAssignmentSelfLinks](docs/InstanceAssignmentSelfLinks.md)
  - [InstanceAssignmentSelfLinks1](docs/InstanceAssignmentSelfLinks1.md)
  - [InstanceDetails](docs/InstanceDetails.md)
+ - [InstanceRegionChangeResponse](docs/InstanceRegionChangeResponse.md)
  - [InstanceRescueActionResponse](docs/InstanceRescueActionResponse.md)
  - [InstanceRescueActionResponseData](docs/InstanceRescueActionResponseData.md)
  - [InstanceResetPasswordActionResponse](docs/InstanceResetPasswordActionResponse.md)
@@ -725,6 +867,7 @@ Class | Method | HTTP request | Description
  - [ListTagResponse](docs/ListTagResponse.md)
  - [ListUserAuditResponse](docs/ListUserAuditResponse.md)
  - [ListUserResponse](docs/ListUserResponse.md)
+ - [ListUserSwitchAccountsResponse](docs/ListUserSwitchAccountsResponse.md)
  - [ListVipAuditResponse](docs/ListVipAuditResponse.md)
  - [ListVipResponse](docs/ListVipResponse.md)
  - [ListVipResponseData](docs/ListVipResponseData.md)
@@ -756,6 +899,8 @@ Class | Method | HTTP request | Description
  - [PutFirewallResponse](docs/PutFirewallResponse.md)
  - [RecordAuditResponse](docs/RecordAuditResponse.md)
  - [RecordAuditResponseData](docs/RecordAuditResponseData.md)
+ - [RegionChangeRequest](docs/RegionChangeRequest.md)
+ - [RegionChangeResponseData](docs/RegionChangeResponseData.md)
  - [ReinstallInstanceRequest](docs/ReinstallInstanceRequest.md)
  - [ReinstallInstanceResponse](docs/ReinstallInstanceResponse.md)
  - [ReinstallInstanceResponseData](docs/ReinstallInstanceResponseData.md)
@@ -767,6 +912,7 @@ Class | Method | HTTP request | Description
  - [RemediesReplayRequest](docs/RemediesReplayRequest.md)
  - [RemedyResponse](docs/RemedyResponse.md)
  - [RemedyTemplateResponse](docs/RemedyTemplateResponse.md)
+ - [RemedyTemplateSummary](docs/RemedyTemplateSummary.md)
  - [RemedyTemplatesGetResponse](docs/RemedyTemplatesGetResponse.md)
  - [RemedyTemplatesListResponse](docs/RemedyTemplatesListResponse.md)
  - [ReplayResponse](docs/ReplayResponse.md)
@@ -783,6 +929,7 @@ Class | Method | HTTP request | Description
  - [SnapshotResponse](docs/SnapshotResponse.md)
  - [SnapshotsAuditResponse](docs/SnapshotsAuditResponse.md)
  - [SrcCidr](docs/SrcCidr.md)
+ - [SupportSignatureResponse](docs/SupportSignatureResponse.md)
  - [TagAssignmentSelfLinks](docs/TagAssignmentSelfLinks.md)
  - [TagAuditResponse](docs/TagAuditResponse.md)
  - [TagResponse](docs/TagResponse.md)
@@ -811,6 +958,12 @@ Class | Method | HTTP request | Description
  - [UserAuditResponse](docs/UserAuditResponse.md)
  - [UserIsPasswordSetResponse](docs/UserIsPasswordSetResponse.md)
  - [UserResponse](docs/UserResponse.md)
+ - [UserSwitchAccount](docs/UserSwitchAccount.md)
+ - [UserSwitchAccountDefaultRequest](docs/UserSwitchAccountDefaultRequest.md)
+ - [UserSwitchAccountDefaultResponse](docs/UserSwitchAccountDefaultResponse.md)
+ - [UserSwitchAccountRequest](docs/UserSwitchAccountRequest.md)
+ - [UserSwitchAccountResponse](docs/UserSwitchAccountResponse.md)
+ - [UserSwitchAccountTokens](docs/UserSwitchAccountTokens.md)
  - [VipAuditResponse](docs/VipAuditResponse.md)
  - [VipResponse](docs/VipResponse.md)
  - [VncResponse](docs/VncResponse.md)

@@ -4,6 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**Internal** | **bool** | Is internal (not shown to the customer) | 
 **Status** | **string** | Status of the handle | 
 **ObjectType** | **string** | Object type to be handled | 
 **ObjectId** | **string** | ID of the object, to be handled | 
@@ -11,20 +12,20 @@ Name | Type | Description | Notes
 **RemedyCollectionId** | **float32** | ID of remedy collection if started in scope of a collection | 
 **RemedyTemplateId** | **float32** | Remedy Template for this remedy | 
 **Name** | **string** | Name of this remedy template | 
-**Note** | **string** | Note to be shown to the customer | 
+**Note** | **string** | Translation key for the customer-facing remedy note. Possible values: fail_remedy_failed, success_remedy_successful, remedy_internal_error, instance_firewall_detach_successful, instance_live_migration_successful, instance_reboot_successful | 
+**InternalNote** | **string** | Translation key for the internal-only remedy note (agent view). Possible values: remedy_internal_error_internal, instance_firewall_detach_successful_internal, instance_live_migration_successful_internal, instance_reboot_successful_internal | 
 **DurationMs** | **float32** | Duration of the remedy in milliseconds | 
 **CreatedDate** | **time.Time** | Creation date | 
 **ModifiedDate** | **time.Time** | Modify date | 
 **OrgId** | **string** | Org id | 
 **AccountId** | **string** | Account id | 
-**InternalNote** | **string** | Note which is shown only internally to the agent | 
 **Log** | **string** | Detailed log of the check execution | 
 
 ## Methods
 
 ### NewRemedyResponse
 
-`func NewRemedyResponse(status string, objectType string, objectId string, remedyId float32, remedyCollectionId float32, remedyTemplateId float32, name string, note string, durationMs float32, createdDate time.Time, modifiedDate time.Time, orgId string, accountId string, internalNote string, log string, ) *RemedyResponse`
+`func NewRemedyResponse(internal bool, status string, objectType string, objectId string, remedyId float32, remedyCollectionId float32, remedyTemplateId float32, name string, note string, internalNote string, durationMs float32, createdDate time.Time, modifiedDate time.Time, orgId string, accountId string, log string, ) *RemedyResponse`
 
 NewRemedyResponse instantiates a new RemedyResponse object
 This constructor will assign default values to properties that have it defined,
@@ -38,6 +39,26 @@ will change when the set of required properties is changed
 NewRemedyResponseWithDefaults instantiates a new RemedyResponse object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
+
+### GetInternal
+
+`func (o *RemedyResponse) GetInternal() bool`
+
+GetInternal returns the Internal field if non-nil, zero value otherwise.
+
+### GetInternalOk
+
+`func (o *RemedyResponse) GetInternalOk() (*bool, bool)`
+
+GetInternalOk returns a tuple with the Internal field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetInternal
+
+`func (o *RemedyResponse) SetInternal(v bool)`
+
+SetInternal sets Internal field to given value.
+
 
 ### GetStatus
 
@@ -199,6 +220,26 @@ and a boolean to check if the value has been set.
 SetNote sets Note field to given value.
 
 
+### GetInternalNote
+
+`func (o *RemedyResponse) GetInternalNote() string`
+
+GetInternalNote returns the InternalNote field if non-nil, zero value otherwise.
+
+### GetInternalNoteOk
+
+`func (o *RemedyResponse) GetInternalNoteOk() (*string, bool)`
+
+GetInternalNoteOk returns a tuple with the InternalNote field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetInternalNote
+
+`func (o *RemedyResponse) SetInternalNote(v string)`
+
+SetInternalNote sets InternalNote field to given value.
+
+
 ### GetDurationMs
 
 `func (o *RemedyResponse) GetDurationMs() float32`
@@ -297,26 +338,6 @@ and a boolean to check if the value has been set.
 `func (o *RemedyResponse) SetAccountId(v string)`
 
 SetAccountId sets AccountId field to given value.
-
-
-### GetInternalNote
-
-`func (o *RemedyResponse) GetInternalNote() string`
-
-GetInternalNote returns the InternalNote field if non-nil, zero value otherwise.
-
-### GetInternalNoteOk
-
-`func (o *RemedyResponse) GetInternalNoteOk() (*string, bool)`
-
-GetInternalNoteOk returns a tuple with the InternalNote field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetInternalNote
-
-`func (o *RemedyResponse) SetInternalNote(v string)`
-
-SetInternalNote sets InternalNote field to given value.
 
 
 ### GetLog
