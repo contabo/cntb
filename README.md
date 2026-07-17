@@ -129,12 +129,11 @@ make build
 
 For `cntb` to work it uses some additional files and folders.
 
-* default file for storing settings / preferences is `~/.cntb.yaml`
-* caching folder is `~/.cache/cntb/`
+* default file for storing settings / preferences is `$XDG_CONFIG_HOME/cntb/.cntb.yaml`
+  * default file for storing settings / preferences is `~/.cntb.yaml` if `$XDG_CONFIG_HOME` isn't declared
+* caching folder is `$XDG_CACHE_HOME/cntb/`
+  * caching folder is `~/.cache/cntb/` if `$XDG_CACHE_HOME` isn't declared
 
 ## License
 
 GNU GENERAL PUBLIC LICENSE, Version 3
-
-
-

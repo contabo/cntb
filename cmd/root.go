@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/url"
 	"os"
+	"path/filepath"
 
 	"contabo.com/cli/cntb/config"
 	"github.com/minio/minio-go/v7"
@@ -12,6 +13,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"github.com/adrg/xdg"
 )
 
 var (
@@ -94,7 +96,7 @@ func init() {
 	// will be global for your application.
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "",
-		"config file (Looks up /etc/cntb/.cntb.yaml then $HOME/.cntb.yaml)")
+		"config file (Looks up $XDG_CONFIG_HOME/cntb/.cntb.yaml then /etc/cntb/.cntb.yaml then $HOME/.cntb.yaml)")
 
 	rootCmd.PersistentFlags().StringVarP(&DebugLevel, "debug", "d", "warn",
 		"debug level [fatal|error|warn|info|debug|trace]")
@@ -145,8 +147,22 @@ func initConfig() {
 		home, err := homedir.Dir()
 		cobra.CheckErr(err)
 
-		cfgFile = home + "/.cntb.yaml"
-		// Search config in home directory with name ".cli" (without extension).
+		cfgFile = filepath.Join(home, ".cntb.yaml")
+
+		// Add $XDG_CONFIG_HOME/cntb as default config path.
+		if (os.Getenv("XDG_CONFIG_HOME") != "") {
+			viper.AddConfigPath(filepath.Join(xdg.ConfigHome, "cntb"))
+
+			// Prioritize the old $HOME/.cntb.yaml for backwards compatibility.
+			if _, err := os.Stat(cfgFile); os.IsNotExist(err) {
+				xdgCfgFile, err := xdg.ConfigFile("cntb/.cntb.yaml")
+				cobra.CheckErr(err)
+				cfgFile = xdgCfgFile
+			}
+
+		}
+
+		// Search config in home directory with name ".cntb" (without extension).
 		viper.AddConfigPath("/etc/cntb/")
 		viper.AddConfigPath(home)
 		viper.SetConfigName(".cntb")

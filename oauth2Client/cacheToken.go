@@ -10,9 +10,9 @@ import (
 	"time"
 
 	"github.com/hprose/hprose-go"
-	"github.com/mitchellh/go-homedir"
 	log "github.com/sirupsen/logrus"
 	"golang.org/x/oauth2"
+	"github.com/adrg/xdg"
 )
 
 func cacheToken(token *oauth2.Token) {
@@ -79,15 +79,11 @@ func RestoreTokenFromCache(oauth2User string) *oauth2.Token {
 }
 
 func getCacheFile() string {
-	home, err := homedir.Dir()
+	// Create token cache file. Respects $XDG_CACHE_HOME, else defaults to $HOME/.cache/cntb/token.
+	tokenCacheFileName, err := xdg.CacheFile("cntb/token")
 	if err != nil {
-		log.Fatal(fmt.Sprintf("Could not determine home dir: %v", err))
+		log.Fatal(fmt.Sprintf("Could not ensure cache file: %v", err))
 	}
-	tokenCacheDirName := home + "/.cache/cntb"
-	err = os.MkdirAll(tokenCacheDirName, os.ModePerm)
-	if err != nil {
-		log.Fatal(fmt.Sprintf("Could not ensure cache folder: %v", err))
-	}
-	tokenCacheFileName := home + "/.cache/cntb/token"
+
 	return tokenCacheFileName
 }

@@ -5,6 +5,7 @@ go 1.23
 require (
 	contabo.com/cli/cntb/openapi v0.0.0-00010101000000-000000000000
 	github.com/PaesslerAG/jsonpath v0.1.1
+	github.com/adrg/xdg v0.5.3
 	github.com/cheggaaa/pb v1.0.29
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/hprose/hprose-go v0.0.0-20161031134501-83de97da5004
@@ -48,7 +49,7 @@ require (
 	github.com/subosito/gotenv v1.2.0 // indirect
 	golang.org/x/crypto v0.19.0 // indirect
 	golang.org/x/net v0.21.0 // indirect
-	golang.org/x/sys v0.17.0 // indirect
+	golang.org/x/sys v0.26.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/protobuf v1.27.1 // indirect

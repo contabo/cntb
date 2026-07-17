@@ -12,7 +12,7 @@ var setCredentialsCmd = &cobra.Command{
 	Use:   "set-credentials",
 	Short: "Stores the OAuth2 credentials in specified config file",
 	Long: `Stores the OAuth2 credentials in specified config file.
-	* If no config file is specified with --config argument $HOME/.cntb.yml is used
+	* If no config file is specified with --config argument $XDG_CONFIG_HOME/cntb/.cntb.yml is used
 	* The OAuth2 credentials are taken over from the --oauth2-* arguments
 	`,
 	Run: func(cmd *cobra.Command, args []string) {

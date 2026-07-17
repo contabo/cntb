@@ -12,7 +12,7 @@ var setDebugLevelCmd = &cobra.Command{
 	Use:   "set-debug-level",
 	Short: "Stores the debug level in specified config file",
 	Long: `Stores the debug level in specified config file.
-  * If no config file is specified with --config argument $HOME/.cntb.yml is used
+  * If no config file is specified with --config argument $XDG_CONFIG_HOME/cntb/.cntb.yml is used
   * debug level is stored by providing --debug argument
 	`,
 	Run: func(cmd *cobra.Command, args []string) {

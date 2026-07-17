@@ -16,10 +16,11 @@ var configCmd = &cobra.Command{
 	Short: "Manage config files",
 	Long: `View and edit config files. Configuration is merged from four different sources in this order:
 
-	1. file /etc/.cntb.yml
-	2. file $HOME/.cntb.yml
-	3. environment variables starting with CNTB_
-	4. arguments passed to command line
+	1. file $XDG_CONFIG_HOME/cntb/.cntb.yml
+	2. file /etc/.cntb.yml
+	3. file $HOME/.cntb.yml
+	4. environment variables starting with CNTB_
+	5. arguments passed to command line
 
 	This means that the arguments have the highest priority. You are free to edit the contents of configuration files with your favorite editor.
 	For the most convenient usage specify the oauht2 credentials (oauth2-client-secret, oauth2-clientid, oauth2-password, oauth2-user).`,

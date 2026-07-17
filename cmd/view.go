@@ -11,10 +11,11 @@ var viewCmd = &cobra.Command{
 	Use:   "view",
 	Short: "Displays current merged configuration.",
 	Long: `Shows the current configuration from various sources, namely:
-		1. file /etc/.cntb.yml
-		2. file $HOME/.cntb.yml
-		3. environment variables starting with CNTB_
-		4. arguments passed to command line
+		1. file $XDG_CONFIG_HOME/cntb/.cntb.yml
+		2. file /etc/.cntb.yml
+		3. file $HOME/.cntb.yml
+		4. environment variables starting with CNTB_
+		5. arguments passed to command line
 	`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Printf("--api %v\n", ApiBaseUrl)
