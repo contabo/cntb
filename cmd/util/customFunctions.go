@@ -16,7 +16,7 @@ func StructToMap(obj interface{}) (newMap map[string]interface{}, err error) {
 	return
 }
 
-func ShowUploadDetails(fileSize int64) *pb.ProgressBar{
+func ShowUploadDetails(fileSize int64) *pb.ProgressBar {
 	progress := pb.New64(fileSize)
 	progress.Start()
 	progress.SetRefreshRate(time.Second)

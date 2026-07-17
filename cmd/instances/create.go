@@ -67,7 +67,6 @@ var instanceCreateCmd = &cobra.Command{
 				}
 			}
 
-
 		default:
 			// from file / stdin
 			var requestFromFile instancesClient.CreateInstanceRequest

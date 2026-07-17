@@ -57,7 +57,7 @@ func PutObject(localPath string, isDir bool, s3Prefix string, s3Client *minio.Cl
 		var minioOptions minio.PutObjectOptions
 		minioOptions.ContentType = "application/octet-stream"
 
-		if(createObjectVerbose) {
+		if createObjectVerbose {
 			minioOptions.Progress = util.ShowUploadDetails(objectStat.Size())
 		}
 

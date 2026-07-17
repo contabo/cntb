@@ -15,9 +15,9 @@ import (
 )
 
 var objectStorageHistoryCmd = &cobra.Command{
-	Use:   "objectStorages",
-	Short: "History of your object storage",
-	Long:  `Show what happend to your object storage over time.`,
+	Use:     "objectStorages",
+	Short:   "History of your object storage",
+	Long:    `Show what happend to your object storage over time.`,
 	Example: `cntb history objectStorages --objectStorageId 9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d`,
 	Run: func(cmd *cobra.Command, args []string) {
 		historyRequest := client.ApiClient().ObjectStoragesAuditsApi.

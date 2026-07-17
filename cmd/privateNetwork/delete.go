@@ -19,7 +19,7 @@ var privateNetworkDeleteCmd = &cobra.Command{
 	Long:  `Specify a private network id to delete. All the instances will be unassigned form this private network`,
 	Run: func(cmd *cobra.Command, args []string) {
 		httpResp, err := client.ApiClient().
-		PrivateNetworksApi.DeletePrivateNetwork(context.Background(), deletePrivateNetworkId).
+			PrivateNetworksApi.DeletePrivateNetwork(context.Background(), deletePrivateNetworkId).
 			XRequestId(uuid.NewV4().String()).Execute()
 
 		util.HandleErrors(err, httpResp, "while deleting private network")

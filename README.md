@@ -73,6 +73,26 @@ cntb start instance 12345
 cntb stop instance 12345
 ```
 
+### Manage DNS records
+
+List DNS records
+
+```sh
+cntb get dns-records example.com
+```
+
+Create DNS record
+
+```sh
+cntb create dns-record example.com --name "www" --type "A" --ttl "14400" --data "1.2.3.4"
+```
+
+Delete DNS record
+
+```sh
+cntb delete dns-record example.com 1234567
+```
+
 ## Enable Shell Completion
 
 ```sh

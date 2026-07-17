@@ -56,7 +56,6 @@ var rescueInstanceCmd = &cobra.Command{
 		resp, httpResp, err := client.ApiClient().InstanceActionsApi.Rescue(context.Background(), rescueInstanceId).
 			XRequestId(uuid.NewV4().String()).InstancesActionsRescueRequest(instancesActionsRescueRequest).Execute()
 
-
 		util.HandleErrors(err, httpResp, "while rescuing instance")
 		responseJson, _ := json.Marshal(resp.Data)
 

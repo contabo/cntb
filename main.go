@@ -17,6 +17,7 @@ import (
 	_ "contabo.com/cli/cntb/cmd/tagAssignment"
 	_ "contabo.com/cli/cntb/cmd/tags"
 	_ "contabo.com/cli/cntb/cmd/users"
+	_ "contabo.com/cli/cntb/cmd/dns"
 )
 
 func main() {
